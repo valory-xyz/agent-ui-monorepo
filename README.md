@@ -17,6 +17,5 @@ Served by the Modius agent, designed to be consumed by [Pearl](https://github.co
 3. The CI will build and release the contents of the `build/` directory to a zip file.
 
 ## License
-
 MIT
 
