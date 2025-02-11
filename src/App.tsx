@@ -21,6 +21,4 @@ function App() {
   );
 }
 
-console.log(process.env.REACT_APP_UI_PORT);
-
 export default App;

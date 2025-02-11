@@ -26,7 +26,7 @@ export const usePortfolio = () =>
     queryKey: ['portfolio'],
     queryFn: async () => {
       const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_UI_PORT}/portfolio`,
+        `http://localhost:${process.env.REACT_APP_API_PORT}/portfolio`,
       );
       return response.json();
     },
