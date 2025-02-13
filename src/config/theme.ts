@@ -9,7 +9,8 @@ export const mainTheme: ThemeConfig = {
     colorText: '#0F172A',
     colorTextSecondary: '#4D596A',
     colorFillSecondary: '#E4E4E4',
-    fontSize: 16,
+    fontSize: 14,
+    lineHeight: 20 / 14,
     fontFamily: 'Inter',
     colorBgContainer: '#FFFFFF',
   },
@@ -18,7 +19,7 @@ export const mainTheme: ThemeConfig = {
       fontSize: 16,
     },
     Button: {
-      fontSize: 16,
+      fontSize: 14,
       fontSizeLG: 16,
     },
     Card: {
@@ -31,6 +32,14 @@ export const mainTheme: ThemeConfig = {
       fontSize: 20,
       colorTextDisabled: '#334155',
     },
+    Table: {
+      colorBgContainer: 'transparent',
+      headerBg: 'transparent',
+      rowHoverBg: 'transparent',
+      padding: 8,
+      fontSize: 14,
+      fontWeightStrong: 500,
+    },
     Tooltip: {
       fontSize: 16,
       colorText: 'black',
@@ -38,7 +47,9 @@ export const mainTheme: ThemeConfig = {
       colorBgSpotlight: 'white',
     },
     Typography: {
+      colorText: '#1F2229',
       colorTextDescription: '#4D596A',
+      colorTextSecondary: '#4D596A',
     },
     Popover: {
       fontSize: 14,
@@ -48,3 +59,23 @@ export const mainTheme: ThemeConfig = {
     },
   },
 };
+
+// /* Pool */
+
+// width: 260px;
+// height: 20px;
+
+// /* MD/Medium */
+// font-family: 'Inter';
+// font-style: normal;
+// font-weight: 500;
+// font-size: 14px;
+// line-height: 20px;
+// /* identical to box height, or 143% */
+
+// color: #4D596A;
+
+// /* Inside auto layout */
+// flex: none;
+// order: 0;
+// flex-grow: 0;

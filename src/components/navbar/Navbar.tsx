@@ -1,27 +1,47 @@
-import { Flex } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Flex, Tooltip, Typography } from 'antd';
 import React from 'react';
+import Jazzicon from 'react-jazzicon';
+
+import { generateName } from '../../utils/agentName';
 
 export const AgentBranding = () => {
   return (
-    <Flex gap={8}>
+    <Flex gap={8} align="center">
       <img
         src="/logos/modius.png"
         alt="Agent Branding"
         style={{ width: 40, height: 40 }}
       />
-      <Flex vertical gap={4} style={{ fontSize: 14 }}>
-        <strong>Modius</strong>
-        <span>Agent economy</span>
+      <Flex vertical gap={0} style={{ fontSize: 14 }}>
+        <Typography.Text strong>Modius</Typography.Text>
+        <Typography.Text type="secondary">Agent economy</Typography.Text>
       </Flex>
     </Flex>
   );
 };
 
 export const AgentIdentity = () => {
+  const agentName = generateName('0x1234567890123456789012345678901234567890');
   return (
-    <Flex vertical>
-      <span>Agent ID</span>
-      <span>Agent Email</span>
+    <Flex gap={8} align="center">
+      <Jazzicon diameter={32} seed={Math.floor(Math.random() * 10000)} />
+      <Flex vertical>
+        <Typography.Text strong>{agentName}</Typography.Text>
+        <Typography.Text
+          type="secondary"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+          }}
+        >
+          Modius agent{' '}
+          <Tooltip>
+            <InfoCircleOutlined size={16} />
+          </Tooltip>
+        </Typography.Text>
+      </Flex>
     </Flex>
   );
 };
