@@ -2,7 +2,6 @@ import { Badge, Flex, Table, Typography } from 'antd';
 import React, { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
-import { mockDataSource } from '../../mock/mock-data-source';
 import { piePalette } from '../../utils/chartjs/palette';
 import { AllocationAssets } from './AllocationAssets';
 
@@ -59,20 +58,13 @@ export const AllocationTable = () => {
     [data?.allocations],
   );
 
-  if (!dataSource && isFetched) {
-    return (
-      <Typography.Text type="secondary">
-        Modius has not yet allocated funds.
-      </Typography.Text>
-    );
-  }
-
   return (
     <Table
       style={{ width: '100%' }}
       columns={columns}
-      dataSource={mockDataSource}
+      dataSource={dataSource}
       pagination={false}
+      loading={!isFetched}
     />
   );
 };

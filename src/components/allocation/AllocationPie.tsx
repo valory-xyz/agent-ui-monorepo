@@ -22,13 +22,13 @@ const emptyChartData = {
 };
 
 export const AllocationPie = () => {
-  const { data, isLoading } = usePortfolio();
+  const { data, isFetched } = usePortfolio();
 
-  if (!data) {
+  if (!isFetched) {
     return (
       <Skeleton.Node
         style={{ width: 200, height: 200, borderRadius: '100%' }}
-        active={isLoading}
+        active={!isFetched}
       >
         <PieChartOutlined style={{ fontSize: 32, color: '#bfbfbf' }} />
       </Skeleton.Node>
@@ -36,8 +36,8 @@ export const AllocationPie = () => {
   }
 
   const hasValidAllocations =
-    data.allocations?.length > 0 &&
-    data.allocations.every(
+    data?.allocations?.length > 0 &&
+    data?.allocations?.every(
       (allocation) =>
         allocation &&
         typeof allocation.ratio === 'number' &&
