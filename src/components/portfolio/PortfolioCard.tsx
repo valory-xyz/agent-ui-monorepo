@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Card, Flex, Typography } from 'antd';
+import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
@@ -11,7 +11,7 @@ const PortfolioTitle = () => (
 );
 
 const PortfolioBalance = () => {
-  const { data } = usePortfolio();
+  const { data, isFetched } = usePortfolio();
 
   const portfolioBalance = useMemo(
     () =>
@@ -21,6 +21,10 @@ const PortfolioBalance = () => {
       }).format(data?.['portfolio-value'] ?? 0),
     [data],
   );
+
+  if (!isFetched) {
+    return <Skeleton.Input />;
+  }
 
   return (
     <Flex gap={2} style={{ alignItems: 'flex-end' }}>
@@ -39,6 +43,7 @@ const SeeBreakdownButton = (props: ButtonProps) => (
 );
 
 export default function PortfolioCard() {
+  const { data } = usePortfolio();
   const [breakdownModalVisible, setBreakdownModalVisible] =
     React.useState(false);
 
@@ -51,7 +56,10 @@ export default function PortfolioCard() {
         <Flex vertical gap={8}>
           <PortfolioTitle />
           <PortfolioBalance />
-          <SeeBreakdownButton onClick={handleOpenBreakdownModal} />
+          <SeeBreakdownButton
+            disabled={typeof data?.['portfolio-value'] !== 'number'}
+            onClick={handleOpenBreakdownModal}
+          />
         </Flex>
       </Card>
       <BreakdownModal

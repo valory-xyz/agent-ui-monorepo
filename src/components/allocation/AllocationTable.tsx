@@ -1,4 +1,4 @@
-import { Badge, Flex, Skeleton, Table, Typography } from 'antd';
+import { Badge, Flex, Table, Typography } from 'antd';
 import React, { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
@@ -46,13 +46,11 @@ const columns = [
 ];
 
 export const AllocationTable = () => {
-  const { data } = usePortfolio();
+  const { data, isFetched } = usePortfolio();
 
-  // Use mock data when real data is not available
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dataSource = useMemo(
     () =>
-      data?.allocations.map(({ type, assets, details, apr }) => ({
+      data?.allocations?.map(({ type, assets, details, apr }) => ({
         key: `${type}-${assets.join('-')}-${details}`,
         pool: assets,
         details: `${details}`,
@@ -61,8 +59,12 @@ export const AllocationTable = () => {
     [data?.allocations],
   );
 
-  if (!dataSource) {
-    return <Skeleton.Node active />;
+  if (!dataSource && isFetched) {
+    return (
+      <Typography.Text type="secondary">
+        Modius has not yet allocated funds.
+      </Typography.Text>
+    );
   }
 
   return (

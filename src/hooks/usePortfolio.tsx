@@ -21,28 +21,62 @@ export interface Portfolio {
   'portfolio-breakdown': PortfolioAsset[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockPortfolio = {
+  'portfolio-value': 100000,
   allocations: [
     {
-      key: 'stable-USDC-USDT-Curve LP',
+      type: 'stable-USDC-USDT-Curve LP',
       assets: ['USDC', 'USDT'],
       details: 'Curve LP',
       apr: 4.5,
       ratio: 0.25,
     },
     {
-      key: 'stable-DAI-USDC-Aave lending',
+      type: 'stable-DAI-USDC-Aave lending',
       assets: ['DAI', 'USDC'],
       details: 'Aave lending',
       apr: 3.8,
       ratio: 0.25,
     },
     {
-      key: 'eth-stETH-rETH-Balancer pool',
+      type: 'eth-stETH-rETH-Balancer pool',
       assets: ['stETH', 'rETH'],
       details: 'Balancer pool',
       apr: 5.2,
       ratio: 0.5,
+    },
+  ],
+  'portfolio-breakdown': [
+    {
+      asset: 'USDC',
+      balance: 25000,
+      ratio: 0.3,
+      price: 1,
+    },
+    {
+      asset: 'USDT',
+      balance: 25000,
+      ratio: 0.3,
+      price: 1,
+    },
+    {
+      asset: 'DAI',
+      balance: 25000,
+      ratio: 0.2,
+      price: 1,
+    },
+    {
+      asset: 'stETH',
+      balance: 15000,
+      ratio: 0.15,
+      price: 2000,
+    },
+    {
+      asset: 'rETH',
+      balance: 10000,
+      ratio: 0.05,
+      price: 2000,
     },
   ],
 };
@@ -51,7 +85,7 @@ export const usePortfolio = () =>
   useQuery<Portfolio>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      return mockPortfolio;
+      // return mockPortfolio;
       const response = await fetch(
         `http://localhost:${process.env.REACT_APP_API_PORT}/portfolio`,
       );

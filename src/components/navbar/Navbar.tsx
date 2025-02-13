@@ -1,5 +1,4 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Flex, Tooltip, Typography } from 'antd';
+import { Flex, Typography } from 'antd';
 import React from 'react';
 import Jazzicon from 'react-jazzicon';
 
@@ -22,10 +21,15 @@ export const AgentBranding = () => {
 };
 
 export const AgentIdentity = () => {
+  // TODO: update once agent address available
   const agentName = generateName('0x1234567890123456789012345678901234567890');
+
   return (
     <Flex gap={8} align="center">
-      <Jazzicon diameter={32} seed={Math.floor(Math.random() * 10000)} />
+      <Jazzicon
+        diameter={32}
+        seed={Number('0x1234567890123456789012345678901234567890')}
+      />
       <Flex vertical>
         <Typography.Text strong>{agentName}</Typography.Text>
         <Typography.Text
@@ -37,9 +41,11 @@ export const AgentIdentity = () => {
           }}
         >
           Modius agent{' '}
+          {/* TODO: Add tooltip once copy created
           <Tooltip>
             <InfoCircleOutlined size={16} />
-          </Tooltip>
+          </Tooltip> 
+          */}
         </Typography.Text>
       </Flex>
     </Flex>

@@ -41,7 +41,7 @@ export const mainTheme: ThemeConfig = {
       fontWeightStrong: 500,
     },
     Tooltip: {
-      fontSize: 16,
+      fontSize: 14,
       colorText: 'black',
       colorTextLightSolid: 'black',
       colorBgSpotlight: 'white',

@@ -8,22 +8,53 @@ import { usePortfolio } from '../../hooks/usePortfolio';
 import { DonutCenterLogoPlugin } from '../../utils/chartjs/donut-center-plugin';
 import { piePalette } from '../../utils/chartjs/palette';
 
-// Register the ArcElement
 ChartJS.register(ArcElement);
 
+// Fallback chart data when no allocations are available
+const emptyChartData = {
+  labels: [],
+  datasets: [
+    {
+      data: [1],
+      backgroundColor: ['#f0f0f0'],
+    },
+  ],
+};
+
 export const AllocationPie = () => {
-  const { data } = usePortfolio();
+  const { data, isLoading } = usePortfolio();
 
   if (!data) {
     return (
       <Skeleton.Node
         style={{ width: 200, height: 200, borderRadius: '100%' }}
-        active
+        active={isLoading}
       >
         <PieChartOutlined style={{ fontSize: 32, color: '#bfbfbf' }} />
       </Skeleton.Node>
     );
   }
+
+  const hasValidAllocations =
+    data.allocations?.length > 0 &&
+    data.allocations.every(
+      (allocation) =>
+        allocation &&
+        typeof allocation.ratio === 'number' &&
+        typeof allocation.type === 'string',
+    );
+
+  const chartData = hasValidAllocations
+    ? {
+        labels: data.allocations.map((allocation) => allocation.type),
+        datasets: [
+          {
+            data: data.allocations.map((allocation) => allocation.ratio),
+            backgroundColor: piePalette.slice(0, data.allocations.length),
+          },
+        ],
+      }
+    : emptyChartData;
 
   return (
     <Doughnut
@@ -36,15 +67,7 @@ export const AllocationPie = () => {
         cutout: '75%',
         hover: { mode: null },
       }}
-      data={{
-        labels: data.allocations.map((allocation) => allocation.type),
-        datasets: [
-          {
-            data: data.allocations.map((allocation) => allocation.ratio),
-            backgroundColor: piePalette,
-          },
-        ],
-      }}
+      data={chartData}
       plugins={[DonutCenterLogoPlugin]}
     />
   );
