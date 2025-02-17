@@ -23,7 +23,7 @@ const PortfolioBalance = () => {
   );
 
   if (!isFetched) {
-    return <Skeleton.Input />;
+    return <Skeleton.Input style={{ minHeight: 38 }} />;
   }
 
   return (

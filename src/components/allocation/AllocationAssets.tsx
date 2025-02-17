@@ -27,23 +27,16 @@ const AssetBadge = ({
   </Flex>
 );
 
-const AssetBadges = ({ assets }: { assets: string[] }) => (
-  <Flex>
-    {assets.map((asset, i) => (
-      <AssetBadge asset={asset} isLast={i >= assets.length - 1} />
-    ))}
-  </Flex>
-);
+export const AssetBadges = ({ assets }: { assets: string[] }) => {
+  if (assets.length === 0) return;
+  if (assets.length === 1) return <AssetBadge asset={assets[0]} />;
+  if (!assets.map) return;
 
-export const AllocationAssets = ({ assets }: { assets: string[] }) => {
-  switch (assets.length) {
-    case 0:
-      return 'N/A';
-    case 1:
-      return <AssetBadge asset={assets[0]} />;
-    case 2:
-    case 3:
-    default:
-      return <AssetBadges assets={assets} />;
-  }
+  return (
+    <Flex>
+      {assets.map((asset, i) => (
+        <AssetBadge key={asset} asset={asset} isLast={i >= assets.length - 1} />
+      ))}
+    </Flex>
+  );
 };

@@ -50,7 +50,7 @@ export const AllocationPie = () => {
         datasets: [
           {
             data: data.allocations.map((allocation) => allocation.ratio),
-            backgroundColor: piePalette.slice(0, data.allocations.length),
+            backgroundColor: piePalette,
           },
         ],
       }

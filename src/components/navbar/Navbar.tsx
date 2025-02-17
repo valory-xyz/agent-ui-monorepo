@@ -1,7 +1,8 @@
-import { Flex, Typography } from 'antd';
-import React from 'react';
+import { Avatar, Flex, Typography } from 'antd';
+import React, { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
+import { usePortfolio } from '../../hooks/usePortfolio';
 import { generateName } from '../../utils/agentName';
 
 export const AgentBranding = () => {
@@ -21,23 +22,35 @@ export const AgentBranding = () => {
 };
 
 export const AgentIdentity = () => {
-  // TODO: update once agent address available
-  const agentName = generateName('0x1234567890123456789012345678901234567890');
+  const { data, isFetched } = usePortfolio();
+
+  const agentName: string | null = useMemo(() => {
+    if (!isFetched) return null;
+    if (data && data.address) return generateName(data.address);
+    return null;
+  }, [data, isFetched]);
+
+  const agentAvatar = useMemo(() => {
+    if (agentName) {
+      return <Jazzicon diameter={32} seed={Number(data.address)} />;
+    }
+    return <Avatar size={32} />;
+  }, [agentName, data?.address]);
 
   return (
     <Flex gap={8} align="center">
-      <Jazzicon
-        diameter={32}
-        seed={Number('0x1234567890123456789012345678901234567890')}
-      />
+      {agentAvatar}
       <Flex vertical>
-        <Typography.Text strong>{agentName}</Typography.Text>
+        <Typography.Text strong style={{ height: 17 }}>
+          {agentName}
+        </Typography.Text>
         <Typography.Text
           type="secondary"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: 6,
+            height: 20,
           }}
         >
           Modius agent{' '}
@@ -58,6 +71,7 @@ export default function Navbar() {
       justify="space-between"
       style={{
         height: 68,
+        minHeight: 68,
         padding: '12px 24px',
         borderBottom: '1px solid #DFE5EE',
       }}

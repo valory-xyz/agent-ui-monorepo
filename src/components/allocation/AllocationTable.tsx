@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { piePalette } from '../../utils/chartjs/palette';
-import { AllocationAssets } from './AllocationAssets';
+import { AssetBadges } from './AllocationAssets';
 
 const columns = [
   {
@@ -23,7 +23,7 @@ const columns = [
           }}
         />
         <div style={{ paddingLeft: 32, display: 'flex' }}>
-          <AllocationAssets assets={assets} />
+          <AssetBadges assets={assets} />
         </div>
       </Flex>
     ),
@@ -39,8 +39,17 @@ const columns = [
     title: 'APR',
     dataIndex: 'apr',
     key: 'apr',
-    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
-    width: 64,
+    render: (text: string) => (
+      <Typography.Text
+        style={{
+          textAlign: 'right',
+          display: 'block',
+        }}
+      >
+        {text}%
+      </Typography.Text>
+    ),
+    width: 75,
   },
 ];
 
@@ -53,7 +62,7 @@ export const AllocationTable = () => {
         key: `${type}-${assets.join('-')}-${details}`,
         pool: assets,
         details: `${details}`,
-        apr: `${apr}%`,
+        apr: `${apr}`,
       })),
     [data?.allocations],
   );
