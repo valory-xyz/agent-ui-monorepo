@@ -1,10 +1,12 @@
-@import '~@fontsource/inter';
+@import url('~@fontsource/inter/index.css');
 
-body {
-    font-family: 'Inter', sans-serif;
-    min-width: 800px;
+* {
+    font-family: 'Inter', sans-serif !important;
 }
 
+body {
+    min-width: 800px;
+}
 
 .card-gradient {
     background: linear-gradient(#F5F7FA, #FFFFFF);
