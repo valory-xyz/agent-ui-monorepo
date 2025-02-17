@@ -80,7 +80,7 @@ export const usePortfolio = () =>
   useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      return mockPortfolio;
+      // return mockPortfolio;
       const response = await fetch(
         `http://localhost:${process.env.REACT_APP_API_PORT}/portfolio`,
       );

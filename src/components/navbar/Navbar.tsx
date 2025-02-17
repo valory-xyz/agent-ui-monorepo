@@ -1,4 +1,4 @@
-import { Avatar, Flex, Typography } from 'antd';
+import { Avatar, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
@@ -41,9 +41,13 @@ export const AgentIdentity = () => {
     <Flex gap={8} align="center">
       {agentAvatar}
       <Flex vertical>
-        <Typography.Text strong style={{ height: 17 }}>
-          {agentName}
-        </Typography.Text>
+        {agentName ? (
+          <Typography.Text strong style={{ height: 17 }}>
+            agentName
+          </Typography.Text>
+        ) : (
+          <Skeleton.Input active={!isFetched} style={{ height: 17 }} />
+        )}
         <Typography.Text
           type="secondary"
           style={{
