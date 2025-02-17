@@ -10,6 +10,8 @@ Served by the Modius agent, designed to be consumed by [Pearl](https://github.co
 3. Build for production via `yarn build`
     - `/build` is the output directory, and can be served statically
 
+Mock portfolio data available in `usePortfolio` hook. Return `mockDatasource` in place of API response.
+
 ## Release process
 
 1. Bump the version in `package.json`
