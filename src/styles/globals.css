@@ -1,4 +1,4 @@
-@import url('~@fontsource/inter/index.css');
+/* @import url('~@fontsource/inter/index.css'); IMPORTED VIA CDN IN public/index.html */
 
 * {
     font-family: 'Inter', sans-serif !important;
