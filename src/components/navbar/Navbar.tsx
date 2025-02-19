@@ -43,7 +43,7 @@ export const AgentIdentity = () => {
       <Flex vertical>
         {agentName ? (
           <Typography.Text strong style={{ height: 17 }}>
-            agentName
+            {agentName}
           </Typography.Text>
         ) : (
           <Skeleton.Input active={!isFetched} style={{ height: 17 }} />
