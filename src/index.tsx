@@ -1,7 +1,7 @@
-import 'antd/dist/reset.css';
-import './styles/globals.css';
-
+// Moved style imports to /public
+// import './styles/antd-reset.css';
 // import './styles/globals.css';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConfigProvider } from 'antd';
 import React from 'react';
