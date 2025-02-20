@@ -81,10 +81,12 @@ export const usePortfolio = () =>
     queryKey: ['portfolio'],
     queryFn: async () => {
       // return mockPortfolio;
-      const response = await fetch(
-        `http://localhost:${process.env.REACT_APP_API_PORT}/portfolio`,
-      );
-      return response.json();
+      try {
+        const response = await fetch(`http://127.0.0.1:8716/portfolio`);
+        return response.json();
+      } catch {
+        return {};
+      }
     },
     refetchInterval: 1000,
   });
