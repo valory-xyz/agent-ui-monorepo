@@ -22,8 +22,7 @@ export interface PortfolioResponse {
   'portfolio-breakdown': PortfolioAsset[];
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockPortfolio = {
+export const mockPortfolio = {
   address: '0x000000000000000000000000000000000000dEaD',
   'portfolio-value': 849585.8579967507,
   allocations: [

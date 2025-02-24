@@ -12,6 +12,8 @@ import React, { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 
+const { Text } = Typography;
+
 const columns = [
   {
     title: 'Token',
@@ -22,13 +24,9 @@ const columns = [
         <Avatar
           src={`/logos/tokens/${asset.toLowerCase()}.png`}
           alt={asset}
-          style={{
-            width: 20,
-            height: 20,
-            marginRight: 8,
-          }}
+          style={{ width: 20, height: 20, marginRight: 8 }}
         />
-        <Typography.Text>{asset}</Typography.Text>
+        <Text>{asset}</Text>
       </Flex>
     ),
   },
@@ -37,14 +35,9 @@ const columns = [
     dataIndex: 'amount',
     key: 'amount',
     render: (amount: number) => (
-      <Typography.Text
-        style={{
-          display: 'block',
-          textAlign: 'right',
-        }}
-      >
+      <Text style={{ display: 'block', textAlign: 'right' }}>
         {Intl.NumberFormat('en-US').format(amount)}
-      </Typography.Text>
+      </Text>
     ),
   },
   {
@@ -52,18 +45,13 @@ const columns = [
     dataIndex: 'price',
     key: 'price',
     render: (price: number) => (
-      <Typography.Text
-        style={{
-          display: 'block',
-          textAlign: 'right',
-        }}
-      >
+      <Text style={{ display: 'block', textAlign: 'right' }}>
         $
         {Intl.NumberFormat('en-US', {
           maximumFractionDigits: 2,
           minimumFractionDigits: 2,
         }).format(price)}
-      </Typography.Text>
+      </Text>
     ),
   },
   {
@@ -78,18 +66,13 @@ const columns = [
     dataIndex: 'ratio',
     key: 'ratio',
     render: (ratio: number) => (
-      <Typography.Text
-        style={{
-          display: 'block',
-          textAlign: 'right',
-        }}
-      >
+      <Text style={{ display: 'block', textAlign: 'right' }}>
         {Intl.NumberFormat('en-US', {
           style: 'percent',
           maximumFractionDigits: 4,
           minimumFractionDigits: 0,
         }).format(ratio)}
-      </Typography.Text>
+      </Text>
     ),
   },
 ];
@@ -98,12 +81,9 @@ export const BreakdownModal = (props: ModalProps) => {
   const { data } = usePortfolio();
 
   const dataSource = useMemo(() => {
-    if (!data) {
-      return null;
-    }
+    if (!data) return null;
 
     // create object to sum balances from all
-
     return data?.['portfolio-breakdown']?.map(
       ({ asset, balance, price, ratio }) => ({
         key: asset,

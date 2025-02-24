@@ -1,13 +1,9 @@
 import { Avatar, Flex, Typography } from 'antd';
 import React from 'react';
 
-const AssetBadge = ({
-  asset,
-  isLast = true,
-}: {
-  asset: string;
-  isLast?: boolean;
-}) => (
+type AssetBadgeProps = { asset: string; isLast?: boolean };
+
+const AssetBadge = ({ asset, isLast = true }: AssetBadgeProps) => (
   <Flex
     gap={4}
     align="center"

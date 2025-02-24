@@ -1,13 +1,15 @@
 import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { BreakdownModal } from '../breakdown-modal/BreakdownModal';
 
+const { Title } = Typography;
+
 const PortfolioTitle = () => (
-  <Typography.Title level={4} style={{ marginBottom: 0 }} type="secondary">
+  <Title level={4} style={{ marginBottom: 0 }} type="secondary">
     Portfolio
-  </Typography.Title>
+  </Title>
 );
 
 const PortfolioBalance = () => {
@@ -29,9 +31,9 @@ const PortfolioBalance = () => {
   return (
     <Flex gap={2} style={{ alignItems: 'flex-end' }}>
       <span style={{ paddingBottom: 4, fontWeight: 'bold' }}>$</span>
-      <Typography.Title level={2} style={{ margin: 0 }}>
+      <Title level={2} style={{ margin: 0 }}>
         {portfolioBalance}
-      </Typography.Title>
+      </Title>
     </Flex>
   );
 };
@@ -44,8 +46,7 @@ const SeeBreakdownButton = (props: ButtonProps) => (
 
 export default function PortfolioCard() {
   const { data } = usePortfolio();
-  const [breakdownModalVisible, setBreakdownModalVisible] =
-    React.useState(false);
+  const [breakdownModalVisible, setBreakdownModalVisible] = useState(false);
 
   const handleOpenBreakdownModal = () => setBreakdownModalVisible(true);
   const handleCloseBreakdownModal = () => setBreakdownModalVisible(false);
