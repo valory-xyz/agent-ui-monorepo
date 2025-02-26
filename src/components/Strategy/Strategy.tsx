@@ -20,7 +20,7 @@ const { Title, Text } = Typography;
 const TradingStrategyTitle = () => (
   <Title level={5} style={{ marginBottom: 0, marginTop: 4 }} type="secondary">
     Trading strategy
-    <Tooltip title="This is a dummy tooltip text">
+    <Tooltip title="Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.">
       <InfoCircleOutlined style={{ marginLeft: 6 }} />
     </Tooltip>
   </Title>
@@ -29,7 +29,7 @@ const TradingStrategyTitle = () => (
 const OperatingProtocolsTitle = () => (
   <Title level={5} style={{ marginBottom: 0, marginTop: 4 }} type="secondary">
     Operating protocols
-    <Tooltip title="This is a dummy tooltip text">
+    <Tooltip title="Operating protocols are the protocols your agent uses to allocate funds and manage investments.">
       <InfoCircleOutlined style={{ marginLeft: 6 }} />
     </Tooltip>
   </Title>

@@ -67,11 +67,11 @@ type OperatingProtocolsProps = { protocol: SelectedProtocol };
 const OperatingProtocols = ({ protocol }: OperatingProtocolsProps) => {
   return (
     <SystemMessage label="Operating protocols excluded:">
-      <Pill size="large" style={{ marginLeft: 0 }}>
+      <Pill size="large" style={{ marginLeft: 0, paddingRight: 16 }}>
         <img
           src={protocolImageMap[protocol]}
           alt={protocol}
-          style={{ width: 24, height: 24 }}
+          style={{ width: 18, height: 18 }}
         />
         {protocolMap[protocol]}
       </Pill>
