@@ -1,10 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
-export type ChatResponse = {
-  reasoning: string;
-  trading_type: 'risky' | 'balanced';
-  selected_protocols: ('balancerPool' | 'sturdy')[];
-};
+import { mockChat } from '../../mocks/mockChat';
+import { ChatResponse } from '../../types';
 
 const IS_MOCK_ENABLED = true;
 
@@ -21,11 +18,7 @@ export const useChats = () =>
 
         return new Promise<ChatResponse>((resolve) => {
           setTimeout(() => {
-            resolve({
-              reasoning: `Mocked response for prompt: ${prompt}`,
-              trading_type: 'balanced',
-              selected_protocols: ['balancerPool'],
-            });
+            resolve(mockChat);
           }, 2000);
         });
         return;

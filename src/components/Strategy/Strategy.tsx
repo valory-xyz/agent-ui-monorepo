@@ -11,15 +11,11 @@ import {
 } from 'antd';
 import React, { useMemo } from 'react';
 
+import { protocolImageMap, tradingTypeMap } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
 
 const { Title, Text } = Typography;
-
-const mapTradingType = {
-  risky: 'Risky',
-  balanced: 'Balanced',
-} as const;
 
 const TradingStrategyTitle = () => (
   <Title level={5} style={{ marginBottom: 0, marginTop: 4 }} type="secondary">
@@ -39,11 +35,13 @@ const OperatingProtocolsTitle = () => (
   </Title>
 );
 
-const protocolImageMap = {
-  balancerPool: '/logos/protocols/balancer.png',
-  sturdy: '/logos/protocols/sturdy.png',
-} as const;
+const Loader = () => (
+  <Skeleton.Input style={{ width: 100 }} active size="small" />
+);
 
+/**
+ * Trading strategy and protocols
+ */
 export const Strategy = () => {
   const { isLoading, data } = usePortfolio();
 
@@ -62,10 +60,10 @@ export const Strategy = () => {
           <Flex vertical gap={8} align="self-start">
             <TradingStrategyTitle />
             {isLoading ? (
-              <Skeleton.Input style={{ width: 100 }} active size="small" />
+              <Loader />
             ) : (
               <Pill type="primary" size="large" style={{ marginLeft: 0 }}>
-                {mapTradingType[data?.trading_type]}
+                {tradingTypeMap[data?.trading_type]}
               </Pill>
             )}
           </Flex>
@@ -75,7 +73,7 @@ export const Strategy = () => {
           <Flex vertical gap={8} align="self-start">
             <OperatingProtocolsTitle />
             {isLoading ? (
-              <Skeleton.Input style={{ width: 100 }} active size="small" />
+              <Loader />
             ) : operatingProtocols.length === 0 ? (
               <Text type="secondary">No protocols</Text>
             ) : (

@@ -1,6 +1,9 @@
-export const mockChat = {
+import { ChatResponse } from '../types';
+
+export const mockChat: ChatResponse = {
   selected_protocols: ['balancerPool', 'sturdy'],
   trading_type: 'risky',
+  previous_trading_type: 'balanced',
   reasoning:
     'For a lower risk approach, I have selected lending protocols and stablecoin strategies to prioritize capital preservation and steady yields over higher potential returns.',
 };

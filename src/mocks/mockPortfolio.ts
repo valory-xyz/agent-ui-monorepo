@@ -1,4 +1,6 @@
-export const mockPortfolio = {
+import { PortfolioResponse } from '../types';
+
+export const mockPortfolio: PortfolioResponse = {
   address: '0x000000000000000000000000000000000000dEaD',
   'portfolio-value': 849585.8579967507,
   allocations: [
