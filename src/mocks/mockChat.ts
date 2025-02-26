@@ -1,4 +1,9 @@
-export const mockChat = {};
+export const mockChat = {
+  selected_protocols: ['balancerPool', 'sturdy'],
+  trading_type: 'risky',
+  reasoning:
+    'For a lower risk approach, I have selected lending protocols and stablecoin strategies to prioritize capital preservation and steady yields over higher potential returns.',
+};
 
 export const mockChatList = [
   {
@@ -24,22 +29,6 @@ export const mockChatList = [
   },
   {
     type: 'user',
-    text: 'Great! Thanks for the update. I’m looking forward to seeing the results of these changes.',
-  },
-  {
-    type: 'user',
-    text: 'Great! Thanks for the update. I’m looking forward to seeing the results of these changes.',
-  },
-  {
-    type: 'user',
-    text: 'Great! Thanks for the update. I’m looking forward to seeing the results of these changes.',
-  },
-  {
-    type: 'user',
-    text: 'Great! Thanks for the update. I’m looking forward to seeing the results of these changes.',
-  },
-  {
-    type: 'agent',
     text: 'Great! Thanks for the update. I’m looking forward to seeing the results of these changes.',
   },
 ];
