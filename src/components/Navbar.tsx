@@ -2,8 +2,8 @@ import { Avatar, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
-import { usePortfolio } from '../../hooks/usePortfolio';
-import { generateName } from '../../utils/agentName';
+import { usePortfolio } from '../hooks/usePortfolio';
+import { generateName } from '../utils/agentName';
 
 const { Text } = Typography;
 

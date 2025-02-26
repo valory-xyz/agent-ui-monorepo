@@ -1,10 +1,10 @@
 import { Flex } from 'antd';
 import React from 'react';
 
-import AllocationCard from './components/allocation/AllocationCard';
+import AllocationCard from './components/Allocation/AllocationCard';
 import { Chat } from './components/Chat/Chat';
-import Navbar from './components/navbar/Navbar';
-import PortfolioCard from './components/portfolio/PortfolioCard';
+import Navbar from './components/Navbar';
+import PortfolioCard from './components/Portfolio/PortfolioCard';
 import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
