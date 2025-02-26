@@ -9,7 +9,11 @@ import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
   return (
-    <Flex vertical style={{ width: '100%', minHeight: '100vh' }} gap={24}>
+    <Flex
+      vertical
+      style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }}
+      gap={24}
+    >
       <Navbar />
       <Flex
         vertical
