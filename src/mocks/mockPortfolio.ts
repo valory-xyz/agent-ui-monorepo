@@ -49,4 +49,6 @@ export const mockPortfolio = {
       ratio: 0.0,
     },
   ],
+  selected_protocols: ['balancerPool', 'sturdy'],
+  trading_type: 'balanced',
 };

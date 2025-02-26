@@ -4,6 +4,7 @@ import React from 'react';
 import AllocationCard from './components/allocation/AllocationCard';
 import Navbar from './components/navbar/Navbar';
 import PortfolioCard from './components/portfolio/PortfolioCard';
+import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       >
         <PortfolioCard />
         <AllocationCard />
+        <Strategy />
       </Flex>
     </Flex>
   );

@@ -2,15 +2,10 @@ import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
+import { CardTitle } from '../../ui/CardTitle';
 import { BreakdownModal } from '../breakdown-modal/BreakdownModal';
 
 const { Title } = Typography;
-
-const PortfolioTitle = () => (
-  <Title level={4} style={{ marginBottom: 0 }} type="secondary">
-    Portfolio
-  </Title>
-);
 
 const PortfolioBalance = () => {
   const { data, isFetched } = usePortfolio();
@@ -55,7 +50,7 @@ export default function PortfolioCard() {
     <>
       <Card className="card-gradient">
         <Flex vertical gap={8}>
-          <PortfolioTitle />
+          <CardTitle text="Portfolio" />
           <PortfolioBalance />
           <SeeBreakdownButton
             disabled={typeof data?.['portfolio-value'] !== 'number'}

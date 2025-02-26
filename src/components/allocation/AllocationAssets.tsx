@@ -1,26 +1,16 @@
 import { Avatar, Flex, Typography } from 'antd';
 import React from 'react';
 
+import { Pill } from '../../ui/Pill';
+
 type AssetBadgeProps = { asset: string; isLast?: boolean };
 
 const AssetBadge = ({ asset, isLast = true }: AssetBadgeProps) => (
-  <Flex
-    gap={4}
-    align="center"
-    style={{
-      border: '2px solid #DFE5EE',
-      display: 'inline-flex',
-      padding: '2px 4px',
-      borderRadius: 32,
-      marginLeft: -28,
-      paddingRight: 8,
-      background: 'white',
-    }}
-  >
+  <Pill>
     <Avatar size={20} src={`/logos/tokens/${asset.toLowerCase()}.png`} />
     <Typography.Text>{asset}</Typography.Text>
     {!isLast && <div style={{ width: 20 }} />}
-  </Flex>
+  </Pill>
 );
 
 export const AssetBadges = ({ assets }: { assets: string[] }) => {

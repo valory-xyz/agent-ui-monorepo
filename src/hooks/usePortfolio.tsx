@@ -22,10 +22,14 @@ export interface PortfolioResponse {
   'portfolio-value': number;
   allocations: Allocation[];
   'portfolio-breakdown': PortfolioAsset[];
+  trading_type: 'risky' | 'balanced';
+  selected_protocols: ('balancerPool' | 'sturdy')[];
 }
 
-export const usePortfolio = () =>
-  useQuery<PortfolioResponse>({
+export const usePortfolio = () => {
+  // return { isFetched: false, data: mockPortfolio };
+
+  return useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
       return mockPortfolio;
@@ -38,3 +42,4 @@ export const usePortfolio = () =>
     },
     refetchInterval: 1000,
   });
+};
