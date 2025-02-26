@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 
 import { COLOR } from '../../constants/colors';
+import { Markdown } from '../../ui/Markdown';
 
 const chatStyles = { height: 360, margin: '16px 0' };
 
@@ -68,7 +69,11 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
     <Flex vertical style={{ ...styles }}>
       <Flex gap={16}>
         {chatLogo}
-        {chat.text}
+        {typeof chat.text === 'string' ? (
+          <Markdown>{chat.text}</Markdown>
+        ) : (
+          chat.text
+        )}
       </Flex>
     </Flex>
   );
@@ -82,10 +87,12 @@ export const DisplayChats = ({ chats }: { chats: EachChat[] }) => {
 
   // Scroll to bottom when messages change
   useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop =
-        chatContainerRef.current.scrollHeight;
-    }
+    setTimeout(() => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop =
+          chatContainerRef.current.scrollHeight;
+      }
+    }, 0);
   }, [chats]);
 
   return (
