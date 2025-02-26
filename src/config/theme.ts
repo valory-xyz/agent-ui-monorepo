@@ -58,7 +58,7 @@ export const mainTheme: ThemeConfig = {
       colorSuccess: '#135200',
     },
   },
-};
+} as const;
 
 // /* Pool */
 

@@ -51,4 +51,4 @@ export const mockPortfolio = {
   ],
   selected_protocols: ['balancerPool', 'sturdy'],
   trading_type: 'balanced',
-};
+} as const;
