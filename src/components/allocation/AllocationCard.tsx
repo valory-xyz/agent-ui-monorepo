@@ -7,7 +7,7 @@ import { AllocationTable } from './AllocationTable';
 
 export default function AllocationCard() {
   return (
-    <Card className="card-gradient">
+    <Card className="card-border card-gradient">
       <CardTitle text="Allocation" />
       <Flex
         style={{ justifyContent: 'space-between', alignItems: 'center' }}

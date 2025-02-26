@@ -3,7 +3,7 @@ import React, { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CardTitle } from '../../ui/CardTitle';
-import { BreakdownModal } from '../breakdown-modal/BreakdownModal';
+import { BreakdownModal } from './BreakdownModal';
 
 const { Title } = Typography;
 
@@ -48,7 +48,7 @@ export default function PortfolioCard() {
 
   return (
     <>
-      <Card className="card-gradient">
+      <Card className="card-border card-gradient">
         <Flex vertical gap={8}>
           <CardTitle text="Portfolio" />
           <PortfolioBalance />

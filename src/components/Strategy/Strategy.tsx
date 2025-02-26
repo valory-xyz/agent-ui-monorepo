@@ -53,10 +53,10 @@ export const Strategy = () => {
     return data.selected_protocols.map((protocol: string) => (
       <Avatar key={protocol} size={32} src={protocolImageMap[protocol]} />
     ));
-  }, [data.selected_protocols]);
+  }, [data?.selected_protocols]);
 
   return (
-    <Card className="card-gradient">
+    <Card className="card-border card-gradient">
       <Row>
         <Col md={12} xs={24}>
           <Flex vertical gap={8} align="self-start">

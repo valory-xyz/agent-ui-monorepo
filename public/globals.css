@@ -8,6 +8,11 @@ body {
   min-width: 800px;
 }
 
+.card-border {
+  outline: 1px solid #E4E4E4;
+  border: 4px solid #ffffff;
+}
+
 .card-gradient {
   background: linear-gradient(#f5f7fa, #ffffff);
 }
