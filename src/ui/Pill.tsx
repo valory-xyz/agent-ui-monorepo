@@ -29,12 +29,12 @@ export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
       {type && (
         <Badge
           className={`ant-tag ant-tag-${type}`}
-          color={type === 'primary' ? COLOR.primary : COLOR.danger}
+          color={type === 'primary' ? COLOR.blue : COLOR.danger}
           styles={{
             indicator: {
               width: 6,
               height: 6,
-              boxShadow: `0px 0 0px 2px ${type === 'primary' ? COLOR.primary : COLOR.danger}40`,
+              boxShadow: `0px 0 0px 2px ${type === 'primary' ? COLOR.blue : COLOR.danger}40`,
             },
           }}
         />

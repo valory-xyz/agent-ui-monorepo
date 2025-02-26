@@ -2,6 +2,7 @@ import { Flex } from 'antd';
 import React from 'react';
 
 import AllocationCard from './components/allocation/AllocationCard';
+import { Chat } from './components/Chat/Chat';
 import Navbar from './components/navbar/Navbar';
 import PortfolioCard from './components/portfolio/PortfolioCard';
 import { Strategy } from './components/Strategy/Strategy';
@@ -18,6 +19,7 @@ function App() {
         <PortfolioCard />
         <AllocationCard />
         <Strategy />
+        <Chat />
       </Flex>
     </Flex>
   );
