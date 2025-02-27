@@ -1,7 +1,9 @@
+type Address = `0x${string}`;
+
 type Allocation = {
   id: string;
   chain: 'ethereum' | 'mode';
-  address?: `0x${string}`;
+  address?: Address;
   type: string;
   assets: string[];
   apr: number;
@@ -11,7 +13,7 @@ type Allocation = {
 
 type PortfolioAsset = {
   asset: string;
-  address?: `0x${string}`;
+  address?: Address;
   value_usd: number;
   balance: number;
   ratio: number;
@@ -26,7 +28,7 @@ export type SelectedProtocol = 'balancerPool' | 'sturdy';
  * Portfolio response from the agent.
  */
 export type PortfolioResponse = {
-  address?: `0x${string}`;
+  address?: Address;
   portfolio_value: number;
   allocations: Allocation[];
   portfolio_breakdown: PortfolioAsset[];

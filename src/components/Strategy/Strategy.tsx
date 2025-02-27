@@ -11,7 +11,8 @@ import {
 } from 'antd';
 import React, { useMemo } from 'react';
 
-import { protocolImageMap, tradingTypeMap } from '../../constants/textMaps';
+import { NA } from '../../constants/common';
+import { PROTOCOL_IMAGE_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
 
@@ -46,7 +47,7 @@ const StrategyContent = () => {
     if (!data?.selected_protocols) return [];
 
     return data.selected_protocols.map((protocol: string) => (
-      <Avatar key={protocol} size={32} src={protocolImageMap[protocol]} />
+      <Avatar key={protocol} size={32} src={PROTOCOL_IMAGE_MAP[protocol]} />
     ));
   }, [data?.selected_protocols]);
 
@@ -58,9 +59,11 @@ const StrategyContent = () => {
 
           {isLoading ? (
             <Loader />
+          ) : !data?.trading_type ? (
+            NA
           ) : (
             <Pill type="primary" size="large" style={{ marginLeft: 0 }}>
-              {tradingTypeMap[data?.trading_type]}
+              {TRADING_TYPE_MAP[data.trading_type]}
             </Pill>
           )}
         </Flex>

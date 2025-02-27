@@ -5,9 +5,9 @@ import React, { CSSProperties, ReactNode, useCallback } from 'react';
 import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
 import {
-  protocolImageMap,
-  protocolMap,
-  tradingTypeMap,
+  PROTOCOL_IMAGE_MAP,
+  PROTOCOL_MAP,
+  TRADING_TYPE_MAP,
 } from '../../constants/textMaps';
 import { SelectedProtocol, TradingType } from '../../types';
 import { Pill } from '../../ui/Pill';
@@ -46,13 +46,13 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   return (
     <SystemMessage label="Trading strategy updated:">
       <Pill type={getType(from)} size="large" style={{ marginLeft: 0 }}>
-        {tradingTypeMap[from]}
+        {TRADING_TYPE_MAP[from]}
       </Pill>
       {to && (
         <>
           <ArrowRightOutlined />
           <Pill type={getType(to)} size="large" style={{ marginLeft: 0 }}>
-            {tradingTypeMap[to]}
+            {TRADING_TYPE_MAP[to]}
           </Pill>
         </>
       )}
@@ -76,11 +76,11 @@ export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
             style={{ marginLeft: 0, paddingRight: 16 }}
           >
             <img
-              src={protocolImageMap[protocol]}
+              src={PROTOCOL_IMAGE_MAP[protocol]}
               alt={protocol}
               style={{ width: 18, height: 18 }}
             />
-            {protocolMap[protocol]}
+            {PROTOCOL_MAP[protocol]}
           </Pill>
         ))}
   </SystemMessage>
