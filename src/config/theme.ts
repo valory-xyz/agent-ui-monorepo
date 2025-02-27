@@ -2,18 +2,15 @@ import { ThemeConfig } from 'antd';
 
 export const mainTheme: ThemeConfig = {
   token: {
-    // colorLink: '#C9ED29',
     colorPrimary: '#C9ED29',
     colorWarning: '#FF9C27',
     colorTextBase: '#0F172A',
     colorText: '#0F172A',
     colorInfoText: '#36075F',
     colorTextSecondary: '#4D596A',
-    // colorFillSecondary: '#E4E4E4',
     fontSize: 14,
     lineHeight: 20 / 14,
     fontFamily: 'Inter',
-    // colorBgContainer: '#FFFFFF',
   },
   components: {
     Alert: {

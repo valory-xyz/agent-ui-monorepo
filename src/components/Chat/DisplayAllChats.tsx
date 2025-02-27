@@ -82,7 +82,7 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
 /**
  * Chat component to display messages
  */
-export const DisplayChats = ({ chats }: { chats: EachChat[] }) => {
+export const DisplayAllChats = ({ chats }: { chats: EachChat[] }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change
