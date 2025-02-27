@@ -24,14 +24,12 @@ const SystemContainerStyles: CSSProperties = {
 
 type SystemMessageProps = { label: string; children: ReactNode };
 
-const SystemMessage = ({ label, children }: SystemMessageProps) => {
-  return (
-    <Flex align="center" gap={12} style={SystemContainerStyles}>
-      <Text type="secondary">{label}</Text>
-      {children}
-    </Flex>
-  );
-};
+const SystemMessage = ({ label, children }: SystemMessageProps) => (
+  <Flex align="center" gap={12} style={SystemContainerStyles}>
+    <Text type="secondary">{label}</Text>
+    {children}
+  </Flex>
+);
 
 type TradingStrategyProps = { from: TradingType; to: TradingType };
 

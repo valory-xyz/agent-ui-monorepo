@@ -9,7 +9,11 @@ export const usePortfolio = () =>
     queryKey: ['portfolio'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        return mockPortfolio;
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(mockPortfolio);
+          }, 2000);
+        });
       }
 
       try {

@@ -90,7 +90,7 @@ export const DisplayAllChats = ({ chats }: { chats: EachChat[] }) => {
   }, [chats]);
 
   return (
-    <Flex ref={chatContainerRef} vertical style={{ ...chatStyles }}>
+    <Flex ref={chatContainerRef} vertical style={chatStyles}>
       {chats.map((chat, index) => (
         <Chat key={index} chat={chat} isFirst={index === 0} />
       ))}

@@ -32,7 +32,7 @@ export const Chat = () => {
 
   // Send chat to the agent
   const handleSend = useCallback(async () => {
-    if (!currentText) return;
+    if (!currentText || currentText.trim().length === 0) return;
 
     setChats([...chats, { text: currentText, type: 'user' as const }]);
     setCurrentText('');
@@ -43,7 +43,7 @@ export const Chat = () => {
           const chats = [...prevChats];
 
           if (data.reasoning) {
-            chats.push({ type: 'agent', text: data.reasoning });
+            chats.push({ type: 'agent' as const, text: data.reasoning });
           }
 
           if (data.trading_type) {
@@ -83,17 +83,17 @@ export const Chat = () => {
 
       <Flex style={{ position: 'relative', width: '100%' }}>
         <TextArea
-          rows={4}
-          style={{ resize: 'none', paddingRight: 64 }}
-          placeholder="Give the agent custom guidance"
           value={currentText}
           onChange={(e) => setCurrentText(e.target.value)}
+          rows={4}
+          placeholder="Give the agent custom guidance"
+          style={{ resize: 'none', paddingRight: 64 }}
         />
         <Button
-          type="primary"
           loading={isSendingChat}
-          icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
           onClick={handleSend}
+          type="primary"
+          icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
           style={{ position: 'absolute', top: 8, right: 8, color: COLOR.black }}
         />
       </Flex>
