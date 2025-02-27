@@ -60,7 +60,7 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
   }, [isUser, isAgent, isSystem, isFirst]);
 
   return (
-    <Flex vertical style={{ ...styles }}>
+    <Flex vertical style={styles}>
       <Flex gap={16}>
         {chatLogo}
         {typeof chat.text === 'string' ? (
