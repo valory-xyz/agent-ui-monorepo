@@ -5,6 +5,8 @@ import { usePortfolio } from '../../hooks/usePortfolio';
 import { piePalette } from '../../utils/chartjs/palette';
 import { AssetBadges } from './AllocationAssets';
 
+const { Text } = Typography;
+
 const columns = [
   {
     title: 'Pool',
@@ -33,21 +35,14 @@ const columns = [
     dataIndex: 'details',
     key: 'details',
     width: 100,
-    render: (text: string) => <Typography.Text>{text}</Typography.Text>,
+    render: (text: string) => <Text>{text}</Text>,
   },
   {
     title: 'APR',
     dataIndex: 'apr',
     key: 'apr',
     render: (text: string) => (
-      <Typography.Text
-        style={{
-          textAlign: 'right',
-          display: 'block',
-        }}
-      >
-        {text}%
-      </Typography.Text>
+      <Text style={{ textAlign: 'right', display: 'block' }}>{text}%</Text>
     ),
     width: 75,
   },

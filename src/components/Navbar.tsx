@@ -2,10 +2,12 @@ import { Avatar, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
-import { usePortfolio } from '../../hooks/usePortfolio';
-import { generateName } from '../../utils/agentName';
+import { usePortfolio } from '../hooks/usePortfolio';
+import { generateName } from '../utils/agentName';
 
-export const AgentBranding = () => {
+const { Text } = Typography;
+
+const AgentBranding = () => {
   return (
     <Flex gap={8} align="center">
       <img
@@ -14,14 +16,14 @@ export const AgentBranding = () => {
         style={{ width: 40, height: 40 }}
       />
       <Flex vertical gap={0} style={{ fontSize: 14 }}>
-        <Typography.Text strong>Modius</Typography.Text>
-        <Typography.Text type="secondary">Agent economy</Typography.Text>
+        <Text strong>Modius</Text>
+        <Text type="secondary">Agent economy</Text>
       </Flex>
     </Flex>
   );
 };
 
-export const AgentIdentity = () => {
+const AgentIdentity = () => {
   const { data, isFetched } = usePortfolio();
 
   const agentName: string | null = useMemo(() => {
@@ -42,28 +44,18 @@ export const AgentIdentity = () => {
       {agentAvatar}
       <Flex vertical>
         {agentName ? (
-          <Typography.Text strong style={{ height: 17 }}>
+          <Text strong style={{ height: 17 }}>
             {agentName}
-          </Typography.Text>
+          </Text>
         ) : (
           <Skeleton.Input active={!isFetched} style={{ height: 17 }} />
         )}
-        <Typography.Text
+        <Text
           type="secondary"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            height: 20,
-          }}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, height: 20 }}
         >
-          Modius agent{' '}
-          {/* TODO: Add tooltip once copy created
-          <Tooltip>
-            <InfoCircleOutlined size={16} />
-          </Tooltip> 
-          */}
-        </Typography.Text>
+          Modius agent
+        </Text>
       </Flex>
     </Flex>
   );

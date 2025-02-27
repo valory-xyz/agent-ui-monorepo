@@ -1,14 +1,11 @@
 import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
-import { BreakdownModal } from '../breakdown-modal/BreakdownModal';
+import { CardTitle } from '../../ui/CardTitle';
+import { BreakdownModal } from './BreakdownModal';
 
-const PortfolioTitle = () => (
-  <Typography.Title level={4} style={{ marginBottom: 0 }} type="secondary">
-    Portfolio
-  </Typography.Title>
-);
+const { Title } = Typography;
 
 const PortfolioBalance = () => {
   const { data, isFetched } = usePortfolio();
@@ -18,7 +15,7 @@ const PortfolioBalance = () => {
       new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
-      }).format(data?.['portfolio-value'] ?? 0),
+      }).format(data?.portfolio_value ?? 0),
     [data],
   );
 
@@ -29,9 +26,9 @@ const PortfolioBalance = () => {
   return (
     <Flex gap={2} style={{ alignItems: 'flex-end' }}>
       <span style={{ paddingBottom: 4, fontWeight: 'bold' }}>$</span>
-      <Typography.Title level={2} style={{ margin: 0 }}>
+      <Title level={2} style={{ margin: 0 }}>
         {portfolioBalance}
-      </Typography.Title>
+      </Title>
     </Flex>
   );
 };
@@ -44,20 +41,19 @@ const SeeBreakdownButton = (props: ButtonProps) => (
 
 export default function PortfolioCard() {
   const { data } = usePortfolio();
-  const [breakdownModalVisible, setBreakdownModalVisible] =
-    React.useState(false);
+  const [breakdownModalVisible, setBreakdownModalVisible] = useState(false);
 
   const handleOpenBreakdownModal = () => setBreakdownModalVisible(true);
   const handleCloseBreakdownModal = () => setBreakdownModalVisible(false);
 
   return (
     <>
-      <Card className="card-gradient">
+      <Card className="card-border card-gradient">
         <Flex vertical gap={8}>
-          <PortfolioTitle />
+          <CardTitle text="Portfolio" />
           <PortfolioBalance />
           <SeeBreakdownButton
-            disabled={typeof data?.['portfolio-value'] !== 'number'}
+            disabled={typeof data?.portfolio_value !== 'number'}
             onClick={handleOpenBreakdownModal}
           />
         </Flex>
