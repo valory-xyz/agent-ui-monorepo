@@ -2,7 +2,7 @@ import { PortfolioResponse } from '../types';
 
 export const mockPortfolio: PortfolioResponse = {
   address: '0x000000000000000000000000000000000000dEaD',
-  'portfolio-value': 849585.8579967507,
+  portfolio_value: 849585.8579967507,
   allocations: [
     {
       chain: 'mode',
@@ -25,7 +25,7 @@ export const mockPortfolio: PortfolioResponse = {
       address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
     },
   ],
-  'portfolio-breakdown': [
+  portfolio_breakdown: [
     {
       asset: 'WETH',
       address: '0x4200000000000000000000000000000000000006',

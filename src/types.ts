@@ -27,9 +27,9 @@ export type SelectedProtocol = 'balancerPool' | 'sturdy';
  */
 export type PortfolioResponse = {
   address?: `0x${string}`;
-  'portfolio-value': number;
+  portfolio_value: number;
   allocations: Allocation[];
-  'portfolio-breakdown': PortfolioAsset[];
+  portfolio_breakdown: PortfolioAsset[];
   trading_type: TradingType;
   selected_protocols: SelectedProtocol[];
 };

@@ -15,7 +15,7 @@ const PortfolioBalance = () => {
       new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
-      }).format(data?.['portfolio-value'] ?? 0),
+      }).format(data?.portfolio_value ?? 0),
     [data],
   );
 
@@ -53,7 +53,7 @@ export default function PortfolioCard() {
           <CardTitle text="Portfolio" />
           <PortfolioBalance />
           <SeeBreakdownButton
-            disabled={typeof data?.['portfolio-value'] !== 'number'}
+            disabled={typeof data?.portfolio_value !== 'number'}
             onClick={handleOpenBreakdownModal}
           />
         </Flex>

@@ -84,7 +84,7 @@ export const BreakdownModal = (props: ModalProps) => {
     if (!data) return null;
 
     // create object to sum balances from all
-    return data?.['portfolio-breakdown']?.map(
+    return data?.portfolio_breakdown?.map(
       ({ asset, balance, price, ratio }) => ({
         key: asset,
         asset,
