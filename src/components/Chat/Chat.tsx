@@ -3,7 +3,6 @@ import { Button, Card, Flex, Input, notification } from 'antd';
 import React, { useCallback, useState } from 'react';
 
 import { COLOR } from '../../constants/colors';
-import { mockChatList } from '../../mocks/mockChat';
 import { CardTitle } from '../../ui/CardTitle';
 import { DisplayAllChats, EachChat } from './DisplayAllChats';
 import { OperatingProtocols, TradingStrategy } from './SystemChat';
@@ -27,16 +26,17 @@ const EmptyChat = () => (
  */
 export const Chat = () => {
   const [currentText, setCurrentText] = useState('');
-  const [chats, setChats] = useState<EachChat[]>(mockChatList as EachChat[]); // TODO: remove dummy
+  const [chats, setChats] = useState<EachChat[]>([]);
 
   const { isPending: isSendingChat, mutateAsync: onSendChat } = useChats();
+
+  // Send chat to the agent
   const handleSend = useCallback(async () => {
     if (!currentText) return;
 
     setChats([...chats, { text: currentText, type: 'user' as const }]);
     setCurrentText('');
 
-    // Send chat to agent
     onSendChat(currentText, {
       onSuccess: (data) => {
         setChats((prevChats) => {
@@ -58,13 +58,10 @@ export const Chat = () => {
             });
           }
 
-          // TODO: is this an array?
           if (data.selected_protocols && data.selected_protocols.length > 0) {
             chats.push({
               type: 'system' as const,
-              text: (
-                <OperatingProtocols protocol={data.selected_protocols[0]} />
-              ),
+              text: <OperatingProtocols protocols={data.selected_protocols} />,
             });
           }
 

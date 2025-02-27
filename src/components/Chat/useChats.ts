@@ -1,27 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { IS_MOCK_ENABLED } from '../../mocks/config';
 import { mockChat } from '../../mocks/mockChat';
 import { ChatResponse } from '../../types';
-
-const IS_MOCK_ENABLED = true;
 
 export const useChats = () =>
   useMutation<ChatResponse, Error, string>({
     mutationFn: async (prompt: string) => {
-      // TODO: Remove dummy
       if (IS_MOCK_ENABLED) {
-        // return new Promise<ChatResponse>((_resolve, reject) => {
-        //   setTimeout(() => {
-        //     reject('Failed to submit prompt.');
-        //   }, 2000);
-        // });
-
         return new Promise<ChatResponse>((resolve) => {
           setTimeout(() => {
             resolve(mockChat);
           }, 2000);
         });
-        return;
       }
 
       const response = await fetch(
@@ -39,6 +30,6 @@ export const useChats = () =>
         throw new Error('Failed to submit prompt.');
       }
 
-      return response.json() as Promise<ChatResponse>;
+      return response.json();
     },
   });

@@ -3,6 +3,7 @@ import { Flex, Typography } from 'antd';
 import React, { CSSProperties, ReactNode, useCallback } from 'react';
 
 import { COLOR } from '../../constants/colors';
+import { NA } from '../../constants/common';
 import {
   protocolImageMap,
   protocolMap,
@@ -14,14 +15,15 @@ import { Pill } from '../../ui/Pill';
 const { Text } = Typography;
 
 const SystemContainerStyles: CSSProperties = {
-  marginTop: 0,
   width: '100%',
-  backgroundColor: COLOR.lightGrey,
+  marginTop: 0,
   padding: '8px 16px',
+  backgroundColor: COLOR.lightGrey,
   borderRadius: 8,
 };
 
 type SystemMessageProps = { label: string; children: ReactNode };
+
 const SystemMessage = ({ label, children }: SystemMessageProps) => {
   return (
     <Flex align="center" gap={12} style={SystemContainerStyles}>
@@ -33,6 +35,9 @@ const SystemMessage = ({ label, children }: SystemMessageProps) => {
 
 type TradingStrategyProps = { from: TradingType; to: TradingType };
 
+/**
+ * Trading strategy update message.
+ */
 export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   const getType = useCallback((type: TradingType) => {
     if (type === 'balanced') return 'primary';
@@ -57,19 +62,28 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   );
 };
 
-type OperatingProtocolsProps = { protocol: SelectedProtocol };
+type OperatingProtocolsProps = { protocols: SelectedProtocol[] };
 
-export const OperatingProtocols = ({ protocol }: OperatingProtocolsProps) => {
-  return (
-    <SystemMessage label="Operating protocols excluded:">
-      <Pill size="large" style={{ marginLeft: 0, paddingRight: 16 }}>
-        <img
-          src={protocolImageMap[protocol]}
-          alt={protocol}
-          style={{ width: 18, height: 18 }}
-        />
-        {protocolMap[protocol]}
-      </Pill>
-    </SystemMessage>
-  );
-};
+/**
+ * Operating protocols exclusion message.
+ */
+export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
+  <SystemMessage label="Operating protocols excluded:">
+    {protocols.length === 0
+      ? NA
+      : protocols.map((protocol) => (
+          <Pill
+            size="large"
+            key={protocol}
+            style={{ marginLeft: 0, paddingRight: 16 }}
+          >
+            <img
+              src={protocolImageMap[protocol]}
+              alt={protocol}
+              style={{ width: 18, height: 18 }}
+            />
+            {protocolMap[protocol]}
+          </Pill>
+        ))}
+  </SystemMessage>
+);

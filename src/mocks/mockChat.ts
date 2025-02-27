@@ -6,7 +6,7 @@ export const mockChat: ChatResponse = {
   previous_trading_type: 'balanced',
   reasoning:
     'For a lower risk approach, I have selected lending protocols and stablecoin strategies to prioritize capital preservation and steady yields over higher potential returns.',
-};
+} as const;
 
 export const mockChatList = [
   {
@@ -47,4 +47,4 @@ export const mockChatList = [
 <p>These updates should help us capture more profitable opportunities while keeping things safe. Let me know if you’d like me to tweak anything further!</p>
 </div>`,
   },
-];
+] as const;

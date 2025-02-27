@@ -10,13 +10,7 @@ import React, {
 import { COLOR } from '../../constants/colors';
 import { Markdown } from '../../ui/Markdown';
 
-const chatStyles = { height: 360, margin: '16px 0' };
-
-/**
- * - Display agent’s messages
- * - Display trading strategy
- * - Display operating protocols
- */
+const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
 
 const AgentChatLogo = () => (
   <img
@@ -61,7 +55,7 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
         color: COLOR.white,
       }),
       ...(isAgent && { alignSelf: 'flex-start' }),
-      ...(isSystem && { borderRadius: 8, marginTop: isFirst ? 0 : 8 }),
+      ...(isSystem && { borderRadius: 8, marginTop: 8 }),
     };
   }, [isUser, isAgent, isSystem, isFirst]);
 
@@ -89,18 +83,14 @@ export const DisplayAllChats = ({ chats }: { chats: EachChat[] }) => {
   useEffect(() => {
     setTimeout(() => {
       if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop =
-          chatContainerRef.current.scrollHeight;
+        const { scrollHeight } = chatContainerRef.current;
+        chatContainerRef.current.scrollTop = scrollHeight;
       }
     }, 0);
   }, [chats]);
 
   return (
-    <Flex
-      ref={chatContainerRef}
-      vertical
-      style={{ ...chatStyles, overflow: 'auto' }}
-    >
+    <Flex ref={chatContainerRef} vertical style={{ ...chatStyles }}>
       {chats.map((chat, index) => (
         <Chat key={index} chat={chat} isFirst={index === 0} />
       ))}

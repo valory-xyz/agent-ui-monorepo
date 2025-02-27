@@ -39,14 +39,11 @@ const Loader = () => (
   <Skeleton.Input style={{ width: 100 }} active size="small" />
 );
 
-/**
- * Trading strategy and protocols
- */
-export const Strategy = () => {
+const StrategyContent = () => {
   const { isLoading, data } = usePortfolio();
 
   const operatingProtocols = useMemo(() => {
-    if (!data?.selected_protocols) return;
+    if (!data?.selected_protocols) return [];
 
     return data.selected_protocols.map((protocol: string) => (
       <Avatar key={protocol} size={32} src={protocolImageMap[protocol]} />
@@ -54,36 +51,45 @@ export const Strategy = () => {
   }, [data?.selected_protocols]);
 
   return (
-    <Card className="card-border card-gradient">
-      <Row>
-        <Col md={12} xs={24}>
-          <Flex vertical gap={8} align="self-start">
-            <TradingStrategyTitle />
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <Pill type="primary" size="large" style={{ marginLeft: 0 }}>
-                {tradingTypeMap[data?.trading_type]}
-              </Pill>
-            )}
-          </Flex>
-        </Col>
+    <Row>
+      <Col md={12} xs={24}>
+        <Flex vertical gap={8} align="self-start">
+          <TradingStrategyTitle />
 
-        <Col md={12} xs={24}>
-          <Flex vertical gap={8} align="self-start">
-            <OperatingProtocolsTitle />
-            {isLoading ? (
-              <Loader />
-            ) : operatingProtocols.length === 0 ? (
-              <Text type="secondary">No protocols</Text>
-            ) : (
-              <Flex gap={8} align="center">
-                {operatingProtocols.map((protocol) => protocol)}
-              </Flex>
-            )}
-          </Flex>
-        </Col>
-      </Row>
-    </Card>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <Pill type="primary" size="large" style={{ marginLeft: 0 }}>
+              {tradingTypeMap[data?.trading_type]}
+            </Pill>
+          )}
+        </Flex>
+      </Col>
+
+      <Col md={12} xs={24}>
+        <Flex vertical gap={8} align="self-start">
+          <OperatingProtocolsTitle />
+
+          {isLoading ? (
+            <Loader />
+          ) : operatingProtocols.length === 0 ? (
+            <Text type="secondary">No protocols</Text>
+          ) : (
+            <Flex gap={8} align="center">
+              {operatingProtocols}
+            </Flex>
+          )}
+        </Flex>
+      </Col>
+    </Row>
   );
 };
+
+/**
+ * Trading strategy and protocols
+ */
+export const Strategy = () => (
+  <Card className="card-border card-gradient">
+    <StrategyContent />
+  </Card>
+);

@@ -1,15 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { IS_MOCK_ENABLED } from '../mocks/config';
 import { mockPortfolio } from '../mocks/mockPortfolio';
 import { PortfolioResponse } from '../types';
 
-export const usePortfolio = () => {
-  // return { isFetched: false, data: mockPortfolio };
-
-  return useQuery<PortfolioResponse>({
+export const usePortfolio = () =>
+  useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      return mockPortfolio;
+      if (IS_MOCK_ENABLED) {
+        return mockPortfolio;
+      }
+
       try {
         const response = await fetch(`http://127.0.0.1:8716/portfolio`);
         return response.json();
@@ -19,4 +21,3 @@ export const usePortfolio = () => {
     },
     refetchInterval: 1000,
   });
-};
