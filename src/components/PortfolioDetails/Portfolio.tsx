@@ -58,6 +58,7 @@ export const Portfolio = () => {
           />
         </Flex>
       </Card>
+
       <BreakdownModal
         open={breakdownModalVisible}
         onCancel={handleCloseBreakdownModal}
