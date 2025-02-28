@@ -2,6 +2,7 @@ import { Avatar, Flex, Skeleton, Typography } from 'antd';
 import React, { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
+import { COLOR } from '../constants/colors';
 import { usePortfolio } from '../hooks/usePortfolio';
 import { generateName } from '../utils/agentName';
 
@@ -61,19 +62,17 @@ const AgentIdentity = () => {
   );
 };
 
-export default function Navbar() {
-  return (
-    <Flex
-      justify="space-between"
-      style={{
-        height: 68,
-        minHeight: 68,
-        padding: '12px 24px',
-        borderBottom: '1px solid #DFE5EE',
-      }}
-    >
-      <AgentBranding />
-      <AgentIdentity />
-    </Flex>
-  );
-}
+export const Navbar = () => (
+  <Flex
+    justify="space-between"
+    style={{
+      height: 68,
+      minHeight: 68,
+      padding: '12px 24px',
+      borderBottom: `1px solid ${COLOR.lightGrey}`,
+    }}
+  >
+    <AgentBranding />
+    <AgentIdentity />
+  </Flex>
+);

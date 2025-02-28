@@ -1,10 +1,10 @@
 import { Flex } from 'antd';
 import React from 'react';
 
-import AllocationCard from './components/Allocation/AllocationCard';
+import { Allocation } from './components/Allocations/Allocation';
 import { Chat } from './components/Chat/Chat';
-import Navbar from './components/Navbar';
-import PortfolioCard from './components/Portfolio/PortfolioCard';
+import { Navbar } from './components/Navbar';
+import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
@@ -20,8 +20,8 @@ function App() {
         gap={24}
         style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}
       >
-        <PortfolioCard />
-        <AllocationCard />
+        <Portfolio />
+        <Allocation />
         <Strategy />
         <Chat />
       </Flex>

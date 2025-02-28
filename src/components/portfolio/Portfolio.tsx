@@ -39,7 +39,7 @@ const SeeBreakdownButton = (props: ButtonProps) => (
   </Button>
 );
 
-export default function PortfolioCard() {
+export const Portfolio = () => {
   const { data } = usePortfolio();
   const [breakdownModalVisible, setBreakdownModalVisible] = useState(false);
 
@@ -64,4 +64,4 @@ export default function PortfolioCard() {
       />
     </>
   );
-}
+};
