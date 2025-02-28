@@ -4,7 +4,7 @@ import React from 'react';
 import { Allocation } from './components/Allocation/Allocation';
 import { Chat } from './components/Chat/Chat';
 import { Navbar } from './components/Navbar';
-import { Portfolio } from './components/PortfolioDetails/Portfolio';
+import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
