@@ -26,8 +26,5 @@ export const usePortfolio = () => {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
-  return {
-    ...query,
-    isLoading: query.isLoading || query.isFetching,
-  };
+  return query;
 };
