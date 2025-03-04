@@ -4,6 +4,7 @@ import { ArcElement, Chart as ChartJS } from 'chart.js';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
+import { COLOR } from '../../constants/colors';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { DonutCenterLogoPlugin } from '../../utils/chartjs/donut-center-plugin';
 import { piePalette } from '../../utils/chartjs/palette';
@@ -22,15 +23,15 @@ const emptyChartData = {
 };
 
 export const AllocationPie = () => {
-  const { data, isFetched } = usePortfolio();
+  const { data, isLoading } = usePortfolio();
 
-  if (!isFetched) {
+  if (isLoading) {
     return (
       <Skeleton.Node
         style={{ width: 200, height: 200, borderRadius: '100%' }}
-        active={!isFetched}
+        active
       >
-        <PieChartOutlined style={{ fontSize: 32, color: '#bfbfbf' }} />
+        <PieChartOutlined style={{ fontSize: 32, color: COLOR.grey }} />
       </Skeleton.Node>
     );
   }

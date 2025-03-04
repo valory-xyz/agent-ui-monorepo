@@ -3,6 +3,7 @@ export const COLOR = {
   danger: '#F5222D',
   black: '#1F2229',
   darkGrey: '#313D4B',
+  grey: '#bfbfbf',
   lightGrey: '#DFE5EE',
   white: '#FFFFFF',
 } as const;
