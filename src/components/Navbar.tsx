@@ -25,13 +25,13 @@ const AgentBranding = () => {
 };
 
 const AgentIdentity = () => {
-  const { data, isFetched } = usePortfolio();
+  const { data, isLoading } = usePortfolio();
 
   const agentName: string | null = useMemo(() => {
-    if (!isFetched) return null;
+    if (isLoading) return null;
     if (data && data.address) return generateName(data.address);
     return null;
-  }, [data, isFetched]);
+  }, [data, isLoading]);
 
   const agentAvatar = useMemo(() => {
     if (agentName) {
@@ -49,7 +49,7 @@ const AgentIdentity = () => {
             {agentName}
           </Text>
         ) : (
-          <Skeleton.Input active={!isFetched} style={{ height: 17 }} />
+          <Skeleton.Input active={isLoading} style={{ height: 20 }} />
         )}
         <Text
           type="secondary"

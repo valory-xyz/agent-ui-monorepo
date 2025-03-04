@@ -8,7 +8,7 @@ import { BreakdownModal } from './BreakdownModal';
 const { Title } = Typography;
 
 const PortfolioBalance = () => {
-  const { data, isFetched } = usePortfolio();
+  const { data, isLoading } = usePortfolio();
 
   const portfolioBalance = useMemo(
     () =>
@@ -19,7 +19,7 @@ const PortfolioBalance = () => {
     [data],
   );
 
-  if (!isFetched) {
+  if (isLoading) {
     return <Skeleton.Input style={{ minHeight: 38 }} />;
   }
 

@@ -49,7 +49,7 @@ const columns = [
 ];
 
 export const AllocationTable = () => {
-  const { data, isFetched } = usePortfolio();
+  const { data, isLoading } = usePortfolio();
 
   const dataSource = useMemo(
     () =>
@@ -68,7 +68,7 @@ export const AllocationTable = () => {
       columns={columns}
       dataSource={dataSource}
       pagination={false}
-      loading={!isFetched}
+      loading={isLoading}
     />
   );
 };
