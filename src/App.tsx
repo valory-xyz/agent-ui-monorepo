@@ -2,10 +2,10 @@ import { Flex } from 'antd';
 import React from 'react';
 
 import { Allocation } from './components/Allocation/Allocation';
-import { Chat } from './components/Chat/Chat';
+// import { Chat } from './components/Chat/Chat';
 import { Navbar } from './components/Navbar';
 import { Portfolio } from './components/Portfolio/Portfolio';
-import { Strategy } from './components/Strategy/Strategy';
+// import { Strategy } from './components/Strategy/Strategy';
 
 function App() {
   return (
@@ -22,8 +22,8 @@ function App() {
       >
         <Portfolio />
         <Allocation />
-        <Strategy />
-        <Chat />
+        {/* <Strategy /> */}
+        {/* <Chat /> */}
       </Flex>
     </Flex>
   );
