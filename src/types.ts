@@ -45,3 +45,7 @@ export type ChatResponse = {
   previous_trading_type?: TradingType;
   selected_protocols: SelectedProtocol[];
 };
+
+export type Features = {
+  isChatEnabled: boolean;
+};

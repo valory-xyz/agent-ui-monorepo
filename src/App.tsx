@@ -2,12 +2,16 @@ import { Flex } from 'antd';
 import React from 'react';
 
 import { Allocation } from './components/Allocation/Allocation';
-// import { Chat } from './components/Chat/Chat';
+import { Chat } from './components/Chat/Chat';
+import { UnlockChat } from './components/Chat/UnlockChat';
 import { Navbar } from './components/Navbar';
 import { Portfolio } from './components/Portfolio/Portfolio';
-// import { Strategy } from './components/Strategy/Strategy';
+import { Strategy } from './components/Strategy/Strategy';
+import { useFeatures } from './hooks/useFeatures';
 
 function App() {
+  const { isLoading, data } = useFeatures();
+
   return (
     <Flex
       vertical
@@ -22,8 +26,18 @@ function App() {
       >
         <Portfolio />
         <Allocation />
-        {/* <Strategy /> */}
-        {/* <Chat /> */}
+        {!isLoading && (
+          <>
+            {data?.isChatEnabled ? (
+              <>
+                <Strategy />
+                <Chat />
+              </>
+            ) : (
+              <UnlockChat />
+            )}
+          </>
+        )}
       </Flex>
     </Flex>
   );

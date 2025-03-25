@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { LOCAL } from '../constants/urls';
 import { IS_MOCK_ENABLED } from '../mocks/config';
 import { mockPortfolio } from '../mocks/mockPortfolio';
 import { PortfolioResponse } from '../types';
@@ -16,7 +17,7 @@ export const usePortfolio = () => {
         });
       }
 
-      const response = await fetch(`http://127.0.0.1:8716/portfolio`);
+      const response = await fetch(`${LOCAL}/portfolio`);
       if (!response.ok) throw new Error('Failed to fetch portfolio');
 
       return response.json();
