@@ -62,7 +62,11 @@ const StrategyContent = () => {
           ) : !data?.trading_type ? (
             NA
           ) : (
-            <Pill type="primary" size="large" style={{ marginLeft: 0 }}>
+            <Pill
+              type={data.trading_type === 'risky' ? 'danger' : 'primary'}
+              size="large"
+              style={{ marginLeft: 0 }}
+            >
               {TRADING_TYPE_MAP[data.trading_type]}
             </Pill>
           )}
