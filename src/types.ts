@@ -4,7 +4,7 @@ type Allocation = {
   id: string;
   chain: 'ethereum' | 'mode';
   address?: Address;
-  type: string;
+  type: SelectedProtocol;
   assets: string[];
   apr: number;
   details: string;
@@ -22,7 +22,7 @@ type PortfolioAsset = {
 
 export type TradingType = 'risky' | 'balanced';
 
-export type SelectedProtocol = 'balancerPool' | 'sturdy';
+export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome';
 
 /**
  * Portfolio response from the agent.

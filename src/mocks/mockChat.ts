@@ -14,7 +14,7 @@ const reasoningMock = `
 `;
 
 export const mockChat: ChatResponse = {
-  selected_protocols: ['balancerPool', 'sturdy'],
+  selected_protocols: ['balancerPool', 'sturdy', 'velodrome'],
   trading_type: 'risky',
   previous_trading_type: 'balanced',
   reasoning: reasoningMock,

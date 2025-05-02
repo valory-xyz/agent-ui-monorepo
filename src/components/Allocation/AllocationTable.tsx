@@ -1,32 +1,47 @@
-import { Badge, Flex, Table, Typography } from 'antd';
+import { Avatar, Badge, BadgeProps, Flex, Table, Typography } from 'antd';
 import React, { useMemo } from 'react';
 
+import { PROTOCOLS_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
+import { SelectedProtocol } from '../../types';
 import { piePalette } from '../../utils/chartjs/palette';
 import { AssetBadges } from './AllocationAssets';
 
 const { Text } = Typography;
+
+type AllocationRow = {
+  key: string;
+  pool: string[];
+  details: string;
+  apr: string;
+  type: SelectedProtocol;
+};
+
+const badgeStyles: BadgeProps['styles'] = {
+  indicator: {
+    width: 10,
+    height: 10,
+    boxShadow: '0px 0 1px rgb(0, 0, 0, 0.5)',
+  },
+};
 
 const columns = [
   {
     title: 'Pool',
     dataIndex: 'pool',
     key: 'pool',
-    render: (assets: string[], _record: unknown, index: number) => (
-      <Flex gap={4} align="center">
+    render: (assets: string[], record: AllocationRow, index: number) => (
+      <Flex gap={6} align="center">
         <Badge
           color={piePalette[Math.min(index, piePalette.length - 1)]}
-          styles={{
-            indicator: {
-              width: 10,
-              height: 10,
-              boxShadow: '0px 0 1px rgb(0, 0, 0, 0.5)',
-            },
-          }}
+          styles={badgeStyles}
         />
-        <div style={{ paddingLeft: 32, display: 'flex' }}>
+        <Flex>
+          <Avatar size={24} src={PROTOCOLS_MAP[record.type].logo} />
+        </Flex>
+        <Flex style={{ paddingLeft: 28 }}>
           <AssetBadges assets={assets} />
-        </div>
+        </Flex>
       </Flex>
     ),
   },
@@ -58,12 +73,13 @@ export const AllocationTable = () => {
         pool: assets,
         details: `${details}`,
         apr: `${apr}`,
+        type,
       })),
     [data?.allocations],
   );
 
   return (
-    <Table
+    <Table<AllocationRow>
       style={{ width: '100%' }}
       columns={columns}
       dataSource={dataSource}

@@ -4,11 +4,7 @@ import React, { CSSProperties, ReactNode, useCallback } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
-import {
-  PROTOCOL_IMAGE_MAP,
-  PROTOCOL_MAP,
-  TRADING_TYPE_MAP,
-} from '../../constants/textMaps';
+import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { SelectedProtocol, TradingType } from '../../types';
 import { Pill } from '../../ui/Pill';
 
@@ -22,12 +18,24 @@ const SystemContainerStyles: CSSProperties = {
   borderRadius: 8,
 };
 
-type SystemMessageProps = { label: string; children: ReactNode };
+type SystemMessageProps = {
+  type?: 'strategy' | 'protocols';
+  label: string;
+  width?: number;
+  children: ReactNode;
+};
 
-const SystemMessage = ({ label, children }: SystemMessageProps) => (
+const SystemMessage = ({ type, label, children }: SystemMessageProps) => (
   <Flex align="center" gap={12} style={SystemContainerStyles}>
-    <Text type="secondary">{label}</Text>
-    {children}
+    <Text
+      type="secondary"
+      style={{ width: type === 'strategy' ? 174 : 200, flex: 'none' }}
+    >
+      {label}
+    </Text>
+    <Flex gap={type === 'strategy' ? 12 : 8} wrap="wrap">
+      {children}
+    </Flex>
   </Flex>
 );
 
@@ -44,7 +52,7 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   }, []);
 
   return (
-    <SystemMessage label="Trading strategy updated:">
+    <SystemMessage label="Trading strategy updated:" type="strategy">
       <Pill type={getType(from)} size="large" style={{ marginLeft: 0 }}>
         {TRADING_TYPE_MAP[from]}
       </Pill>
@@ -66,7 +74,7 @@ type OperatingProtocolsProps = { protocols: SelectedProtocol[] };
  * Operating protocols exclusion message.
  */
 export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
-  <SystemMessage label="Operating protocols excluded:">
+  <SystemMessage label="Operating protocols excluded:" type="protocols">
     {protocols.length === 0
       ? NA
       : protocols.map((protocol) => (
@@ -76,11 +84,11 @@ export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
             style={{ marginLeft: 0, paddingRight: 16 }}
           >
             <img
-              src={PROTOCOL_IMAGE_MAP[protocol]}
+              src={PROTOCOLS_MAP[protocol].logo}
               alt={protocol}
               style={{ width: 18, height: 18 }}
             />
-            {PROTOCOL_MAP[protocol]}
+            {PROTOCOLS_MAP[protocol].name}
           </Pill>
         ))}
   </SystemMessage>

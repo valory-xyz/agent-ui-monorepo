@@ -8,7 +8,7 @@ export const mockPortfolio: PortfolioResponse = {
       chain: 'mode',
       type: 'balancerPool',
       id: '0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007',
-      assets: ['WETH', 'MODE'],
+      assets: ['WETH', 'MODE', 'USDC'],
       apr: 5.96,
       details: 'Balancer 80MODE/20wETH',
       ratio: 10.0,
@@ -16,7 +16,7 @@ export const mockPortfolio: PortfolioResponse = {
     },
     {
       chain: 'ethereum',
-      type: 'Sturdy',
+      type: 'sturdy',
       id: '0xAeD098db0e39bed6DDc2c07727B8FfC0BA470D9C',
       assets: ['tBTC'],
       apr: 12.01,
@@ -51,6 +51,6 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 0.0,
     },
   ],
-  selected_protocols: ['balancerPool', 'sturdy'],
+  selected_protocols: ['balancerPool', 'sturdy', 'velodrome'],
   trading_type: 'balanced',
 } as const;

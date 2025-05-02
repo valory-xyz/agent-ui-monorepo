@@ -18,10 +18,12 @@ export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
       style={{
         border: `1px solid ${COLOR.lightGrey}`,
         display: 'inline-flex',
-        padding: size === 'small' ? '2px 4px' : '4px 16px',
+        padding:
+          size === 'small'
+            ? `2px 4px 2px ${type ? 16 : 8}px`
+            : `4px 16px 4px ${type ? 16 : 8}px`,
         borderRadius: 32,
         marginLeft: -28,
-        paddingRight: type ? 16 : 8,
         backgroundColor: COLOR.white,
         ...(style || {}),
       }}

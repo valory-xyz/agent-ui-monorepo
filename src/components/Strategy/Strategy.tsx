@@ -11,8 +11,9 @@ import {
 } from 'antd';
 import React, { useMemo } from 'react';
 
+import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
-import { PROTOCOL_IMAGE_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
+import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
 
@@ -47,7 +48,12 @@ const StrategyContent = () => {
     if (!data?.selected_protocols) return [];
 
     return data.selected_protocols.map((protocol: string) => (
-      <Avatar key={protocol} size={32} src={PROTOCOL_IMAGE_MAP[protocol]} />
+      <Avatar
+        key={protocol}
+        size={36}
+        src={PROTOCOLS_MAP[protocol].logo}
+        style={{ border: `1px solid ${COLOR.lightGrey}`, padding: 6 }}
+      />
     ));
   }, [data?.selected_protocols]);
 

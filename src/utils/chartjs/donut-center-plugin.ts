@@ -1,5 +1,5 @@
 const image = new Image();
-image.src = '/logos/protocols/mode-network.png';
+image.src = '/logos/networks/mode-network.png';
 
 export const DonutCenterLogoPlugin = {
   id: 'logo',
