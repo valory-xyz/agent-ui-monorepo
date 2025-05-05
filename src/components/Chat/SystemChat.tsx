@@ -71,10 +71,10 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
 type OperatingProtocolsProps = { protocols: SelectedProtocol[] };
 
 /**
- * Operating protocols exclusion message.
+ * Operating protocols update message.
  */
 export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
-  <SystemMessage label="Operating protocols excluded:" type="protocols">
+  <SystemMessage label="Operating protocols updated:" type="protocols">
     {protocols.length === 0
       ? NA
       : protocols.map((protocol) => (
