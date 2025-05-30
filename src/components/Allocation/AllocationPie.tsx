@@ -1,7 +1,7 @@
 import { PieChartOutlined } from '@ant-design/icons';
 import { Skeleton } from 'antd';
 import { ArcElement, Chart as ChartJS } from 'chart.js';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 import { COLOR } from '../../constants/colors';
@@ -25,6 +25,33 @@ const emptyChartData = {
 export const AllocationPie = () => {
   const { data, isLoading } = usePortfolio();
 
+  const hasValidAllocations = useMemo(() => {
+    if (!data) return;
+    if (!data.allocations) return;
+    if (!Array.isArray(data.allocations)) return;
+
+    return data.allocations.every(
+      (allocation) =>
+        allocation &&
+        typeof allocation.ratio === 'number' &&
+        typeof allocation.type === 'string',
+    );
+  }, [data]);
+
+  const chartData = useMemo(() => {
+    if (!data || !hasValidAllocations) return emptyChartData;
+
+    return {
+      labels: data.allocations.map((allocation) => allocation.type),
+      datasets: [
+        {
+          data: data.allocations.map((allocation) => allocation.ratio),
+          backgroundColor: piePalette,
+        },
+      ],
+    };
+  }, [hasValidAllocations, data]);
+
   if (isLoading) {
     return (
       <Skeleton.Node
@@ -35,27 +62,6 @@ export const AllocationPie = () => {
       </Skeleton.Node>
     );
   }
-
-  const hasValidAllocations =
-    data?.allocations?.length > 0 &&
-    data?.allocations?.every(
-      (allocation) =>
-        allocation &&
-        typeof allocation.ratio === 'number' &&
-        typeof allocation.type === 'string',
-    );
-
-  const chartData = hasValidAllocations
-    ? {
-        labels: data.allocations.map((allocation) => allocation.type),
-        datasets: [
-          {
-            data: data.allocations.map((allocation) => allocation.ratio),
-            backgroundColor: piePalette,
-          },
-        ],
-      }
-    : emptyChartData;
 
   return (
     <Doughnut

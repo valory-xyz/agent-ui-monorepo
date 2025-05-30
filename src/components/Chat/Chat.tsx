@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { CardTitle } from '../../ui/CardTitle';
+import { agentType } from '../../utils/agentMap';
 import { DisplayAllChats, EachChat } from './DisplayAllChats';
 import { OperatingProtocols, TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
@@ -14,7 +15,7 @@ const commonChatStyles = { height: 300, margin: '16px 0' };
 const EmptyChat = () => (
   <Flex align="center" justify="center" style={commonChatStyles}>
     <img
-      src="/logos/modius-chat.png"
+      src={`/logos/${agentType}-chat.png`}
       alt="Update agent’s goal"
       style={{ width: 80, height: 80 }}
     />
@@ -94,7 +95,12 @@ export const Chat = () => {
           onClick={handleSend}
           type="primary"
           icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
-          style={{ position: 'absolute', top: 8, right: 8, color: COLOR.black }}
+          style={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            color: agentType === 'modius' ? COLOR.black : COLOR.white,
+          }}
         />
       </Flex>
     </Card>

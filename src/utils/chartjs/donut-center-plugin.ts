@@ -1,5 +1,7 @@
+import { agentChainName } from '../agentMap';
+
 const image = new Image();
-image.src = '/logos/networks/mode-network.png';
+image.src = `/logos/networks/${agentChainName}-network.png`;
 
 export const DonutCenterLogoPlugin = {
   id: 'logo',

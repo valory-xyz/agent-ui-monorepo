@@ -16,13 +16,16 @@ import { NA } from '../../constants/common';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
+import { agentName } from '../../utils/agentMap';
 
 const { Title, Text } = Typography;
 
 const TradingStrategyTitle = () => (
   <Title level={5} style={{ marginBottom: 0, marginTop: 4 }} type="secondary">
     Trading strategy
-    <Tooltip title="Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.">
+    <Tooltip
+      title={`Your ${agentName} agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.`}
+    >
       <InfoCircleOutlined style={{ marginLeft: 6 }} />
     </Tooltip>
   </Title>

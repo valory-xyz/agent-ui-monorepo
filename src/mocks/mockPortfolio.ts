@@ -1,16 +1,19 @@
 import { PortfolioResponse } from '../types';
+import { agentChainName, agentType } from '../utils/agentMap';
+
+export const mockAgentAsset = agentType === 'modius' ? 'MODE' : 'OP';
 
 export const mockPortfolio: PortfolioResponse = {
   address: '0x000000000000000000000000000000000000dEaD',
   portfolio_value: 849585.8579967507,
   allocations: [
     {
-      chain: 'mode',
+      chain: agentChainName,
       type: 'balancerPool',
       id: '0x7c86a44778c52a0aad17860924b53bf3f35dc932000200000000000000000007',
-      assets: ['WETH', 'MODE', 'USDC'],
+      assets: ['WETH', mockAgentAsset, 'USDC'],
       apr: 5.96,
-      details: 'Balancer 80MODE/20wETH',
+      details: `Balancer 80${mockAgentAsset}/20wETH`,
       ratio: 10.0,
       address: '0x140A58BC06338ec49d46266DA3888548983Ce003',
     },
@@ -35,7 +38,7 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 0.200448,
     },
     {
-      asset: 'MODE',
+      asset: mockAgentAsset,
       address: '0xDfc7C877a950e49D2610114102175A06C2e3167a',
       balance: 59146006.65000621,
       price: 0.01148493,

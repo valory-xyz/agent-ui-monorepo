@@ -9,13 +9,14 @@ import React, {
 
 import { COLOR } from '../../constants/colors';
 import { Markdown } from '../../ui/Markdown';
+import { agentName, agentType } from '../../utils/agentMap';
 
 const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
 
 const AgentChatLogo = () => (
   <img
-    src="/logos/modius-chat.png"
-    alt="Modius"
+    src={`/logos/${agentType}-chat.png`}
+    alt={`${agentName} chat logo`}
     style={{ width: 32, height: 32, borderRadius: 16 }}
   />
 );

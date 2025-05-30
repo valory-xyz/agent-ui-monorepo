@@ -2,7 +2,7 @@ type Address = `0x${string}`;
 
 type Allocation = {
   id: string;
-  chain: 'ethereum' | 'mode';
+  chain: 'ethereum' | 'mode' | 'optimism';
   address?: Address;
   type: SelectedProtocol;
   assets: string[];
