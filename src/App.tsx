@@ -4,6 +4,7 @@ import React from 'react';
 import { Allocation } from './components/Allocation/Allocation';
 import { Chat } from './components/Chat/Chat';
 import { UnlockChat } from './components/Chat/UnlockChat';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Navbar } from './components/Navbar';
 import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
@@ -13,33 +14,35 @@ function App() {
   const { isLoading, data } = useFeatures();
 
   return (
-    <Flex
-      vertical
-      style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }}
-      gap={24}
-    >
-      <Navbar />
+    <ErrorBoundary>
       <Flex
         vertical
+        style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }}
         gap={24}
-        style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}
       >
-        <Portfolio />
-        <Allocation />
-        {!isLoading && (
-          <>
-            {data?.isChatEnabled ? (
-              <>
-                <Strategy />
-                <Chat />
-              </>
-            ) : (
-              <UnlockChat />
-            )}
-          </>
-        )}
+        <Navbar />
+        <Flex
+          vertical
+          gap={24}
+          style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}
+        >
+          <Portfolio />
+          <Allocation />
+          {!isLoading && (
+            <>
+              {data?.isChatEnabled ? (
+                <>
+                  <Strategy />
+                  <Chat />
+                </>
+              ) : (
+                <UnlockChat />
+              )}
+            </>
+          )}
+        </Flex>
       </Flex>
-    </Flex>
+    </ErrorBoundary>
   );
 }
 

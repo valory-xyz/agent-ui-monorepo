@@ -1,6 +1,6 @@
 # Chat UI
 
-React application for Chat UI.
+React application for BabyDegen UI.
 Served by the Modius and Optimus agent, designed to be consumed by [Pearl](https://github.com/olas-operate-app).
 
 ## Development

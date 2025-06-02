@@ -22,7 +22,11 @@ type PortfolioAsset = {
 
 export type TradingType = 'risky' | 'balanced';
 
-export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome';
+export type SelectedProtocol =
+  | 'balancerPool'
+  | 'sturdy'
+  | 'velodrome'
+  | 'uniswapV3';
 
 /**
  * Portfolio response from the agent.
