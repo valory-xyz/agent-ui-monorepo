@@ -3,7 +3,6 @@
 /dist
 /.nx/cache
 
-
 # Node modules
 node_modules/
 
