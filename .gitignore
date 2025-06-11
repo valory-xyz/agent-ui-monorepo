@@ -1,7 +1,6 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 # Nx output
 /dist
-/.nx
 /.nx/cache
 
 
@@ -24,3 +23,7 @@ yarn-error.log*
 
 # Optional: lock files (if you're using only yarn)
 package-lock.json
+
+.nx/workspace-data
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
