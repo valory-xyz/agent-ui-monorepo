@@ -1,0 +1,26 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Nx output
+/dist
+/.nx
+/.nx/cache
+
+
+# Node modules
+node_modules/
+
+# Env files
+.env
+.env.local
+
+# OS and editor
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: lock files (if you're using only yarn)
+package-lock.json
