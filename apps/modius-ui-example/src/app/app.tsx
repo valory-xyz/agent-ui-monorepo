@@ -2,15 +2,18 @@ import styled from 'styled-components';
 
 import { Route, Routes, Link } from 'react-router-dom';
 import { UiNavbar } from '@agent-ui-monorepo/ui-navbar';
+import { Button } from 'antd';
 
 const StyledApp = styled.div`
   // Your style here
+  font-family: 'Roboto', sans-serif;
 `;
 
 export function App() {
   return (
     <StyledApp>
         <UiNavbar />
+        <Button type="primary">Ant Design Button</Button>
       <h2>Modius UI Example</h2>
       <br />
       <hr />
