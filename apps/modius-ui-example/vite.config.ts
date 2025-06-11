@@ -6,7 +6,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../node_modules/.vite/modius-ui-example',
+  cacheDir: '../../node_modules/.vite/modius-ui-example',
   server: {
     port: 4200,
     host: 'localhost',
@@ -21,7 +21,7 @@ export default defineConfig(() => ({
   //  plugins: [ nxViteTsPaths() ],
   // },
   build: {
-    outDir: '../dist/modius-ui-example',
+    outDir: '../../dist/modius-ui-example',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
