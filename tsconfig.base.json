@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "ui-navbar": ["libs/ui-navbar/src/index.ts"]
+      "@agent-ui-monorepo/ui-navbar": ["libs/ui-navbar/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

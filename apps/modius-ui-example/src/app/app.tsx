@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import NxWelcome from './nx-welcome';
 
 import { Route, Routes, Link } from 'react-router-dom';
+import { UiNavbar } from '@agent-ui-monorepo/ui-navbar';
 
 const StyledApp = styled.div`
   // Your style here
@@ -10,11 +10,8 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-      <NxWelcome title="modius-ui-example" />
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
+        <UiNavbar />
+      <h2>Modius UI Example</h2>
       <br />
       <hr />
       <br />
@@ -33,7 +30,6 @@ export function App() {
           path="/"
           element={
             <div>
-              This is the generated root route.{' '}
               <Link to="/page-2">Click here for page 2.</Link>
             </div>
           }
@@ -47,7 +43,6 @@ export function App() {
           }
         />
       </Routes>
-      {/* END: routes */}
     </StyledApp>
   );
 }
