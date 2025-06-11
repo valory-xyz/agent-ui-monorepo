@@ -12,8 +12,8 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-        <UiNavbar />
-        <Button type="primary">Ant Design Button</Button>
+      <UiNavbar />
+      <Button type="primary">Ant Design Button</Button>
       <h2>Modius UI Example</h2>
       <br />
       <hr />
