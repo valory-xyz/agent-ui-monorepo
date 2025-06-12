@@ -13,6 +13,10 @@ export function App() {
   return (
     <StyledApp>
       <Navbar />
+      <br />
+      <br />
+      <br />
+      <br />
       <Button type="primary">Ant Design Button</Button>
       <h2>Modius UI Example</h2>
       <br />

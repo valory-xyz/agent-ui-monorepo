@@ -1,6 +1,7 @@
 import { Flex, Typography } from 'antd';
 import { CSSProperties } from 'react';
 import styled from 'styled-components';
+import logo from '../assets/agent-modius-logo.png';
 
 const { Title, Text } = Typography;
 
@@ -19,11 +20,9 @@ type NavContentProps = { imgUrl: string; title: string; description: string };
 const NavContent = ({ imgUrl, title, description }: NavContentProps) => (
   <Flex align="center" gap={8}>
     <Flex>
-      <Text>{imgUrl}</Text>
-      {/* TODO */}
-      {/* <img src={imgUrl} alt={title} style={{ width: '40px', height: '40px' }} /> */}
+      <img src={logo} alt={title} style={{ width: '40px', height: '40px' }} />
     </Flex>
-    <Flex vertical align="start" style={{ paddingLeft: '8px' }}>
+    <Flex vertical align="start">
       <Title level={5} style={{ margin: 0 }}>
         {title}
       </Title>
