@@ -1,17 +1,11 @@
-import styled from 'styled-components';
-
 import { Route, Routes, Link } from 'react-router-dom';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
+// import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Button } from 'antd';
-
-const StyledApp = styled.div`
-  // Your style here
-  font-family: 'Roboto', sans-serif;
-`;
 
 export function App() {
   return (
-    <StyledApp>
+    <>
       <Navbar agentType="modius" />
       <br />
       <br />
@@ -50,7 +44,8 @@ export function App() {
           }
         />
       </Routes>
-    </StyledApp>
+      {/* <GlobalStyles /> */}
+    </>
   );
 }
 

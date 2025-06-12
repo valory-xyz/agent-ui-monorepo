@@ -26,3 +26,6 @@
     npx nx generate @nx/js:library libs/<lib-name>
     ```
   and other documentation can be found in the [Nx documentation](https://nx.dev/features/generate-code#generate-code).
+  - For general questions on creating apps and libraries:
+    - Which bundler would you like to use to build the library? Choose 'none' to skip build setup: `vite`.
+    - Which testing framework would you like to use? Choose 'none' to skip testing setup: `jest`.
