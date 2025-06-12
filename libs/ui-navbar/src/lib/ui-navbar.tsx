@@ -1,8 +1,9 @@
-import { Flex, Typography } from 'antd';
-import { CSSProperties, useMemo } from 'react';
+import { Flex, Typography, Avatar } from 'antd';
+import { CSSProperties, ReactNode, useMemo } from 'react';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import { generateAgentName } from '../utils/generateAgentName';
+import Jazzicon from 'react-jazzicon';
 
 const { Title, Text } = Typography;
 
@@ -13,14 +14,12 @@ const style: CSSProperties = {
   backgroundColor: 'transparent',
 };
 
-type NavContentProps = { imgUrl: string | null; title: string; description: string };
+type NavContentProps = { icon: ReactNode; title: string; description: string };
 
-const NavContent = ({ imgUrl, title, description }: NavContentProps) => {
+const NavContent = ({ icon, title, description }: NavContentProps) => {
   return (
     <Flex align="center" gap={8}>
-      <Flex>
-        {imgUrl ? <img src={imgUrl} alt={title} style={{ width: '40px', height: '40px' }} /> : null}
-      </Flex>
+      <Flex>{icon ? icon : null}</Flex>
       <Flex vertical align="start">
         <Title level={5} style={{ margin: 0 }}>
           {title}
@@ -34,17 +33,17 @@ const NavContent = ({ imgUrl, title, description }: NavContentProps) => {
 type NavbarProps = { agentType: string; userName: string }; // TODO: convert to agentType
 
 export function Navbar({ agentType, userName }: NavbarProps) {
-  const { imgUrls, agentDetails, userDetails } = useMemo(() => {
+  const { agentLogo, agentDetails, userDetails } = useMemo(() => {
     switch (agentType) {
       case 'modius':
         return {
-          imgUrls: { agent: modiusLogo, user: modiusLogo }, // TODO: user image
+          agentLogo: modiusLogo,
           agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
           userDetails: { desc: 'Modius agent' },
         };
       case 'optimus':
         return {
-          imgUrls: { agent: optimusLogo, user: optimusLogo }, // TODO: user image
+          agentLogo: optimusLogo,
           agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
           userDetails: { desc: 'Optimus agent' },
         };
@@ -54,16 +53,28 @@ export function Navbar({ agentType, userName }: NavbarProps) {
   }, [agentType]);
 
   const userDisplayName = generateAgentName(userName);
-  // TODO: icon to be added for user
+  const agentAvatar = useMemo(() => {
+    if (userDisplayName) {
+      // @ts-expect-error TODO
+      return <Jazzicon diameter={32} seed={Number(userName)} />;
+    }
+    return <Avatar size={32} />;
+  }, [userDisplayName, userName]);
 
   return (
     <Flex justify="space-between" align="middle" style={style}>
       <NavContent
-        imgUrl={imgUrls.agent}
+        icon={
+          <img
+            src={agentLogo}
+            alt={`${agentType} logo`}
+            style={{ width: '40px', height: '40px' }}
+          />
+        }
         title={agentDetails.agent}
         description={agentDetails.desc}
       />
-      <NavContent imgUrl={imgUrls.user} title={userDisplayName} description={userDetails.desc} />
+      <NavContent icon={agentAvatar} title={userDisplayName} description={userDetails.desc} />
     </Flex>
   );
 }
