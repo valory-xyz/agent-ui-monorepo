@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui-navbar/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:ui", "scope:util"],
   "// targets": "to see all targets run: nx show project ui-navbar --web",
   "targets": {}
 }

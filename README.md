@@ -14,15 +14,15 @@
   ```
 - To create an app in the monorepo, use:
   ```bash
-  npx nx generate @nx/react:app <app-name>
+  npx nx generate @nx/react:app apps/<app-name>
   ```
 - To create a library in the monorepo:
   - For a React library, use:
     ```bash
-    npx nx generate @nx/react:lib <lib-name>
+    npx nx generate @nx/react:library libs/<lib-name>
     ```
   - For a JavaScript library, use:
     ```bash
-    npx nx generate @nx/js:lib <lib-name>
+    npx nx generate @nx/js:library libs/<lib-name>
     ```
   and other documentation can be found in the [Nx documentation](https://nx.dev/features/generate-code#generate-code).

@@ -12,7 +12,7 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-      <Navbar />
+      <Navbar agentType="modius" />
       <br />
       <br />
       <br />

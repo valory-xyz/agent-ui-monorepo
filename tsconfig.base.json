@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@agent-ui-monorepo/ui-navbar": ["libs/ui-navbar/src/index.ts"],
-      "util-constants-and-types": ["libs/util-constants-and-types/src/index.ts"]
+      "@agent-ui-monorepo/util-constants-and-types": [
+        "libs/util-constants-and-types/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
