@@ -1,6 +1,6 @@
 import { Route, Routes, Link } from 'react-router-dom';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
-// import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
+import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Button } from 'antd';
 
 export function App() {
@@ -44,7 +44,9 @@ export function App() {
           }
         />
       </Routes>
-      {/* <GlobalStyles /> */}
+
+      {/* @ts-expect-error To be fixed */}
+      <GlobalStyles />
     </>
   );
 }
