@@ -6,7 +6,7 @@ import { Button } from 'antd';
 export function App() {
   return (
     <>
-      <Navbar agentType="modius" userName="Modius User" />
+      <Navbar agentType="modius" userAddress="Modius User" />
       <br />
       <br />
       <br />

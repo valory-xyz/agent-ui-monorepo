@@ -4,7 +4,7 @@ import Navbar from './ui-navbar';
 
 describe('Navbar', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Navbar agentType="modius" userName="Modius User" />);
+    const { baseElement } = render(<Navbar agentType="modius" userAddress="Modius User" />);
     expect(baseElement).toBeTruthy();
   });
 });

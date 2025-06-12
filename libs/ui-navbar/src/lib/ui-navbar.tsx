@@ -30,9 +30,9 @@ const NavContent = ({ icon, title, description }: NavContentProps) => {
   );
 };
 
-type NavbarProps = { agentType: string; userName: string }; // TODO: convert to agentType
+type NavbarProps = { agentType: string; userAddress: string }; // TODO: convert to agentType
 
-export function Navbar({ agentType, userName }: NavbarProps) {
+export function Navbar({ agentType, userAddress }: NavbarProps) {
   const { agentLogo, agentDetails, userDetails } = useMemo(() => {
     switch (agentType) {
       case 'modius':
@@ -52,14 +52,14 @@ export function Navbar({ agentType, userName }: NavbarProps) {
     }
   }, [agentType]);
 
-  const userDisplayName = generateAgentName(userName);
+  const userDisplayName = generateAgentName(userAddress);
   const agentAvatar = useMemo(() => {
     if (userDisplayName) {
       // @ts-expect-error TODO
-      return <Jazzicon diameter={32} seed={Number(userName)} />;
+      return <Jazzicon diameter={32} seed={Number(userAddress)} />;
     }
     return <Avatar size={32} />;
-  }, [userDisplayName, userName]);
+  }, [userDisplayName, userAddress]);
 
   return (
     <Flex justify="space-between" align="middle" style={style}>
