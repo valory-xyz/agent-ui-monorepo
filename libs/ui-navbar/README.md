@@ -1,6 +1,6 @@
 # ui-navbar
 
-This library was generated with [Nx](https://nx.dev).
+Navbar component that provides agent information.
 
 ## Running unit tests
 

@@ -1,18 +1,16 @@
-import styled from 'styled-components';
-
 import { Route, Routes, Link } from 'react-router-dom';
-import { UiNavbar } from '@agent-ui-monorepo/ui-navbar';
+import { Navbar } from '@agent-ui-monorepo/ui-navbar';
+import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Button } from 'antd';
-
-const StyledApp = styled.div`
-  // Your style here
-  font-family: 'Roboto', sans-serif;
-`;
 
 export function App() {
   return (
-    <StyledApp>
-      <UiNavbar />
+    <>
+      <Navbar agentType="modius" userAddress="Modius User" />
+      <br />
+      <br />
+      <br />
+      <br />
       <Button type="primary">Ant Design Button</Button>
       <h2>Modius UI Example</h2>
       <br />
@@ -46,7 +44,10 @@ export function App() {
           }
         />
       </Routes>
-    </StyledApp>
+
+      {/* @ts-expect-error To be fixed */}
+      <GlobalStyles />
+    </>
   );
 }
 

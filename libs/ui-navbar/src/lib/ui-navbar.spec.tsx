@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import UiNavbar from './ui-navbar';
+import Navbar from './ui-navbar';
 
-describe('UiNavbar', () => {
+describe('Navbar', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<UiNavbar />);
+    const { baseElement } = render(<Navbar agentType="modius" userAddress="Modius User" />);
     expect(baseElement).toBeTruthy();
   });
 });

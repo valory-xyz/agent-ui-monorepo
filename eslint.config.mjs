@@ -38,7 +38,7 @@ export default [
       '**/*.mjs',
     ],
     plugins: {
-      prettier,
+      prettier: prettier,
     },
     rules: {
       'prettier/prettier': [
