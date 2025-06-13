@@ -1,6 +1,6 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Avatar, Flex, Skeleton, Tooltip, Typography } from 'antd';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import Jazzicon from 'react-jazzicon';
 
 import { COLOR } from '../constants/colors';
@@ -13,11 +13,7 @@ const { Text } = Typography;
 const AgentBranding = () => {
   return (
     <Flex gap={8} align="center">
-      <img
-        src={`/logos/${agentType}.png`}
-        alt="Agent Branding"
-        style={{ width: 40, height: 40 }}
-      />
+      <img src={`/logos/${agentType}.png`} alt="Agent Branding" style={{ width: 40, height: 40 }} />
       <Flex vertical gap={0} style={{ fontSize: 14 }}>
         <Text strong>{agentName}</Text>
         <Text type="secondary">Agent economy</Text>
@@ -37,7 +33,8 @@ const AgentIdentity = () => {
 
   const agentAvatar = useMemo(() => {
     if (agentDisplayName) {
-      return <Jazzicon diameter={32} seed={Number(data.address)} />;
+      //  @ts-expect-error TODO: To be fixed
+      return <Jazzicon diameter={32} seed={Number(data?.address)} />;
     }
     return <Avatar size={32} />;
   }, [agentDisplayName, data?.address]);
@@ -57,9 +54,7 @@ const AgentIdentity = () => {
             title={`Your ${agentName} agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.`}
             placement="bottomRight"
           >
-            <InfoCircleOutlined
-              style={{ color: COLOR.grey, cursor: 'pointer', marginLeft: 4 }}
-            />
+            <InfoCircleOutlined style={{ color: COLOR.grey, cursor: 'pointer', marginLeft: 4 }} />
           </Tooltip>
         </Flex>
       </Flex>
@@ -73,7 +68,7 @@ export const Navbar = () => (
     style={{
       height: 68,
       minHeight: 68,
-      padding: '12px 24px',
+      padding: '0 24px',
       borderBottom: `1px solid ${COLOR.lightGrey}`,
     }}
   >

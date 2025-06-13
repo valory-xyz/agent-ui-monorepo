@@ -218,17 +218,11 @@ const generatePhoneticSyllable = (seed: number) => {
   return phoneticSyllables[seed % phoneticSyllables.length];
 };
 
-const generatePhoneticName = (
-  address: string,
-  startIndex: number,
-  syllables: number,
-): string => {
+const generatePhoneticName = (address: string, startIndex: number, syllables: number): string => {
   return Array.from({ length: syllables }, (_, i) => {
     const slice = address.slice(startIndex + i * 8, startIndex + (i + 1) * 8);
     const seedValue = parseInt(slice, 16);
-    return !isNaN(seedValue)
-      ? generatePhoneticSyllable(seedValue)
-      : phoneticSyllables[0];
+    return !isNaN(seedValue) ? generatePhoneticSyllable(seedValue) : phoneticSyllables[0];
   })
     .join('')
     .toLowerCase();
