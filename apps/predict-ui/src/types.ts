@@ -21,6 +21,8 @@ export type TraderAgent = {
 export type Fpmm = {
   id: string;
   outcomes: string[];
+  currentAnswer: string;
+  openingTimestamp: number;
 };
 
 export type FpmmTrade = {
@@ -42,3 +44,25 @@ export type GetUserTradesParams = {
   orderBy: string;
   orderDirection: string;
 };
+
+export type Condition = {
+  fixedProductMarketMakers: Fpmm[];
+};
+
+export type Conditions = { conditions: Condition[] };
+
+export type GetMarketUserTradesParams = {
+  creator: string;
+  fpmm: string;
+  outcomeIndex_in: number[];
+};
+
+export type UserPosition = {
+  position: {
+    id: string;
+    indexSets: string[];
+    conditionIdsStr: string;
+  };
+};
+
+export type UserPositions = { userPositions: UserPosition[] };
