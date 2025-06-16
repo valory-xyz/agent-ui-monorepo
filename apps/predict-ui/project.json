@@ -1,0 +1,9 @@
+{
+  "name": "predict-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/predict-ui/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project predict-ui --web",
+  "targets": {}
+}
