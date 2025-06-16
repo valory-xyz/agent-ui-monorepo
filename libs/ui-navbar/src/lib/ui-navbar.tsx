@@ -1,11 +1,12 @@
-import { Flex, Typography, Avatar, Tooltip, Skeleton } from 'antd';
-import { CSSProperties, ReactNode, useMemo } from 'react';
+import { generateAgentName } from '@agent-ui-monorepo/util-functions';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { Avatar, Flex, Skeleton, Tooltip, Typography } from 'antd';
+import { CSSProperties, ReactNode, useMemo } from 'react';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import traderLogo from '../assets/agent-predict-logo.png';
-import { generateAgentName } from '@agent-ui-monorepo/util-functions';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 const { Title, Text } = Typography;
 
@@ -32,9 +33,18 @@ const NavContent = ({ icon, title, description }: NavContentProps) => {
   );
 };
 
+// TODO: move to util-functions-and-types folder
+const AgentTypes = {
+  modius: 'modius',
+  optimus: 'optimus',
+  trader: 'trader',
+} as const;
+
+type AgentType = (typeof AgentTypes)[keyof typeof AgentTypes];
+
 const useAgentType = (agentType: string) => useMemo(() => {
   switch (agentType) {
-    case 'modius':
+    case AgentTypes.modius:
       return {
         agentLogo: modiusLogo,
         agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
@@ -44,7 +54,7 @@ const useAgentType = (agentType: string) => useMemo(() => {
             'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
         },
       };
-    case 'optimus':
+    case AgentTypes.optimus:
       return {
         agentLogo: optimusLogo,
         agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
@@ -54,18 +64,19 @@ const useAgentType = (agentType: string) => useMemo(() => {
             'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
         },
       };
-         case 'trader':
-        return {
-          agentLogo: traderLogo,
-          agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
-          userDetails: { desc: 'Predict agent' },
-        };
+    case AgentTypes.trader:
+      return {
+        agentLogo: traderLogo,
+        agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
+        userDetails: { desc: 'Predict agent' },
+      };
     default:
       throw new Error('Unsupported agent type');
   }
 }, [agentType]);
 
-type NavbarProps = { isLoading?: boolean; agentType: string; userAddress?: string }; // TODO: convert to agentType
+
+type NavbarProps = { isLoading?: boolean; agentType: AgentType; userAddress?: string };
 
 export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
   const { agentLogo, agentDetails, userDetails } = useAgentType(agentType);
@@ -95,7 +106,7 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
         <Flex vertical align="start">
           {isLoading ? (
             <Skeleton.Input
-              active={isLoading}
+              active
               style={{ height: 20, marginBottom: 4, width: 110, minWidth: 110 }}
             />
           ) : (
@@ -106,6 +117,7 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
           <Flex>
             <Text type="secondary">{userDetails.desc}</Text>
             <Tooltip title={userDetails.tooltip || null} placement="bottomRight">
+              {/* TODO: use from COLORS */}
               <InfoCircleOutlined style={{ color: '#ADB5BD', cursor: 'pointer', marginLeft: 4 }} />
             </Tooltip>
           </Flex>

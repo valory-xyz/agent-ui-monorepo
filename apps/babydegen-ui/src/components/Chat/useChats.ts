@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
+import { LOCAL } from '../../constants/urls';
 import { IS_MOCK_ENABLED } from '../../mocks/config';
 import { mockChat } from '../../mocks/mockChat';
 import { ChatResponse } from '../../types';
@@ -15,7 +16,7 @@ export const useChats = () =>
         });
       }
 
-      const response = await fetch('http://127.0.0.1:8716/configure_strategies', {
+      const response = await fetch(`${LOCAL}/configure_strategies`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

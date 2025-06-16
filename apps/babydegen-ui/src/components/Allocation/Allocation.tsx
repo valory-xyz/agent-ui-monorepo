@@ -7,7 +7,7 @@ import { AllocationTable } from './AllocationTable';
 export const Allocation = () => (
   <Card className="card-border card-gradient">
     <CardTitle text="Allocation" />
-    <Flex style={{ justifyContent: 'space-between', alignItems: 'center' }} gap={24}>
+    <Flex justify="space-between" align="center" gap={24}>
       <AllocationTable />
       <AllocationPie />
     </Flex>

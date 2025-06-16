@@ -4,17 +4,16 @@ import { agentType } from '../utils/agentMap';
 
 const modiusTheme: ThemeConfig['token'] = {
   colorPrimary: '#C9ED29',
-  colorWarning: '#FF9C27',
 };
 
 const optimusTheme: ThemeConfig['token'] = {
   colorPrimary: '#FF0421',
-  colorWarning: '#FF9C27',
 };
 
 export const mainTheme: ThemeConfig = {
   token: {
     ...(agentType === 'modius' ? modiusTheme : optimusTheme),
+    colorWarning: '#FF9C27',
     colorTextBase: '#0F172A',
     colorText: '#0F172A',
     colorInfoText: '#36075F',

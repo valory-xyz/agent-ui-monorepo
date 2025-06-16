@@ -1,5 +1,4 @@
 import { Avatar, Flex, Typography } from 'antd';
-import React from 'react';
 
 import { Pill } from '../../ui/Pill';
 
@@ -14,9 +13,9 @@ const AssetBadge = ({ asset, isLast = true }: AssetBadgeProps) => (
 );
 
 export const AssetBadges = ({ assets }: { assets: string[] }) => {
-  if (assets.length === 0) return;
+  if (assets.length === 0) return null;
   if (assets.length === 1) return <AssetBadge asset={assets[0]} />;
-  if (!assets.map) return;
+  if (!assets.map) return null;
 
   return (
     <Flex wrap="wrap" gap={2}>
