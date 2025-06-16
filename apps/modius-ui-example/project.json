@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/modius-ui-example/src",
   "projectType": "application",
-  "tags": [],
+  "tags": ["scope:modius-ui-example"],
   "// targets": "to see all targets run: nx show project modius-ui-example --web",
   "targets": {}
 }

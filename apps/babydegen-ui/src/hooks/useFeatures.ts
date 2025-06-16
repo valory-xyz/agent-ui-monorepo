@@ -1,0 +1,32 @@
+import { useQuery } from '@tanstack/react-query';
+
+import { FIVE_MINUTES, FIVE_SECONDS } from '../constants/intervals';
+import { LOCAL } from '../constants/urls';
+import { IS_MOCK_ENABLED } from '../mocks/config';
+import { mockFeatures } from '../mocks/mockFeatures';
+import { Features } from '../types';
+
+export const useFeatures = () => {
+  const query = useQuery<Features>({
+    queryKey: ['features'],
+    queryFn: async () => {
+      if (IS_MOCK_ENABLED) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(mockFeatures);
+          }, 2000);
+        });
+      }
+
+      const response = await fetch(`${LOCAL}/features`);
+      if (!response.ok) throw new Error('Failed to fetch features');
+
+      return response.json();
+    },
+    refetchInterval: (query) => (query.state.data?.isChatEnabled ? FIVE_MINUTES : FIVE_SECONDS),
+    retry: Infinity,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+  });
+
+  return query;
+};
