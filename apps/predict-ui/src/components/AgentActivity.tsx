@@ -1,14 +1,14 @@
 import { Spin, Timeline, TimelineItemProps, Typography, Flex } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { getUserTrades } from '../utils/graphql/queries';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Card } from '../components/ui/Card';
 import { NoDataContainer } from '../components/ui/NoDataContainer';
-import { GNOSIS_SCAN_URL, PREDICT_APP_URL } from '../constants/urls';
+import { PREDICT_APP_URL } from '../constants/urls';
 import { getTimeAgo } from '../utils/time';
-import { NA } from '@agent-ui-monorepo/util-constants-and-types';
+import { GNOSIS_SCAN_URL, NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { FpmmTrade, FpmmTrades } from '../types';
 
 const { Title, Text } = Typography;
@@ -103,7 +103,7 @@ export const AgentActivity = ({ agentId }: AgentActivityProps) => {
     setTrades(getActivityItems(lastTrades));
   }, [data]);
 
-  const loadMoreData = () => {
+  const loadMoreData = useCallback(() => {
     if (data) {
       // Simulate data loading with timeout
       setTimeout(() => {
@@ -114,7 +114,7 @@ export const AgentActivity = ({ agentId }: AgentActivityProps) => {
         setTrades((prev) => [...prev, ...getActivityItems(nextTrades)]);
       }, 1000);
     }
-  };
+  }, [data, trades.length]);
 
   return (
     <Card>
@@ -122,19 +122,15 @@ export const AgentActivity = ({ agentId }: AgentActivityProps) => {
         Latest activity
       </Title>
 
-      {isLoading && (
+      {isLoading ? (
         <NoDataContainer>
           <Spin size="large" />
         </NoDataContainer>
-      )}
-
-      {!isLoading && items.length === 0 && (
+      ) : items.length === 0 ? (
         <NoDataContainer>
           <Text>No data available</Text>
         </NoDataContainer>
-      )}
-
-      {!isLoading && items.length > 0 && (
+      ) : (
         <InfiniteScroll
           dataLength={trades.length}
           next={loadMoreData}

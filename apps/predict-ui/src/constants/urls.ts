@@ -9,6 +9,3 @@ export const CONDITIONAL_TOKENS_SUBGRAPH_URL = 'https://conditional-tokens.subgr
 // apps
 export const REGISTRY_AGENTS_URL = 'https://registry.olas.network/ethereum/agents';
 export const PREDICT_APP_URL = 'https://predict.olas.network';
-
-// scans
-export const GNOSIS_SCAN_URL = 'https://gnosisscan.io';
