@@ -14,7 +14,6 @@ export const GlobalStyles = createGlobalStyle`
     align-items: center;
     width: max-content;
     gap: 6px;
-    padding: 6px 10px;
   }
 
   u {
