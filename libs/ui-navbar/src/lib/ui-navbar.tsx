@@ -62,7 +62,6 @@ export function Navbar({ agentType, userAddress }: NavbarProps) {
   const userDisplayName = generateAgentName(userAddress);
   const agentAvatar = useMemo(() => {
     if (userDisplayName) {
-      // @ts-expect-error TODO
       return <Jazzicon diameter={32} seed={jsNumberForAddress(userAddress)} />;
     }
     return <Avatar size={32} />;

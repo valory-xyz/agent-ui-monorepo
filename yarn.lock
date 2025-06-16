@@ -3363,11 +3363,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.2.tgz#5950e50960793055845e956c427fc2b0d70c5239"
   integrity sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==
 
-"@types/prop-types@*":
-  version "15.7.15"
-  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.15.tgz#e6e5a86d602beaca71ce5163fadf5f95d70931c7"
-  integrity sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==
-
 "@types/react-dom@19.0.0":
   version "19.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-19.0.0.tgz#e7f5d618a080486eaf9952246dbf59eaa2c64130"
@@ -3382,26 +3377,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@18.2.0":
-  version "18.2.0"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.0.tgz#15cda145354accfc09a18d2f2305f9fc099ada21"
-  integrity sha512-0FLj93y5USLHdnhIhABk83rm8XEGA7kH3cr+YUlvxoUGp1xNt/DINUMvqPxLyOQMzLmZe8i4RTHbvb8MC7NmrA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@19.0.0":
+"@types/react@*", "@types/react@19.0.0":
   version "19.0.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-19.0.0.tgz#fbbb53ce223f4e2b750ad5dd09580b2c43522bbf"
   integrity sha512-MY3oPudxvMYyesqs/kW1Bh8y9VqSmf+tzqw3ae8a9DZW68pUe3zAdHeI1jc6iAysuRdACnVknHP8AhwD4/dxtg==
   dependencies:
     csstype "^3.0.2"
-
-"@types/scheduler@*":
-  version "0.26.0"
-  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.26.0.tgz#2b7183b9bbb622d130b23bedf06899b7fec7eed5"
-  integrity sha512-WFHp9YUJQ6CKshqoC37iOlHnQSmxNc795UhB26CyBBttrN9svdIrUjl/NjnNmfcwtncN0h/0PPAFWv9ovP8mLA==
 
 "@types/semver@7.5.8":
   version "7.5.8"
@@ -9227,6 +9208,13 @@ react-dom@19.0.0:
   dependencies:
     scheduler "^0.25.0"
 
+react-infinite-scroll-component@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
+  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 react-is@19.0.0:
   version "19.0.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.0.0.tgz#d6669fd389ff022a9684f708cf6fa4962d1fea7a"
@@ -10203,6 +10191,11 @@ text-decoder@^1.1.0:
   integrity sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==
   dependencies:
     b4a "^1.6.4"
+
+throttle-debounce@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 throttle-debounce@^5.0.0, throttle-debounce@^5.0.2:
   version "5.0.2"

@@ -1,6 +1,6 @@
 import { gql, request } from 'graphql-request';
 import { OLAS_AGENTS_SUBGRAPH_URL, OMEN_SUBGRAPH_URL } from '../../constants/urls';
-import { FpmmTrades, TraderAgent } from '../../types';
+import { FpmmTrades, GetUserTradesParams, TraderAgent } from '../../types';
 
 const getTraderAgentQuery = gql`
   query GetOlasTraderAgent($id: ID!) {
@@ -26,6 +26,45 @@ const getAgentLastTradeTimestampQuery = gql`
   }
 `;
 
+const getUserTradesQuery = gql`
+  query GetUserTrades(
+    $creator: ID!
+    $first: Int!
+    $skip: Int
+    $orderBy: String
+    $orderDirection: String
+  ) {
+    fpmmTrades(
+      where: { creator: $creator }
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      creator {
+        id
+      }
+      fpmm {
+        id
+        outcomes
+      }
+      title
+      outcomeIndex
+      id
+      feeAmount
+      collateralAmount
+      collateralAmountUSD
+      collateralToken
+      outcomeTokenMarginalPrice
+      outcomeTokensTraded
+      oldOutcomeTokenMarginalPrice
+      transactionHash
+      creationTimestamp
+      type
+    }
+  }
+`;
+
 export const getTraderAgent = async (params: { id: string }) =>
   request<{ traderAgent: TraderAgent | null }>(
     OLAS_AGENTS_SUBGRAPH_URL,
@@ -35,3 +74,6 @@ export const getTraderAgent = async (params: { id: string }) =>
 
 export const getAgentLastTradeTimestamp = async (params: { creator: string }) =>
   request<FpmmTrades>(OMEN_SUBGRAPH_URL, getAgentLastTradeTimestampQuery, params);
+
+export const getUserTrades = async (params: GetUserTradesParams) =>
+  request<FpmmTrades>(OMEN_SUBGRAPH_URL, getUserTradesQuery, params);

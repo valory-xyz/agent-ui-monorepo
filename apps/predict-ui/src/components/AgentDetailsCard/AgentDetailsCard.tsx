@@ -13,7 +13,7 @@ import { REGISTRY_AGENTS_URL } from '../../constants/urls';
 const { Title, Text } = Typography;
 
 type AgentDetailsCardProps = {
-  agent: TraderAgent & { agentId?: number };
+  agent: TraderAgent & { serviceAgentId?: number };
 };
 
 export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
@@ -26,7 +26,6 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
   return (
     <Card>
       <Flex gap={24}>
-        {/* @ts-expect-error TODO: Jazzicon has incompatible React component types */}
         <Jazzicon
           diameter={128}
           seed={jsNumberForAddress(agent.id)}
@@ -38,13 +37,17 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
           </Title>
           <Text type="secondary">Specialization</Text>
           <Tag icon={<ChartSpline size={20} color={COLOR.PRIMARY} />}>Trader</Tag>
-          {agent.agentId && (
+          {agent.serviceAgentId && (
             <>
               <Text type="secondary" className="mt-16">
                 Agent ID
               </Text>
-              <a href={`${REGISTRY_AGENTS_URL}/${agent.agentId}`} target="_blank" rel="noreferrer">
-                <Text underline>{agent.agentId}</Text>
+              <a
+                href={`${REGISTRY_AGENTS_URL}/${agent.serviceAgentId}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Text underline>{agent.serviceAgentId}</Text>
               </a>
             </>
           )}

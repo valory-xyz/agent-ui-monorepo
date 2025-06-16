@@ -25,7 +25,6 @@ export function App() {
           </AntdConfigProvider>
         </ErrorBoundary>
       </StyledApp>
-      {/* @ts-expect-error TODO: To be fixed */}
       <GlobalStyles />
     </>
   );
