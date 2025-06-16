@@ -13,6 +13,8 @@ const StyledApp = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  color: ${COLOR.TEXT_PRIMARY};
+  padding-bottom: 24px;
 `;
 
 export function App() {

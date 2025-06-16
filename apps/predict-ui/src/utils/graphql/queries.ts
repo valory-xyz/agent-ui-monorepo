@@ -1,6 +1,17 @@
 import { gql, request } from 'graphql-request';
-import { OLAS_AGENTS_SUBGRAPH_URL, OMEN_SUBGRAPH_URL } from '../../constants/urls';
-import { FpmmTrades, GetUserTradesParams, TraderAgent } from '../../types';
+import {
+  CONDITIONAL_TOKENS_SUBGRAPH_URL,
+  OLAS_AGENTS_SUBGRAPH_URL,
+  OMEN_SUBGRAPH_URL,
+} from '../../constants/urls';
+import {
+  Conditions,
+  FpmmTrades,
+  GetMarketUserTradesParams,
+  GetUserTradesParams,
+  TraderAgent,
+  UserPositions,
+} from '../../types';
 
 const getTraderAgentQuery = gql`
   query GetOlasTraderAgent($id: ID!) {
@@ -65,6 +76,58 @@ const getUserTradesQuery = gql`
   }
 `;
 
+const getConditionMarketQuery = gql`
+  query OmenConditionsQuery($id: ID!) {
+    conditions(where: { id: $id }) {
+      fixedProductMarketMakers {
+        id
+        outcomes
+        currentAnswer
+        openingTimestamp
+      }
+    }
+  }
+`;
+
+const getMarketUserTradesQuery = gql`
+  query GetMarketUserTrades($creator: ID!, $fpmm: ID!, $outcomeIndex_in: [BigInt!]) {
+    fpmmTrades(where: { fpmm: $fpmm, creator: $creator, outcomeIndex_in: $outcomeIndex_in }) {
+      creator {
+        id
+      }
+      title
+      outcomeIndex
+      id
+      feeAmount
+      collateralAmount
+      collateralAmountUSD
+      collateralToken
+      outcomeTokenMarginalPrice
+      outcomeTokensTraded
+      oldOutcomeTokenMarginalPrice
+      transactionHash
+      creationTimestamp
+      type
+    }
+  }
+`;
+
+const getUserPositionsQuery = gql`
+  query OmenGetMyMarkets($id: ID!) {
+    userPositions(
+      where: { user_: { id: $id } }
+      orderBy: position__createTimestamp
+      orderDirection: desc
+    ) {
+      position {
+        id
+        conditionIdsStr
+        indexSets
+      }
+    }
+  }
+`;
+
 export const getTraderAgent = async (params: { id: string }) =>
   request<{ traderAgent: TraderAgent | null }>(
     OLAS_AGENTS_SUBGRAPH_URL,
@@ -77,3 +140,12 @@ export const getAgentLastTradeTimestamp = async (params: { creator: string }) =>
 
 export const getUserTrades = async (params: GetUserTradesParams) =>
   request<FpmmTrades>(OMEN_SUBGRAPH_URL, getUserTradesQuery, params);
+
+export const getConditionMarket = async (params: { id: string }) =>
+  request<Conditions>(OMEN_SUBGRAPH_URL, getConditionMarketQuery, params);
+
+export const getMarketUserTrades = async (params: GetMarketUserTradesParams) =>
+  request<FpmmTrades>(OMEN_SUBGRAPH_URL, getMarketUserTradesQuery, params);
+
+export const getUserPositions = async (params: { id: string }) =>
+  request<UserPositions>(CONDITIONAL_TOKENS_SUBGRAPH_URL, getUserPositionsQuery, params);
