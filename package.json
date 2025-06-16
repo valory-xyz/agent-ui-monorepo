@@ -63,12 +63,10 @@
     "lucide-react": "^0.515.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-is": "19.0.0",
     "react-jazzicon": "^1.0.4",
     "react-router-dom": "6.29.0",
     "styled-components": "5.3.6"
-  },
-  "resolutions": {
-    "@types/react": "18.2.0"
   }
 }

@@ -25,6 +25,9 @@ export const GlobalStyles = createGlobalStyle`
   h1, h2, h3, h4, h5, h6 {
     margin: 0
   }
+  .m-0 {
+    margin: 0px !important;
+  }
   .mb-8 {
     margin-bottom: 8px !important;
   }

@@ -6,6 +6,8 @@ import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { NavBarContainer } from '../components/ui/NavBarContainer';
 import styled from 'styled-components';
+import { AgentActivity } from '../components/AgentActivity';
+import { AgentStatistics } from '../components/AgentStatistics';
 
 const AgentContent = styled.div`
   display: flex;
@@ -42,9 +44,11 @@ export const Agent = () => {
         <AgentDetailsCard
           agent={{
             ...data.traderInfo,
-            agentId: data.agentInfo?.agent_ids[0],
+            serviceAgentId: data.agentInfo?.agent_ids[0],
           }}
         />
+        <AgentStatistics agent={data.traderInfo} />
+        <AgentActivity agentId={data.traderInfo.id} />
       </AgentContent>
     </Flex>
   );
