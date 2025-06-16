@@ -1,10 +1,11 @@
 import { Flex, Typography, Avatar, Tooltip, Skeleton } from 'antd';
 import { CSSProperties, ReactNode, useMemo } from 'react';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
-import { generateAgentName } from '../utils/generateAgentName';
-import Jazzicon from 'react-jazzicon';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import traderLogo from '../assets/agent-predict-logo.png';
+import { generateAgentName } from '@agent-ui-monorepo/util-functions';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 const { Title, Text } = Typography;
 
@@ -53,6 +54,12 @@ const useAgentType = (agentType: string) => useMemo(() => {
             'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
         },
       };
+         case 'trader':
+        return {
+          agentLogo: traderLogo,
+          agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
+          userDetails: { desc: 'Predict agent' },
+        };
     default:
       throw new Error('Unsupported agent type');
   }
@@ -65,8 +72,7 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
 
   const agentAvatar = useMemo(() => {
     if (userAddress) {
-      // @ts-expect-error TODO
-      return <Jazzicon diameter={32} seed={Number(userAddress)} />;
+      return <Jazzicon diameter={32} seed={jsNumberForAddress(userAddress)} />;
     }
     return <Avatar size={32} />;
   }, [userAddress]);
