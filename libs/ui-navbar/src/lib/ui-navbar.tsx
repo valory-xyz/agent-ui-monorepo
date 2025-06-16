@@ -1,9 +1,10 @@
-import { Flex, Typography, Avatar } from 'antd';
+import { Flex, Typography, Avatar, Tooltip, Skeleton } from 'antd';
 import { CSSProperties, ReactNode, useMemo } from 'react';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import { generateAgentName } from '../utils/generateAgentName';
 import Jazzicon from 'react-jazzicon';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
@@ -30,36 +31,43 @@ const NavContent = ({ icon, title, description }: NavContentProps) => {
   );
 };
 
-type NavbarProps = { agentType: string; userAddress: string }; // TODO: convert to agentType
+type NavbarProps = { isLoading?: boolean; agentType: string; userAddress?: string }; // TODO: convert to agentType
 
-export function Navbar({ agentType, userAddress }: NavbarProps) {
+export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
   const { agentLogo, agentDetails, userDetails } = useMemo(() => {
     switch (agentType) {
       case 'modius':
         return {
           agentLogo: modiusLogo,
           agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
-          userDetails: { desc: 'Modius agent' },
+          userDetails: {
+            desc: 'Modius agent',
+            tooltip:
+              'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+          },
         };
       case 'optimus':
         return {
           agentLogo: optimusLogo,
           agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
-          userDetails: { desc: 'Optimus agent' },
+          userDetails: {
+            desc: 'Optimus agent',
+            tooltip:
+              'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+          },
         };
       default:
         throw new Error('Unsupported agent type');
     }
   }, [agentType]);
 
-  const userDisplayName = generateAgentName(userAddress);
   const agentAvatar = useMemo(() => {
-    if (userDisplayName) {
+    if (userAddress) {
       // @ts-expect-error TODO
       return <Jazzicon diameter={32} seed={Number(userAddress)} />;
     }
     return <Avatar size={32} />;
-  }, [userDisplayName, userAddress]);
+  }, [userAddress]);
 
   return (
     <Flex justify="space-between" align="middle" style={style}>
@@ -74,7 +82,27 @@ export function Navbar({ agentType, userAddress }: NavbarProps) {
         title={agentDetails.agent}
         description={agentDetails.desc}
       />
-      <NavContent icon={agentAvatar} title={userDisplayName} description={userDetails.desc} />
+      <Flex align="center" gap={8}>
+        <Flex>{agentAvatar}</Flex>
+        <Flex vertical align="start">
+          {isLoading || 1 + 1 === 0 ? (
+            <Skeleton.Input
+              active={isLoading}
+              style={{ height: 20, marginBottom: 4, width: 110, minWidth: 110 }}
+            />
+          ) : (
+            <Title level={5} style={{ margin: 0 }}>
+              {userAddress ? generateAgentName(userAddress) : ''}
+            </Title>
+          )}
+          <Flex>
+            <Text type="secondary">{userDetails.desc}</Text>
+            <Tooltip title={userDetails.tooltip || null} placement="bottomRight">
+              <InfoCircleOutlined style={{ color: '#ADB5BD', cursor: 'pointer', marginLeft: 4 }} />
+            </Tooltip>
+          </Flex>
+        </Flex>
+      </Flex>
     </Flex>
   );
 }
