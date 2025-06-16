@@ -1,5 +1,5 @@
 import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CardTitle } from '../../ui/CardTitle';
@@ -59,10 +59,7 @@ export const Portfolio = () => {
         </Flex>
       </Card>
 
-      <BreakdownModal
-        open={breakdownModalVisible}
-        onCancel={handleCloseBreakdownModal}
-      />
+      <BreakdownModal open={breakdownModalVisible} onCancel={handleCloseBreakdownModal} />
     </>
   );
 };

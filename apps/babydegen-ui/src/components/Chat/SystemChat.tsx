@@ -1,6 +1,6 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
-import React, { CSSProperties, ReactNode, useCallback } from 'react';
+import { CSSProperties, ReactNode, useCallback } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
@@ -27,10 +27,7 @@ type SystemMessageProps = {
 
 const SystemMessage = ({ type, label, children }: SystemMessageProps) => (
   <Flex align="center" gap={12} style={SystemContainerStyles}>
-    <Text
-      type="secondary"
-      style={{ width: type === 'strategy' ? 174 : 200, flex: 'none' }}
-    >
+    <Text type="secondary" style={{ width: type === 'strategy' ? 174 : 200, flex: 'none' }}>
       {label}
     </Text>
     <Flex gap={type === 'strategy' ? 12 : 8} wrap="wrap">
@@ -78,11 +75,7 @@ export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
     {protocols.length === 0
       ? NA
       : protocols.map((protocol) => (
-          <Pill
-            size="large"
-            key={protocol}
-            style={{ marginLeft: 0, paddingRight: 16 }}
-          >
+          <Pill size="large" key={protocol} style={{ marginLeft: 0, paddingRight: 16 }}>
             <img
               src={PROTOCOLS_MAP[protocol].logo}
               alt={protocol}

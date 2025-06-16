@@ -12,7 +12,7 @@ export const PROTOCOL_IMAGE_MAP: Record<SelectedProtocol, string> = {
   uniswapV3: '/logos/protocols/uniswapV3.png',
 } as const;
 
-export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<string, string>> = {
+export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<'name' | 'logo', string>> = {
   balancerPool: {
     name: 'Balancer',
     logo: '/logos/protocols/balancer.png',

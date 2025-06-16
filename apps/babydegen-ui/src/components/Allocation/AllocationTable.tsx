@@ -1,5 +1,5 @@
 import { Avatar, Badge, BadgeProps, Flex, Table, Typography } from 'antd';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { PROTOCOLS_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
@@ -32,10 +32,7 @@ const columns = [
     key: 'pool',
     render: (assets: string[], record: AllocationRow, index: number) => (
       <Flex gap={6} align="center">
-        <Badge
-          color={piePalette[Math.min(index, piePalette.length - 1)]}
-          styles={badgeStyles}
-        />
+        <Badge color={piePalette[Math.min(index, piePalette.length - 1)]} styles={badgeStyles} />
         <Flex>
           <Avatar size={24} src={PROTOCOLS_MAP[record.type].logo} />
         </Flex>
@@ -56,9 +53,7 @@ const columns = [
     title: 'APR',
     dataIndex: 'apr',
     key: 'apr',
-    render: (text: string) => (
-      <Text style={{ textAlign: 'right', display: 'block' }}>{text}%</Text>
-    ),
+    render: (text: string) => <Text style={{ textAlign: 'right', display: 'block' }}>{text}%</Text>,
     width: 75,
   },
 ];

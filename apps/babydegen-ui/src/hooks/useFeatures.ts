@@ -23,8 +23,7 @@ export const useFeatures = () => {
 
       return response.json();
     },
-    refetchInterval: (query) =>
-      query.state.data?.isChatEnabled ? FIVE_MINUTES : FIVE_SECONDS,
+    refetchInterval: (query) => (query.state.data?.isChatEnabled ? FIVE_MINUTES : FIVE_SECONDS),
     retry: Infinity,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });

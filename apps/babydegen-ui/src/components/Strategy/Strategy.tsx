@@ -1,15 +1,6 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
-import {
-  Avatar,
-  Card,
-  Col,
-  Flex,
-  Row,
-  Skeleton,
-  Tooltip,
-  Typography,
-} from 'antd';
-import React, { useMemo } from 'react';
+import { Avatar, Card, Col, Flex, Row, Skeleton, Tooltip, Typography } from 'antd';
+import { useMemo } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
@@ -17,6 +8,7 @@ import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
 import { agentName } from '../../utils/agentMap';
+import { SelectedProtocol } from '../../types';
 
 const { Title, Text } = Typography;
 
@@ -40,9 +32,7 @@ const OperatingProtocolsTitle = () => (
   </Title>
 );
 
-const Loader = () => (
-  <Skeleton.Input style={{ width: 100 }} active size="small" />
-);
+const Loader = () => <Skeleton.Input style={{ width: 100 }} active size="small" />;
 
 const StrategyContent = () => {
   const { isLoading, data } = usePortfolio();
@@ -50,7 +40,7 @@ const StrategyContent = () => {
   const operatingProtocols = useMemo(() => {
     if (!data?.selected_protocols) return [];
 
-    return data.selected_protocols.map((protocol: string) => (
+    return data.selected_protocols.map((protocol: SelectedProtocol) => (
       <Avatar
         key={protocol}
         size={36}

@@ -11,10 +11,7 @@ type ErrorBoundaryState = {
   errorMessage: string;
 };
 
-export class ErrorBoundary extends Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -41,17 +38,8 @@ export class ErrorBoundary extends Component<
 
     if (hasError) {
       return (
-        <Flex
-          vertical
-          align="center"
-          justify="center"
-          style={{ padding: '2rem', width: '100%' }}
-        >
-          <Alert
-            message={message || 'Something went wrong.'}
-            type="error"
-            showIcon
-          />
+        <Flex vertical align="center" justify="center" style={{ padding: '2rem', width: '100%' }}>
+          <Alert message={message || 'Something went wrong.'} type="error" showIcon />
         </Flex>
       );
     }

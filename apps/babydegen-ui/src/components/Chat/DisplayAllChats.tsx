@@ -1,11 +1,5 @@
 import { Flex } from 'antd';
-import React, {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { Markdown } from '../../ui/Markdown';
@@ -64,11 +58,7 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
     <Flex vertical style={styles}>
       <Flex gap={16}>
         {chatLogo}
-        {typeof chat.text === 'string' ? (
-          <Markdown>{chat.text}</Markdown>
-        ) : (
-          chat.text
-        )}
+        {typeof chat.text === 'string' ? <Markdown>{chat.text}</Markdown> : chat.text}
       </Flex>
     </Flex>
   );

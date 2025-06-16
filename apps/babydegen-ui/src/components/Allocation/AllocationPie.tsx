@@ -1,7 +1,7 @@
 import { PieChartOutlined } from '@ant-design/icons';
 import { Skeleton } from 'antd';
 import { ArcElement, Chart as ChartJS } from 'chart.js';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 import { COLOR } from '../../constants/colors';
@@ -32,9 +32,7 @@ export const AllocationPie = () => {
 
     return data.allocations.every(
       (allocation) =>
-        allocation &&
-        typeof allocation.ratio === 'number' &&
-        typeof allocation.type === 'string',
+        allocation && typeof allocation.ratio === 'number' && typeof allocation.type === 'string',
     );
   }, [data]);
 
@@ -54,10 +52,7 @@ export const AllocationPie = () => {
 
   if (isLoading) {
     return (
-      <Skeleton.Node
-        style={{ width: 200, height: 200, borderRadius: '100%' }}
-        active
-      >
+      <Skeleton.Node style={{ width: 200, height: 200, borderRadius: '100%' }} active>
         <PieChartOutlined style={{ fontSize: 32, color: COLOR.grey }} />
       </Skeleton.Node>
     );
@@ -72,7 +67,6 @@ export const AllocationPie = () => {
         rotation: 0,
         maintainAspectRatio: false,
         cutout: '75%',
-        hover: { mode: null },
       }}
       data={chartData}
       plugins={[DonutCenterLogoPlugin]}

@@ -6,7 +6,7 @@ import Jazzicon from 'react-jazzicon';
 import { COLOR } from '../constants/colors';
 import { usePortfolio } from '../hooks/usePortfolio';
 import { agentName, agentType } from '../utils/agentMap';
-import { generateName } from '../utils/generateAgentName';
+import { generateName } from '../utils/generateAgentName'; // TODO: use from libs
 
 const { Text } = Typography;
 

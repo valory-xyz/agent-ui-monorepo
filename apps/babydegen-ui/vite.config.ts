@@ -25,6 +25,6 @@ export default defineConfig(() => ({
     },
   },
   define: {
-    'process.env': {}, // 👈 Prevent process not defined error
+    'process.env': {},
   },
 }));

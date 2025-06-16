@@ -1,5 +1,5 @@
 import { Badge, Flex } from 'antd';
-import React, { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 
 import { COLOR } from '../constants/colors';
 
@@ -19,9 +19,7 @@ export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
         border: `1px solid ${COLOR.lightGrey}`,
         display: 'inline-flex',
         padding:
-          size === 'small'
-            ? `2px 4px 2px ${type ? 16 : 8}px`
-            : `4px 16px 4px ${type ? 16 : 8}px`,
+          size === 'small' ? `2px 4px 2px ${type ? 16 : 8}px` : `4px 16px 4px ${type ? 16 : 8}px`,
         borderRadius: 32,
         marginLeft: -28,
         backgroundColor: COLOR.white,

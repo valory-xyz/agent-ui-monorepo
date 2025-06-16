@@ -5,6 +5,7 @@ image.src = `/logos/networks/${agentChainName}-network.png`;
 
 export const DonutCenterLogoPlugin = {
   id: 'logo',
+  // @ts-expect-error TODO: To be fixed
   beforeDraw: (chart) => {
     const { ctx, width, height } = chart;
     const imageSize = 35; // Set image size to 24px

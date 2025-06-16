@@ -1,14 +1,6 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
-import {
-  Avatar,
-  Flex,
-  Modal,
-  ModalProps,
-  Table,
-  Tooltip,
-  Typography,
-} from 'antd';
-import React, { useMemo } from 'react';
+import { Avatar, Flex, Modal, ModalProps, Table, Tooltip, Typography } from 'antd';
+import { useMemo } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 
@@ -84,20 +76,24 @@ export const BreakdownModal = (props: ModalProps) => {
     if (!data) return null;
 
     // create object to sum balances from all
-    return data?.portfolio_breakdown?.map(
-      ({ asset, balance, price, ratio }) => ({
-        key: asset,
-        asset,
-        price,
-        amount: balance,
-        ratio,
-      }),
-    );
+    return data?.portfolio_breakdown?.map(({ asset, balance, price, ratio }) => ({
+      key: asset,
+      asset,
+      price,
+      amount: balance,
+      ratio,
+    }));
   }, [data]);
 
   return (
     <Modal title="Portfolio breakdown" footer={null} closable={true} {...props}>
-      <Table columns={columns} dataSource={dataSource} pagination={false} />
+      {dataSource ? (
+        <Table columns={columns} dataSource={dataSource} pagination={false} />
+      ) : (
+        <Flex justify="center" align="middle" style={{ height: 200 }}>
+          <Text type="secondary">No data available.</Text>
+        </Flex>
+      )}
     </Modal>
   );
 };

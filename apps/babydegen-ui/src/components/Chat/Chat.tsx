@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Card, Flex, Input, notification } from 'antd';
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { COLOR } from '../../constants/colors';
 import { CardTitle } from '../../ui/CardTitle';
@@ -47,15 +47,10 @@ export const Chat = () => {
             chats.push({ type: 'agent' as const, text: data.reasoning });
           }
 
-          if (data.trading_type) {
+          if (data.previous_trading_type && data.trading_type) {
             chats.push({
               type: 'system' as const,
-              text: (
-                <TradingStrategy
-                  from={data.previous_trading_type}
-                  to={data.trading_type}
-                />
-              ),
+              text: <TradingStrategy from={data.previous_trading_type} to={data.trading_type} />,
             });
           }
 
