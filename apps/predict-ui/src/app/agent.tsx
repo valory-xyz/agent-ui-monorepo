@@ -18,21 +18,20 @@ const AgentContent = styled.div`
   margin: 0 auto;
 `;
 
+const AgentLoader = () => (
+  <Flex vertical gap={24}>
+    <NavBarContainer />
+    <AgentContent>
+      <LoaderCard />
+    </AgentContent>
+  </Flex>
+);
+
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
-  if (isLoading)
-    return (
-      <Flex vertical gap={24}>
-        <NavBarContainer />
-        <AgentContent>
-          <LoaderCard />
-        </AgentContent>
-      </Flex>
-    );
-
+  if (isLoading) return <AgentLoader />;
   if (isError) return <LoadingError />;
-
   if (!isFetched || !data.traderInfo) return <AgentNotFoundError />;
 
   return (
