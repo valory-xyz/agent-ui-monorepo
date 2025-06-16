@@ -2,10 +2,12 @@ import { ThemeConfig } from 'antd';
 
 import { agentType } from '../utils/agentMap';
 
+// TODO: move to colors instead
 const modiusTheme: ThemeConfig['token'] = {
   colorPrimary: '#C9ED29',
 };
 
+// TODO: move to colors instead
 const optimusTheme: ThemeConfig['token'] = {
   colorPrimary: '#FF0421',
 };
