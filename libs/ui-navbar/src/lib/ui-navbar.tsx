@@ -31,35 +31,37 @@ const NavContent = ({ icon, title, description }: NavContentProps) => {
   );
 };
 
+const useAgentType = (agentType: string) => useMemo(() => {
+  switch (agentType) {
+    case 'modius':
+      return {
+        agentLogo: modiusLogo,
+        agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
+        userDetails: {
+          desc: 'Modius agent',
+          tooltip:
+            'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+        },
+      };
+    case 'optimus':
+      return {
+        agentLogo: optimusLogo,
+        agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
+        userDetails: {
+          desc: 'Optimus agent',
+          tooltip:
+            'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+        },
+      };
+    default:
+      throw new Error('Unsupported agent type');
+  }
+}, [agentType]);
+
 type NavbarProps = { isLoading?: boolean; agentType: string; userAddress?: string }; // TODO: convert to agentType
 
 export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
-  const { agentLogo, agentDetails, userDetails } = useMemo(() => {
-    switch (agentType) {
-      case 'modius':
-        return {
-          agentLogo: modiusLogo,
-          agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
-          userDetails: {
-            desc: 'Modius agent',
-            tooltip:
-              'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
-          },
-        };
-      case 'optimus':
-        return {
-          agentLogo: optimusLogo,
-          agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
-          userDetails: {
-            desc: 'Optimus agent',
-            tooltip:
-              'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
-          },
-        };
-      default:
-        throw new Error('Unsupported agent type');
-    }
-  }, [agentType]);
+  const { agentLogo, agentDetails, userDetails } = useAgentType(agentType);
 
   const agentAvatar = useMemo(() => {
     if (userAddress) {
@@ -85,7 +87,7 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
       <Flex align="center" gap={8}>
         <Flex>{agentAvatar}</Flex>
         <Flex vertical align="start">
-          {isLoading || 1 + 1 === 0 ? (
+          {isLoading ? (
             <Skeleton.Input
               active={isLoading}
               style={{ height: 20, marginBottom: 4, width: 110, minWidth: 110 }}
