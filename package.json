@@ -1,6 +1,6 @@
 {
   "name": "agent-ui-monorepo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.14.5",
