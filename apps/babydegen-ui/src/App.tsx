@@ -1,5 +1,6 @@
 import { Flex } from 'antd';
-import { Navbar as UiNavbar } from '@agent-ui-monorepo/ui-navbar';
+import { Navbar } from '@agent-ui-monorepo/ui-navbar';
+import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 
 import { Allocation } from './components/Allocation/Allocation';
 import { Chat } from './components/Chat/Chat';
@@ -8,7 +9,6 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
 import { useFeatures } from './hooks/useFeatures';
-import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { usePortfolio } from './hooks/usePortfolio';
 import { agentType } from './utils/agentMap';
 
@@ -19,7 +19,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }} gap={24}>
-        <UiNavbar
+        <Navbar
           isLoading={isPortfolioLoading}
           agentType={agentType}
           userAddress={portfolio?.address}

@@ -25,6 +25,9 @@ export default defineConfig(() => ({
     },
   },
   define: {
-    'process.env': {},
+    'process.env': {
+      REACT_APP_API_PORT: process.env.REACT_APP_API_PORT,
+      REACT_APP_AGENT_NAME: process.env.REACT_APP_AGENT_NAME,
+    },
   },
 }));
