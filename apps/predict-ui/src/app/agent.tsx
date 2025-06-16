@@ -27,12 +27,34 @@ const AgentLoader = () => (
   </Flex>
 );
 
+const AgentError = () => (
+  <Flex vertical gap={24}>
+    <NavBarContainer>
+      <Navbar agentType="trader" />
+    </NavBarContainer>
+    <AgentContent>
+      <LoadingError />
+    </AgentContent>
+  </Flex>
+);
+
+const AgentNotFound = () => (
+  <Flex vertical gap={24}>
+    <NavBarContainer>
+      <Navbar agentType="trader" />
+    </NavBarContainer>
+    <AgentContent>
+      <AgentNotFoundError />
+    </AgentContent>
+  </Flex>
+);
+
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
   if (isLoading) return <AgentLoader />;
-  if (isError) return <LoadingError />;
-  if (!isFetched || !data.traderInfo) return <AgentNotFoundError />;
+  if (isError) return <AgentError />;
+  if (!isFetched || !data.traderInfo) return <AgentNotFound />;
 
   return (
     <Flex vertical gap={24}>
@@ -44,6 +66,7 @@ export const Agent = () => {
           agent={{
             ...data.traderInfo,
             serviceAgentId: data.agentInfo?.agent_ids[0],
+            serviceId: data.agentInfo?.service_id,
           }}
         />
         <AgentStatistics agent={data.traderInfo} />

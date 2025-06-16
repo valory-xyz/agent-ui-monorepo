@@ -42,39 +42,39 @@ const AgentTypes = {
 
 type AgentType = (typeof AgentTypes)[keyof typeof AgentTypes];
 
-const useAgentType = (agentType: string) => useMemo(() => {
-  switch (agentType) {
-    case AgentTypes.modius:
-      return {
-        agentLogo: modiusLogo,
-        agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
-        userDetails: {
-          desc: 'Modius agent',
-          tooltip:
-            'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
-        },
-      };
-    case AgentTypes.optimus:
-      return {
-        agentLogo: optimusLogo,
-        agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
-        userDetails: {
-          desc: 'Optimus agent',
-          tooltip:
-            'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
-        },
-      };
-    case AgentTypes.trader:
-      return {
-        agentLogo: traderLogo,
-        agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
-        userDetails: { desc: 'Predict agent' },
-      };
-    default:
-      throw new Error('Unsupported agent type');
-  }
-}, [agentType]);
-
+const useAgentType = (agentType: string) =>
+  useMemo(() => {
+    switch (agentType) {
+      case AgentTypes.modius:
+        return {
+          agentLogo: modiusLogo,
+          agentDetails: { agent: 'Modius', desc: 'Agent Economy' },
+          userDetails: {
+            desc: 'Modius agent',
+            tooltip:
+              'Your Modius agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+          },
+        };
+      case AgentTypes.optimus:
+        return {
+          agentLogo: optimusLogo,
+          agentDetails: { agent: 'Optimus', desc: 'Agent Economy' },
+          userDetails: {
+            desc: 'Optimus agent',
+            tooltip:
+              'Your Optimus agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.',
+          },
+        };
+      case AgentTypes.trader:
+        return {
+          agentLogo: traderLogo,
+          agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
+          userDetails: { desc: 'Predict agent' },
+        };
+      default:
+        throw new Error('Unsupported agent type');
+    }
+  }, [agentType]);
 
 type NavbarProps = { isLoading?: boolean; agentType: AgentType; userAddress?: string };
 
@@ -116,10 +116,14 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
           )}
           <Flex>
             <Text type="secondary">{userDetails.desc}</Text>
-            <Tooltip title={userDetails.tooltip || null} placement="bottomRight">
-              {/* TODO: use from COLORS */}
-              <InfoCircleOutlined style={{ color: '#ADB5BD', cursor: 'pointer', marginLeft: 4 }} />
-            </Tooltip>
+            {userDetails.tooltip && (
+              <Tooltip title={userDetails.tooltip} placement="bottomRight">
+                {/* TODO: use from COLORS */}
+                <InfoCircleOutlined
+                  style={{ color: '#ADB5BD', cursor: 'pointer', marginLeft: 4 }}
+                />
+              </Tooltip>
+            )}
           </Flex>
         </Flex>
       </Flex>

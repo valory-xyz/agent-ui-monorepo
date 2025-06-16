@@ -7,7 +7,6 @@ export type AgentInfoResponse = {
 
 export type TraderAgent = {
   id: string;
-  serviceId: number;
   firstParticipation: string;
   lastActive: string;
   totalBets: number;
