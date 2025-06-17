@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*-predict'
-    branches:
-      - '**'
   workflow_dispatch:
 
 jobs:
