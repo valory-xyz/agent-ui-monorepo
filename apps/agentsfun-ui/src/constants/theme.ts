@@ -1,7 +1,7 @@
 import { ThemeConfig, theme } from 'antd';
 
 export const COLOR = {
-  PRIMARY: '#884dff',
+  PRIMARY: '#2F54EB',
   SECONDARY: 'rgba(255, 255, 255, 0.5)',
   TEXT_PRIMARY: '#fff',
   BACKGROUND: '#2f1d57',

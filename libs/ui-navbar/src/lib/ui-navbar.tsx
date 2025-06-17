@@ -15,7 +15,7 @@ const style: CSSProperties = {
   padding: '12px 24px',
   boxShadow:
     '0px 6px 16px 0px rgba(43, 61, 105, 0.08), 0px 3px 6px -4px rgba(44, 61, 104, 0.12), 0px 9px 28px 8px rgba(44, 61, 104, 0.05)',
-  backgroundColor: 'transparent',
+  backgroundColor: '#FFF',
 };
 
 type NavContentProps = { icon: ReactNode; title: string; description: string };
