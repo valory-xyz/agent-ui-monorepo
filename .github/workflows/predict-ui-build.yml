@@ -1,4 +1,4 @@
-name: Build and Release BabyDegen UI
+name: Build and Release Predict UI
 
 on:
   push:
