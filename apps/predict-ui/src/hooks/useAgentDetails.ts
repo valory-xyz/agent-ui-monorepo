@@ -5,6 +5,8 @@ import { mockAgentInfo } from '../mocks/mockAgentInfo';
 import { AgentInfoResponse } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
 
+const IS_MOCK_ENABLED = import.meta.env.VITE_IS_MOCK_ENABLED === 'true';
+
 export const useAgentDetails = () => {
   const {
     data: agentInfo,
@@ -13,14 +15,13 @@ export const useAgentDetails = () => {
   } = useQuery<AgentInfoResponse>({
     queryKey: ['agentInfo'],
     queryFn: async () => {
-      if (import.meta.env.VITE_IS_MOCK_ENABLED) {
+      if (IS_MOCK_ENABLED) {
         return new Promise((resolve) => {
           setTimeout(() => {
             resolve(mockAgentInfo);
           }, 2000);
         });
       }
-
       const response = await fetch(`${LOCAL}/agent-info`);
       if (!response.ok) throw new Error('Failed to fetch agent info');
 

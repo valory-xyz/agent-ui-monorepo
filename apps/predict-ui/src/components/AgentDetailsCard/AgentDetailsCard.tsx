@@ -8,12 +8,12 @@ import { COLOR } from '../../constants/theme';
 import { getTimeAgo } from '../../utils/time';
 import { TraderAgent } from '../../types';
 import { getAgentLastTradeTimestamp } from '../../utils/graphql/queries';
-import { REGISTRY_AGENTS_URL } from '../../constants/urls';
+import { REGISTRY_AGENTS_URL, REGISTRY_SERVICES_URL } from '../../constants/urls';
 
 const { Title, Text } = Typography;
 
 type AgentDetailsCardProps = {
-  agent: TraderAgent & { serviceAgentId?: number };
+  agent: TraderAgent & { serviceAgentId?: number; serviceId?: number };
 };
 
 export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
@@ -35,21 +35,37 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
           <Title level={3} className="mb-8">
             {generateAgentName(agent.id)}
           </Title>
+
           <Text type="secondary">Specialization</Text>
           <Tag icon={<ChartSpline size={20} color={COLOR.PRIMARY} />}>Trader</Tag>
-          {agent.serviceAgentId && (
-            <>
-              <Text type="secondary" className="mt-16">
-                Agent ID
-              </Text>
-              <a
-                href={`${REGISTRY_AGENTS_URL}/${agent.serviceAgentId}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Text underline>{agent.serviceAgentId}</Text>
-              </a>
-            </>
+
+          {(agent.serviceId || agent.serviceAgentId) && (
+            <Flex className="mt-16" gap={24}>
+              {agent.serviceId && (
+                <Flex vertical gap={8}>
+                  <Text type="secondary">Service ID</Text>
+                  <a
+                    href={`${REGISTRY_SERVICES_URL}/${agent.serviceId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Text underline>{agent.serviceId}</Text>
+                  </a>
+                </Flex>
+              )}
+              {agent.serviceAgentId && (
+                <Flex vertical gap={8}>
+                  <Text type="secondary">Agent ID</Text>
+                  <a
+                    href={`${REGISTRY_AGENTS_URL}/${agent.serviceAgentId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Text underline>{agent.serviceAgentId}</Text>
+                  </a>
+                </Flex>
+              )}
+            </Flex>
           )}
         </Flex>
         <Text type="secondary" className="ml-auto">
