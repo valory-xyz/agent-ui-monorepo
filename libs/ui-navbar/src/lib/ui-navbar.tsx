@@ -7,7 +7,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import traderLogo from '../assets/agent-predict-logo.png';
-import agentsFun from '../assets/agent-predict-logo.png';
+import agentsFun from '../assets/agent-agentsfun-logo.png';
 
 const { Title, Text } = Typography;
 
