@@ -4,7 +4,7 @@
 - List of apps:
   - [BabyDegen UI](apps/babydegen-ui/README.md).
   - Predict UI (work in progress)
-  - Agents.fun UI (work in progress)
+  - [Agents.fun UI](apps/agentsfun-ui/README.md).
 
 # Commands 
 
