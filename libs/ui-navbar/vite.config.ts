@@ -8,7 +8,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/ui-navbar',
+  cacheDir: '../../node_modules/.vite/libs/ui-navbar',
   plugins: [
     react(),
     nxViteTsPaths(),
@@ -25,7 +25,7 @@ export default defineConfig(() => ({
   // Configuration for building your library.
   // See: https://vitejs.dev/guide/build.html#library-mode
   build: {
-    outDir: '../../dist/ui-navbar',
+    outDir: '../../dist/libs/ui-navbar',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
