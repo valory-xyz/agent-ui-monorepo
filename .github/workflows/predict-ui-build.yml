@@ -43,8 +43,7 @@ jobs:
       - name: Zip predict-ui build
         run: |
           cd dist/apps/predict-ui
-          zip -r predict-ui-build.zip .
-          mv predict-ui-build.zip ../../../..
+          zip -r ../../../predict-ui-build.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
