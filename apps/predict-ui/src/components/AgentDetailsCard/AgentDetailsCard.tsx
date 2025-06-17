@@ -37,7 +37,12 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
           </Title>
 
           <Text type="secondary">Specialization</Text>
-          <Tag icon={<ChartSpline size={20} color={COLOR.PRIMARY} />}>Trader</Tag>
+          <Tag
+            icon={<ChartSpline size={20} color={COLOR.PRIMARY} />}
+            style={{ padding: '6px 10px' }}
+          >
+            Trader
+          </Tag>
 
           {(agent.serviceId || agent.serviceAgentId) && (
             <Flex className="mt-16" gap={24}>
