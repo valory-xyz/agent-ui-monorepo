@@ -7,7 +7,6 @@ import { AgentInfoResponse } from '../types';
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () => {
-  console.log('useAgentDetails hook called', process.env);
   const {
     data: agentInfo,
     isLoading: isAgentInfoLoading,

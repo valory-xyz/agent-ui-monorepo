@@ -1,5 +1,6 @@
 import { ThemeConfig, theme } from 'antd';
 
+// TODO: update colors and theme to match the design system
 export const COLOR = {
   PRIMARY: '#2F54EB',
   SECONDARY: 'rgba(255, 255, 255, 0.5)',
