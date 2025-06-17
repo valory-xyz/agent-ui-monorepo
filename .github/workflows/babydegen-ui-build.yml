@@ -44,8 +44,7 @@ jobs:
       - name: Zip babydegen-ui build
         run: |
           cd dist/apps/babydegen-ui
-          zip -r babydegen-ui-build.zip .
-          mv babydegen-ui-build.zip ../../../..
+          zip -r ../../../babydegen-ui-build.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
