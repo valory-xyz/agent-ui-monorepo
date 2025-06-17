@@ -1,10 +1,9 @@
-name: Build and Release BabyDegen UI
+name: Build and Release Predict UI
 
 on:
   push:
     tags:
-      - 'v*-modius'
-      - 'v*-optimus'
+      - 'v*-predict'
   workflow_dispatch:
 
 jobs:
@@ -38,18 +37,18 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Build babydegen-ui app
-        run: yarn nx build babydegen-ui
+      - name: Build predict-ui app
+        run: yarn nx build predict-ui
 
-      - name: Zip babydegen-ui build
+      - name: Zip predict-ui build
         run: |
-          cd dist/apps/babydegen-ui
-          zip -r ../../../babydegen-ui-build.zip .
+          cd dist/apps/predict-ui
+          zip -r ../../../predict-ui-build.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: babydegen-ui-build.zip
+          files: predict-ui-build.zip
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
