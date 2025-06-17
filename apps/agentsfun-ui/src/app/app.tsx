@@ -1,54 +1,34 @@
+import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
+import { Agent } from './agent';
 import styled from 'styled-components';
-import NxWelcome from './nx-welcome';
-
-import { Route, Routes, Link } from 'react-router-dom';
+import { COLOR } from '../constants/theme';
 
 const StyledApp = styled.div`
-  // Your style here
+  min-height: 100vh;
+  overflow: auto;
+  background-color: ${COLOR.BACKGROUND};
+  background-image: url('/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: ${COLOR.TEXT_PRIMARY};
+  padding-bottom: 24px;
+  background:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.7) 100%),
+    url(<path-to-image>) lightgray 50% / cover no-repeat;
+  background-blend-mode: overlay, normal;
 `;
 
 export function App() {
   return (
-    <StyledApp>
-      <NxWelcome title="agentsfun-ui" />
+    <>
+      <StyledApp>
+        <Agent />
+      </StyledApp>
 
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </StyledApp>
+      {/* @ts-expect-error TODO */}
+      <GlobalStyles />
+    </>
   );
 }
 

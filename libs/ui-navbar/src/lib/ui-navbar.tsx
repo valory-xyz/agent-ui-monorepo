@@ -7,6 +7,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import traderLogo from '../assets/agent-predict-logo.png';
+import agentsFun from '../assets/agent-predict-logo.png';
 
 const { Title, Text } = Typography;
 
@@ -38,6 +39,7 @@ const AgentTypes = {
   modius: 'modius',
   optimus: 'optimus',
   trader: 'trader',
+  agentsFun: 'agentsFun',
 } as const;
 
 type AgentType = (typeof AgentTypes)[keyof typeof AgentTypes];
@@ -70,6 +72,12 @@ const useAgentType = (agentType: string) =>
           agentLogo: traderLogo,
           agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
           userDetails: { desc: 'Predict agent' },
+        };
+      case AgentTypes.agentsFun:
+        return {
+          agentLogo: agentsFun,
+          agentDetails: { agent: 'Agents.fun', desc: 'Agent Economy' },
+          userDetails: { desc: 'Agents.fun agent' },
         };
       default:
         throw new Error('Unsupported agent type');
