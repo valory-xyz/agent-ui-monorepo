@@ -3,7 +3,9 @@ name: Build and Release BabyDegen UI
 on:
   push:
     tags:
-      - 'babydegen-ui-v*' # Example: babydegen-ui-v1.0.0
+      - 'v*-modius'
+      - 'v*-optimus'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -47,7 +49,6 @@ jobs:
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/babydegen-ui-v')
         with:
           files: babydegen-ui-build.zip
           name: Release ${{ github.ref_name }}
