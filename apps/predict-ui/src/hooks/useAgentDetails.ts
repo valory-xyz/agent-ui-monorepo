@@ -27,8 +27,7 @@ export const useAgentDetails = () => {
 
       return response.json();
     },
-    refetchInterval: (query) => (query.state.data ? 5000 : 1000),
-    retry: Infinity,
+    retry: 5,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
