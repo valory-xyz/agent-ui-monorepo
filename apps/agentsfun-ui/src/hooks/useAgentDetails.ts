@@ -11,12 +11,9 @@ export const useAgentDetails = () =>
     queryKey: ['agentInfo'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockAgentInfo);
-          }, 2000);
-        });
+        return new Promise((resolve) => setTimeout(() => resolve(mockAgentInfo), 2000));
       }
+
       const response = await fetch(`${LOCAL}/agent-info`);
       if (!response.ok) throw new Error('Failed to fetch agent info');
 

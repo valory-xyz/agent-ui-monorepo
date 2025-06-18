@@ -9,6 +9,7 @@ import { Persona } from '../components/Persona';
 import { THEME_CONFIG } from '../constants/theme';
 import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
 import { NavBarContainer } from '../components/ui/NavBarContainer';
+import { RecentXActivity } from '../components/RecentXActivity';
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -44,24 +45,23 @@ const Agent = () => {
       </NavBarContainer>
       <AgentContent vertical>
         <Persona />
+        <RecentXActivity />
       </AgentContent>
     </Flex>
   );
 };
 
-export function App() {
-  return (
-    <>
-      <StyledApp>
-        <ErrorBoundary>
-          <ConfigProvider theme={THEME_CONFIG}>
-            <Agent />
-          </ConfigProvider>
-        </ErrorBoundary>
-      </StyledApp>
-      <GlobalStyles />
-    </>
-  );
-}
+export const App = () => (
+  <>
+    <StyledApp>
+      <ErrorBoundary>
+        <ConfigProvider theme={THEME_CONFIG}>
+          <Agent />
+        </ConfigProvider>
+      </ErrorBoundary>
+    </StyledApp>
+    <GlobalStyles />
+  </>
+);
 
 export default App;

@@ -49,4 +49,7 @@ export const GlobalStyles = createGlobalStyle`
   .text-sm {
     font-size: 14px;
   }
+  .text-xs {
+    font-size: 12px;
+  }
 `;
