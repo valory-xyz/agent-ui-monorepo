@@ -13,7 +13,6 @@ const components: Components = {
 
 export const Markdown = ({ className, children }: MarkdownProps) => (
   <div className={className}>
-    {/* @ts-expect-error: TODO */}
     <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
       {children}
     </ReactMarkdown>

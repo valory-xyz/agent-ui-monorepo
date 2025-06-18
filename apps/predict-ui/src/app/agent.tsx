@@ -30,7 +30,7 @@ const AgentLoader = () => (
 const AgentError = () => (
   <Flex vertical gap={24}>
     <NavBarContainer>
-      <Navbar agentType="trader" />
+      <Navbar agentType="trader" isTransparent />
     </NavBarContainer>
     <AgentContent>
       <LoadingError />
@@ -41,7 +41,7 @@ const AgentError = () => (
 const AgentNotFound = () => (
   <Flex vertical gap={24}>
     <NavBarContainer>
-      <Navbar agentType="trader" />
+      <Navbar agentType="trader" isTransparent />
     </NavBarContainer>
     <AgentContent>
       <AgentNotFoundError />
@@ -59,7 +59,7 @@ export const Agent = () => {
   return (
     <Flex vertical gap={24}>
       <NavBarContainer>
-        <Navbar agentType="trader" userAddress={data.traderInfo.id} />
+        <Navbar agentType="trader" userAddress={data.traderInfo.id} isTransparent />
       </NavBarContainer>
       <AgentContent>
         <AgentDetailsCard

@@ -7,6 +7,7 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import traderLogo from '../assets/agent-predict-logo.png';
+import agentsFun from '../assets/agent-agentsfun-logo.png';
 
 const { Title, Text } = Typography;
 
@@ -14,7 +15,6 @@ const style: CSSProperties = {
   padding: '12px 24px',
   boxShadow:
     '0px 6px 16px 0px rgba(43, 61, 105, 0.08), 0px 3px 6px -4px rgba(44, 61, 104, 0.12), 0px 9px 28px 8px rgba(44, 61, 104, 0.05)',
-  backgroundColor: 'transparent',
 };
 
 type NavContentProps = { icon: ReactNode; title: string; description: string };
@@ -38,6 +38,7 @@ const AgentTypes = {
   modius: 'modius',
   optimus: 'optimus',
   trader: 'trader',
+  agentsFun: 'agentsFun',
 } as const;
 
 type AgentType = (typeof AgentTypes)[keyof typeof AgentTypes];
@@ -71,14 +72,25 @@ const useAgentType = (agentType: string) =>
           agentDetails: { agent: 'Predict', desc: 'Agent Economy' },
           userDetails: { desc: 'Predict agent' },
         };
+      case AgentTypes.agentsFun:
+        return {
+          agentLogo: agentsFun,
+          agentDetails: { agent: 'Agents.fun', desc: 'Agent Economy' },
+          userDetails: { desc: 'Agents.fun agent' },
+        };
       default:
         throw new Error('Unsupported agent type');
     }
   }, [agentType]);
 
-type NavbarProps = { isLoading?: boolean; agentType: AgentType; userAddress?: string };
+type NavbarProps = {
+  isLoading?: boolean;
+  agentType: AgentType;
+  userAddress?: string;
+  isTransparent?: boolean;
+};
 
-export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
+export const Navbar = ({ isLoading, agentType, userAddress, isTransparent }: NavbarProps) => {
   const { agentLogo, agentDetails, userDetails } = useAgentType(agentType);
 
   const agentAvatar = useMemo(() => {
@@ -89,7 +101,11 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
   }, [userAddress]);
 
   return (
-    <Flex justify="space-between" align="middle" style={style}>
+    <Flex
+      justify="space-between"
+      align="middle"
+      style={{ ...style, backgroundColor: isTransparent ? 'transparent' : '#FFF' }}
+    >
       <NavContent
         icon={
           <img
@@ -129,6 +145,6 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
       </Flex>
     </Flex>
   );
-}
+};
 
 export default Navbar;

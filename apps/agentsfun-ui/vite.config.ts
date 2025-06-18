@@ -6,13 +6,13 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig(() => ({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/modius-ui-example',
+  cacheDir: '../../node_modules/.vite/apps/agentsfun-ui',
   server: {
-    port: 4200,
+    port: 4300,
     host: 'localhost',
   },
   preview: {
-    port: 4300,
+    port: 4400,
     host: 'localhost',
   },
   plugins: [react(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
@@ -21,11 +21,16 @@ export default defineConfig(() => ({
   //  plugins: [ nxViteTsPaths() ],
   // },
   build: {
-    outDir: '../../dist/modius-ui-example',
+    outDir: '../../dist/apps/agentsfun-ui',
     emptyOutDir: true,
     reportCompressedSize: true,
     commonjsOptions: {
       transformMixedEsModules: true,
+    },
+  },
+  define: {
+    'process.env': {
+      IS_MOCK_ENABLED: process.env.IS_MOCK_ENABLED,
     },
   },
 }));
