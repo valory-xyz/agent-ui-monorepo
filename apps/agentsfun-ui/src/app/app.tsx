@@ -25,8 +25,6 @@ export function App() {
       <StyledApp>
         <Agent />
       </StyledApp>
-
-      {/* @ts-expect-error TODO */}
       <GlobalStyles />
     </>
   );

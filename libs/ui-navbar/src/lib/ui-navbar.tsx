@@ -15,7 +15,6 @@ const style: CSSProperties = {
   padding: '12px 24px',
   boxShadow:
     '0px 6px 16px 0px rgba(43, 61, 105, 0.08), 0px 3px 6px -4px rgba(44, 61, 104, 0.12), 0px 9px 28px 8px rgba(44, 61, 104, 0.05)',
-  backgroundColor: '#FFF',
 };
 
 type NavContentProps = { icon: ReactNode; title: string; description: string };
@@ -84,9 +83,14 @@ const useAgentType = (agentType: string) =>
     }
   }, [agentType]);
 
-type NavbarProps = { isLoading?: boolean; agentType: AgentType; userAddress?: string };
+type NavbarProps = {
+  isLoading?: boolean;
+  agentType: AgentType;
+  userAddress?: string;
+  isTransparent?: boolean;
+};
 
-export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
+export const Navbar = ({ isLoading, agentType, userAddress, isTransparent }: NavbarProps) => {
   const { agentLogo, agentDetails, userDetails } = useAgentType(agentType);
 
   const agentAvatar = useMemo(() => {
@@ -97,7 +101,11 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
   }, [userAddress]);
 
   return (
-    <Flex justify="space-between" align="middle" style={style}>
+    <Flex
+      justify="space-between"
+      align="middle"
+      style={{ ...style, backgroundColor: isTransparent ? 'transparent' : '#FFF' }}
+    >
       <NavContent
         icon={
           <img
@@ -137,6 +145,6 @@ export function Navbar({ isLoading, agentType, userAddress }: NavbarProps) {
       </Flex>
     </Flex>
   );
-}
+};
 
 export default Navbar;
