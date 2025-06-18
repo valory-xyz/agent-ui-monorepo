@@ -28,4 +28,9 @@ export default defineConfig(() => ({
       transformMixedEsModules: true,
     },
   },
+  define: {
+    'process.env': {
+      IS_MOCK_ENABLED: process.env.IS_MOCK_ENABLED,
+    },
+  },
 }));
