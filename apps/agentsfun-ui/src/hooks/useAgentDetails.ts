@@ -6,12 +6,8 @@ import { AgentInfoResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-export const useAgentDetails = () => {
-  const {
-    data: agentInfo,
-    isLoading: isAgentInfoLoading,
-    isError: isAgentInfoError,
-  } = useQuery<AgentInfoResponse>({
+export const useAgentDetails = () =>
+  useQuery<AgentInfoResponse>({
     queryKey: ['agentInfo'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -29,10 +25,3 @@ export const useAgentDetails = () => {
     retry: 3,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
-
-  return {
-    data: agentInfo,
-    isLoading: isAgentInfoLoading,
-    isError: isAgentInfoError,
-  };
-};

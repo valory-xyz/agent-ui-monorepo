@@ -34,6 +34,7 @@ export const THEME_CONFIG: ThemeConfig = {
       defaultBg: 'transparent',
       defaultHoverBg: COLOR.BLACK_TRANSPARENT_20,
       defaultBorderColor: COLOR.TEXT_PRIMARY,
+      fontSize: 16,
     },
     Typography: {
       fontSize: 16,
