@@ -36,4 +36,8 @@ export const GlobalStyles = createGlobalStyle`
   .ml-auto {
     margin-left: auto;
   }
+
+  .text-sm {
+    font-size: 14px;
+  }
 `;

@@ -1,6 +1,14 @@
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
-import { Agent } from './agent';
+
+import { Flex } from 'antd';
+import { Navbar } from '@agent-ui-monorepo/ui-navbar';
+import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
+import { useAgentDetails } from '../hooks/useAgentDetails';
+import { Persona } from '../components/Persona';
+import { THEME_CONFIG } from '../constants/theme';
+import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
+import { NavBarContainer } from '../components/ui/NavBarContainer';
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -19,11 +27,37 @@ const StyledApp = styled.div`
     );
 `;
 
+const AgentContent = styled(Flex)`
+  gap: 24px;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+`;
+
+const Agent = () => {
+  const { data, isLoading } = useAgentDetails();
+
+  return (
+    <Flex vertical gap={24}>
+      <NavBarContainer>
+        <Navbar agentType="agentsFun" isLoading={isLoading} userAddress={data?.address} />
+      </NavBarContainer>
+      <AgentContent vertical>
+        <Persona />
+      </AgentContent>
+    </Flex>
+  );
+};
+
 export function App() {
   return (
     <>
       <StyledApp>
-        <Agent />
+        <ErrorBoundary>
+          <ConfigProvider theme={THEME_CONFIG}>
+            <Agent />
+          </ConfigProvider>
+        </ErrorBoundary>
       </StyledApp>
       <GlobalStyles />
     </>
