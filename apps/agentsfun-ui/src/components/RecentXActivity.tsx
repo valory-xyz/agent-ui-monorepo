@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { xActivity } from '../mocks/mockAgentInfo';
+import { xActivity } from '../mock';
 import { XActivity } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
 import { Card } from './ui/Card';

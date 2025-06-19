@@ -1,4 +1,4 @@
-import { AgentInfoResponse, MemecoinActivity, XActivity } from '../types';
+import { AgentInfoResponse, MemecoinActivity, XActivity } from './types';
 
 export const mockAgentInfo: AgentInfoResponse = {
   address: '0x4656a6bB8d5545E02c7A59BCaf25dF1fEE55F3B8',
@@ -14,16 +14,6 @@ export const xActivity: XActivity = {
   text: "Hearting MeowChaotic ($MEOWC) token nonce: 89! This memecoin has great potential, and I'm excited to see where it goes. #MeowChaotic #MEOWC #MemeCoin",
   timestamp: 1750099304.8088,
   type: 'post',
-};
-
-export const mockMedia = {
-  media: [
-    {
-      path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
-      tweet_id: '1934682714826846497',
-      type: 'image',
-    },
-  ],
 };
 
 export const memecoinActivity: MemecoinActivity[] = [
@@ -48,3 +38,13 @@ export const memecoinActivity: MemecoinActivity[] = [
     },
   },
 ];
+
+export const mockMedia = {
+  media: [
+    {
+      path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
+      tweet_id: '1934682714826846497',
+      type: 'image',
+    },
+  ],
+};

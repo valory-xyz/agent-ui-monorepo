@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { memecoinActivity } from '../mocks/mockAgentInfo';
-import { MemecoinActivity as MemecoinActivityType } from '../types';
+import { memecoinActivity } from '../mock';
+import { MemecoinActivity as MemecoinActivityType, MemecoinActivityAction } from '../types';
 import memecoinActivityEmptyLogo from '../assets/memecoin-activity-empty.png';
 import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
 import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { COLOR } from '../constants/theme';
 
 const { Title, Text, Link } = Typography;
@@ -49,6 +49,41 @@ const useMemecoinActivity = () =>
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
+type AgentActivityOnMemecoinProps = {
+  type: MemecoinActivityAction;
+  tokenSymbol: string;
+};
+
+const AgentActivityOnMemecoin: FC<AgentActivityOnMemecoinProps> = ({ type, tokenSymbol }) => {
+  const details = useMemo(() => {
+    switch (type) {
+      case 'heart':
+        return { emoji: '❤️', action: 'hearted' };
+      case 'collect':
+        return { emoji: '🎁', action: 'collected' };
+      case 'purge':
+        return { emoji: '🔥', action: 'purged' };
+      case 'summon':
+        return { emoji: '🪄', action: 'summoned' };
+      case 'unleash':
+        return { emoji: '🚀', action: 'unleashed' };
+      default:
+        return { emoji: '', action: '' };
+    }
+  }, [type]);
+
+  if (!details.emoji || !details.action) {
+    return <Text>Unknown activity type</Text>;
+  }
+
+  return (
+    <Text>
+      {details.emoji} Agent {details.action}{' '}
+      <Text style={{ color: COLOR.PRIMARY }}>{tokenSymbol}</Text> token
+    </Text>
+  );
+};
+
 const Activity: FC = () => {
   const { isLoading, isError, data: memecoinActivity } = useMemecoinActivity();
 
@@ -58,45 +93,25 @@ const Activity: FC = () => {
 
   return (
     <Flex gap={8} vertical>
-      {memecoinActivity.map((activity) => {
-        const tokenDetails = (() => {
-          if (activity.type === 'heart') {
-            return { emoji: '❤️', action: 'hearted' };
-          } else if (activity.type === 'collect') {
-            return { emoji: '💰', action: 'collected' };
-          } else if (activity.type === 'purge') {
-            return { emoji: '📝', action: 'purged' };
-          } else if (activity.type === 'summon') {
-            return { emoji: '👥', action: 'summoned' };
-          } else if (activity.type === 'unleash') {
-            return { emoji: '🔁', action: 'unleashed' };
-          }
-          return { emoji: '', action: '' };
-        })();
-
-        return (
-          <Flex
-            key={activity.postId}
-            justify="space-between"
-            align="center"
-            style={{ width: '100%' }}
-          >
-            <Flex gap={8} align="center">
-              <Text>
-                {tokenDetails.emoji} Agent {tokenDetails.action}{' '}
-                <Text style={{ color: COLOR.PRIMARY }}>{activity.token.symbol}</Text> token
-              </Text>
-              <Text type="secondary" className="text-xs">
-                {UNICODE_SYMBOLS.BULLET}
-              </Text>
-              <Text type="secondary">{formatTimestampToMonthDay(activity.timestamp)}</Text>
-            </Flex>
-            <Link href={`https://x.com/i/web/status/${activity.postId}`} target="_blank">
-              View on X {UNICODE_SYMBOLS.EXTERNAL_LINK}
-            </Link>
+      {memecoinActivity.map((activity) => (
+        <Flex
+          key={activity.postId}
+          justify="space-between"
+          align="center"
+          style={{ width: '100%' }}
+        >
+          <Flex gap={8} align="center">
+            <AgentActivityOnMemecoin type={activity.type} tokenSymbol={activity.token.symbol} />
+            <Text type="secondary" className="text-xs">
+              {UNICODE_SYMBOLS.BULLET}
+            </Text>
+            <Text type="secondary">{formatTimestampToMonthDay(activity.timestamp)}</Text>
           </Flex>
-        );
-      })}
+          <Link href={`https://x.com/i/web/status/${activity.postId}`} target="_blank">
+            View on X {UNICODE_SYMBOLS.EXTERNAL_LINK}
+          </Link>
+        </Flex>
+      ))}
     </Flex>
   );
 };

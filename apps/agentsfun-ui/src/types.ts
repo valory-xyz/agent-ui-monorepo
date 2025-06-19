@@ -13,8 +13,10 @@ export type XActivity = {
   type: 'post';
 };
 
+export type MemecoinActivityAction = 'heart' | 'summon' | 'unleash' | 'collect' | 'purge';
+
 export type MemecoinActivity = {
-  type: 'heart' | 'summon' | 'unleash' | 'collect' | 'purge';
+  type: MemecoinActivityAction;
   timestamp: number;
   postId: string | null;
   token: {
