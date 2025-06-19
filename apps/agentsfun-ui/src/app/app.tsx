@@ -6,9 +6,8 @@ import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { Persona } from '../components/Persona';
-import { THEME_CONFIG } from '../constants/theme';
+import { COLOR, THEME_CONFIG } from '../constants/theme';
 import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
-import { NavBarContainer } from '../components/ui/NavBarContainer';
 import { RecentXActivity } from '../components/RecentXActivity';
 
 const StyledApp = styled.div`
@@ -34,6 +33,10 @@ const AgentContent = styled(Flex)`
   max-width: 720px;
   width: 100%;
   margin: 0 auto;
+`;
+
+const NavBarContainer = styled.div`
+  background-color: ${COLOR.WHITE};
 `;
 
 const Agent = () => {

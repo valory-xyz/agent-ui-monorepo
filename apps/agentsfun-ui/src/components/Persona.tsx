@@ -1,13 +1,13 @@
 import { Button, Flex, Skeleton, Typography } from 'antd';
 import { Card } from './ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Paragraph } = Typography;
 
-const PersonaLoading = () => (
+const PersonaLoading: FC = () => (
   <Flex vertical gap={24} style={{ width: '100%' }}>
     <Flex vertical align="flex-start">
       <Title level={3} className="m-0">
@@ -27,7 +27,7 @@ const PersonaLoading = () => (
   </Flex>
 );
 
-const Description = ({ desc }: { desc: string }) => {
+const Description: FC<{ desc: string }> = ({ desc }) => {
   const [ellipsis, setEllipsis] = useState(true);
 
   return (
@@ -55,7 +55,7 @@ const Description = ({ desc }: { desc: string }) => {
   );
 };
 
-const AgentPersona = () => {
+const AgentPersona: FC = () => {
   const { isLoading, isError, data: agentDetails } = useAgentDetails();
 
   if (isLoading) return <PersonaLoading />;
@@ -87,7 +87,7 @@ const AgentPersona = () => {
 /**
  * Displays the agent's persona information.
  */
-export const Persona = () => (
+export const Persona: FC = () => (
   <Card>
     <AgentPersona />
   </Card>

@@ -8,6 +8,9 @@ import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
 import styled from 'styled-components';
 import { ErrorState } from './ui/ErrorState';
+import { formatTimestampToMonthDay } from '../utils/date';
+import { FC } from 'react';
+import { COLOR } from '../constants/theme';
 
 const { Title, Text, Link } = Typography;
 
@@ -24,18 +27,13 @@ const TweetContainer = styled.div`
   background: #f6fbfe;
 `;
 
-const toMonthDay = (timestamp: number) => {
-  const date = new Date(timestamp * 1000);
-  return `${date.toLocaleString('default', { month: 'short' })} ${date.getDate()}`;
-};
-
-const Loader = () => (
+const Loader: FC = () => (
   <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
     <Spin />
   </Flex>
 );
 
-const NoActivity = () => (
+const NoActivity: FC = () => (
   <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
     <Flex justify="center" align="center" vertical gap={24} style={{ maxWidth: 340 }}>
       <img src={xActivityEmptyLogo} alt="No recent activity" style={{ width: 40, height: 40 }} />
@@ -46,9 +44,23 @@ const NoActivity = () => (
   </Flex>
 );
 
-const ErrorActivity = () => (
+const ErrorActivity: FC = () => (
   <ErrorState message="Failed to load recent activity. Please try again later." />
 );
+
+const TweetText: FC<{ text: string }> = ({ text }) => {
+  const parts = text.split(/(#[a-zA-Z0-9_]+)/g); // keep hashtags as separate tokens
+
+  return (
+    <Text>
+      {parts.map((part, index) => (
+        <Text key={index} style={part.startsWith('#') ? { color: COLOR.PRIMARY } : {}}>
+          {part}
+        </Text>
+      ))}
+    </Text>
+  );
+};
 
 const useXActivity = () =>
   useQuery<XActivity>({
@@ -64,10 +76,7 @@ const useXActivity = () =>
     },
   });
 
-/**
- * Recent X Activity, showing the latest activity of the agent on X.
- */
-export const Activity = () => {
+const Activity: FC = () => {
   const { isLoading, isError, data: activity } = useXActivity();
 
   if (isLoading) return <Loader />;
@@ -84,7 +93,7 @@ export const Activity = () => {
               <Text type="secondary" className="text-xs">
                 {UNICODE_SYMBOLS.BULLET}
               </Text>
-              <Text type="secondary">{toMonthDay(activity?.timestamp)}</Text>
+              <Text type="secondary">{formatTimestampToMonthDay(activity?.timestamp)}</Text>
             </>
           )}
         </Flex>
@@ -94,7 +103,7 @@ export const Activity = () => {
       </Flex>
 
       <TweetContainer>
-        <Text>{activity?.text}</Text>
+        {activity?.text && <TweetText text={activity.text} />}
         {/* TODO: to discuss with agent team, ignore for now */}
         <Flex style={{ display: 'none' }}>
           {activity?.media?.map((media, index) => (
@@ -111,7 +120,7 @@ export const Activity = () => {
   );
 };
 
-export const RecentXActivity = () => (
+export const RecentXActivity: FC = () => (
   <Card>
     <Flex vertical gap={24} style={{ width: '100%' }}>
       <Title level={4} className="m-0">

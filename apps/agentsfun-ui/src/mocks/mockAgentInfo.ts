@@ -13,7 +13,7 @@ export const xActivity: XActivity = {
   postId: '1934682830287622621',
   text: "Hearting MeowChaotic ($MEOWC) token nonce: 89! This memecoin has great potential, and I'm excited to see where it goes. #MeowChaotic #MEOWC #MemeCoin",
   timestamp: 1750099304.8088,
-  type: 'tweet', // TODO: ask agent team about the type
+  type: 'post',
 };
 
 export const mockMedia = {
