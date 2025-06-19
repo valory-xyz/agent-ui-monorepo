@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { Persona } from '../components/Persona';
 import { COLOR, THEME_CONFIG } from '../constants/theme';
-import { RecentXActivity } from '../components/RecentXActivity';
+import { XActivity } from '../components/XActivity';
 import { MemecoinActivity } from '../components/MemecoinActivity';
 
 const StyledApp = styled.div`
@@ -50,7 +50,7 @@ const Agent = () => {
       </NavBarContainer>
       <AgentContent vertical>
         <Persona />
-        <RecentXActivity />
+        <XActivity />
         <MemecoinActivity />
       </AgentContent>
     </Flex>

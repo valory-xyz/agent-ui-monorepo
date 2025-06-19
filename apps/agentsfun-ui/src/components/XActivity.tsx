@@ -8,7 +8,7 @@ import {
 } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { xActivity } from '../mock';
-import { XActivity } from '../types';
+import { XActivity as XActivityType } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
 import { Card } from './ui/Card';
 
@@ -65,7 +65,7 @@ const TweetText: FC<{ text: string }> = ({ text }) => {
 };
 
 const useXActivity = () =>
-  useQuery<XActivity | null>({
+  useQuery<XActivityType | null>({
     queryKey: ['xActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -126,7 +126,7 @@ const Activity: FC = () => {
   );
 };
 
-export const RecentXActivity: FC = () => (
+export const XActivity: FC = () => (
   <Card>
     <Flex vertical gap={24} style={{ width: '100%' }}>
       <Title level={4} className="m-0">
