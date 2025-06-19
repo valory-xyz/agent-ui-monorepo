@@ -4,6 +4,8 @@ export const COLOR = {
   PRIMARY: '#2F54EB',
   SECONDARY: '#4D596A',
   WHITE: '#fff',
+  GRAY_1: '#f6fbfe',
+  GRAY_2: '#dbe9f1',
 };
 
 export const THEME_CONFIG: ThemeConfig = {

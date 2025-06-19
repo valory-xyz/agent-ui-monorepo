@@ -42,7 +42,7 @@ export const memecoinActivity: MemecoinActivity[] = [
 export const mockMedia: GeneratedMedia[] = [
   {
     path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
-    post_id: '1934682714826846497',
+    postId: '1934682714826846497',
     type: 'image',
   },
 ];

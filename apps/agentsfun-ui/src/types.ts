@@ -28,6 +28,6 @@ export type MemecoinActivity = {
 
 export type GeneratedMedia = {
   path: string;
-  post_id: string;
+  postId: string;
   type: 'image' | 'video';
 };

@@ -29,8 +29,8 @@ const TweetContainer = styled.div`
   align-self: stretch;
   gap: 12px;
   padding: 12px 24px 12px 16px;
-  border-left: 4px solid #dbe9f1;
-  background: #f6fbfe;
+  border-left: 4px solid ${COLOR.GRAY_2};
+  background: ${COLOR.GRAY_1};
 `;
 
 const Loader: FC = () => (
@@ -98,7 +98,7 @@ const Activity: FC = () => {
               <Text type="secondary" className="text-xs">
                 {UNICODE_SYMBOLS.BULLET}
               </Text>
-              <Text type="secondary">{formatTimestampToMonthDay(activity?.timestamp)}</Text>
+              <Text type="secondary">{formatTimestampToMonthDay(activity.timestamp)}</Text>
             </>
           )}
         </Flex>
