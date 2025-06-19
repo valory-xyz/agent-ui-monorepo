@@ -40,11 +40,16 @@ const Description = ({ desc }: { desc: string }) => {
         {desc}
       </Paragraph>
       <Button onClick={() => setEllipsis(!ellipsis)} type="link" className="p-0">
-        {ellipsis ? 'Show full description' : 'Hide full description'}
         {ellipsis ? (
-          <DownOutlined style={{ fontSize: 12 }} />
+          <>
+            Show full description&nbsp;
+            <DownOutlined style={{ fontSize: 12 }} />
+          </>
         ) : (
-          <UpOutlined style={{ fontSize: 12 }} />
+          <>
+            Hide full description&nbsp;
+            <UpOutlined style={{ fontSize: 12 }} />
+          </>
         )}
       </Button>
     </Flex>

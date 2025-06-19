@@ -52,4 +52,7 @@ export const GlobalStyles = createGlobalStyle`
   .text-xs {
     font-size: 12px;
   }
+  .text-center {
+    text-align: center;
+  }
 `;

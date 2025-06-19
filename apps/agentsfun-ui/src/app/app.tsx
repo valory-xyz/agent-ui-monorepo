@@ -13,6 +13,7 @@ import { RecentXActivity } from '../components/RecentXActivity';
 
 const StyledApp = styled.div`
   min-height: 100vh;
+  padding-bottom: 24px;
   overflow: auto;
   background:
     radial-gradient(50% 50% at 50% 50%, #fff 0%, rgba(255, 255, 255, 0) 60.1%),

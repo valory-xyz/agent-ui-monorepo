@@ -27,9 +27,6 @@ export const THEME_CONFIG: ThemeConfig = {
     fontFamily: '"Inter", sans-serif',
   },
   components: {
-    Spin: {
-      colorPrimary: COLOR.TEXT_PRIMARY,
-    },
     Button: {
       defaultBg: 'transparent',
       defaultHoverBg: COLOR.BLACK_TRANSPARENT_20,
