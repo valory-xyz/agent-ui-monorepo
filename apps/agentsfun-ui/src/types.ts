@@ -12,3 +12,22 @@ export type XActivity = {
   timestamp: number;
   type: 'post';
 };
+
+export type MemecoinActivityAction = 'heart' | 'summon' | 'unleash' | 'collect' | 'purge';
+
+export type MemecoinActivity = {
+  type: MemecoinActivityAction;
+  timestamp: number;
+  postId: string | null;
+  token: {
+    address: `0x${string}` | null;
+    nonce: number;
+    symbol: string;
+  };
+};
+
+export type GeneratedMedia = {
+  path: string;
+  post_id: string;
+  type: 'image' | 'video';
+};

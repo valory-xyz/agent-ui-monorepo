@@ -1,14 +1,15 @@
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
-
+import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
 import { Flex } from 'antd';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
+
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { Persona } from '../components/Persona';
 import { COLOR, THEME_CONFIG } from '../constants/theme';
-import ErrorBoundary from 'antd/es/alert/ErrorBoundary';
-import { RecentXActivity } from '../components/RecentXActivity';
+import { XActivity } from '../components/XActivity';
+import { MemecoinActivity } from '../components/MemecoinActivity';
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -49,7 +50,8 @@ const Agent = () => {
       </NavBarContainer>
       <AgentContent vertical>
         <Persona />
-        <RecentXActivity />
+        <XActivity />
+        <MemecoinActivity />
       </AgentContent>
     </Flex>
   );

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { mockAgentInfo } from '../mocks/mockAgentInfo';
+import { mockAgentInfo } from '../mock';
 import { AgentInfoResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';

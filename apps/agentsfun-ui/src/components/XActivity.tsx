@@ -1,13 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
-import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
-
-import { xActivity } from '../mocks/mockAgentInfo';
-import { XActivity } from '../types';
-import xActivityEmptyLogo from '../assets/x-activity-empty.png';
-import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
 import styled from 'styled-components';
+import {
+  LOCAL,
+  UNICODE_SYMBOLS,
+  THIRTY_SECONDS,
+} from '@agent-ui-monorepo/util-constants-and-types';
+
+import { xActivity } from '../mock';
+import { XActivity as XActivityType } from '../types';
+import xActivityEmptyLogo from '../assets/x-activity-empty.png';
+import { Card } from './ui/Card';
+
 import { ErrorState } from './ui/ErrorState';
+import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
 import { FC } from 'react';
 import { COLOR } from '../constants/theme';
@@ -34,14 +40,10 @@ const Loader: FC = () => (
 );
 
 const NoActivity: FC = () => (
-  <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
-    <Flex justify="center" align="center" vertical gap={24} style={{ maxWidth: 340 }}>
-      <img src={xActivityEmptyLogo} alt="No recent activity" style={{ width: 40, height: 40 }} />
-      <Text type="secondary" className="text-center">
-        Nothing to show here. Give your agent some time to find something worth sharing.
-      </Text>
-    </Flex>
-  </Flex>
+  <EmptyState
+    logo={xActivityEmptyLogo}
+    message="Nothing to show here. Give your agent some time to find something worth sharing."
+  />
 );
 
 const ErrorActivity: FC = () => (
@@ -63,7 +65,7 @@ const TweetText: FC<{ text: string }> = ({ text }) => {
 };
 
 const useXActivity = () =>
-  useQuery<XActivity | null>({
+  useQuery<XActivityType | null>({
     queryKey: ['xActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -76,6 +78,7 @@ const useXActivity = () =>
     },
     retry: 5,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    refetchInterval: THIRTY_SECONDS,
   });
 
 const Activity: FC = () => {
@@ -106,14 +109,15 @@ const Activity: FC = () => {
 
       <TweetContainer>
         {activity?.text && <TweetText text={activity.text} />}
-        {/* TODO: to discuss with agent team, ignore for now */}
-        <Flex style={{ display: 'none' }}>
+        <Flex>
           {activity?.media?.map((media, index) => (
             <img
               key={index}
-              src={media}
+              src={`${LOCAL}/${media}`}
               alt={`Media ${index + 1}`}
-              style={{ maxWidth: '100%', borderRadius: '8px' }}
+              width={160}
+              height={160}
+              style={{ borderRadius: '8px' }}
             />
           ))}
         </Flex>
@@ -122,7 +126,7 @@ const Activity: FC = () => {
   );
 };
 
-export const RecentXActivity: FC = () => (
+export const XActivity: FC = () => (
   <Card>
     <Flex vertical gap={24} style={{ width: '100%' }}>
       <Title level={4} className="m-0">
