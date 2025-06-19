@@ -13,13 +13,13 @@ export type XActivity = {
   type: 'post';
 };
 
-export type Activity = {
+export type MemecoinActivity = {
   type: 'heart' | 'summon' | 'unleash' | 'collect' | 'purge';
   timestamp: number;
-  postId: number | null;
+  postId: string | null;
   token: {
-    nonce: number;
     address: `0x${string}` | null;
+    nonce: number;
     symbol: string;
   };
 };

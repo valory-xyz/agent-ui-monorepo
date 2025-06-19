@@ -8,6 +8,7 @@ import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
 import styled from 'styled-components';
 import { ErrorState } from './ui/ErrorState';
+import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
 import { FC } from 'react';
 import { COLOR } from '../constants/theme';
@@ -34,14 +35,10 @@ const Loader: FC = () => (
 );
 
 const NoActivity: FC = () => (
-  <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
-    <Flex justify="center" align="center" vertical gap={24} style={{ maxWidth: 340 }}>
-      <img src={xActivityEmptyLogo} alt="No recent activity" style={{ width: 40, height: 40 }} />
-      <Text type="secondary" className="text-center">
-        Nothing to show here. Give your agent some time to find something worth sharing.
-      </Text>
-    </Flex>
-  </Flex>
+  <EmptyState
+    logo={xActivityEmptyLogo}
+    message="Nothing to show here. Give your agent some time to find something worth sharing."
+  />
 );
 
 const ErrorActivity: FC = () => (

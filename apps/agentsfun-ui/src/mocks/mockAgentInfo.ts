@@ -1,4 +1,4 @@
-import { AgentInfoResponse, XActivity } from '../types';
+import { AgentInfoResponse, MemecoinActivity, XActivity } from '../types';
 
 export const mockAgentInfo: AgentInfoResponse = {
   address: '0x4656a6bB8d5545E02c7A59BCaf25dF1fEE55F3B8',
@@ -26,15 +26,25 @@ export const mockMedia = {
   ],
 };
 
-export const memecoinActivity = [
+export const memecoinActivity: MemecoinActivity[] = [
   {
-    postId: '1934682830287622621',
+    type: 'heart',
     timestamp: 1750099304.8088,
+    postId: '1934682830287622621',
     token: {
       address: null,
       nonce: 89,
       symbol: 'MEOWC',
     },
-    type: 'heart',
+  },
+  {
+    type: 'collect',
+    timestamp: 1750099304.8088,
+    postId: '1934682714826846497',
+    token: {
+      address: null,
+      nonce: 88,
+      symbol: 'MEOWC',
+    },
   },
 ];
