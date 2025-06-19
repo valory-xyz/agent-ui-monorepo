@@ -106,12 +106,11 @@ const Activity: FC = () => {
 
       <TweetContainer>
         {activity?.text && <TweetText text={activity.text} />}
-        {/* TODO: to discuss with agent team, ignore for now */}
-        <Flex style={{ display: 'none' }}>
+        <Flex>
           {activity?.media?.map((media, index) => (
             <img
               key={index}
-              src={media}
+              src={`${LOCAL}/${media}`}
               alt={`Media ${index + 1}`}
               style={{ maxWidth: '100%', borderRadius: '8px' }}
             />

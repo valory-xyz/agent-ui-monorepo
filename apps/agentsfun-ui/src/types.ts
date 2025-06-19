@@ -12,3 +12,14 @@ export type XActivity = {
   timestamp: number;
   type: 'post';
 };
+
+export type Activity = {
+  type: 'heart' | 'summon' | 'unleash' | 'collect' | 'purge';
+  timestamp: number;
+  postId: number | null;
+  token: {
+    nonce: number;
+    address: `0x${string}` | null;
+    symbol: string;
+  };
+};
