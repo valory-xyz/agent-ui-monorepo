@@ -10,5 +10,5 @@ export type XActivity = {
   postId: string;
   text: string;
   timestamp: number;
-  type: 'tweet' | 'post' | 'comment'; // TODO: ask agent team about the type
+  type: 'post';
 };

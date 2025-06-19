@@ -3,29 +3,28 @@ import { Card } from './ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useState } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Paragraph } = Typography;
 
 const PersonaLoading = () => (
-  <Card>
-    <Flex vertical gap={24} style={{ width: '100%' }}>
-      <Flex vertical align="flex-start">
-        <Title level={3} className="m-0">
-          <Skeleton.Input active />
-        </Title>
-        <Skeleton.Input active size="small" style={{ marginTop: 12 }} />
-      </Flex>
+  <Flex vertical gap={24} style={{ width: '100%' }}>
+    <Flex vertical align="flex-start">
+      <Title level={3} className="m-0">
+        <Skeleton.Input active />
+      </Title>
+      <Skeleton.Input active size="small" style={{ marginTop: 12 }} />
+    </Flex>
 
-      <Flex vertical gap={8} style={{ width: '100%' }}>
-        <Text type="secondary">Persona</Text>
-        <Flex vertical align="flex-start" gap={8}>
-          <Skeleton.Input active block size="small" />
-          <Skeleton.Input active block size="small" />
-          <Skeleton.Input active size="small" style={{ width: 200 }} />
-        </Flex>
+    <Flex vertical gap={8} style={{ width: '100%' }}>
+      <Text type="secondary">Persona</Text>
+      <Flex vertical align="flex-start" gap={8}>
+        <Skeleton.Input active block size="small" />
+        <Skeleton.Input active block size="small" />
+        <Skeleton.Input active size="small" style={{ width: 200 }} />
       </Flex>
     </Flex>
-  </Card>
+  </Flex>
 );
 
 const Description = ({ desc }: { desc: string }) => {
@@ -56,36 +55,40 @@ const Description = ({ desc }: { desc: string }) => {
   );
 };
 
-// TODO: ask design team about error handling states.
+const AgentPersona = () => {
+  const { isLoading, isError, data: agentDetails } = useAgentDetails();
+
+  if (isLoading) return <PersonaLoading />;
+  if (isError) return <ErrorState message="Failed to load agent details." />;
+
+  return (
+    <Flex vertical gap={24}>
+      <Flex vertical align="flex-start">
+        <Title level={3} className="m-0">
+          {agentDetails?.name}
+        </Title>
+        <Button
+          onClick={() => window.open(`https://x.com/${agentDetails?.username}`, '_blank')}
+          type="link"
+          className="p-0"
+        >
+          {`@${agentDetails?.username}`}
+        </Button>
+      </Flex>
+
+      <Flex vertical gap={8}>
+        <Text type="secondary">Persona</Text>
+        <Description desc={agentDetails?.personaDescription || ''} />
+      </Flex>
+    </Flex>
+  );
+};
+
 /**
  * Displays the agent's persona information.
  */
-export const Persona = () => {
-  const { isLoading, data: agentDetails } = useAgentDetails();
-
-  if (isLoading) return <PersonaLoading />;
-
-  return (
-    <Card>
-      <Flex vertical gap={24}>
-        <Flex vertical align="flex-start">
-          <Title level={3} className="m-0">
-            {agentDetails?.name}
-          </Title>
-          <Button
-            onClick={() => window.open(`https://x.com/${agentDetails?.username}`, '_blank')}
-            type="link"
-            className="p-0"
-          >
-            {`@${agentDetails?.username}`}
-          </Button>
-        </Flex>
-
-        <Flex vertical gap={8}>
-          <Text type="secondary">Persona</Text>
-          <Description desc={agentDetails?.personaDescription || ''} />
-        </Flex>
-      </Flex>
-    </Card>
-  );
-};
+export const Persona = () => (
+  <Card>
+    <AgentPersona />
+  </Card>
+);

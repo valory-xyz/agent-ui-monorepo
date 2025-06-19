@@ -4,10 +4,10 @@ import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-ty
 import { xActivity } from '../mocks/mockAgentInfo';
 import { XActivity } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
-import errorLogo from '../assets/error.png';
 import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
 import styled from 'styled-components';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Link } = Typography;
 
@@ -47,14 +47,7 @@ const NoActivity = () => (
 );
 
 const ErrorActivity = () => (
-  <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
-    <Flex justify="center" align="center" vertical gap={16} style={{ maxWidth: 340 }}>
-      <img src={errorLogo} alt="Error loading activity" style={{ width: 40, height: 40 }} />
-      <Text type="secondary" className="text-center">
-        Failed to load recent activity. Please try again later.
-      </Text>
-    </Flex>
-  </Flex>
+  <ErrorState message="Failed to load recent activity. Please try again later." />
 );
 
 const useXActivity = () =>
@@ -102,10 +95,11 @@ export const Activity = () => {
 
       <TweetContainer>
         <Text>{activity?.text}</Text>
-        {/* TODO: to discuss with agent team */}
+        {/* TODO: to discuss with agent team, ignore for now */}
         <Flex style={{ display: 'none' }}>
           {activity?.media?.map((media, index) => (
             <img
+              key={index}
               src={media}
               alt={`Media ${index + 1}`}
               style={{ maxWidth: '100%', borderRadius: '8px' }}

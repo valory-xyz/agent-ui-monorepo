@@ -6,17 +6,6 @@ export const COLOR = {
   TEXT_PRIMARY: '#fff',
   BACKGROUND: '#2f1d57',
   WHITE: '#fff',
-
-  // TODO: is this required?
-  BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
-  BLACK_TRANSPARENT_20: 'rgba(0, 0, 0, 0.20)',
-  BLACK_TRANSPARENT_30: 'rgba(0, 0, 0, 0.30)',
-  BLACK_TRANSPARENT_50: 'rgba(0, 0, 0, 0.50)',
-
-  WHITE_TRANSPARENT_5: 'rgba(255, 255, 255, 0.05)',
-  WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
-  WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
-  WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
 };
 
 export const THEME_CONFIG: ThemeConfig = {
@@ -28,8 +17,6 @@ export const THEME_CONFIG: ThemeConfig = {
   },
   components: {
     Button: {
-      defaultBg: 'transparent',
-      defaultHoverBg: COLOR.BLACK_TRANSPARENT_20,
       defaultBorderColor: COLOR.TEXT_PRIMARY,
       fontSize: 16,
     },
