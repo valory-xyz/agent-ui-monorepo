@@ -3,7 +3,7 @@ name: Build and Release Agents.fun UI
 on:
   push:
     tags:
-      - 'v*-agents-fun'
+      - 'v*-agentsfun'
   workflow_dispatch:
 
 jobs:
