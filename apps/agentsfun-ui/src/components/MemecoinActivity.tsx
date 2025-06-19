@@ -1,5 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
+import {
+  LOCAL,
+  UNICODE_SYMBOLS,
+  THIRTY_SECONDS,
+} from '@agent-ui-monorepo/util-constants-and-types';
 
 import { memecoinActivity } from '../mock';
 import { MemecoinActivity as MemecoinActivityType, MemecoinActivityAction } from '../types';
@@ -47,6 +51,7 @@ const useMemecoinActivity = () =>
     },
     retry: 5,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    refetchInterval: THIRTY_SECONDS,
   });
 
 type AgentActivityOnMemecoinProps = {

@@ -1,4 +1,4 @@
-import { AgentInfoResponse, MemecoinActivity, XActivity } from './types';
+import { AgentInfoResponse, GeneratedMedia, MemecoinActivity, XActivity } from './types';
 
 export const mockAgentInfo: AgentInfoResponse = {
   address: '0x4656a6bB8d5545E02c7A59BCaf25dF1fEE55F3B8',
@@ -39,12 +39,10 @@ export const memecoinActivity: MemecoinActivity[] = [
   },
 ];
 
-export const mockMedia = {
-  media: [
-    {
-      path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
-      tweet_id: '1934682714826846497',
-      type: 'image',
-    },
-  ],
-};
+export const mockMedia: GeneratedMedia[] = [
+  {
+    path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
+    post_id: '1934682714826846497',
+    type: 'image',
+  },
+];

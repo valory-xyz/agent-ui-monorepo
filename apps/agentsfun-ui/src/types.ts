@@ -25,3 +25,9 @@ export type MemecoinActivity = {
     symbol: string;
   };
 };
+
+export type GeneratedMedia = {
+  path: string;
+  post_id: string;
+  type: 'image' | 'video';
+};

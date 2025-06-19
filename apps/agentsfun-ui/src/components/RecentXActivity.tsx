@@ -1,12 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import { LOCAL, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
+import { Flex, Spin, Typography } from 'antd';
+import styled from 'styled-components';
+import {
+  LOCAL,
+  UNICODE_SYMBOLS,
+  THIRTY_SECONDS,
+} from '@agent-ui-monorepo/util-constants-and-types';
 
 import { xActivity } from '../mock';
 import { XActivity } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
 import { Card } from './ui/Card';
-import { Flex, Spin, Typography } from 'antd';
-import styled from 'styled-components';
+
 import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
@@ -73,6 +78,7 @@ const useXActivity = () =>
     },
     retry: 5,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    refetchInterval: THIRTY_SECONDS,
   });
 
 const Activity: FC = () => {
@@ -109,7 +115,9 @@ const Activity: FC = () => {
               key={index}
               src={`${LOCAL}/${media}`}
               alt={`Media ${index + 1}`}
-              style={{ maxWidth: '100%', borderRadius: '8px' }}
+              width={160}
+              height={160}
+              style={{ borderRadius: '8px' }}
             />
           ))}
         </Flex>
