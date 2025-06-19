@@ -58,11 +58,11 @@ const Agent = () => {
 export const App = () => (
   <>
     <StyledApp>
-      <ErrorBoundary>
-        <ConfigProvider theme={THEME_CONFIG}>
+      <ConfigProvider theme={THEME_CONFIG}>
+        <ErrorBoundary>
           <Agent />
-        </ConfigProvider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </ConfigProvider>
     </StyledApp>
     <GlobalStyles />
   </>

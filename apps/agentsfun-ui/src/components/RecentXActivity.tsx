@@ -63,7 +63,7 @@ const TweetText: FC<{ text: string }> = ({ text }) => {
 };
 
 const useXActivity = () =>
-  useQuery<XActivity>({
+  useQuery<XActivity | null>({
     queryKey: ['xActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -74,6 +74,8 @@ const useXActivity = () =>
       if (!response.ok) throw new Error('Failed to fetch X activity');
       return response.json();
     },
+    retry: 5,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
 const Activity: FC = () => {
