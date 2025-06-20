@@ -98,8 +98,23 @@ const Media: FC = () => {
                   postId={activity.postId}
                   alt={`Generated media ${index + 1}`}
                 />
+              ) : activity.type === 'video' ? (
+                <video
+                  src={activity.path}
+                  controls
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() =>
+                    window.open(`https://x.com/i/web/status/${activity.postId}`, '_blank')
+                  }
+                />
               ) : (
-                <span>{activity.type}</span>
+                'Unknown media type'
               )}
 
               <ViewOnXContainer>View on X</ViewOnXContainer>

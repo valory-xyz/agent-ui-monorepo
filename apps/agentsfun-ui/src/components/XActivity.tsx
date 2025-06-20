@@ -86,14 +86,19 @@ const Activity: FC = () => {
         {activity.text && <TweetText text={activity.text} />}
         <Flex>
           {activity.media?.map((media, index) => (
-            <img
-              key={index}
-              src={media}
-              alt={`Media ${index + 1}`}
-              width={160}
-              height={160}
-              style={{ borderRadius: '8px' }}
-            />
+            <div key={index} style={{ width: 160, height: 160 }}>
+              {/* TODO: check image width */}
+              <img
+                src={media}
+                alt={`Media ${index + 1}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '8px',
+                  objectFit: 'contain',
+                }}
+              />
+            </div>
           ))}
         </Flex>
       </TweetContainer>
