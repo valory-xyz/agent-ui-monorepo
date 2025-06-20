@@ -6,6 +6,8 @@ export const COLOR = {
   WHITE: '#fff',
   GRAY_1: '#f6fbfe',
   GRAY_2: '#dbe9f1',
+
+  BLACK_TRANSPARENT_1: 'rgba(0, 0, 0, 0.5)',
 };
 
 export const THEME_CONFIG: ThemeConfig = {

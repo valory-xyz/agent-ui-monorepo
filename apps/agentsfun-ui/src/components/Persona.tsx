@@ -4,6 +4,7 @@ import { useAgentDetails } from '../hooks/useAgentDetails';
 import { FC, useState } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { ErrorState } from './ui/ErrorState';
+import { X_URL } from '@agent-ui-monorepo/util-constants-and-types';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -69,7 +70,7 @@ const AgentPersona: FC = () => {
           {agentDetails.name}
         </Title>
         <Button
-          onClick={() => window.open(`https://x.com/${agentDetails.username}`, '_blank')}
+          onClick={() => window.open(`${X_URL}/${agentDetails.username}`, '_blank')}
           type="link"
           className="p-0"
         >

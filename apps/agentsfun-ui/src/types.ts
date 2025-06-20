@@ -31,8 +31,3 @@ export type GeneratedMedia = {
   postId: string;
   type: 'image' | 'video';
 };
-
-/**
- * - if data is null keep calling
- * - useQuery to be in separate folder
- */

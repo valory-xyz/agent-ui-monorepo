@@ -24,7 +24,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "19.0.0",
     "@types/react-is": "19.0.0",
-    "@types/styled-components": "5.1.26",
+    "@types/styled-components": "^5.1.26",
     "@vitejs/plugin-react": "^4.2.0",
     "@vitest/ui": "^3.0.0",
     "ajv": "^8.0.0",

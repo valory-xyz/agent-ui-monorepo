@@ -1,21 +1,23 @@
+import { FC } from 'react';
+import styled from 'styled-components';
+
+import { X_POST_URL } from '@agent-ui-monorepo/util-constants-and-types';
+
 import mediaEmptyLogo from '../assets/media-empty.png';
 import { Card } from './ui/Card';
 import { Col, Flex, Row, Spin, Typography } from 'antd';
 import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
-import { FC } from 'react';
-import styled from 'styled-components';
 import { useGeneratedMedia } from '../hooks/useGeneratedMedia';
+import { COLOR } from '../constants/theme';
 
 const { Title } = Typography;
 
-// TODO: image is being squeezed, fix it
 const MediaContainer = styled.div`
   width: 160px;
   height: 160px;
-  border: 1px solid #eeeeee;
   border-radius: 2px;
-  background: #fafafa;
+  background: ${COLOR.GRAY_1};
   overflow: hidden;
 `;
 
@@ -25,17 +27,18 @@ const ViewOnXContainer = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
+  color: ${COLOR.WHITE};
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
+  background: ${COLOR.BLACK_TRANSPARENT_1};
+  backdrop-filter: blur(2px);
 `;
 
-const Image = styled('img')`
+const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -46,6 +49,14 @@ const Image = styled('img')`
   &:hover {
     transform: scale(1.05);
   }
+`;
+
+const Video = styled.video`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
 `;
 
 const Loader: FC = () => (
@@ -73,9 +84,23 @@ const GeneratedImage: FC<GeneratedImageProps> = ({ path, postId, alt }) => (
   <Image
     src={path}
     alt={alt}
-    onClick={() => window.open(`https://x.com/i/web/status/${postId}`, '_blank')}
+    onClick={() => window.open(`${X_POST_URL}/${postId}`, '_blank')}
     onMouseOver={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')}
     onMouseOut={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')}
+  />
+);
+
+type GeneratedVideoProps = { path: string; postId: string };
+const GeneratedVideo: FC<GeneratedVideoProps> = ({ path, postId }) => (
+  <Video
+    src={path}
+    controls
+    muted
+    playsInline
+    onClick={() => window.open(`${X_POST_URL}/${postId}`, '_blank')}
+    onMouseOver={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')}
+    onMouseOut={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')}
+    onPlay={(e) => e.currentTarget.pause()}
   />
 );
 
@@ -91,7 +116,7 @@ const Media: FC = () => {
       {media.map((activity, index) => (
         <Col key={activity.postId} span={6}>
           <MediaContainer>
-            <div style={{ position: 'relative', width: '100%', height: '100%' }} tabIndex={0}>
+            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
               {activity.type === 'image' ? (
                 <GeneratedImage
                   path={activity.path}
@@ -99,24 +124,10 @@ const Media: FC = () => {
                   alt={`Generated media ${index + 1}`}
                 />
               ) : activity.type === 'video' ? (
-                <video
-                  src={activity.path}
-                  controls
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() =>
-                    window.open(`https://x.com/i/web/status/${activity.postId}`, '_blank')
-                  }
-                />
+                <GeneratedVideo path={activity.path} postId={activity.postId} />
               ) : (
                 'Unknown media type'
               )}
-
               <ViewOnXContainer>View on X</ViewOnXContainer>
             </div>
           </MediaContainer>

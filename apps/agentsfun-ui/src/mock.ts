@@ -47,4 +47,14 @@ export const mockMedia: GeneratedMedia[] = [
     postId: '1934682714826846497',
     type: 'image',
   },
+  {
+    path: 'https://gateway.autonolas.tech/ipfs/bafybeifgj3kackzfoq4fxjiuousm6epgwx7jbc3n2gjwzjgvtbbz7fc3su',
+    postId: '1934682714826846494',
+    type: 'image',
+  },
+  {
+    path: 'https://446adc5a-ab05-4599-a16f-0730ff74a0f7.mdnplay.dev/shared-assets/videos/flower.mp4',
+    postId: '1934682714826846422',
+    type: 'video',
+  },
 ];

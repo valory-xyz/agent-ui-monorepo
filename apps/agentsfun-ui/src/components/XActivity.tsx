@@ -25,6 +25,17 @@ const TweetContainer = styled.div`
   background: ${COLOR.GRAY_1};
 `;
 
+const ImageContainer = styled.div`
+  width: 160px;
+  height: 160px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+`;
+
 const Loader: FC = () => (
   <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
     <Spin />
@@ -86,19 +97,9 @@ const Activity: FC = () => {
         {activity.text && <TweetText text={activity.text} />}
         <Flex>
           {activity.media?.map((media, index) => (
-            <div key={index} style={{ width: 160, height: 160 }}>
-              {/* TODO: check image width */}
-              <img
-                src={media}
-                alt={`Media ${index + 1}`}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '8px',
-                  objectFit: 'contain',
-                }}
-              />
-            </div>
+            <ImageContainer key={index}>
+              <img src={media} alt={`Media ${index + 1}`} />
+            </ImageContainer>
           ))}
         </Flex>
       </TweetContainer>
