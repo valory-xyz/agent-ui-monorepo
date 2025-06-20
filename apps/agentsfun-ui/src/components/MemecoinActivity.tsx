@@ -5,7 +5,7 @@ import {
   THIRTY_SECONDS,
 } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { memecoinActivity } from '../mock';
+import { mockMemecoinActivity } from '../mock';
 import { MemecoinActivity as MemecoinActivityType, MemecoinActivityAction } from '../types';
 import memecoinActivityEmptyLogo from '../assets/memecoin-activity-empty.png';
 import { Card } from './ui/Card';
@@ -42,7 +42,7 @@ const useMemecoinActivity = () =>
     queryKey: ['xMemecoinActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(memecoinActivity), 2000));
+        return new Promise((resolve) => setTimeout(() => resolve(mockMemecoinActivity), 2000));
       }
 
       const response = await fetch(`${LOCAL}/memecoin-activity`);

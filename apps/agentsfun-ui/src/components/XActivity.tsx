@@ -7,7 +7,7 @@ import {
   THIRTY_SECONDS,
 } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { xActivity } from '../mock';
+import { mockXActivity } from '../mock';
 import { XActivity as XActivityType } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
 import { Card } from './ui/Card';
@@ -69,7 +69,7 @@ const useXActivity = () =>
     queryKey: ['xActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(xActivity), 2000));
+        return new Promise((resolve) => setTimeout(() => resolve(mockXActivity), 2000));
       }
 
       const response = await fetch(`${LOCAL}/x-activity`);

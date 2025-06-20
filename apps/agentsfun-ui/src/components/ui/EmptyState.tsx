@@ -1,9 +1,9 @@
 import { Flex, Typography } from 'antd';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 const { Text } = Typography;
 
-type EmptyStateProps = { logo: string; message: string };
+type EmptyStateProps = { logo: string; message: string | ReactNode };
 
 export const EmptyState: FC<EmptyStateProps> = ({ logo, message }) => (
   <Flex justify="center" align="center" style={{ height: 200, width: '100%' }}>
