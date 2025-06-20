@@ -1,23 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
 import { FORTYFIVE_SECONDS, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { mockAgentInfo } from '../mock';
-import { AgentInfoResponse } from '../types';
+import { mockXActivity } from '../mock';
+import { XActivity as XActivityType } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-export const useAgentDetails = () =>
-  useQuery<AgentInfoResponse | null>({
-    queryKey: ['agentInfo'],
+export const useXActivity = () =>
+  useQuery<XActivityType | null>({
+    queryKey: ['xActivity'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        console.warn('Mocking agent info response');
-        return new Promise((resolve) => setTimeout(() => resolve(mockAgentInfo), 2000));
+        return new Promise((resolve) => setTimeout(() => resolve(mockXActivity), 2000));
       }
 
-      const response = await fetch(`${LOCAL}/agent-info`);
-      if (!response.ok) throw new Error('Failed to fetch agent info');
-
+      const response = await fetch(`${LOCAL}/x-activity`);
+      if (!response.ok) throw new Error('Failed to fetch X activity');
       return response.json();
     },
     retry: 5,

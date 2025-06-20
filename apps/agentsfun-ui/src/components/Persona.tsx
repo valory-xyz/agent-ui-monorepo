@@ -59,8 +59,8 @@ const Description: FC<{ content: string }> = ({ content }) => {
 const AgentPersona: FC = () => {
   const { isLoading, isError, data: agentDetails } = useAgentDetails();
 
-  if (isLoading) return <PersonaLoading />;
-  if (isError || !agentDetails) return <ErrorState message="Failed to load agent details." />;
+  if (isLoading || !agentDetails) return <PersonaLoading />;
+  if (isError) return <ErrorState message="Failed to load agent details." />;
 
   return (
     <Flex vertical gap={24}>
