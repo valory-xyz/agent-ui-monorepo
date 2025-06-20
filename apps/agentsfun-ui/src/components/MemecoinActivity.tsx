@@ -3,6 +3,8 @@ import {
   LOCAL,
   UNICODE_SYMBOLS,
   THIRTY_SECONDS,
+  AGENTS_FUN_URL,
+  X_POST_URL,
 } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { mockMemecoinActivity } from '../mock';
@@ -14,7 +16,6 @@ import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
 import { FC, useMemo } from 'react';
-import { COLOR } from '../constants/theme';
 
 const { Title, Text, Link } = Typography;
 
@@ -84,7 +85,10 @@ const AgentActivityOnMemecoin: FC<AgentActivityOnMemecoinProps> = ({ type, token
   return (
     <Text>
       {details.emoji} Agent {details.action}{' '}
-      <Text style={{ color: COLOR.PRIMARY }}>{tokenSymbol}</Text> token
+      <Link href={`${AGENTS_FUN_URL}/tools`} target="_blank">
+        {tokenSymbol}
+      </Link>{' '}
+      token
     </Text>
   );
 };
@@ -112,7 +116,7 @@ const Activity: FC = () => {
             </Text>
             <Text type="secondary">{formatTimestampToMonthDay(activity.timestamp)}</Text>
           </Flex>
-          <Link href={`https://x.com/i/web/status/${activity.postId}`} target="_blank">
+          <Link href={`${X_POST_URL}/${activity.postId}`} target="_blank">
             View on X {UNICODE_SYMBOLS.EXTERNAL_LINK}
           </Link>
         </Flex>

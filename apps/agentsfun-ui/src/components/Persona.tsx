@@ -27,7 +27,7 @@ const PersonaLoading: FC = () => (
   </Flex>
 );
 
-const Description: FC<{ desc: string }> = ({ desc }) => {
+const Description: FC<{ content: string }> = ({ content }) => {
   const [ellipsis, setEllipsis] = useState(true);
 
   return (
@@ -36,7 +36,7 @@ const Description: FC<{ desc: string }> = ({ desc }) => {
         ellipsis={ellipsis ? { rows: 2, expandable: false, symbol: '...' } : false}
         className="mb-0"
       >
-        {desc}
+        {content}
       </Paragraph>
       <Button onClick={() => setEllipsis(!ellipsis)} type="link" className="p-0">
         {ellipsis ? (
@@ -59,26 +59,26 @@ const AgentPersona: FC = () => {
   const { isLoading, isError, data: agentDetails } = useAgentDetails();
 
   if (isLoading) return <PersonaLoading />;
-  if (isError) return <ErrorState message="Failed to load agent details." />;
+  if (isError || !agentDetails) return <ErrorState message="Failed to load agent details." />;
 
   return (
     <Flex vertical gap={24}>
       <Flex vertical align="flex-start">
         <Title level={3} className="m-0">
-          {agentDetails?.name}
+          {agentDetails.name}
         </Title>
         <Button
-          onClick={() => window.open(`https://x.com/${agentDetails?.username}`, '_blank')}
+          onClick={() => window.open(`https://x.com/${agentDetails.username}`, '_blank')}
           type="link"
           className="p-0"
         >
-          {`@${agentDetails?.username}`}
+          {`@${agentDetails.username}`}
         </Button>
       </Flex>
 
       <Flex vertical gap={8}>
         <Text type="secondary">Persona</Text>
-        <Description desc={agentDetails?.personaDescription || ''} />
+        <Description content={agentDetails.personaDescription || ''} />
       </Flex>
     </Flex>
   );

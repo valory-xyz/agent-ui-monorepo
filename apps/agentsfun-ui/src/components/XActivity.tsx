@@ -5,6 +5,7 @@ import {
   LOCAL,
   UNICODE_SYMBOLS,
   THIRTY_SECONDS,
+  X_POST_URL,
 } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { mockXActivity } from '../mock';
@@ -93,7 +94,7 @@ const Activity: FC = () => {
       <Flex justify="space-between" align="center" style={{ width: '100%' }}>
         <Flex gap={8} align="center">
           <Text>Agent posted a message</Text>
-          {activity?.timestamp && (
+          {activity.timestamp && (
             <>
               <Text type="secondary" className="text-xs">
                 {UNICODE_SYMBOLS.BULLET}
@@ -102,18 +103,18 @@ const Activity: FC = () => {
             </>
           )}
         </Flex>
-        <Link href={`https://x.com/i/web/status/${activity?.postId}`} target="_blank">
+        <Link href={`${X_POST_URL}/${activity?.postId}`} target="_blank">
           View on X {UNICODE_SYMBOLS.EXTERNAL_LINK}
         </Link>
       </Flex>
 
       <TweetContainer>
-        {activity?.text && <TweetText text={activity.text} />}
+        {activity.text && <TweetText text={activity.text} />}
         <Flex>
-          {activity?.media?.map((media, index) => (
+          {activity.media?.map((media, index) => (
             <img
               key={index}
-              src={`${LOCAL}/${media}`}
+              src={media}
               alt={`Media ${index + 1}`}
               width={160}
               height={160}
