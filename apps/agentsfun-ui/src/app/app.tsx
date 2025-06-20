@@ -5,11 +5,12 @@ import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
 
+import { COLOR, THEME_CONFIG } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { Persona } from '../components/Persona';
-import { COLOR, THEME_CONFIG } from '../constants/theme';
 import { XActivity } from '../components/XActivity';
 import { MemecoinActivity } from '../components/MemecoinActivity';
+import { AiGeneratedMedia } from '../components/AiGeneratedMedia';
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -52,6 +53,7 @@ const Agent = () => {
         <Persona />
         <XActivity />
         <MemecoinActivity />
+        <AiGeneratedMedia />
       </AgentContent>
     </Flex>
   );

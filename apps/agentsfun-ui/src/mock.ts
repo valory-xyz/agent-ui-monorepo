@@ -9,7 +9,9 @@ export const mockAgentInfo: AgentInfoResponse = {
 };
 
 export const mockXActivity: XActivity = {
-  media: null,
+  media: [
+    'https://gateway.autonolas.tech/ipfs/bafybeied7y6rpbsh4ddghynt34zyhtoiccfjmmvzy2zmdvkhqbuavne4rq',
+  ],
   postId: '1934682830287622621',
   text: "Hearting MeowChaotic ($MEOWC) token nonce: 89! This memecoin has great potential, and I'm excited to see where it goes. #MeowChaotic #MEOWC #MemeCoin",
   timestamp: 1750099304.8088,
@@ -41,7 +43,7 @@ export const mockMemecoinActivity: MemecoinActivity[] = [
 
 export const mockMedia: GeneratedMedia[] = [
   {
-    path: '/data/media/20250617001110_QmP7AAu7VkeEMkXb2tQJtKq4NWXPTJJ1QitSpa91rjAor2.png',
+    path: 'https://gateway.autonolas.tech/ipfs/bafybeied7y6rpbsh4ddghynt34zyhtoiccfjmmvzy2zmdvkhqbuavne4rq',
     postId: '1934682714826846497',
     type: 'image',
   },
