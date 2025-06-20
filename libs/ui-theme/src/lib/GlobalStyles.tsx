@@ -8,7 +8,7 @@ export const GlobalStyles = createGlobalStyle`
     font-family: 'Roboto', sans-serif;
   }
 
-  // antd override
+  /* antd override */
   .ant-tag {
     display: flex;
     align-items: center;
@@ -20,12 +20,15 @@ export const GlobalStyles = createGlobalStyle`
     text-underline-offset: 6px;
   }
 
-  // margins
+  /* margins */
   h1, h2, h3, h4, h5, h6 {
     margin: 0
   }
   .m-0 {
     margin: 0px !important;
+  }
+  .mb-0 {
+    margin-bottom: 0px !important;
   }
   .mb-8 {
     margin-bottom: 8px !important;
@@ -35,5 +38,21 @@ export const GlobalStyles = createGlobalStyle`
   }
   .ml-auto {
     margin-left: auto;
+  }
+
+  /* padding */
+  .p-0 {
+    padding: 0px !important;
+  }
+
+  /* font size */
+  .text-sm {
+    font-size: 14px;
+  }
+  .text-xs {
+    font-size: 12px;
+  }
+  .text-center {
+    text-align: center;
   }
 `;

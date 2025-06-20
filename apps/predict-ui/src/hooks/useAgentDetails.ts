@@ -5,7 +5,7 @@ import { mockAgentInfo } from '../mocks/mockAgentInfo';
 import { AgentInfoResponse } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
 
-const IS_MOCK_ENABLED = import.meta.env.VITE_IS_MOCK_ENABLED === 'true';
+const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () => {
   const {
