@@ -109,7 +109,7 @@ const Media: FC = () => {
 
   if (isLoading) return <Loader />;
   if (isError) return <ErrorMedia />;
-  if (!media) return <NoActivity />;
+  if (!media || media.length === 0) return <NoActivity />;
 
   return (
     <Row gutter={[4, 4]}>

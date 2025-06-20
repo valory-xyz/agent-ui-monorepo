@@ -28,7 +28,6 @@ const PersonaLoading: FC = () => (
   </Flex>
 );
 
-// TODO: hide "Show full description" button when the content is less than 2 lines
 const Description: FC<{ content: string }> = ({ content }) => {
   const [ellipsis, setEllipsis] = useState(true);
 
