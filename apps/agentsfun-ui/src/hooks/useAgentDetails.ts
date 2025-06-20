@@ -11,7 +11,6 @@ export const useAgentDetails = () =>
     queryKey: ['agentInfo'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        console.warn('Mocking agent info response');
         return new Promise((resolve) => setTimeout(() => resolve(mockAgentInfo), 2000));
       }
 
@@ -29,5 +28,4 @@ export const useAgentDetails = () =>
       // Slow down when data is available
       return FORTYFIVE_SECONDS;
     },
-    refetchOnWindowFocus: true,
   });

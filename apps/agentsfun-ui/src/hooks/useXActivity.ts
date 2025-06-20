@@ -20,12 +20,5 @@ export const useXActivity = () =>
     },
     retry: 5,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
-    refetchInterval: (data) => {
-      // Keep polling every 2 seconds if no data is available
-      if (data === null) return 2000;
-
-      // Slow down when data is available
-      return FORTYFIVE_SECONDS;
-    },
-    refetchOnWindowFocus: true,
+    refetchInterval: FORTYFIVE_SECONDS,
   });

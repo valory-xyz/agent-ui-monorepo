@@ -1,8 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { LOCAL, THIRTY_SECONDS } from '@agent-ui-monorepo/util-constants-and-types';
-
-import { mockMedia } from '../mock';
-import { GeneratedMedia } from '../types';
 import mediaEmptyLogo from '../assets/media-empty.png';
 import { Card } from './ui/Card';
 import { Col, Flex, Row, Spin, Typography } from 'antd';
@@ -10,10 +5,9 @@ import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useGeneratedMedia } from '../hooks/useGeneratedMedia';
 
-const { Title, Text, Link } = Typography;
-
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
+const { Title } = Typography;
 
 // TODO: image is being squeezed, fix it
 const MediaContainer = styled.div`
@@ -74,26 +68,16 @@ const NoActivity: FC = () => (
 
 const ErrorMedia: FC = () => <ErrorState message="Failed to load media. Please try again later." />;
 
-const useGeneratedMedia = () =>
-  useQuery<GeneratedMedia[] | null>({
-    queryKey: ['xMediaActivity'],
-    queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(mockMedia), 2000));
-      }
-
-      const response = await fetch(`${LOCAL}/media`);
-      if (!response.ok) throw new Error('Failed to fetch generated media');
-      return response.json();
-    },
-    retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
-    refetchInterval: THIRTY_SECONDS,
-  });
-
-const GeneratedImage = () => {
-  return null;
-};
+type GeneratedImageProps = { path: string; postId: string; alt: string };
+const GeneratedImage: FC<GeneratedImageProps> = ({ path, postId, alt }) => (
+  <Image
+    src={path}
+    alt={alt}
+    onClick={() => window.open(`https://x.com/i/web/status/${postId}`, '_blank')}
+    onMouseOver={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')}
+    onMouseOut={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')}
+  />
+);
 
 const Media: FC = () => {
   const { isLoading, isError, data: media } = useGeneratedMedia();
@@ -109,25 +93,16 @@ const Media: FC = () => {
           <MediaContainer>
             <div style={{ position: 'relative', width: '100%', height: '100%' }} tabIndex={0}>
               {activity.type === 'image' ? (
-                <>
-                  <Image
-                    src={activity.path}
-                    alt={`Generated media ${index}`}
-                    onClick={() =>
-                      window.open(`https://x.com/i/web/status/${activity.postId}`, '_blank')
-                    }
-                    onMouseOver={(e) =>
-                      ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')
-                    }
-                    onMouseOut={(e) =>
-                      ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')
-                    }
-                  />
-                  <ViewOnXContainer>View on X</ViewOnXContainer>
-                </>
+                <GeneratedImage
+                  path={activity.path}
+                  postId={activity.postId}
+                  alt={`Generated media ${index + 1}`}
+                />
               ) : (
                 <span>{activity.type}</span>
               )}
+
+              <ViewOnXContainer>View on X</ViewOnXContainer>
             </div>
           </MediaContainer>
         </Col>
