@@ -19,6 +19,10 @@ const MediaContainer = styled.div`
   border-radius: 2px;
   background: ${COLOR.GRAY_1};
   overflow: hidden;
+
+  &:hover .view-on-x {
+    opacity: 1;
+  }
 `;
 
 const ViewOnXContainer = styled.div`
@@ -39,12 +43,12 @@ const ViewOnXContainer = styled.div`
 `;
 
 const Image = styled.img`
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s;
   cursor: pointer;
-  display: block;
 
   &:hover {
     transform: scale(1.05);
@@ -65,7 +69,7 @@ const Loader: FC = () => (
   </Flex>
 );
 
-const NoActivity: FC = () => (
+const NoMedia: FC = () => (
   <EmptyState
     logo={mediaEmptyLogo}
     message={
@@ -81,13 +85,7 @@ const ErrorMedia: FC = () => <ErrorState message="Failed to load media. Please t
 
 type GeneratedImageProps = { path: string; postId: string; alt: string };
 const GeneratedImage: FC<GeneratedImageProps> = ({ path, postId, alt }) => (
-  <Image
-    src={path}
-    alt={alt}
-    onClick={() => window.open(`${X_POST_URL}/${postId}`, '_blank')}
-    onMouseOver={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')}
-    onMouseOut={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')}
-  />
+  <Image src={path} alt={alt} onClick={() => window.open(`${X_POST_URL}/${postId}`, '_blank')} />
 );
 
 type GeneratedVideoProps = { path: string; postId: string };
@@ -98,8 +96,6 @@ const GeneratedVideo: FC<GeneratedVideoProps> = ({ path, postId }) => (
     muted
     playsInline
     onClick={() => window.open(`${X_POST_URL}/${postId}`, '_blank')}
-    onMouseOver={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '1')}
-    onMouseOut={(e) => ((e.currentTarget.nextSibling as HTMLElement).style.opacity = '0')}
     onPlay={(e) => e.currentTarget.pause()}
   />
 );
@@ -109,7 +105,7 @@ const Media: FC = () => {
 
   if (isLoading) return <Loader />;
   if (isError) return <ErrorMedia />;
-  if (!media || media.length === 0) return <NoActivity />;
+  if (!media || media.length === 0) return <NoMedia />;
 
   return (
     <Row gutter={[4, 4]}>
@@ -128,7 +124,7 @@ const Media: FC = () => {
               ) : (
                 'Unknown media type'
               )}
-              <ViewOnXContainer>View on X</ViewOnXContainer>
+              <ViewOnXContainer className="view-on-x">View on X</ViewOnXContainer>
             </div>
           </MediaContainer>
         </Col>
