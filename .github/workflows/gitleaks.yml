@@ -1,0 +1,30 @@
+name: Gitleaks
+
+on:
+  pull_request:
+    branches:
+      - '**'  # Run on all branches
+
+jobs:
+  scan:
+    name: Run Gitleaks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required to scan full git history
+
+      - name: Install Gitleaks
+        run: |
+          wget https://github.com/zricethezav/gitleaks/releases/download/v8.10.1/gitleaks_8.10.1_linux_x64.tar.gz
+          tar -xzf gitleaks_8.10.1_linux_x64.tar.gz
+          sudo install gitleaks /usr/local/bin/gitleaks
+
+      - name: Run Gitleaks scan
+        run: |
+          gitleaks detect --source . \
+                          --report-format=json \
+                          --report-path=leak_report.json \
+                          --verbose

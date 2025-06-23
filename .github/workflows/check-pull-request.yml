@@ -38,3 +38,7 @@ jobs:
 
       - name: Run Nx Lint
         run: yarn nx run-many --target=lint --all --skip-nx-cache
+
+      - name: Test
+        run: yarn nx run-many --target=test --all --skip-nx-cache
+

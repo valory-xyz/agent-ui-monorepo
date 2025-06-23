@@ -29,6 +29,10 @@
   - For general questions on creating apps and libraries:
     - Which bundler would you like to use to build the library? Choose 'none' to skip build setup: `vite`.
     - Which testing framework would you like to use? Choose 'none' to skip testing setup: `jest`.
+- To run tests for a specific app or library, use:
+  ```bash
+  npx nx test <app-or-lib-name>
+  ```
 - To clear the cache, use:
   ```bash
   npx nx reset
