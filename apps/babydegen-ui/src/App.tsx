@@ -41,8 +41,6 @@ function App() {
           )}
         </Flex>
       </Flex>
-
-      {/* @ts-expect-error To be fixed */}
       <GlobalStyles />
     </ErrorBoundary>
   );
