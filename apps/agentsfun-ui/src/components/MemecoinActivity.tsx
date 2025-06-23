@@ -1,14 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import {
-  LOCAL,
   UNICODE_SYMBOLS,
-  THIRTY_SECONDS,
   AGENTS_FUN_URL,
   X_POST_URL,
 } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { mockMemecoinActivity } from '../mock';
-import { MemecoinActivity as MemecoinActivityType, MemecoinActivityAction } from '../types';
+import { MemecoinActivityAction } from '../types';
 import memecoinActivityEmptyLogo from '../assets/memecoin-activity-empty.png';
 import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
@@ -16,10 +12,9 @@ import { ErrorState } from './ui/ErrorState';
 import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
 import { FC, useMemo } from 'react';
+import { useMemecoinActivity } from '../hooks/useMemecoinActivity';
 
 const { Title, Text, Link } = Typography;
-
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 const Loader: FC = () => (
   <Flex justify="center" align="center" style={{ height: 140, width: '100%' }}>
@@ -37,23 +32,6 @@ const NoActivity: FC = () => (
 const ErrorActivity: FC = () => (
   <ErrorState message="Failed to load memecoin activity. Please try again later." />
 );
-
-const useMemecoinActivity = () =>
-  useQuery<MemecoinActivityType[] | null>({
-    queryKey: ['xMemecoinActivity'],
-    queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(mockMemecoinActivity), 2000));
-      }
-
-      const response = await fetch(`${LOCAL}/memecoin-activity`);
-      if (!response.ok) throw new Error('Failed to fetch Memecoin activity');
-      return response.json();
-    },
-    retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
-    refetchInterval: THIRTY_SECONDS,
-  });
 
 type AgentActivityOnMemecoinProps = {
   type: MemecoinActivityAction;

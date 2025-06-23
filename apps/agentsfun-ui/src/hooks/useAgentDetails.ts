@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { FORTYFIVE_SECONDS, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { mockAgentInfo } from '../mock';
 import { AgentInfoResponse } from '../types';
@@ -7,7 +7,7 @@ import { AgentInfoResponse } from '../types';
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () =>
-  useQuery<AgentInfoResponse>({
+  useQuery<AgentInfoResponse | null>({
     queryKey: ['agentInfo'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -20,5 +20,12 @@ export const useAgentDetails = () =>
       return response.json();
     },
     retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000),
+    refetchInterval: (data) => {
+      // Keep polling every 2 seconds if no data is available
+      if (data === null) return 2000;
+
+      // Slow down when data is available
+      return FORTYFIVE_SECONDS;
+    },
   });

@@ -1,15 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
 import { Flex, Spin, Typography } from 'antd';
 import styled from 'styled-components';
-import {
-  LOCAL,
-  UNICODE_SYMBOLS,
-  THIRTY_SECONDS,
-  X_POST_URL,
-} from '@agent-ui-monorepo/util-constants-and-types';
+import { UNICODE_SYMBOLS, X_POST_URL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { mockXActivity } from '../mock';
-import { XActivity as XActivityType } from '../types';
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
 import { Card } from './ui/Card';
 
@@ -18,10 +10,9 @@ import { EmptyState } from './ui/EmptyState';
 import { formatTimestampToMonthDay } from '../utils/date';
 import { FC } from 'react';
 import { COLOR } from '../constants/theme';
+import { useXActivity } from '../hooks/useXActivity';
 
 const { Title, Text, Link } = Typography;
-
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 const TweetContainer = styled.div`
   display: flex;
@@ -32,6 +23,17 @@ const TweetContainer = styled.div`
   padding: 12px 24px 12px 16px;
   border-left: 4px solid ${COLOR.GRAY_2};
   background: ${COLOR.GRAY_1};
+`;
+
+const ImageContainer = styled.div`
+  width: 160px;
+  height: 160px;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
 `;
 
 const Loader: FC = () => (
@@ -65,23 +67,6 @@ const TweetText: FC<{ text: string }> = ({ text }) => {
   );
 };
 
-const useXActivity = () =>
-  useQuery<XActivityType | null>({
-    queryKey: ['xActivity'],
-    queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(mockXActivity), 2000));
-      }
-
-      const response = await fetch(`${LOCAL}/x-activity`);
-      if (!response.ok) throw new Error('Failed to fetch X activity');
-      return response.json();
-    },
-    retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
-    refetchInterval: THIRTY_SECONDS,
-  });
-
 const Activity: FC = () => {
   const { isLoading, isError, data: activity } = useXActivity();
 
@@ -112,14 +97,9 @@ const Activity: FC = () => {
         {activity.text && <TweetText text={activity.text} />}
         <Flex>
           {activity.media?.map((media, index) => (
-            <img
-              key={index}
-              src={media}
-              alt={`Media ${index + 1}`}
-              width={160}
-              height={160}
-              style={{ borderRadius: '8px' }}
-            />
+            <ImageContainer key={index}>
+              <img src={media} alt={`Media ${index + 1}`} />
+            </ImageContainer>
           ))}
         </Flex>
       </TweetContainer>

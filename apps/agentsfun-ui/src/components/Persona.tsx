@@ -1,11 +1,24 @@
 import { Button, Flex, Skeleton, Typography } from 'antd';
 import { Card } from './ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { ErrorState } from './ui/ErrorState';
+import { X_URL } from '@agent-ui-monorepo/util-constants-and-types';
+import styled from 'styled-components';
 
 const { Title, Text, Paragraph } = Typography;
+
+const DescriptionContainer = styled(Flex)`
+  .ant-typography-collapse,
+  .ant-typography-expand {
+    display: flex;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.75;
+    letter-spacing: 0.56px;
+  }
+`;
 
 const PersonaLoading: FC = () => (
   <Flex vertical gap={24} style={{ width: '100%' }}>
@@ -28,38 +41,39 @@ const PersonaLoading: FC = () => (
 );
 
 const Description: FC<{ content: string }> = ({ content }) => {
-  const [ellipsis, setEllipsis] = useState(true);
-
   return (
-    <Flex vertical align="flex-start" gap={4}>
+    <DescriptionContainer vertical align="flex-start" gap={4}>
       <Paragraph
-        ellipsis={ellipsis ? { rows: 2, expandable: false, symbol: '...' } : false}
+        ellipsis={{
+          rows: 2,
+          expandable: 'collapsible',
+          defaultExpanded: false,
+          symbol: (expanded) =>
+            expanded ? (
+              <>
+                Hide full description&nbsp;
+                <UpOutlined style={{ fontSize: 12 }} />
+              </>
+            ) : (
+              <>
+                Show full description&nbsp;
+                <DownOutlined style={{ fontSize: 12 }} />
+              </>
+            ),
+        }}
         className="mb-0"
       >
         {content}
       </Paragraph>
-      <Button onClick={() => setEllipsis(!ellipsis)} type="link" className="p-0">
-        {ellipsis ? (
-          <>
-            Show full description&nbsp;
-            <DownOutlined style={{ fontSize: 12 }} />
-          </>
-        ) : (
-          <>
-            Hide full description&nbsp;
-            <UpOutlined style={{ fontSize: 12 }} />
-          </>
-        )}
-      </Button>
-    </Flex>
+    </DescriptionContainer>
   );
 };
 
 const AgentPersona: FC = () => {
   const { isLoading, isError, data: agentDetails } = useAgentDetails();
 
-  if (isLoading) return <PersonaLoading />;
-  if (isError || !agentDetails) return <ErrorState message="Failed to load agent details." />;
+  if (isLoading || !agentDetails) return <PersonaLoading />;
+  if (isError) return <ErrorState message="Failed to load agent details." />;
 
   return (
     <Flex vertical gap={24}>
@@ -68,7 +82,7 @@ const AgentPersona: FC = () => {
           {agentDetails.name}
         </Title>
         <Button
-          onClick={() => window.open(`https://x.com/${agentDetails.username}`, '_blank')}
+          onClick={() => window.open(`${X_URL}/${agentDetails.username}`, '_blank')}
           type="link"
           className="p-0"
         >
