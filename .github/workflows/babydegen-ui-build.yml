@@ -38,6 +38,19 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Set variables 
+        id: variables 
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [[ "$TAG" == *-modius ]]; then
+            echo "REACT_APP_AGENT_NAME=modius" >> $GITHUB_ENV
+          elif [[ "$TAG" == *-optimus ]]; then
+            echo "REACT_APP_AGENT_NAME=optimus" >> $GITHUB_ENV
+          else
+            echo "Unknown tag format: $TAG"
+            exit 1
+          fi
+
       - name: Build babydegen-ui app
         run: yarn nx build babydegen-ui
 
