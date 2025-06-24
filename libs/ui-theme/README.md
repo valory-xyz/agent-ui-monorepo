@@ -1,6 +1,6 @@
 # ui-theme
 
-This library defines the shared theme configuration for the design system, including colors, spacing, and other style-related tokens
+This library defines the shared theme configuration for the design system, including colors, spacing, and other style-related tokens.
 
 ## Running unit tests
 

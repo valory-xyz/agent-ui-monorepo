@@ -125,9 +125,8 @@ export const Navbar = ({ isLoading, agentType, userAddress }: NavbarProps) => {
               <Tooltip title={userDetails.tooltip} placement="bottomRight">
                 <InfoCircleOutlined
                   style={{
-                    color:
-                      //  TODO: use from COLORS
-                      '#ADB5BD',
+                    //  TODO: use from COLORS
+                    color: '#ADB5BD',
                     cursor: 'pointer',
                   }}
                 />

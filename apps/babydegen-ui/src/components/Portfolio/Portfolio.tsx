@@ -24,11 +24,11 @@ const PortfolioBalance = () => {
   }
 
   return (
-    <Flex gap={2} style={{ alignItems: 'flex-end' }}>
+    <Flex gap={2} align="flex-end">
       <Text type="secondary" style={{ paddingBottom: 4, fontSize: '16px' }}>
         $
       </Text>
-      <Title level={2} style={{ margin: 0 }}>
+      <Title level={2} className="m-0">
         {portfolioBalance}
       </Title>
     </Flex>
@@ -43,8 +43,8 @@ const Roi = () => {
   }
 
   return (
-    <Flex gap={2} style={{ alignItems: 'flex-end' }}>
-      <Title level={2} style={{ margin: 0 }}>
+    <Flex gap={2} align="flex-end">
+      <Title level={2} className="m-0">
         {data?.roi ?? 0}
       </Title>
       <Text type="secondary" style={{ paddingBottom: 4, fontSize: '16px' }}>
