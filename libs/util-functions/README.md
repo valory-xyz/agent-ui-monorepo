@@ -1,6 +1,6 @@
 # util-functions
 
-This library was generated with [Nx](https://nx.dev).
+This library contains shared utility functions such as formatting, validation, data manipulation, and more.
 
 ## Building
 

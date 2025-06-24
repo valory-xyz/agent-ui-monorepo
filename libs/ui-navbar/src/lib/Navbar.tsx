@@ -18,11 +18,6 @@ const style: CSSProperties = {
   background: 'transparent',
 };
 
-//  TODO: use from COLORS
-const InfoTooltip = () => (
-  <InfoCircleOutlined style={{ color: '#ADB5BD', cursor: 'pointer', marginLeft: 4 }} />
-);
-
 // TODO: move to util-functions-and-types folder
 const AgentTypes = {
   modius: 'modius',
@@ -122,13 +117,20 @@ export const Navbar = ({ isLoading, agentType, userAddress }: NavbarProps) => {
               {userAddress ? generateAgentName(userAddress) : ''}
             </Title>
           )}
-          <Flex>
+          <Flex gap={4}>
             <Text type="secondary" className="text-sm">
               {userDetails.desc}
             </Text>
             {userDetails.tooltip && (
               <Tooltip title={userDetails.tooltip} placement="bottomRight">
-                <InfoTooltip />
+                <InfoCircleOutlined
+                  style={{
+                    color:
+                      //  TODO: use from COLORS
+                      '#ADB5BD',
+                    cursor: 'pointer',
+                  }}
+                />
               </Tooltip>
             )}
           </Flex>

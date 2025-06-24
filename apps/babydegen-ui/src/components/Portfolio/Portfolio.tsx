@@ -1,11 +1,11 @@
-import { Button, ButtonProps, Card, Flex, Skeleton, Typography } from 'antd';
+import { Button, ButtonProps, Card, Row, Col, Flex, Skeleton, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CardTitle } from '../../ui/CardTitle';
 import { BreakdownModal } from './BreakdownModal';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const PortfolioBalance = () => {
   const { data, isLoading } = usePortfolio();
@@ -25,10 +25,31 @@ const PortfolioBalance = () => {
 
   return (
     <Flex gap={2} style={{ alignItems: 'flex-end' }}>
-      <span style={{ paddingBottom: 4, fontWeight: 'bold' }}>$</span>
+      <Text type="secondary" style={{ paddingBottom: 4, fontSize: '16px' }}>
+        $
+      </Text>
       <Title level={2} style={{ margin: 0 }}>
         {portfolioBalance}
       </Title>
+    </Flex>
+  );
+};
+
+const Roi = () => {
+  const { data, isLoading } = usePortfolio();
+
+  if (isLoading) {
+    return <Skeleton.Input style={{ minHeight: 38 }} />;
+  }
+
+  return (
+    <Flex gap={2} style={{ alignItems: 'flex-end' }}>
+      <Title level={2} style={{ margin: 0 }}>
+        {data?.roi ?? 0}
+      </Title>
+      <Text type="secondary" style={{ paddingBottom: 4, fontSize: '16px' }}>
+        %
+      </Text>
     </Flex>
   );
 };
@@ -49,14 +70,25 @@ export const Portfolio = () => {
   return (
     <>
       <Card className="card-border card-gradient">
-        <Flex vertical gap={8}>
-          <CardTitle text="Portfolio" />
-          <PortfolioBalance />
-          <SeeBreakdownButton
-            disabled={typeof data?.portfolio_value !== 'number'}
-            onClick={handleOpenBreakdownModal}
-          />
-        </Flex>
+        <Row>
+          <Col md={12} xs={24}>
+            <Flex vertical gap={8}>
+              <CardTitle text="Portfolio" />
+              <PortfolioBalance />
+              <SeeBreakdownButton
+                disabled={typeof data?.portfolio_value !== 'number'}
+                onClick={handleOpenBreakdownModal}
+              />
+            </Flex>
+          </Col>
+
+          <Col md={12} xs={24}>
+            <Flex vertical gap={8}>
+              <CardTitle text="Avg ROI" />
+              <Roi />
+            </Flex>
+          </Col>
+        </Row>
       </Card>
 
       <BreakdownModal open={breakdownModalVisible} onCancel={handleCloseBreakdownModal} />
