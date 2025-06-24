@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { LOCAL } from '../constants/urls';
-import { IS_MOCK_ENABLED } from '../mocks/config';
 import { mockPortfolio } from '../mocks/mockPortfolio';
 import { PortfolioResponse } from '../types';
+
+const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const usePortfolio = () => {
   const query = useQuery<PortfolioResponse>({

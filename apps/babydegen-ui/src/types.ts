@@ -30,6 +30,7 @@ export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswa
 export type PortfolioResponse = {
   address?: Address;
   portfolio_value: number;
+  roi: number;
   allocations: Allocation[];
   portfolio_breakdown: PortfolioAsset[];
   trading_type: TradingType;

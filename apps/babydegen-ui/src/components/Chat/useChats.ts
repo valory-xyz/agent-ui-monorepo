@@ -1,9 +1,10 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { LOCAL } from '../../constants/urls';
-import { IS_MOCK_ENABLED } from '../../mocks/config';
 import { mockChat } from '../../mocks/mockChat';
 import { ChatResponse } from '../../types';
+
+const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useChats = () =>
   useMutation<ChatResponse, Error, string>({

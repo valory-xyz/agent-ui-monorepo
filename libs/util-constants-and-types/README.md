@@ -1,6 +1,6 @@
 # util-constants-and-types
 
-This library was generated with [Nx](https://nx.dev).
+This library provides shared constants (such as URLs, labels, or symbol definitions) and TypeScript types.
 
 ## Running unit tests
 
