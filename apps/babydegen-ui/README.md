@@ -24,6 +24,3 @@ To mock, update the `IS_MOCK_ENABLED` in `config.ts` to `true` and the app will 
     - For modius, use suffix `-modius` (e.g., `v1.0.0-modius`)
     - For optimus, use suffix `-optimus` (e.g., `v1.0.0-optimus`)
 3. The CI will build and release the contents of the `dist/apps/babydegen-ui` directory to a zip file.
-
-## 🪪 License
-![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)

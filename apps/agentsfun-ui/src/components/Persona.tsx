@@ -50,15 +50,15 @@ const Description: FC<{ content: string }> = ({ content }) => {
           defaultExpanded: false,
           symbol: (expanded) =>
             expanded ? (
-              <>
-                Hide full description&nbsp;
+              <Flex align="center" gap={4}>
+                Hide full description
                 <UpOutlined style={{ fontSize: 12 }} />
-              </>
+              </Flex>
             ) : (
-              <>
-                Show full description&nbsp;
+              <Flex align="center" gap={4}>
+                Show full description
                 <DownOutlined style={{ fontSize: 12 }} />
-              </>
+              </Flex>
             ),
         }}
         className="mb-0"

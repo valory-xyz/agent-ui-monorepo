@@ -3,7 +3,7 @@
 - This repository contains the source code for the Agent UI monorepo, which is a collection of web apps designed to provide a UI for various agent-based functionalities.
 - List of apps:
   - [BabyDegen UI](apps/babydegen-ui/README.md).
-  - Predict UI (work in progress)
+  - [Predict UI](apps/predict-ui/README.md).
   - [Agents.fun UI](apps/agentsfun-ui/README.md).
 
 # Commands 
@@ -37,3 +37,6 @@
   ```bash
   npx nx reset
   ```
+
+## License
+![MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
