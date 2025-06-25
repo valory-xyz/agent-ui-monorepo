@@ -84,7 +84,7 @@ export const Portfolio = () => {
 
           <Col md={12} xs={24}>
             <Flex vertical gap={8}>
-              <CardTitle text="Avg ROI" />
+              <CardTitle text="ROI Since Activation" />
               <Roi />
             </Flex>
           </Col>
