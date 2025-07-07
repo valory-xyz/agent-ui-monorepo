@@ -11,9 +11,22 @@ import { Strategy } from './components/Strategy/Strategy';
 import { useFeatures } from './hooks/useFeatures';
 import { usePortfolio } from './hooks/usePortfolio';
 import { agentType } from './utils/agentMap';
+import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds';
 
-function App() {
+const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();
+
+  if (isLoading) return null;
+  if (!data?.isChatEnabled) return <UnlockChat />;
+  return (
+    <>
+      <Strategy />
+      <Chat />
+    </>
+  );
+};
+
+const App = () => {
   const { isLoading: isPortfolioLoading, data: portfolio } = usePortfolio();
 
   return (
@@ -27,23 +40,13 @@ function App() {
         <Flex vertical gap={24} style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}>
           <Portfolio />
           <Allocation />
-          {!isLoading && (
-            <>
-              {data?.isChatEnabled ? (
-                <>
-                  <Strategy />
-                  <Chat />
-                </>
-              ) : (
-                <UnlockChat />
-              )}
-            </>
-          )}
+          <StrategyAndChat />
+          {agentType === 'modius' && <WithdrawAgentsFunds />}
         </Flex>
       </Flex>
       <GlobalStyles />
     </ErrorBoundary>
   );
-}
+};
 
 export default App;
