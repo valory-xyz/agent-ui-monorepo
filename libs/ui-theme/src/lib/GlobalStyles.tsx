@@ -56,6 +56,10 @@ export const GlobalStyles = createGlobalStyle`
     text-align: center;
   }
 
+  .w-full {
+    width: 100%;
+  }
+
   /* card */
   .card-gradient {
     border-radius: 12px;
