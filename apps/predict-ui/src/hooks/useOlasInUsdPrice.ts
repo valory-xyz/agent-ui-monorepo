@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { COINGECKO_OLAS_IN_USD_PRICE_URL } from '../constants/urls';
-
-const OLAS_ADDRESS = '0xce11e14225575945b8e6dc0d4f2dd4c570f79d9f';
+import { OLAS_ADDRESS } from '@agent-ui-monorepo/util-constants-and-types';
 
 type CoingeckoResponse = {
   [OLAS_ADDRESS]: { usd: number };
