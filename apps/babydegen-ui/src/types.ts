@@ -50,3 +50,14 @@ export type ChatResponse = {
 export type Features = {
   isChatEnabled: boolean;
 };
+
+export type Funds = {
+  amount: number;
+};
+
+/** Withdraw details response from the agent. */
+export type WithdrawDetails = {
+  isComplete: boolean;
+  message?: string;
+  txnLink?: string;
+};

@@ -67,9 +67,6 @@ const ShowFundsAndInitialWithdraw = () => {
   const { data: withdrawDetails } = useWithdrawFunds();
 
   const handleInitiateWithdrawal = useCallback((address: Address) => {
-    // TODO: POST request to initiate withdrawal
-    // This is a placeholder for the actual withdrawal logic
-    // For now, we just log the address to the console
     console.log('Initiating withdrawal to:', address);
   }, []);
 
