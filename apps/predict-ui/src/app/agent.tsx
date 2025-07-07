@@ -7,7 +7,7 @@ import { useAgentDetails } from '../hooks/useAgentDetails';
 import { NavBarContainer } from '../components/ui/NavBarContainer';
 import styled from 'styled-components';
 import { AgentActivity } from '../components/AgentActivity';
-import { AgentStatistics } from '../components/AgentStatistics';
+import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
 
 const AgentContent = styled.div`
   display: flex;
@@ -66,7 +66,6 @@ export const Agent = () => {
           agent={{
             ...data.traderInfo,
             serviceAgentId: data.agentInfo?.agent_ids[0],
-            serviceId: data.agentInfo?.service_id,
           }}
         />
         <AgentStatistics agent={data.traderInfo} />
