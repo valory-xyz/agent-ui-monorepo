@@ -11,7 +11,7 @@ import { Strategy } from './components/Strategy/Strategy';
 import { useFeatures } from './hooks/useFeatures';
 import { usePortfolio } from './hooks/usePortfolio';
 import { agentType } from './utils/agentMap';
-import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds';
+import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAgentsFunds';
 
 const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();

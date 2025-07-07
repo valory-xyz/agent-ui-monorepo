@@ -60,6 +60,11 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  .underline {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
   /* card */
   .card-gradient {
     border-radius: 12px;
