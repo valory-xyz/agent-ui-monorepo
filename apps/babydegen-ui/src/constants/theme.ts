@@ -33,9 +33,9 @@ export const mainTheme: ThemeConfig = {
       fontSizeLG: 16,
     },
     Card: {
-      colorBgContainer: '#FFFFFF',
       padding: 20,
       fontWeightStrong: 400,
+      borderRadius: 12,
       colorBorderSecondary: '#E4E4E4',
     },
     Input: {

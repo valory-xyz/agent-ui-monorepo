@@ -69,7 +69,7 @@ export const Portfolio = () => {
 
   return (
     <>
-      <Card className="card-border card-gradient">
+      <Card className="card-gradient">
         <Row>
           <Col md={12} xs={24}>
             <Flex vertical gap={8}>

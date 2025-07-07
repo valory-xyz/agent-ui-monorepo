@@ -55,4 +55,11 @@ export const GlobalStyles = createGlobalStyle`
   .text-center {
     text-align: center;
   }
+
+  /* card */
+  .card-gradient {
+    border-radius: 12px;
+    background: linear-gradient(180deg, #F5F7FA 0%, #FFF 100%), #FFF;
+    box-shadow: 0px 0px 0px 4px #FFF inset;
+  }
 `;

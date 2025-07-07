@@ -73,7 +73,7 @@ export const Chat = () => {
   }, [chats, currentText, onSendChat]);
 
   return (
-    <Card className="card-border card-gradient">
+    <Card className="card-gradient">
       <CardTitle text="Update agent’s goal" />
       {chats.length === 0 ? <EmptyChat /> : <DisplayAllChats chats={chats} />}
 
