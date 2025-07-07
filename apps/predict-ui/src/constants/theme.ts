@@ -48,6 +48,10 @@ export const THEME_CONFIG: ThemeConfig = {
     Typography: {
       fontSize: 16,
     },
+    Tooltip: {
+      paddingXS: 16,
+      paddingSM: 32,
+    },
   },
   algorithm: theme.darkAlgorithm,
 };

@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { Flex, Tag, Typography } from 'antd';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import { ChartSpline } from 'lucide-react';
@@ -7,22 +6,16 @@ import { Card } from '../../components/ui/Card';
 import { COLOR } from '../../constants/theme';
 import { getTimeAgo } from '../../utils/time';
 import { TraderAgent } from '../../types';
-import { getAgentLastTradeTimestamp } from '../../utils/graphql/queries';
 import { REGISTRY_AGENTS_URL, REGISTRY_SERVICES_URL } from '../../constants/urls';
 
 const { Title, Text } = Typography;
 
 type AgentDetailsCardProps = {
-  agent: TraderAgent & { serviceAgentId?: number; serviceId?: number };
+  agent: TraderAgent & { serviceAgentId?: number };
 };
 
 export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
-  const { data: lastActivityTimestamp } = useQuery({
-    queryKey: ['getAgentLastTradeTimestamp', agent.id],
-    queryFn: async () => getAgentLastTradeTimestamp({ creator: `${agent.id}`.toLowerCase() }),
-    select: (data) => data.fpmmTrades[0]?.creationTimestamp,
-  });
-
+  const lastBet = agent.bets.length > 0 ? agent.bets[0] : null;
   return (
     <Card>
       <Flex gap={24}>
@@ -74,7 +67,7 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
           )}
         </Flex>
         <Text type="secondary" className="ml-auto">
-          {lastActivityTimestamp && `Last active ${getTimeAgo(lastActivityTimestamp * 1000)}`}
+          {lastBet && `Last active ${getTimeAgo(lastBet.timestamp * 1000)}`}
         </Text>
       </Flex>
     </Card>

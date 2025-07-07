@@ -2,19 +2,41 @@ export type AgentInfoResponse = {
   address: `0x${string}`;
   safe_address: `0x${string}`;
   agent_ids: number[];
-  service_id: number;
 };
 
 export type TraderAgent = {
   id: string;
+  serviceId: string;
   firstParticipation: string;
-  lastActive: string;
   totalBets: number;
   totalTraded: string;
   totalPayout: string;
+  totalFees: string;
+  bets: {
+    timestamp: number;
+  }[];
   blockNumber: string;
   blockTimestamp: string;
   transactionHash: string;
+};
+
+export type TraderAgentBets = {
+  id: string;
+  bets: {
+    outcomeIndex: string;
+    fixedProductMarketMaker: {
+      id: string;
+      currentAnswer: string;
+    };
+  }[];
+};
+
+export type GetUserTradesParams = {
+  creator: string;
+  first: number;
+  skip: number;
+  orderBy: string;
+  orderDirection: string;
 };
 
 export type Fpmm = {
@@ -36,32 +58,25 @@ export type FpmmTrade = {
 
 export type FpmmTrades = { fpmmTrades: FpmmTrade[] };
 
-export type GetUserTradesParams = {
-  creator: string;
-  first: number;
-  skip: number;
-  orderBy: string;
-  orderDirection: string;
+export type GetMechSenderParams = {
+  id: string;
+  timestamp_gt: number;
 };
 
-export type Condition = {
-  fixedProductMarketMakers: Fpmm[];
-};
-
-export type Conditions = { conditions: Condition[] };
-
-export type GetMarketUserTradesParams = {
-  creator: string;
-  fpmm: string;
-  outcomeIndex_in: number[];
-};
-
-export type UserPosition = {
-  position: {
+export type MechSender = {
+  totalRequests: number;
+  requests: {
     id: string;
-    indexSets: string[];
-    conditionIdsStr: string;
-  };
+    questionTitle: string;
+  }[];
 };
 
-export type UserPositions = { userPositions: UserPosition[] };
+export type Question = {
+  id: string;
+  question: string;
+};
+
+export type Service = {
+  id: string;
+  olasRewardsEarned: string;
+};
