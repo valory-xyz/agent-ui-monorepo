@@ -61,8 +61,8 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .underline {
-    text-decoration: underline;
-    text-underline-offset: 6px;
+    text-decoration: underline !important;
+    text-underline-offset: 4px;
   }
 
   /* card */

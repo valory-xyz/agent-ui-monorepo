@@ -34,7 +34,11 @@ const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawIniti
 export const useWithdrawFunds = () => {
   const [withdrawId, setWithdrawId] = useState<string | null>(null);
 
-  const { isPending, mutateAsync } = useMutation<WithdrawInitiateResponse, unknown, Address>({
+  const { isPending, isError, mutateAsync } = useMutation<
+    WithdrawInitiateResponse,
+    unknown,
+    Address
+  >({
     mutationKey: ['withdraw-initiate'],
     mutationFn: async (targetAddress: Address) => {
       const initiateResponse = await initiateWithdrawal(targetAddress);
@@ -47,7 +51,11 @@ export const useWithdrawFunds = () => {
     },
   });
 
-  const { data, isLoading: isQueryLoading } = useQuery<WithdrawalStatus>({
+  const {
+    data,
+    isLoading: isQueryLoading,
+    isError: isQueryError,
+  } = useQuery<WithdrawalStatus>({
     queryKey: ['withdraw-status', withdrawId],
     queryFn: async () => {
       if (!withdrawId) {
@@ -74,8 +82,9 @@ export const useWithdrawFunds = () => {
   });
 
   return {
-    initiateWithdraw: mutateAsync,
     isLoading: isPending || isQueryLoading,
+    isError: isError || isQueryError,
     data,
+    initiateWithdraw: mutateAsync,
   };
 };

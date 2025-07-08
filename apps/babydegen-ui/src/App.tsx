@@ -1,4 +1,4 @@
-import { Flex } from 'antd';
+import { App as AntdApp, Flex } from 'antd';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 
@@ -31,20 +31,26 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }} gap={24}>
-        <Navbar
-          isLoading={isPortfolioLoading}
-          agentType={agentType}
-          userAddress={portfolio?.address}
-        />
-        <Flex vertical gap={24} style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}>
-          <Portfolio />
-          <Allocation />
-          <StrategyAndChat />
-          <WithdrawAgentsFunds />
+      <AntdApp>
+        <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }} gap={24}>
+          <Navbar
+            isLoading={isPortfolioLoading}
+            agentType={agentType}
+            userAddress={portfolio?.address}
+          />
+          <Flex
+            vertical
+            gap={24}
+            style={{ minWidth: '760px', maxWidth: '760px', margin: '0 auto' }}
+          >
+            <Portfolio />
+            <Allocation />
+            <StrategyAndChat />
+            <WithdrawAgentsFunds />
+          </Flex>
         </Flex>
-      </Flex>
-      <GlobalStyles />
+        <GlobalStyles />
+      </AntdApp>
     </ErrorBoundary>
   );
 };

@@ -1,17 +1,24 @@
-import { Alert, Button, Card, Flex, message, Skeleton, Spin, Tooltip, Typography } from 'antd';
+import { Alert, App, Button, Card, Flex, Skeleton, Spin, Tooltip, Typography } from 'antd';
 import { Address, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 import { isAddress } from 'viem';
 
 import { CardTitle } from '../../ui/CardTitle';
 import { useCallback, useState } from 'react';
 import { COLOR } from '../../constants/colors';
-import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { ExclamationCircleFilled, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { NA } from '../../constants/common';
-import { WithdrawInvestedFunds } from './WithdrawInvestedFunds';
 import { useWithdrawFunds } from './useWithdrawFunds';
 import { useFunds } from './useFunds';
+import { WithdrawInvestedFunds } from './WithdrawInvestedFunds';
 
 const { Title, Text, Link } = Typography;
+
+const WithdrawLoading = ({ text }: { text: string }) => (
+  <Flex gap={8}>
+    <Spin indicator={<LoadingOutlined style={{ color: COLOR.black }} spin />} />
+    <Text type="secondary">{text}</Text>
+  </Flex>
+);
 
 const WithdrawSuccess = ({ href }: { href: string | null }) => (
   <Alert
@@ -32,11 +39,40 @@ const WithdrawSuccess = ({ href }: { href: string | null }) => (
   />
 );
 
-const WithdrawLoading = ({ text }: { text: string }) => (
-  <Flex gap={8}>
-    <Spin indicator={<LoadingOutlined style={{ color: COLOR.black }} spin />} />
-    <Text type="secondary">{text}</Text>
-  </Flex>
+type WithdrawalFailedProps = {
+  isLoading: boolean;
+  href?: string | null;
+  onRetry: () => void;
+};
+
+const WithdrawFailed = ({ isLoading, href, onRetry }: WithdrawalFailedProps) => (
+  <Alert
+    message={
+      <Flex vertical gap={8} align="flex-start" className="w-full">
+        <Flex gap={8} className="w-full" align="center">
+          <ExclamationCircleFilled style={{ color: COLOR.danger, fontSize: 20 }} />
+          <Text type="secondary">Withdrawal failed due to error!</Text>
+          {href && (
+            <Link href={href} target="_blank" rel="noopener noreferrer" className="underline">
+              Transaction details {UNICODE_SYMBOLS.EXTERNAL_LINK}
+            </Link>
+          )}
+        </Flex>
+
+        <Button
+          loading={isLoading}
+          onClick={onRetry}
+          type="primary"
+          style={{ color: COLOR.black, marginLeft: 32 }}
+        >
+          Retry
+        </Button>
+      </Flex>
+    }
+    type="error"
+    className="w-full"
+    style={{ background: COLOR.white, borderColor: COLOR.lightGrey }}
+  />
 );
 
 const FundsToWithdraw = () => {
@@ -63,19 +99,33 @@ const FundsToWithdraw = () => {
 };
 
 const ShowFundsAndInitialWithdraw = () => {
-  const { initiateWithdraw, data: withdrawDetails } = useWithdrawFunds();
+  const { message } = App.useApp();
+  const [withdrawalAddress, setWithdrawalAddress] = useState('');
 
-  const handleInitiateWithdrawal = useCallback(
-    (address: Address) => {
-      if (!isAddress(address)) {
-        message.error('Please enter a valid address.');
-        return;
-      }
+  const { isLoading, initiateWithdraw, isError, data: withdrawDetails } = useWithdrawFunds();
 
-      initiateWithdraw(address);
-    },
-    [initiateWithdraw],
-  );
+  const handleAddressChange = useCallback((address: Address) => {
+    setWithdrawalAddress(address);
+  }, []);
+
+  const handleInitiateWithdrawal = useCallback(() => {
+    if (!isAddress(withdrawalAddress)) {
+      message.error('Please enter a valid address.');
+      return;
+    }
+
+    initiateWithdraw(withdrawalAddress as Address);
+  }, [initiateWithdraw, message, withdrawalAddress]);
+
+  if (isError || withdrawDetails?.status === 'failed') {
+    return (
+      <WithdrawFailed
+        isLoading={isLoading}
+        onRetry={handleInitiateWithdrawal}
+        href={withdrawDetails?.transaction_link}
+      />
+    );
+  }
 
   if (withdrawDetails?.status === 'completed') {
     return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
@@ -93,7 +143,12 @@ const ShowFundsAndInitialWithdraw = () => {
   return (
     <>
       <FundsToWithdraw />
-      <WithdrawInvestedFunds onInitiateWithdrawal={handleInitiateWithdrawal} />
+      <WithdrawInvestedFunds
+        isLoading={isLoading}
+        withdrawalAddress={withdrawalAddress}
+        onAddressChange={handleAddressChange}
+        onInitiateWithdrawal={handleInitiateWithdrawal}
+      />
     </>
   );
 };
