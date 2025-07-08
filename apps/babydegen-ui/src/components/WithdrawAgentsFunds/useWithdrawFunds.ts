@@ -13,11 +13,9 @@ const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawInitiateResponse> => {
   if (IS_MOCK_ENABLED) {
-    return new Promise<WithdrawInitiateResponse>((resolve) => {
-      setTimeout(() => {
-        resolve(mockWithdrawInitiateResponse);
-      }, 2000);
-    });
+    return new Promise<WithdrawInitiateResponse>((resolve) =>
+      setTimeout(() => resolve(mockWithdrawInitiateResponse), 2000),
+    );
   }
 
   const response = await fetch(`${LOCAL}/withdrawal/initiate`, {
@@ -27,7 +25,6 @@ const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawIniti
   });
 
   if (!response.ok) throw new Error('Failed to initiate withdrawal.');
-
   return response.json();
 };
 
@@ -63,19 +60,17 @@ export const useWithdrawFunds = () => {
       }
 
       if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockWithdrawStatusResponse);
-          }, 2000);
-        });
+        return new Promise((resolve) =>
+          setTimeout(() => resolve(mockWithdrawStatusResponse), 2000),
+        );
       }
 
       const response = await fetch(`${LOCAL}/withdrawal/status/${withdrawId}`);
-      if (!response.ok) throw new Error('Failed to fetch withdrawal status.');
 
+      if (!response.ok) throw new Error('Failed to fetch withdrawal status.');
       return response.json();
     },
-    enabled: !!withdrawId,
+    enabled: !!withdrawId, // Only run this query if withdrawId is fetched
     refetchInterval: ({ state }) => (state.data?.status === 'completed' ? false : 2000),
     retry: Infinity,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
