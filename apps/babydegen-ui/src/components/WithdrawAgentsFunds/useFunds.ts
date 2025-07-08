@@ -11,11 +11,7 @@ export const useFunds = () =>
     queryKey: ['funds'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockFunds);
-          }, 2000);
-        });
+        return new Promise((resolve) => setTimeout(() => resolve(mockFunds), 2000));
       }
 
       const response = await fetch(`${LOCAL}/withdrawal/amount`);

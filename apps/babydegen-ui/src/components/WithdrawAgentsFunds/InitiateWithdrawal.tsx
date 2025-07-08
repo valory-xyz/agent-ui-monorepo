@@ -1,4 +1,4 @@
-import { Alert, App, Button, Flex, Skeleton, Spin, Tooltip, Typography } from 'antd';
+import { Alert, App, Button, Flex, Skeleton, Spin, Tooltip, Typography, Input } from 'antd';
 import { Address, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 import { isAddress } from 'viem';
 import { ExclamationCircleFilled, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
@@ -8,8 +8,6 @@ import { COLOR } from '../../constants/colors';
 import { NA } from '../../constants/common';
 import { useWithdrawFunds } from './useWithdrawFunds';
 import { useFunds } from './useFunds';
-
-import { Input } from 'antd';
 
 const { Title, Text, Link } = Typography;
 

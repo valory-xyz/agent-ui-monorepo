@@ -67,7 +67,7 @@ export type WithdrawalFunds = {
 
 type FundsWithdrawalStatus = 'pending' | 'initiated' | 'processing' | 'completed' | 'failed';
 
-export type WithdrawInitiateResponse = {
+export type WithdrawalInitiateResponse = {
   id: string;
   status: FundsWithdrawalStatus;
   target_address: Address;

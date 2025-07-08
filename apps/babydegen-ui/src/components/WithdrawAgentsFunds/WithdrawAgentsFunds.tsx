@@ -1,7 +1,7 @@
 import { Button, Card, Flex, Typography } from 'antd';
+import { useState } from 'react';
 
 import { CardTitle } from '../../ui/CardTitle';
-import { useState } from 'react';
 import { COLOR } from '../../constants/colors';
 import { InitiateWithdrawal } from './InitiateWithdrawal';
 

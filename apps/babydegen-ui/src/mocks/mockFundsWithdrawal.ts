@@ -1,4 +1,4 @@
-import { WithdrawalFunds, WithdrawalStatus, WithdrawInitiateResponse } from '../types';
+import { WithdrawalFunds, WithdrawalStatus, WithdrawalInitiateResponse } from '../types';
 
 export const mockFunds: WithdrawalFunds = {
   amount: 1000000000,
@@ -22,7 +22,7 @@ export const mockFunds: WithdrawalFunds = {
   ],
 } as const;
 
-export const mockWithdrawInitiateResponse: WithdrawInitiateResponse = {
+export const mockWithdrawInitiateResponse: WithdrawalInitiateResponse = {
   id: '550e8400-e29b-41d4-a716-446655440000',
   status: 'initiated',
   target_address: '0x9876543210987654321098765432109876543210',

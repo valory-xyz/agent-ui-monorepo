@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Address } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { WithdrawalStatus, WithdrawInitiateResponse } from '../../types';
+import { WithdrawalStatus, WithdrawalInitiateResponse } from '../../types';
 import {
   mockWithdrawInitiateResponse,
   mockWithdrawStatusResponse,
@@ -11,9 +11,9 @@ import { LOCAL } from '../../constants/urls';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawInitiateResponse> => {
+const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawalInitiateResponse> => {
   if (IS_MOCK_ENABLED) {
-    return new Promise<WithdrawInitiateResponse>((resolve) =>
+    return new Promise<WithdrawalInitiateResponse>((resolve) =>
       setTimeout(() => resolve(mockWithdrawInitiateResponse), 2000),
     );
   }
@@ -32,7 +32,7 @@ export const useWithdrawFunds = () => {
   const [withdrawId, setWithdrawId] = useState<string | null>(null);
 
   const { isPending, isError, mutateAsync } = useMutation<
-    WithdrawInitiateResponse,
+    WithdrawalInitiateResponse,
     unknown,
     Address
   >({
