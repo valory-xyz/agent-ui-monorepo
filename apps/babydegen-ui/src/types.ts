@@ -51,7 +51,7 @@ export type Features = {
   isChatEnabled: boolean;
 };
 
-export type Funds = {
+export type WithdrawalFunds = {
   /** e.g., 1,500 USDC in smallest unit (e.g., 1,500,000,000) */
   amount: number;
   /** e.g., 1,500 USDC */

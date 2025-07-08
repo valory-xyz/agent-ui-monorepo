@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { LOCAL } from '../../constants/urls';
-import { Funds } from '../../types';
+import { WithdrawalFunds } from '../../types';
 import { mockFunds } from '../../mocks/mockFundsWithdrawal';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useFunds = () =>
-  useQuery<Funds>({
+  useQuery<WithdrawalFunds>({
     queryKey: ['funds'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {

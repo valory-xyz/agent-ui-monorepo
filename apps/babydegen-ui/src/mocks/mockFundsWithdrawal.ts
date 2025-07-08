@@ -1,6 +1,6 @@
-import { Funds, WithdrawalStatus, WithdrawInitiateResponse } from '../types';
+import { WithdrawalFunds, WithdrawalStatus, WithdrawInitiateResponse } from '../types';
 
-export const mockFunds: Funds = {
+export const mockFunds: WithdrawalFunds = {
   amount: 1000000000,
   total_value_usd: 1000,
   asset_breakdown: [
