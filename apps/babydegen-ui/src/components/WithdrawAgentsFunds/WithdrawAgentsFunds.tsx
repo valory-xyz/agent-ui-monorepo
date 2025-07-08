@@ -47,7 +47,7 @@ const FundsToWithdraw = () => {
     <Flex vertical gap={8}>
       <Text type="secondary">
         Funds to withdraw
-        <Tooltip title="TODO: Ask Roman">
+        <Tooltip title="Calculated by converting all active positions into USDC at current market rates. Final value may differ slightly at withdrawal.">
           <InfoCircleOutlined style={{ marginLeft: 6 }} />
         </Tooltip>
       </Text>
