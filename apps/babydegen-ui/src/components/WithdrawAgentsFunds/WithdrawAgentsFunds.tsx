@@ -8,6 +8,7 @@ import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { NA } from '../../constants/common';
 import { WithdrawInvestedFunds } from './WithdrawInvestedFunds';
 import { useWithdrawFunds } from './useWithdrawFunds';
+import { useFunds } from './useFunds';
 
 const { Title, Text, Link } = Typography;
 
@@ -35,11 +36,6 @@ const WithdrawLoading = ({ text }: { text: string }) => (
   </Flex>
 );
 
-// TODO: Ask agent team
-const useFunds = () => {
-  return { isLoading: false, data: 768.55 };
-};
-
 const FundsToWithdraw = () => {
   const { isLoading, data } = useFunds();
 
@@ -56,7 +52,7 @@ const FundsToWithdraw = () => {
         <Skeleton.Input />
       ) : (
         <Title level={3} className="m-0">
-          {data ? `$${data.toFixed(2)} USDC` : NA}
+          {data ? `$${data.total_value_usd.toFixed(2)} USDC` : NA}
         </Title>
       )}
     </Flex>

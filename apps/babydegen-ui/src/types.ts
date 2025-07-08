@@ -52,7 +52,17 @@ export type Features = {
 };
 
 export type Funds = {
+  /** e.g., 1,500 USDC in smallest unit (e.g., 1,500,000,000) */
   amount: number;
+  /** e.g., 1,500 USDC */
+  total_value_usd: number;
+  asset_breakdown: {
+    token_symbol: string;
+    /** e.g., 0.5 ETH or 500 USDC */
+    value: number;
+    /** e.g., $750 */
+    value_usd: number;
+  }[];
 };
 
 /** Withdraw details response from the agent. */

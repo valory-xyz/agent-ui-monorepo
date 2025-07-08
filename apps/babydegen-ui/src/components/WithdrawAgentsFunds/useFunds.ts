@@ -18,8 +18,8 @@ export const useFunds = () => {
         });
       }
 
-      const response = await fetch(`${LOCAL}/funds`);
-      if (!response.ok) throw new Error('Failed to fetch funds.');
+      const response = await fetch(`${LOCAL}/withdrawal/amount`);
+      if (!response.ok) throw new Error('Failed to fetch withdrawal amount.');
 
       return response.json();
     },
