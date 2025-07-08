@@ -65,9 +65,23 @@ export type Funds = {
   }[];
 };
 
-/** Withdraw details response from the agent. */
-export type WithdrawDetails = {
-  isComplete: boolean;
-  message?: string;
-  txnLink?: string;
+type FundsWithdrawalStatus = 'pending' | 'initiated' | 'processing' | 'completed' | 'failed';
+
+export type WithdrawInitiateResponse = {
+  id: string;
+  status: FundsWithdrawalStatus;
+  target_address: Address;
+  estimated_value_usd: number;
+  chain: 'mode' | 'optimism';
+};
+
+export type WithdrawalStatus = {
+  status: FundsWithdrawalStatus;
+  message: string;
+  target_address: Address;
+  chain: 'mode' | 'optimism';
+  safe_address: Address;
+  requested_at: string;
+  estimated_value_usd: number;
+  transaction_link: string | null;
 };

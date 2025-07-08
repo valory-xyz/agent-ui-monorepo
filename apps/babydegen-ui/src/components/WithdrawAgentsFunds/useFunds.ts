@@ -6,8 +6,8 @@ import { mockFunds } from '../../mocks/mockFunds';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-export const useFunds = () => {
-  const query = useQuery<Funds>({
+export const useFunds = () =>
+  useQuery<Funds>({
     queryKey: ['funds'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
@@ -27,6 +27,3 @@ export const useFunds = () => {
     retry: Infinity,
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
-
-  return query;
-};

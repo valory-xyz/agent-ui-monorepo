@@ -19,9 +19,7 @@ export const useChats = () =>
 
       const response = await fetch(`${LOCAL}/configure_strategies`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
       });
 
