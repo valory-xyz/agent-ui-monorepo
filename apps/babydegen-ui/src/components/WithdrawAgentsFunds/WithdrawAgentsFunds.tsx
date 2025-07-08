@@ -12,14 +12,16 @@ import { useFunds } from './useFunds';
 
 const { Title, Text, Link } = Typography;
 
-const WithdrawSuccess = ({ href }: { href: string }) => (
+const WithdrawSuccess = ({ href }: { href: string | null }) => (
   <Alert
     message={
       <Flex gap={8} className="w-full">
         <Text type="secondary">Withdrawal complete!</Text>
-        <Link href={href} target="_blank" rel="noopener noreferrer" className="underline">
-          Transaction details {UNICODE_SYMBOLS.EXTERNAL_LINK}
-        </Link>
+        {href && (
+          <Link href={href} target="_blank" rel="noopener noreferrer" className="underline">
+            Transaction details {UNICODE_SYMBOLS.EXTERNAL_LINK}
+          </Link>
+        )}
       </Flex>
     }
     type="success"
@@ -66,8 +68,8 @@ const ShowFundsAndInitialWithdraw = () => {
     console.log('Initiating withdrawal to:', address);
   }, []);
 
-  if (withdrawDetails?.isComplete) {
-    return <WithdrawSuccess href={withdrawDetails.txnLink} />;
+  if (withdrawDetails?.status === 'completed') {
+    return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
   }
 
   if (withdrawDetails?.message) {
