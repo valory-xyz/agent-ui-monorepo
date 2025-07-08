@@ -28,7 +28,7 @@ export const mockWithdrawInitiateResponse: WithdrawInitiateResponse = {
   target_address: '0x9876543210987654321098765432109876543210',
   estimated_value_usd: 1500.0,
   chain: 'mode',
-};
+} as const;
 
 export const mockWithdrawStatusResponse: WithdrawalStatus = {
   status: 'pending',
@@ -39,4 +39,4 @@ export const mockWithdrawStatusResponse: WithdrawalStatus = {
   requested_at: '1703123456',
   estimated_value_usd: 1500.0,
   transaction_link: 'https://example.com/transaction/67890',
-};
+} as const;

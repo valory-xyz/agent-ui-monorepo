@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { LOCAL } from '../../constants/urls';
 import { Funds } from '../../types';
-import { mockFunds } from '../../mocks/mockFunds';
+import { mockFunds } from '../../mocks/mockFundsWithdrawal';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 

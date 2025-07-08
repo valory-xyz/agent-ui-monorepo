@@ -41,7 +41,7 @@ const App = () => {
           <Portfolio />
           <Allocation />
           <StrategyAndChat />
-          {agentType === 'modius' && <WithdrawAgentsFunds />}
+          <WithdrawAgentsFunds />
         </Flex>
       </Flex>
       <GlobalStyles />

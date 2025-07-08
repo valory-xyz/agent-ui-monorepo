@@ -1,5 +1,6 @@
-import { Alert, Button, Card, Flex, Skeleton, Spin, Tooltip, Typography } from 'antd';
+import { Alert, Button, Card, Flex, message, Skeleton, Spin, Tooltip, Typography } from 'antd';
 import { Address, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
+import { isAddress } from 'viem';
 
 import { CardTitle } from '../../ui/CardTitle';
 import { useCallback, useState } from 'react';
@@ -62,11 +63,19 @@ const FundsToWithdraw = () => {
 };
 
 const ShowFundsAndInitialWithdraw = () => {
-  const { data: withdrawDetails } = useWithdrawFunds();
+  const { initiateWithdraw, data: withdrawDetails } = useWithdrawFunds();
 
-  const handleInitiateWithdrawal = useCallback((address: Address) => {
-    console.log('Initiating withdrawal to:', address);
-  }, []);
+  const handleInitiateWithdrawal = useCallback(
+    (address: Address) => {
+      if (!isAddress(address)) {
+        message.error('Please enter a valid address.');
+        return;
+      }
+
+      initiateWithdraw(address);
+    },
+    [initiateWithdraw],
+  );
 
   if (withdrawDetails?.status === 'completed') {
     return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
