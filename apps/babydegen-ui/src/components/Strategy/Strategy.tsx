@@ -95,7 +95,7 @@ const StrategyContent = () => {
  * Trading strategy and protocols
  */
 export const Strategy = () => (
-  <Card className="card-border card-gradient">
+  <Card className="card-gradient">
     <StrategyContent />
   </Card>
 );

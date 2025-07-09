@@ -11,7 +11,7 @@ const { Text } = Typography;
  */
 export const UnlockChat = () => {
   return (
-    <Card className="card-border card-gradient">
+    <Card className="card-gradient">
       <CardTitle text="Update agent’s goal" />
 
       <Flex
