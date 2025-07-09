@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { CardTitle } from '../../ui/CardTitle';
 import { COLOR } from '../../constants/colors';
-import { InitiateWithdrawal } from './InitiateWithdrawal';
+import { WithdrawInvestedFunds } from './WithdrawInvestedFunds';
 
 const { Text } = Typography;
 
@@ -24,7 +24,7 @@ export const WithdrawAgentsFunds = () => {
         </Flex>
 
         {canInitiateWithdrawal ? (
-          <InitiateWithdrawal />
+          <WithdrawInvestedFunds />
         ) : (
           <Button
             onClick={() => setCanInitiateWithdrawal(true)}

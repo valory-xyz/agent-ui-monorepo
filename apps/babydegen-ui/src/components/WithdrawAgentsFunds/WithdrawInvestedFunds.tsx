@@ -98,12 +98,12 @@ const FundsToWithdraw = () => {
 
 type WithdrawInvestedFundsProps = {
   isLoading: boolean;
-  onInitiateWithdrawal: (address: Address) => void;
+  onInitiateWithdrawal: () => void;
   withdrawalAddress: string;
   onAddressChange: (address: Address) => void;
 };
 
-const WithdrawInvestedFunds = ({
+const InitiateWithdrawal = ({
   isLoading,
   onInitiateWithdrawal,
   withdrawalAddress,
@@ -126,7 +126,7 @@ const WithdrawInvestedFunds = ({
     <Button
       disabled={!withdrawalAddress}
       loading={isLoading}
-      onClick={() => onInitiateWithdrawal(withdrawalAddress as Address)}
+      onClick={() => onInitiateWithdrawal()}
       type="primary"
       style={{ color: withdrawalAddress ? COLOR.black : undefined }}
     >
@@ -135,7 +135,7 @@ const WithdrawInvestedFunds = ({
   </>
 );
 
-export const InitiateWithdrawal = () => {
+export const WithdrawInvestedFunds = () => {
   const { message } = App.useApp();
   const { isLoading, initiateWithdraw, isError, data: withdrawDetails } = useWithdrawFunds();
   const [withdrawalAddress, setWithdrawalAddress] = useState('');
@@ -167,7 +167,7 @@ export const InitiateWithdrawal = () => {
     return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
   }
 
-  if (withdrawDetails?.message) {
+  if (withdrawDetails?.status === 'pending') {
     return (
       <>
         <FundsToWithdraw />
@@ -179,7 +179,7 @@ export const InitiateWithdrawal = () => {
   return (
     <>
       <FundsToWithdraw />
-      <WithdrawInvestedFunds
+      <InitiateWithdrawal
         isLoading={isLoading}
         withdrawalAddress={withdrawalAddress}
         onAddressChange={handleAddressChange}

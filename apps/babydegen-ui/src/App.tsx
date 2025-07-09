@@ -16,7 +16,7 @@ import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAg
 const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();
 
-  if (isLoading) return null;
+  if (isLoading) return;
   if (!data?.isChatEnabled) return <UnlockChat />;
   return (
     <>

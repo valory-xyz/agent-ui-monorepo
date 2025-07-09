@@ -36,7 +36,7 @@ export const useWithdrawFunds = () => {
     unknown,
     Address
   >({
-    mutationKey: ['withdraw-initiate'],
+    mutationKey: ['withdrawInitiate'],
     mutationFn: async (targetAddress: Address) => {
       const initiateResponse = await initiateWithdrawal(targetAddress);
       setWithdrawId(initiateResponse.id);
@@ -53,7 +53,7 @@ export const useWithdrawFunds = () => {
     isLoading: isQueryLoading,
     isError: isQueryError,
   } = useQuery<WithdrawalStatus>({
-    queryKey: ['withdraw-status', withdrawId],
+    queryKey: ['withdrawStatus', withdrawId],
     queryFn: async () => {
       if (!withdrawId) {
         throw new Error('Withdrawal ID is required to fetch status.');

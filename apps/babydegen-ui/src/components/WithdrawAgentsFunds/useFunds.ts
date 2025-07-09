@@ -8,7 +8,7 @@ const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useFunds = () =>
   useQuery<WithdrawalFunds>({
-    queryKey: ['funds'],
+    queryKey: ['withdrawalFunds'],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
         return new Promise((resolve) => setTimeout(() => resolve(mockFunds), 2000));
