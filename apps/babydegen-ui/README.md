@@ -7,7 +7,7 @@ Served by the Modius and Optimus agent, designed to be consumed by the agent and
 
 1. Install via `yarn install`
 2. Run via `npx nx serve babydegen-ui`
-    - The app will be available at `http://localhost:4200`
+    - The app will be available at `https://localhost:4200`
     - For modius, update the REACT_APP_AGENT_NAME value in .env file to `modius`
     - For optimus, update the REACT_APP_AGENT_NAME value in .env file to `optimus` 
 3. Build for production via `npx nx build babydegen-ui`
