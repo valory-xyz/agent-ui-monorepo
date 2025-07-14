@@ -13,9 +13,6 @@ import { usePortfolio } from './hooks/usePortfolio';
 import { agentType } from './utils/agentMap';
 import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAgentsFunds';
 
-// TODO: already merged to main, remove this when we release.
-const IS_WITHDRAWAL_ENABLED = false;
-
 const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();
 
@@ -49,7 +46,7 @@ const App = () => {
             <Portfolio />
             <Allocation />
             <StrategyAndChat />
-            {IS_WITHDRAWAL_ENABLED && <WithdrawAgentsFunds />}
+            <WithdrawAgentsFunds />
           </Flex>
         </Flex>
         <GlobalStyles />
