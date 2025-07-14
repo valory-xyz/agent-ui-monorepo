@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
+import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { LOCAL } from '../../constants/urls';
 import { mockChat } from '../../mocks/mockChat';
 import { ChatResponse } from '../../types';
 

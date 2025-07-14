@@ -1,13 +1,12 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Address } from '@agent-ui-monorepo/util-constants-and-types';
+import { Address, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { WithdrawalStatus, WithdrawalInitiateResponse } from '../../types';
 import {
   mockWithdrawInitiateResponse,
   mockWithdrawStatusResponse,
 } from '../../mocks/mockFundsWithdrawal';
-import { LOCAL } from '../../constants/urls';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 

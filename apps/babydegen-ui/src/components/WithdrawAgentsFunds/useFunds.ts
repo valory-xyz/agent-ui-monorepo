@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { LOCAL } from '../../constants/urls';
 import { WithdrawalFunds } from '../../types';
 import { mockFunds } from '../../mocks/mockFundsWithdrawal';
 

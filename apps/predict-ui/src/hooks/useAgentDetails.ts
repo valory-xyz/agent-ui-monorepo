@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { LOCAL } from '../constants/urls';
 import { mockAgentInfo } from '../mocks/mockAgentInfo';
 import { AgentInfoResponse } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';

@@ -1,5 +1,3 @@
-export const LOCAL = 'https://localhost:8716';
-
 // subgraphs
 export const OLAS_AGENTS_SUBGRAPH_URL = 'https://predict-agents.subgraph.autonolas.tech';
 export const OLAS_MECH_SUBGRAPH_URL = 'https://subgraph.autonolas.tech/subgraphs/name/mech';
