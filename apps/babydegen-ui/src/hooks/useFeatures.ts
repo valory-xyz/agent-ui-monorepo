@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
+import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { FIVE_MINUTES, FIVE_SECONDS } from '../constants/intervals';
-import { LOCAL } from '../constants/urls';
 import { mockFeatures } from '../mocks/mockFeatures';
 import { Features } from '../types';
 
