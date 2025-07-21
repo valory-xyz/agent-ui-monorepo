@@ -168,7 +168,7 @@ export const WithdrawInvestedFunds = () => {
     return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
   }
 
-  if (withdrawDetails?.status === 'initiated') {
+  if (withdrawDetails?.status === 'initiated' || withdrawDetails?.status === 'withdrawing') {
     return (
       <>
         <FundsToWithdraw />
