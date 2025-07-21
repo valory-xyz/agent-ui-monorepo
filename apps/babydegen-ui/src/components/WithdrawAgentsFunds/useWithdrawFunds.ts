@@ -39,8 +39,6 @@ export const useWithdrawFunds = () => {
     mutationFn: async (targetAddress: Address) => {
       const initiateResponse = await initiateWithdrawal(targetAddress);
       setWithdrawId(initiateResponse.id);
-
-      window.console.log('Withdrawal Initiate Response:', initiateResponse);
       return initiateResponse;
     },
     onError: (error) => {
@@ -48,8 +46,6 @@ export const useWithdrawFunds = () => {
       setWithdrawId(null);
     },
   });
-
-  console.log('Withdraw details', { withdrawId, isPending, isError });
 
   const {
     data,
@@ -62,8 +58,6 @@ export const useWithdrawFunds = () => {
         throw new Error('Withdrawal ID is required to fetch status.');
       }
 
-      window.console.log('Fetching withdrawal status for ID:', withdrawId);
-
       if (IS_MOCK_ENABLED) {
         return new Promise((resolve) =>
           setTimeout(() => resolve(mockWithdrawStatusResponse), 2000),
@@ -75,7 +69,6 @@ export const useWithdrawFunds = () => {
       if (!response.ok) throw new Error('Failed to fetch withdrawal status.');
 
       const responseJson = await response.json();
-      window.console.log('Withdrawal Status response:', responseJson);
       return responseJson;
     },
     enabled: !!withdrawId, // Only run this query if withdrawId is fetched

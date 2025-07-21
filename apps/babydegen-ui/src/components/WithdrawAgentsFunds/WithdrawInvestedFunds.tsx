@@ -150,7 +150,6 @@ export const WithdrawInvestedFunds = () => {
       return;
     }
 
-    window.console.log('Initiating withdrawal for address:', withdrawalAddress);
     await initiateWithdraw(withdrawalAddress as Address);
   }, [initiateWithdraw, message, withdrawalAddress]);
 
