@@ -1,1 +1,1 @@
-export const LOCAL = 'https://localhost:8716';
+export const LOCAL = 'http://localhost:8716';
