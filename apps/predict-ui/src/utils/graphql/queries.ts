@@ -26,6 +26,7 @@ const getTraderAgentQuery = gql`
       totalTraded
       totalPayout
       totalFees
+      blockTimestamp
       bets(first: 1, orderBy: timestamp, orderDirection: desc) {
         timestamp
       }

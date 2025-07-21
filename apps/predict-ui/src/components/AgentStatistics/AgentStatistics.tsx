@@ -25,10 +25,7 @@ export const AgentStatistics = ({ agent }: AgentStatisticsProps) => {
         <SuccessRateCard agent={agent} />
       </Row>
       <Row>
-        <StatisticCard
-          title="Created"
-          value={getTimeAgo(Number(agent.firstParticipation) * 1000)}
-        />
+        <StatisticCard title="Created" value={getTimeAgo(Number(agent.blockTimestamp) * 1000)} />
         <RoiCard agent={agent} />
       </Row>
     </Card>
