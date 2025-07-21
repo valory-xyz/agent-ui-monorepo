@@ -144,13 +144,14 @@ export const WithdrawInvestedFunds = () => {
     setWithdrawalAddress(address);
   }, []);
 
-  const handleInitiateWithdrawal = useCallback(() => {
+  const handleInitiateWithdrawal = useCallback(async () => {
     if (!isAddress(withdrawalAddress)) {
       message.error('Please enter a valid address.');
       return;
     }
 
-    initiateWithdraw(withdrawalAddress as Address);
+    window.console.log('Initiating withdrawal for address:', withdrawalAddress);
+    await initiateWithdraw(withdrawalAddress as Address);
   }, [initiateWithdraw, message, withdrawalAddress]);
 
   if (isError || withdrawDetails?.status === 'failed') {
