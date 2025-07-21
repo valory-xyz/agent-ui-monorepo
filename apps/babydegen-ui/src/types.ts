@@ -65,7 +65,7 @@ export type WithdrawalFunds = {
   }[];
 };
 
-type FundsWithdrawalStatus = 'pending' | 'initiated' | 'processing' | 'completed' | 'failed';
+type FundsWithdrawalStatus = 'initiated' | 'withdrawing' | 'completed' | 'failed';
 
 export type WithdrawalInitiateResponse = {
   id: string;
