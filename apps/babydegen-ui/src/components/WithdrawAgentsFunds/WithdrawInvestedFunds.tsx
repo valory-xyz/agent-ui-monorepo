@@ -144,13 +144,13 @@ export const WithdrawInvestedFunds = () => {
     setWithdrawalAddress(address);
   }, []);
 
-  const handleInitiateWithdrawal = useCallback(() => {
+  const handleInitiateWithdrawal = useCallback(async () => {
     if (!isAddress(withdrawalAddress)) {
       message.error('Please enter a valid address.');
       return;
     }
 
-    initiateWithdraw(withdrawalAddress as Address);
+    await initiateWithdraw(withdrawalAddress as Address);
   }, [initiateWithdraw, message, withdrawalAddress]);
 
   if (isError || withdrawDetails?.status === 'failed') {
@@ -167,7 +167,7 @@ export const WithdrawInvestedFunds = () => {
     return <WithdrawSuccess href={withdrawDetails.transaction_link} />;
   }
 
-  if (withdrawDetails?.status === 'pending') {
+  if (withdrawDetails?.status === 'initiated' || withdrawDetails?.status === 'withdrawing') {
     return (
       <>
         <FundsToWithdraw />

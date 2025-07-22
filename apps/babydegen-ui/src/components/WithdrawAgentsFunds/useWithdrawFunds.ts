@@ -67,7 +67,9 @@ export const useWithdrawFunds = () => {
       const response = await fetch(`${LOCAL}/withdrawal/status/${withdrawId}`);
 
       if (!response.ok) throw new Error('Failed to fetch withdrawal status.');
-      return response.json();
+
+      const responseJson = await response.json();
+      return responseJson;
     },
     enabled: !!withdrawId, // Only run this query if withdrawId is fetched
     refetchInterval: ({ state }) => (state.data?.status === 'completed' ? false : 2000),
