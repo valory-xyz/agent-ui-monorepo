@@ -1,6 +1,6 @@
 # Agents.fun UI
 
-React application for Agents.fun UI, designed to be consumed by the agent and available in [Pearl](https://github.com/olas-operate-app).
+React application for Agents.fun UI, designed to be consumed by the agent and available in [Pearl](https://github.com/valory-xyz/olas-operate-app).
 
 ## 🧪 Mock Data
 To mock, update the `IS_MOCK_ENABLED` in `.env` and the app will use the mock data instead of the API. 
