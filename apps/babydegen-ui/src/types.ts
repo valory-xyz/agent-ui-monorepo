@@ -30,7 +30,8 @@ export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswa
 export type PortfolioResponse = {
   address?: Address;
   portfolio_value: number;
-  roi: number;
+  total_roi: number; // including staking rewards
+  partial_roi: number; // excluding staking rewards
   allocations: Allocation[];
   portfolio_breakdown: PortfolioAsset[];
   trading_type: TradingType;

@@ -6,7 +6,8 @@ export const mockAgentAsset = agentType === 'modius' ? 'MODE' : 'OP';
 export const mockPortfolio: PortfolioResponse = {
   address: '0x000000000000000000000000000000000000dEaD',
   portfolio_value: 849585.8579967507,
-  roi: -24.6,
+  total_roi: 12.5,
+  partial_roi: -24.6,
   allocations: [
     {
       chain: agentChainName,

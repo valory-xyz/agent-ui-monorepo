@@ -31,7 +31,7 @@ export const mockWithdrawInitiateResponse: WithdrawalInitiateResponse = {
 } as const;
 
 export const mockWithdrawStatusResponse: WithdrawalStatus = {
-  status: 'pending',
+  status: 'withdrawing',
   message: 'Withdrawal request received and validated',
   target_address: '0x9876543210987654321098765432109876543210',
   chain: 'optimism',

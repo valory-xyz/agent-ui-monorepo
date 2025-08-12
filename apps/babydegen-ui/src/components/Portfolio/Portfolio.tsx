@@ -1,11 +1,12 @@
-import { Button, ButtonProps, Card, Row, Col, Flex, Skeleton, Typography } from 'antd';
+import { Button, ButtonProps, Card, Row, Col, Flex, Skeleton, Typography, Tooltip } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CardTitle } from '../../ui/CardTitle';
 import { BreakdownModal } from './BreakdownModal';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const PortfolioBalance = () => {
   const { data, isLoading } = usePortfolio();
@@ -45,7 +46,7 @@ const Roi = () => {
   return (
     <Flex gap={2} align="flex-end">
       <Title level={2} className="m-0">
-        {data?.roi ?? 0}
+        {data?.total_roi ?? 0}
       </Title>
       <Text type="secondary" style={{ paddingBottom: 4, fontSize: '16px' }}>
         %
@@ -84,7 +85,37 @@ export const Portfolio = () => {
 
           <Col md={12} xs={24}>
             <Flex vertical gap={8}>
-              <CardTitle text="ROI Since Activation" />
+              <CardTitle
+                text={
+                  <span>
+                    Total ROI Since Activation{' '}
+                    {data && data.partial_roi ? (
+                      <Tooltip
+                        styles={{ body: { width: 365 } }}
+                        title={
+                          <>
+                            <Paragraph type="secondary">
+                              Total ROI shows your agent's comprehensive financial performance,
+                              including trading profits from liquidity pool investments across
+                              supported DEXs and staking rewards
+                            </Paragraph>
+                            <Paragraph type="secondary">
+                              Partial ROI accounts only for core liquidity trading activities,
+                              excluding staking rewards
+                            </Paragraph>
+                            <Flex justify="space-between">
+                              <Text strong>Partial ROI</Text>
+                              <Text strong>{`${data.partial_roi}%`}</Text>
+                            </Flex>
+                          </>
+                        }
+                      >
+                        <InfoCircleOutlined style={{ marginLeft: 6 }} />
+                      </Tooltip>
+                    ) : null}
+                  </span>
+                }
+              />
               <Roi />
             </Flex>
           </Col>
