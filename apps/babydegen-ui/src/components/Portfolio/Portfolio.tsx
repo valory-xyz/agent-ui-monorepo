@@ -61,6 +61,29 @@ const SeeBreakdownButton = (props: ButtonProps) => (
   </Button>
 );
 
+const RoiTooltip = ({ partialRoi }: { partialRoi: number }) => (
+  <Tooltip
+    styles={{ body: { width: 365 } }}
+    title={
+      <>
+        <Paragraph type="secondary">
+          Total ROI shows your agent's comprehensive financial performance, including trading
+          profits from liquidity pool investments across supported DEXs and staking rewards
+        </Paragraph>
+        <Paragraph type="secondary">
+          Partial ROI accounts only for core liquidity trading activities, excluding staking rewards
+        </Paragraph>
+        <Flex justify="space-between">
+          <Text strong>Partial ROI</Text>
+          <Text strong>{`${partialRoi}%`}</Text>
+        </Flex>
+      </>
+    }
+  >
+    <InfoCircleOutlined style={{ marginLeft: 6 }} />
+  </Tooltip>
+);
+
 export const Portfolio = () => {
   const { data } = usePortfolio();
   const [breakdownModalVisible, setBreakdownModalVisible] = useState(false);
@@ -89,30 +112,7 @@ export const Portfolio = () => {
                 text={
                   <span>
                     Total ROI Since Activation{' '}
-                    {data && data.partial_roi ? (
-                      <Tooltip
-                        styles={{ body: { width: 365 } }}
-                        title={
-                          <>
-                            <Paragraph type="secondary">
-                              Total ROI shows your agent's comprehensive financial performance,
-                              including trading profits from liquidity pool investments across
-                              supported DEXs and staking rewards
-                            </Paragraph>
-                            <Paragraph type="secondary">
-                              Partial ROI accounts only for core liquidity trading activities,
-                              excluding staking rewards
-                            </Paragraph>
-                            <Flex justify="space-between">
-                              <Text strong>Partial ROI</Text>
-                              <Text strong>{`${data.partial_roi}%`}</Text>
-                            </Flex>
-                          </>
-                        }
-                      >
-                        <InfoCircleOutlined style={{ marginLeft: 6 }} />
-                      </Tooltip>
-                    ) : null}
+                    {data && data.partial_roi ? <RoiTooltip partialRoi={data.partial_roi} /> : null}
                   </span>
                 }
               />
