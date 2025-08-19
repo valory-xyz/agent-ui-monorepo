@@ -29,6 +29,16 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 100.0,
       address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
     },
+    {
+      chain: 'optimism',
+      type: 'velodrome',
+      id: '0x1737275d53A5Ca5dAc582a493AA32C85ba2cFaD3',
+      assets: ['USDC', 'VELO'],
+      apr: 17.19,
+      details: 'Velodrome CL Pool',
+      ratio: 100.0,
+      address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
+    },
   ],
   portfolio_breakdown: [
     {

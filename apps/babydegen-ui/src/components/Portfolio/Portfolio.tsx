@@ -64,6 +64,7 @@ const SeeBreakdownButton = (props: ButtonProps) => (
 const RoiTooltip = ({ partialRoi }: { partialRoi: number }) => (
   <Tooltip
     styles={{ body: { width: 365 } }}
+    placement="bottomRight"
     title={
       <>
         <Paragraph type="secondary">
