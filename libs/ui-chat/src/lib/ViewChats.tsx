@@ -1,13 +1,14 @@
 import { Flex } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef } from 'react';
 
-import { ChatMarkdown } from './ChatMarkdown';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-import { EachChat } from './types';
+import { AgentType, EachChat } from './types';
+
+import ReactMarkdown, { Components } from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
-
-type AgentType = 'modius' | 'optimus' | 'predict';
 
 const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   <img
@@ -17,17 +18,30 @@ const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   />
 );
 
-const EmptyLogo = () => <div style={{ width: 32 }} />;
+const components: Components = {
+  ul: ({ children }) => <ul style={{ paddingLeft: 24, margin: '4px 0 8px 0' }}>{children}</ul>,
+  ol: ({ children }) => <ol style={{ paddingLeft: 24, margin: '4px 0 8px 0' }}>{children}</ol>,
+  li: ({ children }) => <li style={{ marginBottom: 4 }}>{children}</li>,
+  p: ({ children }) => <p style={{ margin: 0 }}>{children}</p>,
+} as const;
 
-type ChatProps = { chat: EachChat; isFirst: boolean; agentType: AgentType };
-const Chat = ({ chat, isFirst, agentType }: ChatProps) => {
+export const ChatMarkdown = ({ className, children }: { className?: string; children: string }) => (
+  <div className={className}>
+    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
+      {children}
+    </ReactMarkdown>
+  </div>
+);
+
+type ViewEachChatProps = { chat: EachChat; isFirst: boolean; agentType: AgentType };
+const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
   const isUser = chat.type === 'user';
   const isAgent = chat.type === 'agent';
   const isSystem = chat.type === 'system';
 
   const chatLogo = useMemo(() => {
     if (isAgent) return <AgentChatLogo agentType={agentType} />;
-    if (isSystem) return <EmptyLogo />;
+    if (isSystem) return <div style={{ width: 32 }} />;
     return null;
   }, [isAgent, isSystem, agentType]);
 
@@ -65,7 +79,7 @@ const Chat = ({ chat, isFirst, agentType }: ChatProps) => {
   );
 };
 
-type ViewChatsProps = { chats: EachChat[] } & Pick<ChatProps, 'agentType'>;
+type ViewChatsProps = { chats: EachChat[] } & Pick<ViewEachChatProps, 'agentType'>;
 
 /**
  * Chat component to display messages.
@@ -86,7 +100,7 @@ export const ViewChats = ({ agentType, chats }: ViewChatsProps) => {
   return (
     <Flex ref={chatContainerRef} vertical style={chatStyles}>
       {chats.map((chat, index) => (
-        <Chat key={index} chat={chat} isFirst={index === 0} agentType={agentType} />
+        <ViewEachChat key={index} chat={chat} isFirst={index === 0} agentType={agentType} />
       ))}
     </Flex>
   );

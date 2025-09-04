@@ -6,9 +6,6 @@ import { OperatingProtocols, TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
 import { EachChat, Chat as UiChat } from '@agent-ui-monorepo/ui-chat';
 
-/**
- * Chat component for user to interact with the agent.
- */
 export const Chat = () => {
   const [currentText, setCurrentText] = useState('');
   const [chats, setChats] = useState<EachChat[]>([]);
