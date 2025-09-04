@@ -1,9 +1,9 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
 import { CSSProperties, ReactNode, useCallback } from 'react';
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { COLOR } from '../../constants/colors';
-import { NA } from '../../constants/common';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { SelectedProtocol, TradingType } from '../../types';
 import { Pill } from '../../ui/Pill';

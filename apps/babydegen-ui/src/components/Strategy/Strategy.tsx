@@ -1,9 +1,9 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Avatar, Card, Col, Flex, Row, Skeleton, Tooltip, Typography } from 'antd';
 import { useMemo } from 'react';
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { COLOR } from '../../constants/colors';
-import { NA } from '../../constants/common';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { Pill } from '../../ui/Pill';
