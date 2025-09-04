@@ -8,6 +8,9 @@ import { NavBarContainer } from '../components/ui/NavBarContainer';
 import styled from 'styled-components';
 import { AgentActivity } from '../components/AgentActivity';
 import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
+import { useFeatures } from '../hooks/useFeatures';
+import { Card } from '../components/ui/Card';
 
 const AgentContent = styled.div`
   display: flex;
@@ -49,6 +52,28 @@ const AgentNotFound = () => (
   </Flex>
 );
 
+const StrategyAndChat = () => {
+  const { isLoading, data } = useFeatures();
+
+  if (isLoading) return;
+
+  if (!data?.isChatEnabled) {
+    return (
+      <Card>
+        <UnlockChat />
+      </Card>
+    );
+  }
+
+  return null;
+  // return (
+  //   <>
+  //     <Strategy />
+  //     <Chat />
+  //   </>
+  // );
+};
+
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
@@ -70,6 +95,7 @@ export const Agent = () => {
         />
         <AgentStatistics agent={data.traderInfo} />
         <AgentActivity agentId={data.traderInfo.id} />
+        <StrategyAndChat />
       </AgentContent>
     </Flex>
   );

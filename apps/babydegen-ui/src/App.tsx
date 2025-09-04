@@ -1,10 +1,10 @@
-import { App as AntdApp, Flex } from 'antd';
+import { App as AntdApp, Card, Flex } from 'antd';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 
 import { Allocation } from './components/Allocation/Allocation';
 import { Chat } from './components/Chat/Chat';
-import { UnlockChat } from './components/Chat/UnlockChat';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
@@ -17,7 +17,15 @@ const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();
 
   if (isLoading) return;
-  if (!data?.isChatEnabled) return <UnlockChat />;
+
+  if (!data?.isChatEnabled) {
+    return (
+      <Card className="card-gradient">
+        <UnlockChat type="secondary" />;
+      </Card>
+    );
+  }
+
   return (
     <>
       <Strategy />
