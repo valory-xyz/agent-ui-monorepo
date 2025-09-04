@@ -5,9 +5,9 @@ import { useCallback, useState } from 'react';
 import { COLOR } from '../../constants/colors';
 import { CardTitle } from '../../ui/CardTitle';
 import { agentType } from '../../utils/agentMap';
-import { DisplayAllChats, EachChat } from './DisplayAllChats';
 import { OperatingProtocols, TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
+import { EachChat, ViewChats } from '@agent-ui-monorepo/ui-chat';
 
 const { TextArea } = Input;
 const commonChatStyles = { height: 300, margin: '16px 0' };
@@ -75,7 +75,7 @@ export const Chat = () => {
   return (
     <Card className="card-gradient">
       <CardTitle text="Update agent’s goal" />
-      {chats.length === 0 ? <EmptyChat /> : <DisplayAllChats chats={chats} />}
+      {chats.length === 0 ? <EmptyChat /> : <ViewChats agentType={agentType} chats={chats} />}
 
       <Flex style={{ position: 'relative', width: '100%' }}>
         <TextArea

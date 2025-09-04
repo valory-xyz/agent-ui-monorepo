@@ -1,43 +1,44 @@
 import { Flex } from 'antd';
-import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
+import { CSSProperties, useEffect, useMemo, useRef } from 'react';
 
-import { COLOR } from '../../constants/colors';
-import { agentName, agentType } from '../../utils/agentMap';
-import { ChatMarkdown } from '@agent-ui-monorepo/ui-chat';
+import { ChatMarkdown } from './ChatMarkdown';
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
+import { EachChat } from './types';
 
 const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
 
-const AgentChatLogo = () => (
+type AgentType = 'modius' | 'optimus' | 'predict';
+
+const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   <img
     src={`/logos/${agentType}-chat.png`}
-    alt={`${agentName} chat logo`}
+    alt={`${agentType} chat logo`}
     style={{ width: 32, height: 32, borderRadius: 16 }}
   />
 );
 
 const EmptyLogo = () => <div style={{ width: 32 }} />;
 
-export type EachChat = {
-  text: string | ReactNode;
-  type: 'user' | 'agent' | 'system';
-};
-
-const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
+type ChatProps = { chat: EachChat; isFirst: boolean; agentType: AgentType };
+const Chat = ({ chat, isFirst, agentType }: ChatProps) => {
   const isUser = chat.type === 'user';
   const isAgent = chat.type === 'agent';
   const isSystem = chat.type === 'system';
 
   const chatLogo = useMemo(() => {
-    if (isAgent) return <AgentChatLogo />;
+    if (isAgent) return <AgentChatLogo agentType={agentType} />;
     if (isSystem) return <EmptyLogo />;
     return null;
-  }, [isAgent, isSystem]);
+  }, [isAgent, isSystem, agentType]);
 
   const styles = useMemo(() => {
     const commonStyles: CSSProperties = {
       width: '100%',
       marginTop: isFirst ? 0 : 12,
     };
+
+    const backgroundColor =
+      agentType === 'predict' ? GLOBAL_COLORS.darkGrey : GLOBAL_COLORS.darkGrey;
 
     return {
       ...commonStyles,
@@ -46,13 +47,13 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
         width: '60%',
         alignSelf: 'flex-end',
         borderRadius: '8px 8px 4px 8px',
-        backgroundColor: COLOR.darkGrey,
-        color: COLOR.white,
+        backgroundColor,
+        color: GLOBAL_COLORS.white,
       }),
       ...(isAgent && { alignSelf: 'flex-start' }),
       ...(isSystem && { borderRadius: 8, marginTop: 8 }),
     };
-  }, [isUser, isAgent, isSystem, isFirst]);
+  }, [isUser, isAgent, isSystem, isFirst, agentType]);
 
   return (
     <Flex vertical style={styles}>
@@ -64,10 +65,12 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
   );
 };
 
+type ViewChatsProps = { chats: EachChat[] } & Pick<ChatProps, 'agentType'>;
+
 /**
- * Chat component to display messages
+ * Chat component to display messages.
  */
-export const DisplayAllChats = ({ chats }: { chats: EachChat[] }) => {
+export const ViewChats = ({ agentType, chats }: ViewChatsProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change
@@ -83,7 +86,7 @@ export const DisplayAllChats = ({ chats }: { chats: EachChat[] }) => {
   return (
     <Flex ref={chatContainerRef} vertical style={chatStyles}>
       {chats.map((chat, index) => (
-        <Chat key={index} chat={chat} isFirst={index === 0} />
+        <Chat key={index} chat={chat} isFirst={index === 0} agentType={agentType} />
       ))}
     </Flex>
   );
