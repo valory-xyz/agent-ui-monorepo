@@ -2,8 +2,8 @@ import { Flex } from 'antd';
 import { CSSProperties, ReactNode, useEffect, useMemo, useRef } from 'react';
 
 import { COLOR } from '../../constants/colors';
-import { Markdown } from '../../ui/Markdown';
 import { agentName, agentType } from '../../utils/agentMap';
+import { ChatMarkdown } from '@agent-ui-monorepo/ui-chat';
 
 const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
 
@@ -58,7 +58,7 @@ const Chat = ({ chat, isFirst }: { chat: EachChat; isFirst: boolean }) => {
     <Flex vertical style={styles}>
       <Flex gap={16}>
         {chatLogo}
-        {typeof chat.text === 'string' ? <Markdown>{chat.text}</Markdown> : chat.text}
+        {typeof chat.text === 'string' ? <ChatMarkdown>{chat.text}</ChatMarkdown> : chat.text}
       </Flex>
     </Flex>
   );

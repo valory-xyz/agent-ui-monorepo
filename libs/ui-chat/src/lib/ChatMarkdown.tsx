@@ -11,7 +11,7 @@ const components: Components = {
   p: ({ children }) => <p style={{ marginBottom: 0 }}>{children}</p>,
 } as const;
 
-export const Markdown = ({ className, children }: MarkdownProps) => (
+export const ChatMarkdown = ({ className, children }: MarkdownProps) => (
   <div className={className}>
     <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
       {children}

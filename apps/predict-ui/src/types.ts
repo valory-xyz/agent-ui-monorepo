@@ -85,3 +85,17 @@ export type Service = {
 export type Features = {
   isChatEnabled: boolean;
 };
+
+export type TradingType = 'risky' | 'balanced';
+
+export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswapV3';
+
+/**
+ * Chat response from the agent.
+ */
+export type ChatResponse = {
+  reasoning: string;
+  trading_type: TradingType;
+  previous_trading_type?: TradingType;
+  selected_protocols: SelectedProtocol[];
+};

@@ -21,7 +21,7 @@ const StrategyAndChat = () => {
   if (!data?.isChatEnabled) {
     return (
       <Card className="card-gradient">
-        <UnlockChat type="secondary" />;
+        <UnlockChat type="secondary" />
       </Card>
     );
   }

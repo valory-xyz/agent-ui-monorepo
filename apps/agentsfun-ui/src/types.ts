@@ -31,17 +31,3 @@ export type GeneratedMedia = {
   postId: string;
   type: 'image' | 'video';
 };
-
-export type TradingType = 'risky' | 'balanced';
-
-export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswapV3';
-
-/**
- * Chat response from the agent.
- */
-export type ChatResponse = {
-  reasoning: string;
-  trading_type: TradingType;
-  previous_trading_type?: TradingType;
-  selected_protocols: SelectedProtocol[];
-};
