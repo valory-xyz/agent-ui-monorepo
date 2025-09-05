@@ -1,38 +1,41 @@
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
-import { CSSProperties, ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import { TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { TradingType } from '../../types';
 import { Pill } from '../ui/Pill';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
+import styled from 'styled-components';
 
 const { Text } = Typography;
 
-const SystemContainerStyles: CSSProperties = {
-  width: '100%',
-  marginTop: 0,
-  padding: '8px 16px',
-  backgroundColor: GLOBAL_COLORS.lightGrey,
-  borderRadius: 8,
-};
+const SystemContainer = styled(Flex)`
+  width: 100%;
+  margin-top: 0;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: ${GLOBAL_COLORS.WHITE_TRANSPARENT_10};
+  backdrop-filter: blur(10px);
+  .ant-typography {
+    flex: none;
+    font-size: 14px;
+  }
+`;
 
 type SystemMessageProps = {
-  type?: 'strategy' | 'protocols';
   label: string;
   width?: number;
   children: ReactNode;
 };
 
-const SystemMessage = ({ type, label, children }: SystemMessageProps) => (
-  <Flex align="center" gap={12} style={SystemContainerStyles}>
-    <Text type="secondary" style={{ width: type === 'strategy' ? 174 : 200, flex: 'none' }}>
-      {label}
-    </Text>
-    <Flex gap={type === 'strategy' ? 12 : 8} wrap="wrap">
+const SystemMessage = ({ label, children }: SystemMessageProps) => (
+  <SystemContainer align="center" gap={16}>
+    <Text type="secondary">{label}</Text>
+    <Flex gap={12} wrap="wrap">
       {children}
     </Flex>
-  </Flex>
+  </SystemContainer>
 );
 
 type TradingStrategyProps = { from: TradingType; to: TradingType };
@@ -48,13 +51,13 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   }, []);
 
   return (
-    <SystemMessage label="Trading strategy updated:" type="strategy">
-      <Pill type={getType(from)} size="large" style={{ marginLeft: 0 }}>
+    <SystemMessage label="Trading strategy updated:">
+      <Pill type={getType(from)} size="large" style={{ marginLeft: 0, fontSize: 14 }}>
         {TRADING_TYPE_MAP[from]}
       </Pill>
       {to && (
         <>
-          <ArrowRightOutlined />
+          <ArrowRightOutlined style={{ fontSize: 14, color: GLOBAL_COLORS.WHITE_TRANSPARENT_50 }} />
           <Pill type={getType(to)} size="large" style={{ marginLeft: 0 }}>
             {TRADING_TYPE_MAP[to]}
           </Pill>

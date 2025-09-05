@@ -5,25 +5,16 @@ import { EachChat } from './types';
 import { ViewChats } from './ViewChats';
 import { AgentType } from './types';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-
-import modiusLogo from '../assets/modius-chat.png';
-import optimusLogo from '../assets/optimus-chat.png';
-import traderLogo from '../assets/predict-chat.png';
+import { LOGO_MAP } from './constants';
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const commonChatStyles = { height: 300, margin: '16px 0' };
 
-const logoMap: Record<AgentType, string> = {
-  modius: modiusLogo,
-  optimus: optimusLogo,
-  predict: traderLogo,
-};
-
 const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
   <Flex align="center" justify="center" style={commonChatStyles}>
-    <img src={logoMap[agentType]} alt="Update agent’s goal" style={{ width: 80, height: 80 }} />
+    <img src={LOGO_MAP[agentType]} alt="Update agent’s goal" style={{ width: 80, height: 80 }} />
   </Flex>
 );
 
@@ -78,7 +69,7 @@ export const Chat = ({
             position: 'absolute',
             top: 8,
             right: 8,
-            color: agentType === 'modius' ? GLOBAL_COLORS.black : GLOBAL_COLORS.white,
+            color: agentType === 'modius' ? GLOBAL_COLORS.BLACK : GLOBAL_COLORS.WHITE,
           }}
         />
       </Flex>

@@ -1,7 +1,10 @@
 export const GLOBAL_COLORS = {
-  mediumGrey: '#6C757D',
-  lightGrey: '#CED4DA',
-  darkGrey: '#343A40',
-  white: '#FFFFFF',
-  black: '#000000',
+  WHITE: '#FFFFFF',
+  BLACK: '#000000',
+  WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
+  WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.5)',
+
+  MEDIUM_GRAY: '#6C757D',
+  LIGHT_GRAY: '#CED4DA',
+  DARK_GRAY: '#343A40',
 };

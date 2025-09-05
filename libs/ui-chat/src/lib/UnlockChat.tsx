@@ -21,7 +21,7 @@ export const UnlockChat = ({ type }: { type?: 'secondary' }) => {
         gap={24}
         style={{ height: 240, margin: '16px 0' }}
       >
-        <LockOutlined style={{ fontSize: 48, color: GLOBAL_COLORS.mediumGrey }} />
+        <LockOutlined style={{ fontSize: 48, color: GLOBAL_COLORS.MEDIUM_GRAY }} />
         <Text type="secondary" style={{ fontSize: 16, maxWidth: 360, textAlign: 'center' }}>
           Add your Gemini API key in Agent Settings on the Pearl Home screen to unlock this feature.
         </Text>

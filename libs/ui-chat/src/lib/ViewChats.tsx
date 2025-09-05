@@ -8,11 +8,13 @@ import ReactMarkdown, { Components } from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+import { LOGO_MAP } from './constants';
+
 const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
 
 const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   <img
-    src={`/logos/${agentType}-chat.png`}
+    src={LOGO_MAP[agentType]}
     alt={`${agentType} chat logo`}
     style={{ width: 32, height: 32, borderRadius: 16 }}
   />
@@ -51,8 +53,15 @@ const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
       marginTop: isFirst ? 0 : 12,
     };
 
-    const backgroundColor =
-      agentType === 'predict' ? GLOBAL_COLORS.darkGrey : GLOBAL_COLORS.darkGrey;
+    const backgroundStyles: CSSProperties = (() => {
+      if (agentType === 'predict') {
+        return {
+          background: GLOBAL_COLORS.WHITE_TRANSPARENT_10,
+          backdropFilter: 'blur(10px)',
+        };
+      }
+      return { background: GLOBAL_COLORS.DARK_GRAY };
+    })();
 
     return {
       ...commonStyles,
@@ -61,8 +70,8 @@ const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
         width: '60%',
         alignSelf: 'flex-end',
         borderRadius: '8px 8px 4px 8px',
-        backgroundColor,
-        color: GLOBAL_COLORS.white,
+        color: GLOBAL_COLORS.WHITE,
+        ...backgroundStyles,
       }),
       ...(isAgent && { alignSelf: 'flex-start' }),
       ...(isSystem && { borderRadius: 8, marginTop: 8 }),

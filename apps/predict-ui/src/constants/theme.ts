@@ -3,7 +3,7 @@ import { ThemeConfig, theme } from 'antd';
 export const COLOR = {
   PRIMARY: '#884dff',
   SECONDARY: 'rgba(255, 255, 255, 0.5)',
-  TEXT_PRIMARY: '#fff',
+  TEXT_PRIMARY: '#FFFFFF',
   BACKGROUND: '#2f1d57',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
@@ -16,14 +16,9 @@ export const COLOR = {
   WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
   WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
 
-  // TODO
-  mediumGrey: '#6C757D',
-  lightGrey: '#CED4DA',
-  darkGrey: '#343A40',
-  white: '#FFFFFF',
-  black: '#000000',
-  danger: '#F5222D',
-  blue: '#1677FF',
+  RED: '#F5222D',
+  BLUE: '#1677FF',
+  LIGHT_GRAY: '#F8F9FA',
 };
 
 export const THEME_CONFIG: ThemeConfig = {
@@ -38,6 +33,7 @@ export const THEME_CONFIG: ThemeConfig = {
   components: {
     Card: {
       borderRadiusLG: 16,
+      fontSize: 16,
     },
     Spin: {
       colorPrimary: COLOR.TEXT_PRIMARY,
