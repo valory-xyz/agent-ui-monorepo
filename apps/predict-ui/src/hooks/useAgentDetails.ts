@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 
-import { mockAgentInfo } from '../mocks/mockAgentInfo';
-import { AgentInfoResponse } from '../types';
+import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
+import { AgentInfoResponse, TraderAgent } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
@@ -39,7 +39,17 @@ export const useAgentDetails = () => {
   } = useQuery({
     enabled: !!agentInfo?.safe_address,
     queryKey: ['traderInfo', agentInfo?.safe_address],
-    queryFn: async () => getTraderAgent({ id: `${agentInfo?.safe_address}`.toLowerCase() }),
+    queryFn: async () => {
+      if (IS_MOCK_ENABLED) {
+        return new Promise<{ traderAgent: TraderAgent }>((resolve) => {
+          setTimeout(() => {
+            resolve({ traderAgent: mockTraderInfo });
+          }, 2000);
+        });
+      }
+
+      return getTraderAgent({ id: `${agentInfo?.safe_address}`.toLowerCase() });
+    },
     select: (data) => data.traderAgent,
   });
 

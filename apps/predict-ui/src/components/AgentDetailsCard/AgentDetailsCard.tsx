@@ -67,7 +67,7 @@ export const AgentDetailsCard = ({ agent }: AgentDetailsCardProps) => {
           )}
         </Flex>
         <Text type="secondary" className="ml-auto">
-          {lastBet && `Last active ${getTimeAgo(lastBet.timestamp * 1000)}`}
+          {lastBet && `Last active ${getTimeAgo(Number(lastBet.timestamp) * 1000)}`}
         </Text>
       </Flex>
     </Card>
