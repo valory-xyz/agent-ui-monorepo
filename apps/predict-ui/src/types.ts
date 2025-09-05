@@ -82,7 +82,6 @@ export type Service = {
   olasRewardsEarned: string;
 };
 
-// TODO: ask backend
 export type Features = {
   isChatEnabled: boolean;
 };
