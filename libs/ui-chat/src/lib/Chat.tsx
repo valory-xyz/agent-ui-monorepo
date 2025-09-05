@@ -6,18 +6,24 @@ import { ViewChats } from './ViewChats';
 import { AgentType } from './types';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 
+import modiusLogo from '../assets/modius-chat.png';
+import optimusLogo from '../assets/optimus-chat.png';
+import traderLogo from '../assets/predict-chat.png';
+
 const { TextArea } = Input;
 const { Title } = Typography;
 
 const commonChatStyles = { height: 300, margin: '16px 0' };
 
+const logoMap: Record<AgentType, string> = {
+  modius: modiusLogo,
+  optimus: optimusLogo,
+  predict: traderLogo,
+};
+
 const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
   <Flex align="center" justify="center" style={commonChatStyles}>
-    <img
-      src={`/logos/${agentType}-chat.png`}
-      alt="Update agent’s goal"
-      style={{ width: 80, height: 80 }}
-    />
+    <img src={logoMap[agentType]} alt="Update agent’s goal" style={{ width: 80, height: 80 }} />
   </Flex>
 );
 
@@ -55,7 +61,7 @@ export const Chat = ({
         <ViewChats agentType={agentType} chats={chats} />
       )}
 
-      <Flex style={{ position: 'relative', width: '100%' }}>
+      <Flex style={{ position: 'relative', width: '100%' }} className="agent-chat-input">
         <TextArea
           value={currentText}
           onChange={(e) => onCurrentTextChange(e.target.value)}

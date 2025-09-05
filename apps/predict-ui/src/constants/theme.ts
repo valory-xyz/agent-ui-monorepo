@@ -15,6 +15,15 @@ export const COLOR = {
   WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
   WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
   WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
+
+  // TODO
+  mediumGrey: '#6C757D',
+  lightGrey: '#CED4DA',
+  darkGrey: '#343A40',
+  white: '#FFFFFF',
+  black: '#000000',
+  danger: '#F5222D',
+  blue: '#1677FF',
 };
 
 export const THEME_CONFIG: ThemeConfig = {
@@ -27,6 +36,9 @@ export const THEME_CONFIG: ThemeConfig = {
     fontFamily: '"Inter", sans-serif',
   },
   components: {
+    Card: {
+      borderRadiusLG: 16,
+    },
     Spin: {
       colorPrimary: COLOR.TEXT_PRIMARY,
     },

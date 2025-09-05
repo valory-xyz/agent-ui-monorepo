@@ -1,9 +1,10 @@
-import { Card, notification } from 'antd';
+import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
 import { TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
 import { EachChat, Chat as UiChat } from '@agent-ui-monorepo/ui-chat';
+import { CardV2 } from '../ui/Card';
 
 export const Chat = () => {
   const [currentText, setCurrentText] = useState('');
@@ -46,9 +47,8 @@ export const Chat = () => {
   }, [chats, currentText, onSendChat]);
 
   return (
-    <Card className="card-gradient">
+    <CardV2>
       <UiChat
-        type="secondary"
         agentType="predict"
         isLoading={isSendingChat}
         currentText={currentText}
@@ -56,6 +56,6 @@ export const Chat = () => {
         onCurrentTextChange={setCurrentText}
         onSend={handleSend}
       />
-    </Card>
+    </CardV2>
   );
 };

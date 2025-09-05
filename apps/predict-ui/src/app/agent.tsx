@@ -11,6 +11,7 @@ import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { useFeatures } from '../hooks/useFeatures';
 import { Card } from '../components/ui/Card';
+import { Chat } from '../components/Chat/Chat';
 
 const AgentContent = styled.div`
   display: flex;
@@ -65,13 +66,12 @@ const StrategyAndChat = () => {
     );
   }
 
-  return null;
-  // return (
-  //   <>
-  //     <Strategy />
-  //     <Chat />
-  //   </>
-  // );
+  return (
+    <>
+      {/* <Strategy /> */}
+      <Chat />
+    </>
+  );
 };
 
 export const Agent = () => {
