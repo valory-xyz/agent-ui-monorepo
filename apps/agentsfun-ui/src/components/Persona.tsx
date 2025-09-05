@@ -1,11 +1,12 @@
-import { Button, Flex, Skeleton, Typography } from 'antd';
-import { Card } from './ui/Card';
-import { useAgentDetails } from '../hooks/useAgentDetails';
-import { FC } from 'react';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { ErrorState } from './ui/ErrorState';
 import { X_URL } from '@agent-ui-monorepo/util-constants-and-types';
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Button, Flex, Skeleton, Typography } from 'antd';
+import { FC } from 'react';
 import styled from 'styled-components';
+
+import { useAgentDetails } from '../hooks/useAgentDetails';
+import { Card } from './ui/Card';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Paragraph } = Typography;
 

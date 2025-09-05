@@ -1,12 +1,11 @@
 import { Row, Typography } from 'antd';
 
 import { Card } from '../../components/ui/Card';
-
-import { getTimeAgo } from '../../utils/time';
 import { TraderAgent } from '../../types';
+import { getTimeAgo } from '../../utils/time';
+import { RoiCard } from './RoiCard';
 import { StatisticCard } from './StatisticCard';
 import { SuccessRateCard } from './SuccessRateCard';
-import { RoiCard } from './RoiCard';
 
 const { Title } = Typography;
 

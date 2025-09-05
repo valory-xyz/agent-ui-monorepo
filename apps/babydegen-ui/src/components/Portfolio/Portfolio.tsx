@@ -1,10 +1,10 @@
-import { Button, ButtonProps, Card, Row, Col, Flex, Skeleton, Typography, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Button, ButtonProps, Card, Col, Flex, Row, Skeleton, Tooltip, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { CardTitle } from '../../ui/CardTitle';
 import { BreakdownModal } from './BreakdownModal';
-import { InfoCircleOutlined } from '@ant-design/icons';
 
 const { Title, Text, Paragraph } = Typography;
 

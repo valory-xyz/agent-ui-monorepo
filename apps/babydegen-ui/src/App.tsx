@@ -1,17 +1,17 @@
-import { App as AntdApp, Card, Flex } from 'antd';
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
-import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
+import { App as AntdApp, Card, Flex } from 'antd';
 
 import { Allocation } from './components/Allocation/Allocation';
 import { Chat } from './components/Chat/Chat';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
+import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAgentsFunds';
 import { useFeatures } from './hooks/useFeatures';
 import { usePortfolio } from './hooks/usePortfolio';
 import { agentType } from './utils/agentMap';
-import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAgentsFunds';
 
 const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();

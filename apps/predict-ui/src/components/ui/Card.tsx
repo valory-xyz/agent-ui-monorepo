@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
 import { Card as AntdCard } from 'antd';
+import styled, { css } from 'styled-components';
 
 import { COLOR } from '../../constants/theme';
 

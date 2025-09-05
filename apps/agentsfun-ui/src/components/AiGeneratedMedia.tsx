@@ -1,15 +1,14 @@
+import { X_POST_URL } from '@agent-ui-monorepo/util-constants-and-types';
+import { Col, Flex, Row, Spin, Typography } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import { X_POST_URL } from '@agent-ui-monorepo/util-constants-and-types';
-
 import mediaEmptyLogo from '../assets/media-empty.png';
-import { Card } from './ui/Card';
-import { Col, Flex, Row, Spin, Typography } from 'antd';
-import { ErrorState } from './ui/ErrorState';
-import { EmptyState } from './ui/EmptyState';
-import { useGeneratedMedia } from '../hooks/useGeneratedMedia';
 import { COLOR } from '../constants/theme';
+import { useGeneratedMedia } from '../hooks/useGeneratedMedia';
+import { Card } from './ui/Card';
+import { EmptyState } from './ui/EmptyState';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title } = Typography;
 

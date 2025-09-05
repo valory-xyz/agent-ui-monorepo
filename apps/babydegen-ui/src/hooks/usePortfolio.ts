@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { useQuery } from '@tanstack/react-query';
 
 import { mockPortfolio } from '../mocks/mockPortfolio';
 import { PortfolioResponse } from '../types';

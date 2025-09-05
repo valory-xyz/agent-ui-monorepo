@@ -1,4 +1,5 @@
 import { gql, request } from 'graphql-request';
+
 import {
   GNOSIS_STAKING_SUBGRAPH_URL,
   OLAS_AGENTS_SUBGRAPH_URL,

@@ -1,14 +1,12 @@
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { Flex } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef } from 'react';
-
-import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-import { AgentType, ChatSize, EachChat } from './types';
-
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import { LOGO_MAP } from './constants';
+import { AgentType, ChatSize, EachChat } from './types';
 
 const chatStyles = { height: 360, overflow: 'auto' };
 

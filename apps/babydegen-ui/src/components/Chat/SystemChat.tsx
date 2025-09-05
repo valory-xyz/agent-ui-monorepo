@@ -1,7 +1,7 @@
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
 import { CSSProperties, ReactNode, useCallback } from 'react';
-import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { COLOR } from '../../constants/colors';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';

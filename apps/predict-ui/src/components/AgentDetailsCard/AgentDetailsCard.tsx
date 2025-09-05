@@ -1,12 +1,13 @@
-import { Flex, Tag, Typography } from 'antd';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
-import { ChartSpline } from 'lucide-react';
 import { generateAgentName } from '@agent-ui-monorepo/util-functions';
+import { Flex, Tag, Typography } from 'antd';
+import { ChartSpline } from 'lucide-react';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+
 import { Card } from '../../components/ui/Card';
 import { COLOR } from '../../constants/theme';
-import { getTimeAgo } from '../../utils/time';
-import { TraderAgent } from '../../types';
 import { REGISTRY_AGENTS_URL, REGISTRY_SERVICES_URL } from '../../constants/urls';
+import { TraderAgent } from '../../types';
+import { getTimeAgo } from '../../utils/time';
 
 const { Title, Text } = Typography;
 
