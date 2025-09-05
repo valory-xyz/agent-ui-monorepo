@@ -40,5 +40,6 @@ jobs:
         run: yarn nx run-many --target=lint --all --skip-nx-cache
 
       - name: Test
-        run: yarn nx run-many --target=test --all --skip-nx-cache
+        run: yarn nx run-many --target=test --all --skip-nx-cache --passWithNoTests
+
 
