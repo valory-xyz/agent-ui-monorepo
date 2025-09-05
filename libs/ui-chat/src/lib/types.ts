@@ -6,3 +6,5 @@ export type EachChat = {
   text: ReactNode;
   type: 'user' | 'agent' | 'system';
 };
+
+export type ChatSize = 'small' | 'large';

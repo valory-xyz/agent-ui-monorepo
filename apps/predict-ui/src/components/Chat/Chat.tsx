@@ -49,12 +49,13 @@ export const Chat = () => {
   return (
     <CardV2>
       <UiChat
-        agentType="predict"
         isLoading={isSendingChat}
         currentText={currentText}
         chats={chats}
         onCurrentTextChange={setCurrentText}
         onSend={handleSend}
+        agentType="predict"
+        size="large"
       />
     </CardV2>
   );

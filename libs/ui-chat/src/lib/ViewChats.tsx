@@ -2,15 +2,15 @@ import { Flex } from 'antd';
 import { CSSProperties, useEffect, useMemo, useRef } from 'react';
 
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-import { AgentType, EachChat } from './types';
+import { AgentType, ChatSize, EachChat } from './types';
 
-import ReactMarkdown, { Components } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 import { LOGO_MAP } from './constants';
 
-const chatStyles = { height: 360, margin: '16px 0', overflow: 'auto' };
+const chatStyles = { height: 360, overflow: 'auto' };
 
 const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   <img
@@ -20,23 +20,40 @@ const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   />
 );
 
-const components: Components = {
-  ul: ({ children }) => <ul style={{ paddingLeft: 24, margin: '4px 0 8px 0' }}>{children}</ul>,
-  ol: ({ children }) => <ol style={{ paddingLeft: 24, margin: '4px 0 8px 0' }}>{children}</ol>,
-  li: ({ children }) => <li style={{ marginBottom: 4 }}>{children}</li>,
-  p: ({ children }) => <p style={{ margin: 0 }}>{children}</p>,
-} as const;
+type ChatMarkdownProps = { size: ChatSize; className?: string; children: string };
+const ChatMarkdown = ({ size, className, children }: ChatMarkdownProps) => {
+  const listStyles: CSSProperties = {
+    paddingLeft: 24,
+    margin: size === 'large' ? '8px 0 8px 0' : '4px 0 8px 0',
+  };
 
-export const ChatMarkdown = ({ className, children }: { className?: string; children: string }) => (
-  <div className={className}>
-    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={components}>
-      {children}
-    </ReactMarkdown>
-  </div>
-);
+  return (
+    <div className={className}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={{
+          ul: ({ children }) => <ul style={listStyles}>{children}</ul>,
+          ol: ({ children }) => <ol style={listStyles}>{children}</ol>,
+          li: ({ children }) => (
+            <li style={{ marginBottom: size === 'large' ? 8 : 4 }}>{children}</li>
+          ),
+          p: ({ children }) => <p style={{ margin: 0 }}>{children}</p>,
+        }}
+      >
+        {children}
+      </ReactMarkdown>
+    </div>
+  );
+};
 
-type ViewEachChatProps = { chat: EachChat; isFirst: boolean; agentType: AgentType };
-const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
+type ViewEachChatProps = {
+  chat: EachChat;
+  isFirst: boolean;
+  agentType: AgentType;
+  size: ChatSize;
+};
+const ViewEachChat = ({ chat, isFirst, agentType, size }: ViewEachChatProps) => {
   const isUser = chat.type === 'user';
   const isAgent = chat.type === 'agent';
   const isSystem = chat.type === 'system';
@@ -50,7 +67,7 @@ const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
   const styles = useMemo(() => {
     const commonStyles: CSSProperties = {
       width: '100%',
-      marginTop: isFirst ? 0 : 12,
+      marginTop: isFirst ? 0 : size === 'large' ? 24 : 12,
     };
 
     const backgroundStyles: CSSProperties = (() => {
@@ -74,26 +91,27 @@ const ViewEachChat = ({ chat, isFirst, agentType }: ViewEachChatProps) => {
         ...backgroundStyles,
       }),
       ...(isAgent && { alignSelf: 'flex-start' }),
-      ...(isSystem && { borderRadius: 8, marginTop: 8 }),
+      ...(isSystem && { borderRadius: 8, marginTop: size === 'large' ? 16 : 8 }),
     };
-  }, [isUser, isAgent, isSystem, isFirst, agentType]);
+  }, [isUser, isAgent, isSystem, isFirst, agentType, size]);
 
   return (
     <Flex vertical style={styles}>
       <Flex gap={16}>
         {chatLogo}
-        {typeof chat.text === 'string' ? <ChatMarkdown>{chat.text}</ChatMarkdown> : chat.text}
+        {typeof chat.text === 'string' ? (
+          <ChatMarkdown size={size}>{chat.text}</ChatMarkdown>
+        ) : (
+          chat.text
+        )}
       </Flex>
     </Flex>
   );
 };
 
-type ViewChatsProps = { chats: EachChat[] } & Pick<ViewEachChatProps, 'agentType'>;
+type ViewChatsProps = { chats: EachChat[] } & Pick<ViewEachChatProps, 'agentType' | 'size'>;
 
-/**
- * Chat component to display messages.
- */
-export const ViewChats = ({ agentType, chats }: ViewChatsProps) => {
+export const ViewChats = ({ chats, agentType, size }: ViewChatsProps) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Scroll to bottom when messages change
@@ -107,9 +125,19 @@ export const ViewChats = ({ agentType, chats }: ViewChatsProps) => {
   }, [chats]);
 
   return (
-    <Flex ref={chatContainerRef} vertical style={chatStyles}>
+    <Flex
+      ref={chatContainerRef}
+      vertical
+      style={{ ...chatStyles, margin: size === 'large' ? '24px 0' : '16px 0' }}
+    >
       {chats.map((chat, index) => (
-        <ViewEachChat key={index} chat={chat} isFirst={index === 0} agentType={agentType} />
+        <ViewEachChat
+          size={size}
+          key={index}
+          chat={chat}
+          isFirst={index === 0}
+          agentType={agentType}
+        />
       ))}
     </Flex>
   );

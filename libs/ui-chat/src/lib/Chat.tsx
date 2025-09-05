@@ -1,16 +1,18 @@
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, Typography } from 'antd';
 
-import { EachChat } from './types';
+import { ChatSize, EachChat } from './types';
 import { ViewChats } from './ViewChats';
 import { AgentType } from './types';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { LOGO_MAP } from './constants';
+import { CSSProperties } from 'react';
 
 const { TextArea } = Input;
 const { Title } = Typography;
 
-const commonChatStyles = { height: 300, margin: '16px 0' };
+const commonChatStyles: CSSProperties = { height: 300, margin: '16px 0' };
+const btnStyles: CSSProperties = { position: 'absolute', top: 8, right: 8 };
 
 const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
   <Flex align="center" justify="center" style={commonChatStyles}>
@@ -19,26 +21,28 @@ const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
 );
 
 type ChatProps = {
-  type?: 'secondary';
-  agentType: AgentType;
   isLoading: boolean;
   currentText: string;
   chats: EachChat[];
   onCurrentTextChange: (text: string) => void;
   onSend: () => void;
+  agentType: AgentType;
+  type?: 'secondary';
+  size?: ChatSize;
 };
 
 /**
  * Chat component for user to interact with the agent.
  */
 export const Chat = ({
-  type,
-  agentType,
   isLoading,
   currentText,
   chats,
   onCurrentTextChange,
   onSend,
+  agentType,
+  type,
+  size = 'small',
 }: ChatProps) => {
   return (
     <>
@@ -49,7 +53,7 @@ export const Chat = ({
       {chats.length === 0 ? (
         <EmptyChat agentType={agentType} />
       ) : (
-        <ViewChats agentType={agentType} chats={chats} />
+        <ViewChats size={size} agentType={agentType} chats={chats} />
       )}
 
       <Flex style={{ position: 'relative', width: '100%' }} className="agent-chat-input">
@@ -58,7 +62,11 @@ export const Chat = ({
           onChange={(e) => onCurrentTextChange(e.target.value)}
           rows={4}
           placeholder="Give the agent custom guidance"
-          style={{ resize: 'none', paddingRight: 64 }}
+          style={{
+            resize: 'none',
+            paddingRight: 64,
+            fontSize: size === 'large' ? 16 : 14,
+          }}
         />
         <Button
           loading={isLoading}
@@ -66,9 +74,7 @@ export const Chat = ({
           type="primary"
           icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
           style={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
+            ...btnStyles,
             color: agentType === 'modius' ? GLOBAL_COLORS.BLACK : GLOBAL_COLORS.WHITE,
           }}
         />

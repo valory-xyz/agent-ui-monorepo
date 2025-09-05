@@ -55,6 +55,7 @@ export const CardV2 = styled(AntdCard)`
 
   &::before {
     ${cardBeforeStyles}
+    border-radius: 16px;
   }
 
   & > * {
