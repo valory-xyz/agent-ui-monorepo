@@ -18,13 +18,13 @@ const cardBeforeStyles = css`
   z-index: 1;
 `;
 
-export const Card = styled.div`
+export const Card = styled.div<{ $padding?: string }>`
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  padding: 32px;
+  padding: ${({ $padding }) => $padding || '32px'};
   border-radius: 16px;
   backdrop-filter: blur(10px);
   border: 1px solid ${COLOR.WHITE_TRANSPARENT_10};

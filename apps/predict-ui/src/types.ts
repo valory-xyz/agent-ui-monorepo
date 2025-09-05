@@ -18,6 +18,7 @@ export type TraderAgent = {
   blockNumber: string;
   blockTimestamp: string;
   transactionHash: string;
+  trading_type: TradingType;
 };
 
 export type TraderAgentBets = {
