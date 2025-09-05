@@ -2,6 +2,7 @@ import { Badge, Flex } from 'antd';
 import { CSSProperties, ReactNode } from 'react';
 
 import { COLOR } from '../../constants/theme';
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 
 type PillProps = {
   type?: 'primary' | 'danger';
@@ -21,7 +22,8 @@ export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
           size === 'small' ? `2px 4px 2px ${type ? 16 : 8}px` : `6px 12px 6px ${type ? 12 : 6}px`,
         borderRadius: 40,
         marginLeft: -28,
-        backgroundColor: type === 'primary' ? `rgba(22, 119, 255, 0.2)` : `rgba(245, 34, 45, 0.2)`,
+        backgroundColor:
+          type === 'primary' ? GLOBAL_COLORS.BLUE_TRANSPARENT_10 : GLOBAL_COLORS.RED_TRANSPARENT_20,
         ...(style || {}),
       }}
     >

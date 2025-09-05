@@ -6,7 +6,7 @@ import { ViewChats } from './ViewChats';
 import { AgentType } from './types';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { LOGO_MAP } from './constants';
-import { CSSProperties } from 'react';
+import { CSSProperties, useMemo } from 'react';
 
 const { TextArea } = Input;
 const { Title } = Typography;
@@ -44,6 +44,22 @@ export const Chat = ({
   type,
   size = 'small',
 }: ChatProps) => {
+  const btnStyle = useMemo(() => {
+    if (agentType === 'predict') {
+      return {
+        ...btnStyles,
+        color: GLOBAL_COLORS.BLACK,
+        background: GLOBAL_COLORS.WHITE,
+      };
+    }
+
+    if (agentType === 'modius') {
+      return { ...btnStyles, color: GLOBAL_COLORS.BLACK };
+    }
+
+    return { ...btnStyles, color: GLOBAL_COLORS.WHITE };
+  }, [agentType]);
+
   return (
     <>
       <Title level={4} style={{ margin: 0 }} type={type}>
@@ -73,10 +89,7 @@ export const Chat = ({
           onClick={onSend}
           type="primary"
           icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
-          style={{
-            ...btnStyles,
-            color: agentType === 'modius' ? GLOBAL_COLORS.BLACK : GLOBAL_COLORS.WHITE,
-          }}
+          style={btnStyle}
         />
       </Flex>
     </>
