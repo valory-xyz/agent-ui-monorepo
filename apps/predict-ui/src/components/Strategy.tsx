@@ -22,7 +22,7 @@ const Loader = () => <Skeleton.Input style={{ width: 100 }} active size="small" 
 
 const StrategyContent = () => {
   const { isLoading, data } = useAgentDetails();
-  const type = data?.traderInfo?.trading_type;
+  const type = data?.agentInfo?.trading_type;
 
   return (
     <Flex justify="space-between" align="self-start">
