@@ -1,15 +1,15 @@
-import { Spin, Timeline, TimelineItemProps, Typography, Flex } from 'antd';
+import { GNOSIS_SCAN_URL, NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { useQuery } from '@tanstack/react-query';
-import { getUserTrades } from '../utils/graphql/queries';
+import { Flex, Spin, Timeline, TimelineItemProps, Typography } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Card } from '../components/ui/Card';
 import { NoDataContainer } from '../components/ui/NoDataContainer';
 import { PREDICT_APP_URL } from '../constants/urls';
-import { getTimeAgo } from '../utils/time';
-import { GNOSIS_SCAN_URL, NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { FpmmTrade, FpmmTrades } from '../types';
+import { getUserTrades } from '../utils/graphql/queries';
+import { getTimeAgo } from '../utils/time';
 
 const { Title, Text } = Typography;
 

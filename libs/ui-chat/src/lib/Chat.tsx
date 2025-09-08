@@ -1,12 +1,12 @@
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, Typography } from 'antd';
-
-import { ChatSize, EachChat } from './types';
-import { ViewChats } from './ViewChats';
-import { AgentType } from './types';
-import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-import { LOGO_MAP } from './constants';
 import { CSSProperties, useMemo } from 'react';
+
+import { LOGO_MAP } from './constants';
+import { ChatSize, EachChat } from './types';
+import { AgentType } from './types';
+import { ViewChats } from './ViewChats';
 
 const { TextArea } = Input;
 const { Title } = Typography;

@@ -1,8 +1,8 @@
 import { Button, Card, Flex, Typography } from 'antd';
 import { useState } from 'react';
 
-import { CardTitle } from '../../ui/CardTitle';
 import { COLOR } from '../../constants/colors';
+import { CardTitle } from '../../ui/CardTitle';
 import { WithdrawInvestedFunds } from './WithdrawInvestedFunds';
 
 const { Text } = Typography;

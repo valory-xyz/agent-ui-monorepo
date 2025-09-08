@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { FORTYFIVE_SECONDS, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { useQuery } from '@tanstack/react-query';
 
 import { mockMemecoinActivity } from '../mock';
 import { MemecoinActivity as MemecoinActivityType } from '../types';

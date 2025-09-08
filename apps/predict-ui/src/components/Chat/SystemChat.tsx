@@ -1,12 +1,12 @@
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
 import { ReactNode, useCallback } from 'react';
+import styled from 'styled-components';
 
 import { TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { TradingType } from '../../types';
 import { Pill } from '../ui/Pill';
-import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
-import styled from 'styled-components';
 
 const { Text } = Typography;
 

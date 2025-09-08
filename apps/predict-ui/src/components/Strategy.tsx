@@ -1,11 +1,11 @@
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Flex, Skeleton, Tooltip, Typography } from 'antd';
-import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 
 import { TRADING_TYPE_MAP } from '../constants/textMaps';
-import { Pill } from './ui/Pill';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { Card } from './ui/Card';
+import { Pill } from './ui/Pill';
 
 const { Title } = Typography;
 

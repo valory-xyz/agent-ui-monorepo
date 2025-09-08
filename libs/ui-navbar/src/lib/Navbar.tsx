@@ -4,10 +4,10 @@ import { Avatar, Flex, Skeleton, Tooltip, Typography } from 'antd';
 import { CSSProperties, useMemo } from 'react';
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
+import agentsFun from '../assets/agent-agentsfun-logo.png';
 import modiusLogo from '../assets/agent-modius-logo.png';
 import optimusLogo from '../assets/agent-optimus-logo.png';
 import traderLogo from '../assets/agent-predict-logo.png';
-import agentsFun from '../assets/agent-agentsfun-logo.png';
 
 const { Title, Text } = Typography;
 
