@@ -1,5 +1,6 @@
 import nx from '@nx/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default [
   ...nx.configs['flat/base'],
@@ -39,6 +40,7 @@ export default [
     ],
     plugins: {
       prettier: prettier,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       'prettier/prettier': [
@@ -61,6 +63,8 @@ export default [
           ],
         },
       ],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
 ];

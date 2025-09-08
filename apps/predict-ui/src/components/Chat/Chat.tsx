@@ -1,10 +1,10 @@
+import { Chat as UiChat, type EachChat } from '@agent-ui-monorepo/ui-chat';
 import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
+import { CardV2 } from '../ui/Card';
 import { TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
-import { type EachChat, Chat as UiChat } from '@agent-ui-monorepo/ui-chat';
-import { CardV2 } from '../ui/Card';
 
 export const Chat = () => {
   const [notificationApi, contextHolder] = notification.useNotification();

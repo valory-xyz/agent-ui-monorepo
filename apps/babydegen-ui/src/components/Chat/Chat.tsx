@@ -1,10 +1,10 @@
+import { Chat as UiChat, EachChat } from '@agent-ui-monorepo/ui-chat';
 import { Card, notification } from 'antd';
 import { useCallback, useState } from 'react';
 
 import { agentType } from '../../utils/agentMap';
 import { OperatingProtocols, TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
-import { EachChat, Chat as UiChat } from '@agent-ui-monorepo/ui-chat';
 
 export const Chat = () => {
   const [currentText, setCurrentText] = useState('');

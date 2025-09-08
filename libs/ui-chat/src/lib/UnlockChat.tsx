@@ -1,6 +1,6 @@
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { LockOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
-import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 
 const { Text, Title } = Typography;
 

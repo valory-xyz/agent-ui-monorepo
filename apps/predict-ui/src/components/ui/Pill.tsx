@@ -1,8 +1,8 @@
+import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { Badge, Flex } from 'antd';
 import { CSSProperties, ReactNode } from 'react';
 
 import { COLOR } from '../../constants/theme';
-import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 
 type PillProps = {
   type?: 'primary' | 'danger';

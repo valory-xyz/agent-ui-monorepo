@@ -1,16 +1,15 @@
-import { Flex, Spin, Typography } from 'antd';
-import styled from 'styled-components';
 import { UNICODE_SYMBOLS, X_POST_URL } from '@agent-ui-monorepo/util-constants-and-types';
+import { Flex, Spin, Typography } from 'antd';
+import { FC } from 'react';
+import styled from 'styled-components';
 
 import xActivityEmptyLogo from '../assets/x-activity-empty.png';
-import { Card } from './ui/Card';
-
-import { ErrorState } from './ui/ErrorState';
-import { EmptyState } from './ui/EmptyState';
-import { formatTimestampToMonthDay } from '../utils/date';
-import { FC } from 'react';
 import { COLOR } from '../constants/theme';
 import { useXActivity } from '../hooks/useXActivity';
+import { formatTimestampToMonthDay } from '../utils/date';
+import { Card } from './ui/Card';
+import { EmptyState } from './ui/EmptyState';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Link } = Typography;
 

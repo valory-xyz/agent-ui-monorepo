@@ -1,5 +1,6 @@
-import errorLogo from '../../assets/error.png';
 import { Flex, Typography } from 'antd';
+
+import errorLogo from '../../assets/error.png';
 
 const { Text } = Typography;
 

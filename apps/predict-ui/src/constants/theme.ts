@@ -1,4 +1,4 @@
-import { ThemeConfig, theme } from 'antd';
+import { theme, ThemeConfig } from 'antd';
 
 export const COLOR = {
   PRIMARY: '#884dff',

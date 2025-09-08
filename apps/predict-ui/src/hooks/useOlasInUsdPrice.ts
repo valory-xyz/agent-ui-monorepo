@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { OLAS_ADDRESS } from '@agent-ui-monorepo/util-constants-and-types';
+import { useQuery } from '@tanstack/react-query';
 
 import { COINGECKO_OLAS_IN_USD_PRICE_URL } from '../constants/urls';
 

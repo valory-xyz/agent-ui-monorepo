@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { CHART_HEIGHT } from '../../constants/sizes';
 
 export const NoDataContainer = styled.div`
