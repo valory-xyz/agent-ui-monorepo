@@ -47,7 +47,6 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   const getType = useCallback((type: TradingType) => {
     if (type === 'balanced') return 'primary';
     if (type === 'risky') return 'danger';
-    return undefined;
   }, []);
 
   return (
