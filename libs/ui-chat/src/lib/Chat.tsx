@@ -12,7 +12,7 @@ const { TextArea } = Input;
 const { Title } = Typography;
 
 const commonChatStyles: CSSProperties = { height: 300, margin: '16px 0' };
-const btnStyles: CSSProperties = { position: 'absolute', top: 8, right: 8 };
+const commonBtnStyles: CSSProperties = { position: 'absolute', top: 8, right: 8 };
 
 const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
   <Flex align="center" justify="center" style={commonChatStyles}>
@@ -47,17 +47,17 @@ export const Chat = ({
   const btnStyle = useMemo(() => {
     if (agentType === 'predict') {
       return {
-        ...btnStyles,
+        ...commonBtnStyles,
         color: GLOBAL_COLORS.BLACK,
         background: GLOBAL_COLORS.WHITE,
       };
     }
 
     if (agentType === 'modius') {
-      return { ...btnStyles, color: GLOBAL_COLORS.BLACK };
+      return { ...commonBtnStyles, color: GLOBAL_COLORS.BLACK };
     }
 
-    return { ...btnStyles, color: GLOBAL_COLORS.WHITE };
+    return { ...commonBtnStyles, color: GLOBAL_COLORS.WHITE };
   }, [agentType]);
 
   return (
