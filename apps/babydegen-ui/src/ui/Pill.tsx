@@ -10,6 +10,7 @@ type PillProps = {
   children: ReactNode;
 };
 
+// TODO: add a ui-pill nxx lib and move this there
 export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
   return (
     <Flex

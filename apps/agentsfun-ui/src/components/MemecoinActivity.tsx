@@ -1,18 +1,18 @@
 import {
-  UNICODE_SYMBOLS,
   AGENTS_FUN_URL,
+  UNICODE_SYMBOLS,
   X_POST_URL,
 } from '@agent-ui-monorepo/util-constants-and-types';
-
-import { MemecoinActivityAction } from '../types';
-import memecoinActivityEmptyLogo from '../assets/memecoin-activity-empty.png';
-import { Card } from './ui/Card';
 import { Flex, Spin, Typography } from 'antd';
-import { ErrorState } from './ui/ErrorState';
-import { EmptyState } from './ui/EmptyState';
-import { formatTimestampToMonthDay } from '../utils/date';
 import { FC, useMemo } from 'react';
+
+import memecoinActivityEmptyLogo from '../assets/memecoin-activity-empty.png';
 import { useMemecoinActivity } from '../hooks/useMemecoinActivity';
+import { MemecoinActivityAction } from '../types';
+import { formatTimestampToMonthDay } from '../utils/date';
+import { Card } from './ui/Card';
+import { EmptyState } from './ui/EmptyState';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text, Link } = Typography;
 

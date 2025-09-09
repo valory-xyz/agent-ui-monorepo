@@ -1,13 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { getMechSender, getOpenMarkets, getStakingService } from '../../utils/graphql/queries';
-
 import { NA } from '@agent-ui-monorepo/util-constants-and-types';
-import { TraderAgent } from '../../types';
-import { StatisticCard } from './StatisticCard';
-import { useMemo } from 'react';
-import { useOlasInUsdPrice } from '../../hooks/useOlasInUsdPrice';
-import { Flex, Tooltip, Typography } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import { Flex, Tooltip, Typography } from 'antd';
+import { useMemo } from 'react';
+
+import { useOlasInUsdPrice } from '../../hooks/useOlasInUsdPrice';
+import { TraderAgent } from '../../types';
+import { getMechSender, getOpenMarkets, getStakingService } from '../../utils/graphql/queries';
+import { StatisticCard } from './StatisticCard';
 
 const { Text, Paragraph } = Typography;
 

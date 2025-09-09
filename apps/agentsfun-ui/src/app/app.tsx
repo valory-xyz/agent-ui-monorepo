@@ -1,16 +1,16 @@
+import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Flex } from 'antd';
-import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
 
-import { COLOR, THEME_CONFIG } from '../constants/theme';
-import { useAgentDetails } from '../hooks/useAgentDetails';
-import { Persona } from '../components/Persona';
-import { XActivity } from '../components/XActivity';
-import { MemecoinActivity } from '../components/MemecoinActivity';
 import { AiGeneratedMedia } from '../components/AiGeneratedMedia';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { MemecoinActivity } from '../components/MemecoinActivity';
+import { Persona } from '../components/Persona';
+import { XActivity } from '../components/XActivity';
+import { COLOR, THEME_CONFIG } from '../constants/theme';
+import { useAgentDetails } from '../hooks/useAgentDetails';
 
 const StyledApp = styled.div`
   min-height: 100vh;

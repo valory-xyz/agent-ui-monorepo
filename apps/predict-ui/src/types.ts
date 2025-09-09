@@ -2,6 +2,7 @@ export type AgentInfoResponse = {
   address: `0x${string}`;
   safe_address: `0x${string}`;
   agent_ids: number[];
+  trading_type: TradingType;
 };
 
 export type TraderAgent = {
@@ -13,7 +14,7 @@ export type TraderAgent = {
   totalPayout: string;
   totalFees: string;
   bets: {
-    timestamp: number;
+    timestamp: number | string;
   }[];
   blockNumber: string;
   blockTimestamp: string;
@@ -79,4 +80,19 @@ export type Question = {
 export type Service = {
   id: string;
   olasRewardsEarned: string;
+};
+
+export type Features = {
+  isChatEnabled: boolean;
+};
+
+export type TradingType = 'risky' | 'balanced';
+
+/**
+ * Chat response from the agent.
+ */
+export type ChatResponse = {
+  reasoning: string;
+  trading_type: TradingType;
+  previous_trading_type?: TradingType;
 };

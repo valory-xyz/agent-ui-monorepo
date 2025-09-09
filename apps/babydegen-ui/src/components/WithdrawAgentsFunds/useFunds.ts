@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { useQuery } from '@tanstack/react-query';
 
-import { WithdrawalFunds } from '../../types';
 import { mockFunds } from '../../mocks/mockFundsWithdrawal';
+import { WithdrawalFunds } from '../../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 

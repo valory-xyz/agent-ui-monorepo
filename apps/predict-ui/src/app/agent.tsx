@@ -1,13 +1,19 @@
-import { Flex } from 'antd';
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
+import { Flex } from 'antd';
+import styled from 'styled-components';
+
+import { AgentActivity } from '../components/AgentActivity';
 import { AgentDetailsCard } from '../components/AgentDetailsCard/AgentDetailsCard';
 import { LoaderCard } from '../components/AgentDetailsCard/LoaderCard';
-import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
-import { useAgentDetails } from '../hooks/useAgentDetails';
-import { NavBarContainer } from '../components/ui/NavBarContainer';
-import styled from 'styled-components';
-import { AgentActivity } from '../components/AgentActivity';
 import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
+import { Chat } from '../components/Chat/Chat';
+import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
+import { Strategy } from '../components/Strategy';
+import { Card } from '../components/ui/Card';
+import { NavBarContainer } from '../components/ui/NavBarContainer';
+import { useAgentDetails } from '../hooks/useAgentDetails';
+import { useFeatures } from '../hooks/useFeatures';
 
 const AgentContent = styled.div`
   display: flex;
@@ -49,6 +55,27 @@ const AgentNotFound = () => (
   </Flex>
 );
 
+const StrategyAndChat = () => {
+  const { isLoading, data } = useFeatures();
+
+  if (isLoading) return;
+
+  if (!data?.isChatEnabled) {
+    return (
+      <Card>
+        <UnlockChat />
+      </Card>
+    );
+  }
+
+  return (
+    <>
+      <Strategy />
+      <Chat />
+    </>
+  );
+};
+
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
@@ -70,6 +97,7 @@ export const Agent = () => {
         />
         <AgentStatistics agent={data.traderInfo} />
         <AgentActivity agentId={data.traderInfo.id} />
+        <StrategyAndChat />
       </AgentContent>
     </Flex>
   );

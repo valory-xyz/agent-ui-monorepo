@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
-import { getTraderAgentBets } from '../../utils/graphql/queries';
-
 import { NA } from '@agent-ui-monorepo/util-constants-and-types';
+import { useQuery } from '@tanstack/react-query';
+
 import { TraderAgent } from '../../types';
+import { getTraderAgentBets } from '../../utils/graphql/queries';
 import { StatisticCard } from './StatisticCard';
 
 const INVALID_ANSWER_HEX = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
