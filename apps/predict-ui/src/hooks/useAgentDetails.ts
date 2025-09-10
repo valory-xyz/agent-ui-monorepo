@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
 import { AgentInfoResponse, TraderAgent } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
+import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
@@ -13,7 +14,7 @@ export const useAgentDetails = () => {
     isLoading: isAgentInfoLoading,
     isError: isAgentInfoError,
   } = useQuery<AgentInfoResponse>({
-    queryKey: ['agentInfo'],
+    queryKey: [REACT_QUERY_KEYS.AGENT_INFO],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
         return new Promise((resolve) => {
