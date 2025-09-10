@@ -1,12 +1,15 @@
 import { Chat as UiChat, type EachChat } from '@agent-ui-monorepo/ui-chat';
+import { useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
+import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
 import { CardV2 } from '../ui/Card';
 import { TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
 
 export const Chat = () => {
+  const queryClient = useQueryClient();
   const [notificationApi, contextHolder] = notification.useNotification();
 
   const [currentText, setCurrentText] = useState('');
@@ -24,6 +27,9 @@ export const Chat = () => {
 
     onSendChat(currentText, {
       onSuccess: (data) => {
+        // refetch the latest data
+        queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.AGENT_INFO] });
+
         setChats((prevChats) => {
           const chatsAfterConfig = [...prevChats];
 
@@ -41,7 +47,7 @@ export const Chat = () => {
           return chatsAfterConfig;
         });
       },
-      onError: (error) => {
+      onError: () => {
         notificationApi.error({ message: 'Failed to send chat, please try again.' });
 
         // Remove the last chat if it was the one that failed to send
@@ -57,7 +63,7 @@ export const Chat = () => {
         }
       },
     });
-  }, [chats, currentText, onSendChat, notificationApi]);
+  }, [chats, currentText, onSendChat, notificationApi, queryClient]);
 
   return (
     <CardV2>

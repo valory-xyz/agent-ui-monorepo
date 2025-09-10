@@ -4,41 +4,66 @@ import { CSSProperties, ReactNode } from 'react';
 
 import { COLOR } from '../../constants/theme';
 
+const flexStyle: CSSProperties = { display: 'inline-flex', borderRadius: 40 };
+
 type PillProps = {
-  type?: 'primary' | 'danger';
+  type?: 'primary' | 'danger' | 'neutral';
   size?: 'small' | 'large';
   style?: CSSProperties;
   children: ReactNode;
 };
 
+type PillType = NonNullable<PillProps['type']>;
+
+const PILL_STYLES: Record<PillType, { background: string; badgeColor: string; boxShadow: string }> =
+  {
+    primary: {
+      background: GLOBAL_COLORS.BLUE_TRANSPARENT_10,
+      badgeColor: COLOR.BLUE,
+      boxShadow: `0px 0 10px ${COLOR.BLUE}20`,
+    },
+    danger: {
+      background: GLOBAL_COLORS.RED_TRANSPARENT_20,
+      badgeColor: COLOR.RED,
+      boxShadow: `0px 0 10px ${COLOR.RED}20`,
+    },
+    neutral: {
+      background: GLOBAL_COLORS.GRAY_TRANSPARENT_20,
+      badgeColor: COLOR.TEXT_PRIMARY,
+      boxShadow: 'none',
+    },
+  };
+
+const getSpacing = (size: 'small' | 'large', hasType: boolean) => ({
+  gap: size === 'small' ? 4 : 8,
+  padding: size === 'small' ? `2px 4px 2px ${hasType ? 16 : 8}px` : `6px 12px`,
+  marginLeft: hasType ? -28 : 0,
+});
+
 // TODO: add a ui-pill nxx lib and move this there
-export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
+export const Pill = ({ type = 'neutral', size = 'small', style, children }: PillProps) => {
+  const { background, badgeColor, boxShadow } = PILL_STYLES[type];
+  const spacing = getSpacing(size, !!type);
+
   return (
     <Flex
-      gap={size === 'small' ? 4 : 8}
       align="center"
+      gap={spacing.gap}
       style={{
-        display: 'inline-flex',
-        padding:
-          size === 'small' ? `2px 4px 2px ${type ? 16 : 8}px` : `6px 12px 6px ${type ? 12 : 6}px`,
-        borderRadius: 40,
-        marginLeft: -28,
-        backgroundColor:
-          type === 'primary' ? GLOBAL_COLORS.BLUE_TRANSPARENT_10 : GLOBAL_COLORS.RED_TRANSPARENT_20,
-        ...(style || {}),
+        ...flexStyle,
+        padding: spacing.padding,
+        marginLeft: spacing.marginLeft,
+        backgroundColor: background,
+        ...style,
       }}
     >
       {type && (
         <Badge
+          size="small"
           className={`ant-tag ant-tag-${type}`}
-          color={type === 'primary' ? COLOR.BLUE : COLOR.RED}
-          styles={{
-            indicator: {
-              width: 8,
-              height: 8,
-              boxShadow: `0px 0 0px 4px ${type === 'primary' ? COLOR.BLUE : COLOR.RED}40`,
-            },
-          }}
+          color={badgeColor}
+          style={{ display: 'none' }}
+          styles={{ indicator: { width: 8, height: 8, boxShadow } }}
         />
       )}
       {children}

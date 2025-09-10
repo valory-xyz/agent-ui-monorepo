@@ -1,6 +1,7 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { useQuery } from '@tanstack/react-query';
 
+import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
 import { AgentInfoResponse, TraderAgent } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
@@ -13,7 +14,7 @@ export const useAgentDetails = () => {
     isLoading: isAgentInfoLoading,
     isError: isAgentInfoError,
   } = useQuery<AgentInfoResponse>({
-    queryKey: ['agentInfo'],
+    queryKey: [REACT_QUERY_KEYS.AGENT_INFO],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) {
         return new Promise((resolve) => {
