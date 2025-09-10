@@ -4,6 +4,8 @@ import { CSSProperties, ReactNode } from 'react';
 
 import { COLOR } from '../../constants/theme';
 
+const flexStyle: CSSProperties = { display: 'inline-flex', borderRadius: 40 };
+
 type PillProps = {
   type?: 'primary' | 'danger' | 'neutral';
   size?: 'small' | 'large';
@@ -38,6 +40,7 @@ const getSpacing = (size: 'small' | 'large', hasType: boolean) => ({
   marginLeft: hasType ? -28 : 0,
 });
 
+// TODO: add a ui-pill nxx lib and move this there
 export const Pill = ({ type = 'neutral', size = 'small', style, children }: PillProps) => {
   const { background, badgeColor, boxShadow } = PILL_STYLES[type];
   const spacing = getSpacing(size, !!type);
@@ -47,10 +50,9 @@ export const Pill = ({ type = 'neutral', size = 'small', style, children }: Pill
       align="center"
       gap={spacing.gap}
       style={{
-        display: 'inline-flex',
+        ...flexStyle,
         padding: spacing.padding,
         marginLeft: spacing.marginLeft,
-        borderRadius: 40,
         backgroundColor: background,
         ...style,
       }}
@@ -61,9 +63,7 @@ export const Pill = ({ type = 'neutral', size = 'small', style, children }: Pill
           className={`ant-tag ant-tag-${type}`}
           color={badgeColor}
           style={{ display: 'none' }}
-          styles={{
-            indicator: { width: 8, height: 8, boxShadow },
-          }}
+          styles={{ indicator: { width: 8, height: 8, boxShadow } }}
         />
       )}
       {children}
