@@ -1,12 +1,12 @@
 import { Chat as UiChat, type EachChat } from '@agent-ui-monorepo/ui-chat';
+import { useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
+import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
 import { CardV2 } from '../ui/Card';
 import { TradingStrategy } from './SystemChat';
 import { useChats } from './useChats';
-import { useQueryClient } from '@tanstack/react-query';
-import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
 
 export const Chat = () => {
   const queryClient = useQueryClient();
