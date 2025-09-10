@@ -1,7 +1,7 @@
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
-import { ReactNode, useCallback } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { TRADING_TYPE_MAP } from '../../constants/textMaps';
@@ -9,6 +9,8 @@ import { TradingType } from '../../types';
 import { Pill } from '../ui/Pill';
 
 const { Text } = Typography;
+
+const pillStyle: CSSProperties = { fontSize: 14, marginLeft: 0, lineHeight: 'normal' };
 
 const SystemContainer = styled(Flex)`
   width: 100%;
@@ -32,7 +34,7 @@ type SystemMessageProps = {
 const SystemMessage = ({ label, children }: SystemMessageProps) => (
   <SystemContainer align="center" gap={16}>
     <Text type="secondary">{label}</Text>
-    <Flex gap={12} wrap="wrap">
+    <Flex gap={12} wrap="wrap" align="center">
       {children}
     </Flex>
   </SystemContainer>
@@ -44,20 +46,15 @@ type TradingStrategyProps = { from: TradingType; to: TradingType };
  * Trading strategy update message.
  */
 export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
-  const getType = useCallback((type: TradingType) => {
-    if (type === 'balanced') return 'primary';
-    if (type === 'risky') return 'danger';
-  }, []);
-
   return (
     <SystemMessage label="Trading strategy updated:">
-      <Pill type={getType(from)} size="large" style={{ marginLeft: 0, fontSize: 14 }}>
+      <Pill size="large" style={pillStyle}>
         {TRADING_TYPE_MAP[from]}
       </Pill>
       {to && (
         <>
           <ArrowRightOutlined style={{ fontSize: 14, color: GLOBAL_COLORS.WHITE_TRANSPARENT_50 }} />
-          <Pill type={getType(to)} size="large" style={{ marginLeft: 0 }}>
+          <Pill size="large" style={pillStyle}>
             {TRADING_TYPE_MAP[to]}
           </Pill>
         </>

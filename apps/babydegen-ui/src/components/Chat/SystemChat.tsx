@@ -30,7 +30,7 @@ const SystemMessage = ({ type, label, children }: SystemMessageProps) => (
     <Text type="secondary" style={{ width: type === 'strategy' ? 174 : 200, flex: 'none' }}>
       {label}
     </Text>
-    <Flex gap={type === 'strategy' ? 12 : 8} wrap="wrap">
+    <Flex gap={type === 'strategy' ? 12 : 8} wrap="wrap" align="center">
       {children}
     </Flex>
   </Flex>
