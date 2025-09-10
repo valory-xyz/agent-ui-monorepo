@@ -55,7 +55,7 @@ const AgentNotFound = () => (
   </Flex>
 );
 
-const StrategyAndChat = () => {
+const ChatContent = () => {
   const { isLoading, data } = useFeatures();
 
   if (isLoading) return;
@@ -68,12 +68,7 @@ const StrategyAndChat = () => {
     );
   }
 
-  return (
-    <>
-      <Strategy />
-      <Chat />
-    </>
-  );
+  return <Chat />;
 };
 
 export const Agent = () => {
@@ -97,7 +92,8 @@ export const Agent = () => {
         />
         <AgentStatistics agent={data.traderInfo} />
         <AgentActivity agentId={data.traderInfo.id} />
-        <StrategyAndChat />
+        <Strategy />
+        <ChatContent />
       </AgentContent>
     </Flex>
   );
