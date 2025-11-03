@@ -24,7 +24,16 @@ export const useChats = () =>
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit prompt.');
+        let errorMessage = 'Failed to send chat, please try again.';
+        try {
+          const data = await response.json();
+          if (data?.error) {
+            errorMessage = data.error;
+          }
+        } catch {
+          // Ignore JSON parse errors
+        }
+        throw new Error(errorMessage);
       }
 
       return response.json();
