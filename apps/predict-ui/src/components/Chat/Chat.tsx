@@ -48,7 +48,7 @@ export const Chat = () => {
         });
       },
       onError: (error) => {
-        notificationApi.error({ message: error?.message || 'Failed to send chat.',});
+        notificationApi.error({ message: error?.message || 'Failed to send chat.' });
 
         // Remove the last chat if it was the one that failed to send
         const lastChat = updatedChats[updatedChats.length - 1];
