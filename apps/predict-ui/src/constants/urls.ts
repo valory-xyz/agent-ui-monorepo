@@ -1,9 +1,8 @@
 // subgraphs
 export const OLAS_AGENTS_SUBGRAPH_URL = 'https://predict-agents.subgraph.autonolas.tech';
-export const OLAS_MECH_SUBGRAPH_URL = 'https://subgraph.autonolas.tech/subgraphs/name/mech';
+export const OLAS_MECH_SUBGRAPH_URL = 'https://api.subgraph.autonolas.tech/api/proxy/mech';
 export const OMEN_SUBGRAPH_URL = 'https://omen.subgraph.autonolas.tech';
-export const GNOSIS_STAKING_SUBGRAPH_URL =
-  'https://gateway.thegraph.com/api/5c035877a4af18d178c96afe55ed41ae/subgraphs/id/F3iqL2iw5UTrP1qbb4S694pGEkBwzoxXp1TRikB2K4e';
+export const GNOSIS_STAKING_SUBGRAPH_URL = 'https://staking-gnosis.subgraph.autonolas.tech';
 
 // apps
 export const REGISTRY_AGENTS_URL = 'https://registry.olas.network/ethereum/agents';
