@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import { LOGO_MAP } from './constants';
 import { AgentType, ChatSize, EachChat } from './types';
 
-const chatStyles = { height: 360, overflow: 'auto' };
+const chatStyles = { width: '100%', height: 360, overflow: 'auto' };
 
 const AgentChatLogo = ({ agentType }: { agentType: AgentType }) => (
   <img
@@ -74,6 +74,9 @@ const ViewEachChat = ({ chat, isFirst, agentType, size }: ViewEachChatProps) => 
           background: GLOBAL_COLORS.WHITE_TRANSPARENT_10,
           backdropFilter: 'blur(10px)',
         };
+      }
+      if (agentType === 'agentsFun') {
+        return { background: GLOBAL_COLORS.NEUTRAL_GRAY };
       }
       return { background: GLOBAL_COLORS.DARK_GRAY };
     })();

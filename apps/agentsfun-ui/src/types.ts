@@ -31,3 +31,11 @@ export type GeneratedMedia = {
   postId: string;
   type: 'image' | 'video';
 };
+
+export type ChatResponse = {
+  reasoning: string;
+};
+
+export type Features = {
+  isChatEnabled: boolean;
+};
