@@ -1,6 +1,6 @@
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
-import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Card, Flex } from 'antd';
 import { ConfigProvider } from 'antd';
 import styled from 'styled-components';

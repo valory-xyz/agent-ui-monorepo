@@ -39,4 +39,3 @@ export const useChats = () =>
       return response.json();
     },
   });
-

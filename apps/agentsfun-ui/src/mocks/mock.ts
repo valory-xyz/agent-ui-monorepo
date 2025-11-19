@@ -1,4 +1,10 @@
-import { AgentInfoResponse, ChatResponse, GeneratedMedia, MemecoinActivity, XActivity } from '../types';
+import {
+  AgentInfoResponse,
+  ChatResponse,
+  GeneratedMedia,
+  MemecoinActivity,
+  XActivity,
+} from '../types';
 
 export const mockAgentInfo: AgentInfoResponse = {
   address: '0x4656a6bB8d5545E02c7A59BCaf25dF1fEE55F3B8',
