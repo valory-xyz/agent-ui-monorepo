@@ -1,8 +1,7 @@
-import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
-import { FIVE_MINUTES, FIVE_SECONDS } from '@agent-ui-monorepo/util-constants-and-types';
+import { FIVE_MINUTES, FIVE_SECONDS, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { useQuery } from '@tanstack/react-query';
 
-import { mockFeatures } from '../mocks/mockFeatures';
+import { mockFeatures } from '../mocks';
 import { Features } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';

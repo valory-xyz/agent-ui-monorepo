@@ -1,12 +1,18 @@
-import { Chat as UiChat, type EachChat } from '@agent-ui-monorepo/ui-chat';
+import {
+  Chat as UiChat,
+  type EachChat,
+  handleChatError,
+  useChats,
+} from '@agent-ui-monorepo/ui-chat';
 import { useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
 import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
+import { mockChat } from '../../mocks/mockChat';
+import { ChatResponse } from '../../types';
 import { CardV2 } from '../ui/Card';
 import { TradingStrategy } from './SystemChat';
-import { useChats } from './useChats';
 
 export const Chat = () => {
   const queryClient = useQueryClient();
@@ -15,7 +21,7 @@ export const Chat = () => {
   const [currentText, setCurrentText] = useState('');
   const [chats, setChats] = useState<EachChat[]>([]);
 
-  const { isPending: isSendingChat, mutateAsync: onSendChat } = useChats();
+  const { isPending: isSendingChat, mutateAsync: onSendChat } = useChats<ChatResponse>(mockChat);
 
   // Send chat to the agent
   const handleSend = useCallback(async () => {
@@ -48,18 +54,10 @@ export const Chat = () => {
         });
       },
       onError: (error) => {
-        notificationApi.error({ message: error?.message || 'Failed to send chat.' });
-
-        // Remove the last chat if it was the one that failed to send
-        const lastChat = updatedChats[updatedChats.length - 1];
-        if (!lastChat || !lastChat.text) return;
-
-        if (lastChat.type !== 'user') return;
-
-        // Remove the last chat and restore the current text
-        setChats(updatedChats.slice(0, -1));
-        if (typeof lastChat.text === 'string') {
-          setCurrentText(lastChat.text);
+        const rollback = handleChatError({ error, chats: updatedChats });
+        if (rollback) {
+          setChats(rollback.updatedChats);
+          setCurrentText(rollback.restoredText);
         }
       },
     });

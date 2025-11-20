@@ -19,7 +19,7 @@ export const UnlockChat = ({ type }: { type?: 'secondary' }) => {
         align="center"
         justify="center"
         gap={24}
-        style={{ height: 240, margin: '16px 0' }}
+        style={{ height: 240, margin: '16px 0', width: '100%' }}
       >
         <LockOutlined style={{ fontSize: 48, color: GLOBAL_COLORS.MEDIUM_GRAY }} />
         <Text type="secondary" style={{ fontSize: 16, maxWidth: 360, textAlign: 'center' }}>

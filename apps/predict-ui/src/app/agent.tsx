@@ -58,7 +58,7 @@ const AgentNotFound = () => (
 const ChatContent = () => {
   const { isLoading, data } = useFeatures();
 
-  if (isLoading) return;
+  if (isLoading) return null;
 
   if (!data?.isChatEnabled) {
     return (

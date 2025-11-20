@@ -1,16 +1,17 @@
-import { Chat as UiChat, EachChat } from '@agent-ui-monorepo/ui-chat';
+import { Chat as UiChat, EachChat, useChats } from '@agent-ui-monorepo/ui-chat';
 import { Card, notification } from 'antd';
 import { useCallback, useState } from 'react';
 
+import { mockChat } from '../../mocks/mockChat';
+import { ChatResponse } from '../../types';
 import { agentType } from '../../utils/agentMap';
 import { OperatingProtocols, TradingStrategy } from './SystemChat';
-import { useChats } from './useChats';
 
 export const Chat = () => {
   const [currentText, setCurrentText] = useState('');
   const [chats, setChats] = useState<EachChat[]>([]);
 
-  const { isPending: isSendingChat, mutateAsync: onSendChat } = useChats();
+  const { isPending: isSendingChat, mutateAsync: onSendChat } = useChats<ChatResponse>(mockChat);
 
   // Send chat to the agent
   const handleSend = useCallback(async () => {
