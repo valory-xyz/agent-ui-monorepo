@@ -3,6 +3,7 @@ import {
   ChatResponse,
   GeneratedMedia,
   MemecoinActivity,
+  PerformanceSummary,
   XActivity,
 } from '../types';
 
@@ -68,4 +69,23 @@ export const mockMedia: GeneratedMedia[] = [
 export const mockChat: ChatResponse = {
   reasoning:
     "Thanks for your message! I'm processing your request and will update the persona accordingly.",
+};
+
+export const mockPerformanceSummary: PerformanceSummary = {
+  timestamp: 1763641360,
+  metrics: [
+    {
+      name: 'Total Impressions',
+      is_primary: true,
+      value: '979',
+      description: 'Total number of tweet impressions overall',
+    },
+    {
+      name: 'Total Likes',
+      is_primary: false,
+      value: '12',
+      description: 'Total number of likes overall',
+    },
+  ],
+  agent_behavior: 'The agent is a bro. He likes to post about crypto and memes.',
 };

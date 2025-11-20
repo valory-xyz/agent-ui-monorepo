@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { AiGeneratedMedia } from '../components/AiGeneratedMedia';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorBoundary } from '../components/ErrorBoundary';
+import { Performance } from '../components/Performance';
 import { Persona } from '../components/Persona';
 import { XActivity } from '../components/XActivity';
 import { COLOR, THEME_CONFIG } from '../constants/theme';
@@ -69,6 +70,7 @@ const Agent = () => {
       </NavBarContainer>
       <AgentContent vertical>
         <Persona />
+        <Performance />
         <XActivity />
         <ChatContent />
         <AiGeneratedMedia />
