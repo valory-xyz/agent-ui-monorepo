@@ -8,11 +8,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 
-import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
-import { mockChat } from '../../mocks/mockChat';
+import { mockChat } from '../../mocks/mock';
 import { ChatResponse } from '../../types';
-import { CardV2 } from '../ui/Card';
-import { TradingStrategy } from './SystemChat';
+import { Card } from '../ui/Card';
 
 export const Chat = () => {
   const queryClient = useQueryClient();
@@ -34,20 +32,13 @@ export const Chat = () => {
     onSendChat(currentText, {
       onSuccess: (data) => {
         // refetch the latest data
-        queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.AGENT_INFO] });
+        queryClient.invalidateQueries({ queryKey: ['agentInfo'] });
 
         setChats((prevChats) => {
           const chatsAfterConfig = [...prevChats];
 
           if (data.reasoning) {
             chatsAfterConfig.push({ type: 'agent' as const, text: data.reasoning });
-          }
-
-          if (data.previous_trading_type && data.trading_type) {
-            chatsAfterConfig.push({
-              type: 'system' as const,
-              text: <TradingStrategy from={data.previous_trading_type} to={data.trading_type} />,
-            });
           }
 
           return chatsAfterConfig;
@@ -64,17 +55,17 @@ export const Chat = () => {
   }, [chats, currentText, onSendChat, notificationApi, queryClient]);
 
   return (
-    <CardV2>
+    <Card>
       <UiChat
         isLoading={isSendingChat}
         currentText={currentText}
         chats={chats}
         onCurrentTextChange={setCurrentText}
         onSend={handleSend}
-        agentType="predict"
-        size="large"
+        agentType="agentsFun"
+        size="small"
       />
       {contextHolder}
-    </CardV2>
+    </Card>
   );
 };

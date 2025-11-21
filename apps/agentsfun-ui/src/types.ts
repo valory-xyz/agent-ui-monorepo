@@ -31,3 +31,22 @@ export type GeneratedMedia = {
   postId: string;
   type: 'image' | 'video';
 };
+
+export type ChatResponse = {
+  reasoning: string;
+};
+
+export type Features = {
+  isChatEnabled: boolean;
+};
+
+export type PerformanceSummary = {
+  timestamp: number;
+  metrics: {
+    name: 'Total Impressions' | 'Total Likes';
+    is_primary: boolean;
+    value: string;
+    description: string;
+  }[];
+  agent_behavior: string;
+};

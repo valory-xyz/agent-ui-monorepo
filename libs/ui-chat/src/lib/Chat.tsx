@@ -11,12 +11,32 @@ import { ViewChats } from './ViewChats';
 const { TextArea } = Input;
 const { Title } = Typography;
 
-const commonChatStyles: CSSProperties = { height: 300, margin: '16px 0' };
 const commonBtnStyles: CSSProperties = { position: 'absolute', top: 8, right: 8 };
 
+const getPlaceholder = (agentType: AgentType) => {
+  if (agentType === 'agentsFun') {
+    return "Describe the agent's persona";
+  }
+  return 'Give the agent custom guidance';
+};
+
+const getLogoSize = (agentType: AgentType) => {
+  if (agentType === 'agentsFun') {
+    return { width: 48, height: 48 };
+  }
+  return { width: 80, height: 80 };
+};
+
+const getContainerStyles = (agentType: AgentType) => {
+  if (agentType === 'agentsFun') {
+    return { width: '100%', height: 96 };
+  }
+  return { width: '100%', height: 300, margin: '16px 0' };
+};
+
 const EmptyChat = ({ agentType }: { agentType: AgentType }) => (
-  <Flex align="center" justify="center" style={commonChatStyles}>
-    <img src={LOGO_MAP[agentType]} alt="Update agent’s goal" style={{ width: 80, height: 80 }} />
+  <Flex align="center" justify="center" style={getContainerStyles(agentType)}>
+    <img src={LOGO_MAP[agentType]} alt="Update agent’s goal" style={getLogoSize(agentType)} />
   </Flex>
 );
 
@@ -76,8 +96,8 @@ export const Chat = ({
         <TextArea
           value={currentText}
           onChange={(e) => onCurrentTextChange(e.target.value)}
-          rows={4}
-          placeholder="Give the agent custom guidance"
+          rows={3}
+          placeholder={getPlaceholder(agentType)}
           style={{
             resize: 'none',
             paddingRight: 64,

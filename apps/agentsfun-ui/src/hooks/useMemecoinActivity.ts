@@ -1,7 +1,7 @@
 import { FORTYFIVE_SECONDS, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { useQuery } from '@tanstack/react-query';
 
-import { mockMemecoinActivity } from '../mock';
+import { mockMemecoinActivity } from '../mocks';
 import { MemecoinActivity as MemecoinActivityType } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';

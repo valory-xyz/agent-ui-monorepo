@@ -1,3 +1,4 @@
+import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Flex } from 'antd';
@@ -5,12 +6,15 @@ import { ConfigProvider } from 'antd';
 import styled from 'styled-components';
 
 import { AiGeneratedMedia } from '../components/AiGeneratedMedia';
+import { Chat } from '../components/Chat/Chat';
 import { ErrorBoundary } from '../components/ErrorBoundary';
-import { MemecoinActivity } from '../components/MemecoinActivity';
+import { Performance } from '../components/Performance';
 import { Persona } from '../components/Persona';
+import { Card } from '../components/ui/Card';
 import { XActivity } from '../components/XActivity';
 import { COLOR, THEME_CONFIG } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
+import { useFeatures } from '../hooks/useFeatures';
 
 const StyledApp = styled.div`
   min-height: 100vh;
@@ -41,6 +45,22 @@ const NavBarContainer = styled.div`
   background-color: ${COLOR.WHITE};
 `;
 
+const ChatContent = () => {
+  const { isLoading, data } = useFeatures();
+
+  if (isLoading) return;
+
+  if (!data?.isChatEnabled) {
+    return (
+      <Card>
+        <UnlockChat />
+      </Card>
+    );
+  }
+
+  return <Chat />;
+};
+
 const Agent = () => {
   const { data, isLoading } = useAgentDetails();
 
@@ -51,8 +71,9 @@ const Agent = () => {
       </NavBarContainer>
       <AgentContent vertical>
         <Persona />
+        <Performance />
         <XActivity />
-        <MemecoinActivity />
+        <ChatContent />
         <AiGeneratedMedia />
       </AgentContent>
     </Flex>
