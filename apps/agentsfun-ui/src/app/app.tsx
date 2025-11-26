@@ -57,7 +57,7 @@ const ChatContent = () => {
 
 const Agent = () => {
   return (
-    <Flex vertical gap={24} style={{marginTop: 40}}>
+    <Flex vertical gap={24} style={{ marginTop: 40 }}>
       <AgentContent vertical>
         <Persona />
         <Performance />
