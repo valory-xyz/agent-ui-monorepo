@@ -1,5 +1,4 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
-import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { Flex } from 'antd';
 import { ConfigProvider } from 'antd';
@@ -12,8 +11,7 @@ import { Performance } from '../components/Performance';
 import { Persona } from '../components/Persona';
 import { Card } from '../components/ui/Card';
 import { XActivity } from '../components/XActivity';
-import { COLOR, THEME_CONFIG } from '../constants/theme';
-import { useAgentDetails } from '../hooks/useAgentDetails';
+import { THEME_CONFIG } from '../constants/theme';
 import { useFeatures } from '../hooks/useFeatures';
 
 const StyledApp = styled.div`
@@ -41,10 +39,6 @@ const AgentContent = styled(Flex)`
   margin: 0 auto;
 `;
 
-const NavBarContainer = styled.div`
-  background-color: ${COLOR.WHITE};
-`;
-
 const ChatContent = () => {
   const { isLoading, data } = useFeatures();
 
@@ -62,13 +56,8 @@ const ChatContent = () => {
 };
 
 const Agent = () => {
-  const { data, isLoading } = useAgentDetails();
-
   return (
-    <Flex vertical gap={24}>
-      <NavBarContainer>
-        <Navbar agentType="agentsFun" isLoading={isLoading} userAddress={data?.address} />
-      </NavBarContainer>
+    <Flex vertical gap={24} style={{marginTop: 40}}>
       <AgentContent vertical>
         <Persona />
         <Performance />
