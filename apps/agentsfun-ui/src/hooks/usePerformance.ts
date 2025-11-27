@@ -7,8 +7,8 @@ import { PerformanceSummary } from '../types';
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 const METRIC_NAMES_MAPPING = {
-  TOTAL_IMPRESSIONS: 'Total Impressions',
-  TOTAL_LIKES: 'Total Likes',
+  WEEKLY_IMPRESSIONS: 'Weekly Impressions',
+  WEEKLY_LIKES: 'Weekly Likes',
 } as const;
 
 type PerformanceMetrics = {
@@ -43,9 +43,9 @@ export const usePerformance = () => {
 
   if (metricsData) {
     const impressions = metricsData.find(
-      (metric) => metric.name === METRIC_NAMES_MAPPING.TOTAL_IMPRESSIONS,
+      (metric) => metric.name === METRIC_NAMES_MAPPING.WEEKLY_IMPRESSIONS,
     );
-    const likes = metricsData.find((metric) => metric.name === METRIC_NAMES_MAPPING.TOTAL_LIKES);
+    const likes = metricsData.find((metric) => metric.name === METRIC_NAMES_MAPPING.WEEKLY_LIKES);
 
     metrics.totalImpressions = parseInt(impressions?.value || '0', 10);
     metrics.totalLikes = parseInt(likes?.value || '0', 10);

@@ -56,7 +56,7 @@ export const Performance = () => {
           <Col xs={24} sm={12}>
             <MetricCard
               icon={<Chart />}
-              label="Total Impressions"
+              label="Weekly Impressions"
               value={totalImpressions}
               tooltip={impressionsTooltip}
             />
@@ -64,7 +64,7 @@ export const Performance = () => {
           <Col xs={24} sm={12}>
             <MetricCard
               icon={<Heart />}
-              label="Total Likes"
+              label="Weekly Likes"
               value={totalLikes}
               tooltip={likesTooltip}
             />

@@ -75,17 +75,17 @@ export const mockPerformanceSummary: PerformanceSummary = {
   timestamp: 1763641360,
   metrics: [
     {
-      name: 'Total Impressions',
+      name: 'Weekly Impressions',
       is_primary: true,
       value: '979',
-      description: 'Total number of tweet impressions overall',
+      description: 'Total number of times your agent’s posts were viewed on X (non-unique) in the last 7 days. A view counts whenever any part of the post appears on screen.',
     },
     {
-      name: 'Total Likes',
+      name: 'Weekly Likes',
       is_primary: false,
       value: '12',
-      description: 'Total number of likes overall',
+      description: 'Total number of times users tapped the heart icon on your agent’s posts on X in the last 7 days.',
     },
   ],
-  agent_behavior: 'The agent is a bro. He likes to post about crypto and memes.',
+  agent_behavior: 'Total number of times users tapped the heart icon on your agent’s posts on X in the last 7 days.',
 };
