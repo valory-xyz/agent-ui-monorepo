@@ -45,7 +45,7 @@ const Loader = () => (
 );
 
 export const Performance = () => {
-  const { isLoading, totalImpressions, totalLikes, impressionsTooltip, likesTooltip } =
+  const { isLoading, weeklyImpressions, weeklyLikes, impressionsTooltip, likesTooltip } =
     usePerformance();
 
   if (isLoading) return <Loader />;
@@ -57,7 +57,7 @@ export const Performance = () => {
             <MetricCard
               icon={<Chart />}
               label="Weekly Impressions"
-              value={totalImpressions}
+              value={weeklyImpressions}
               tooltip={impressionsTooltip}
             />
           </Col>
@@ -65,7 +65,7 @@ export const Performance = () => {
             <MetricCard
               icon={<Heart />}
               label="Weekly Likes"
-              value={totalLikes}
+              value={weeklyLikes}
               tooltip={likesTooltip}
             />
           </Col>

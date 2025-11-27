@@ -12,8 +12,8 @@ const METRIC_NAMES_MAPPING = {
 } as const;
 
 type PerformanceMetrics = {
-  totalImpressions: number;
-  totalLikes: number;
+  weeklyImpressions: number;
+  weeklyLikes: number;
   impressionsTooltip?: string;
   likesTooltip?: string;
 };
@@ -37,8 +37,8 @@ export const usePerformance = () => {
 
   const metricsData = query.data?.metrics;
   const metrics: PerformanceMetrics = {
-    totalImpressions: 0,
-    totalLikes: 0,
+    weeklyImpressions: 0,
+    weeklyLikes: 0,
   };
 
   if (metricsData) {
@@ -47,16 +47,16 @@ export const usePerformance = () => {
     );
     const likes = metricsData.find((metric) => metric.name === METRIC_NAMES_MAPPING.WEEKLY_LIKES);
 
-    metrics.totalImpressions = parseInt(impressions?.value || '0', 10);
-    metrics.totalLikes = parseInt(likes?.value || '0', 10);
+    metrics.weeklyImpressions = parseInt(impressions?.value || '0', 10);
+    metrics.weeklyLikes = parseInt(likes?.value || '0', 10);
     metrics.impressionsTooltip = impressions?.description;
     metrics.likesTooltip = likes?.description;
   }
 
   return {
     ...query,
-    totalImpressions: metrics.totalImpressions,
-    totalLikes: metrics.totalLikes,
+    weeklyImpressions: metrics.weeklyImpressions,
+    weeklyLikes: metrics.weeklyLikes,
     impressionsTooltip: metrics.impressionsTooltip,
     likesTooltip: metrics.likesTooltip,
   };
