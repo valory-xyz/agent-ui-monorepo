@@ -7,13 +7,13 @@ import { PerformanceSummary } from '../types';
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 const METRIC_NAMES_MAPPING = {
-  TOTAL_IMPRESSIONS: 'Total Impressions',
-  TOTAL_LIKES: 'Total Likes',
+  WEEKLY_IMPRESSIONS: 'Weekly Impressions',
+  WEEKLY_LIKES: 'Weekly Likes',
 } as const;
 
 type PerformanceMetrics = {
-  totalImpressions: number;
-  totalLikes: number;
+  weeklyImpressions: number;
+  weeklyLikes: number;
   impressionsTooltip?: string;
   likesTooltip?: string;
 };
@@ -37,26 +37,26 @@ export const usePerformance = () => {
 
   const metricsData = query.data?.metrics;
   const metrics: PerformanceMetrics = {
-    totalImpressions: 0,
-    totalLikes: 0,
+    weeklyImpressions: 0,
+    weeklyLikes: 0,
   };
 
   if (metricsData) {
     const impressions = metricsData.find(
-      (metric) => metric.name === METRIC_NAMES_MAPPING.TOTAL_IMPRESSIONS,
+      (metric) => metric.name === METRIC_NAMES_MAPPING.WEEKLY_IMPRESSIONS,
     );
-    const likes = metricsData.find((metric) => metric.name === METRIC_NAMES_MAPPING.TOTAL_LIKES);
+    const likes = metricsData.find((metric) => metric.name === METRIC_NAMES_MAPPING.WEEKLY_LIKES);
 
-    metrics.totalImpressions = parseInt(impressions?.value || '0', 10);
-    metrics.totalLikes = parseInt(likes?.value || '0', 10);
+    metrics.weeklyImpressions = parseInt(impressions?.value || '0', 10);
+    metrics.weeklyLikes = parseInt(likes?.value || '0', 10);
     metrics.impressionsTooltip = impressions?.description;
     metrics.likesTooltip = likes?.description;
   }
 
   return {
     ...query,
-    totalImpressions: metrics.totalImpressions,
-    totalLikes: metrics.totalLikes,
+    weeklyImpressions: metrics.weeklyImpressions,
+    weeklyLikes: metrics.weeklyLikes,
     impressionsTooltip: metrics.impressionsTooltip,
     likesTooltip: metrics.likesTooltip,
   };

@@ -43,7 +43,7 @@ export type Features = {
 export type PerformanceSummary = {
   timestamp: number;
   metrics: {
-    name: 'Total Impressions' | 'Total Likes';
+    name: 'Weekly Impressions' | 'Weekly Likes';
     is_primary: boolean;
     value: string;
     description: string;
