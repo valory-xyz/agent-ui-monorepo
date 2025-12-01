@@ -1,5 +1,4 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
-import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { Flex } from 'antd';
 import styled from 'styled-components';
 
@@ -11,7 +10,6 @@ import { Chat } from '../components/Chat/Chat';
 import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
-import { NavBarContainer } from '../components/ui/NavBarContainer';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
@@ -21,12 +19,11 @@ const AgentContent = styled.div`
   gap: 24px;
   max-width: 720px;
   width: 100%;
-  margin: 0 auto;
+  margin: 48px auto 0;
 `;
 
 const AgentLoader = () => (
   <Flex vertical gap={24}>
-    <NavBarContainer />
     <AgentContent>
       <LoaderCard />
     </AgentContent>
@@ -35,9 +32,6 @@ const AgentLoader = () => (
 
 const AgentError = () => (
   <Flex vertical gap={24}>
-    <NavBarContainer>
-      <Navbar agentType="trader" />
-    </NavBarContainer>
     <AgentContent>
       <LoadingError />
     </AgentContent>
@@ -46,9 +40,6 @@ const AgentError = () => (
 
 const AgentNotFound = () => (
   <Flex vertical gap={24}>
-    <NavBarContainer>
-      <Navbar agentType="trader" />
-    </NavBarContainer>
     <AgentContent>
       <AgentNotFoundError />
     </AgentContent>
@@ -80,9 +71,6 @@ export const Agent = () => {
 
   return (
     <Flex vertical gap={24}>
-      <NavBarContainer>
-        <Navbar agentType="trader" userAddress={data.traderInfo.id} />
-      </NavBarContainer>
       <AgentContent>
         <AgentDetailsCard
           agent={{
