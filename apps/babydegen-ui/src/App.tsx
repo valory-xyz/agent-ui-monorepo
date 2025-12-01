@@ -35,7 +35,11 @@ const App = () => {
   return (
     <ErrorBoundary>
       <AntdApp>
-        <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24, marginTop: 48 }} gap={24}>
+        <Flex
+          vertical
+          style={{ width: '100%', minHeight: '100vh', paddingBottom: 24, marginTop: 48 }}
+          gap={24}
+        >
           <Flex
             vertical
             gap={24}
