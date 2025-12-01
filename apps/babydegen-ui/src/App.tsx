@@ -1,5 +1,4 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
-import { Navbar } from '@agent-ui-monorepo/ui-navbar';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { App as AntdApp, Card, Flex } from 'antd';
 
@@ -10,8 +9,6 @@ import { Portfolio } from './components/Portfolio/Portfolio';
 import { Strategy } from './components/Strategy/Strategy';
 import { WithdrawAgentsFunds } from './components/WithdrawAgentsFunds/WithdrawAgentsFunds';
 import { useFeatures } from './hooks/useFeatures';
-import { usePortfolio } from './hooks/usePortfolio';
-import { agentType } from './utils/agentMap';
 
 const StrategyAndChat = () => {
   const { isLoading, data } = useFeatures();
@@ -35,17 +32,10 @@ const StrategyAndChat = () => {
 };
 
 const App = () => {
-  const { isLoading: isPortfolioLoading, data: portfolio } = usePortfolio();
-
   return (
     <ErrorBoundary>
       <AntdApp>
-        <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24 }} gap={24}>
-          <Navbar
-            isLoading={isPortfolioLoading}
-            agentType={agentType}
-            userAddress={portfolio?.address}
-          />
+        <Flex vertical style={{ width: '100%', minHeight: '100vh', paddingBottom: 24, marginTop: 48 }} gap={24}>
           <Flex
             vertical
             gap={24}
