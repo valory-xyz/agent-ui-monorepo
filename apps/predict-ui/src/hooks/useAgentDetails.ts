@@ -2,13 +2,38 @@ import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
+import { mockAgentDetails } from '../mocks/mockAgentDetails';
 import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
-import { AgentInfoResponse, TraderAgent } from '../types';
+import { AgentDetailsResponse, AgentInfoResponse, TraderAgent } from '../types';
 import { getTraderAgent } from '../utils/graphql/queries';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () => {
+  const {
+    data: agentDetails,
+    isLoading: isAgentDetailsLoading,
+    isError: isAgentDetailsError,
+  } = useQuery<AgentDetailsResponse>({
+    queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS],
+    queryFn: async () => {
+      if (IS_MOCK_ENABLED) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(mockAgentDetails);
+          }, 2000);
+        });
+      }
+      const response = await fetch(`${LOCAL}/agent/details`);
+      if (!response.ok) throw new Error('Failed to fetch agent details');
+
+      return response.json();
+    },
+    retry: 5,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+  });
+
+  // NOTE: TO BE REMOVED
   const {
     data: agentInfo,
     isLoading: isAgentInfoLoading,
@@ -32,6 +57,7 @@ export const useAgentDetails = () => {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
+  // NOTE: TO BE REMOVED
   const {
     data: traderInfo,
     isLoading: isTraderInfoLoading,
@@ -58,9 +84,10 @@ export const useAgentDetails = () => {
     data: {
       agentInfo,
       traderInfo,
+      agentDetails,
     },
-    isLoading: isAgentInfoLoading || isTraderInfoLoading,
+    isLoading: isAgentInfoLoading || isTraderInfoLoading || isAgentDetailsLoading,
     isFetched: isTraderInfoFetched,
-    isError: isAgentInfoError || isTraderInfoError,
+    isError: isAgentInfoError || isTraderInfoError || isAgentDetailsError,
   };
 };

@@ -3,6 +3,7 @@ import { Flex } from 'antd';
 import styled from 'styled-components';
 
 import { AgentActivity } from '../components/AgentActivity';
+import { AgentDetails } from '../components/AgentDetails';
 import { AgentDetailsCard } from '../components/AgentDetailsCard/AgentDetailsCard';
 import { LoaderCard } from '../components/AgentDetailsCard/LoaderCard';
 import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
@@ -69,17 +70,23 @@ export const Agent = () => {
   if (isError) return <AgentError />;
   if (!isFetched || !data.traderInfo) return <AgentNotFound />;
 
+  const { agentDetails, agentInfo, traderInfo } = data;
+
   return (
     <Flex vertical gap={24}>
       <AgentContent>
+        <AgentDetails
+          createdAt={agentDetails?.created_at}
+          lastActiveAt={agentDetails?.last_active_at}
+        />
         <AgentDetailsCard
           agent={{
-            ...data.traderInfo,
-            serviceAgentId: data.agentInfo?.agent_ids[0],
+            ...traderInfo,
+            serviceAgentId: agentInfo?.agent_ids[0],
           }}
         />
-        <AgentStatistics agent={data.traderInfo} />
-        <AgentActivity agentId={data.traderInfo.id} />
+        <AgentStatistics agent={traderInfo} />
+        <AgentActivity agentId={traderInfo.id} />
         <Strategy />
         <ChatContent />
       </AgentContent>

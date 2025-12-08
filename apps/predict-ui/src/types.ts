@@ -97,6 +97,12 @@ export type ChatResponse = {
   previous_trading_type?: TradingType;
 };
 
+export type AgentDetailsResponse = {
+  agent_id: string;
+  created_at: string;
+  last_active_at: string;
+};
+
 export type AgentMetricsResponse = {
   agent_id: string;
   window: '7d' | '30d' | '90d' | 'lifetime'; // e.g. "lifetime", "7d", "30d"
