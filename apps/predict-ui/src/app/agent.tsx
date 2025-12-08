@@ -82,23 +82,23 @@ const ChatContent = () => {
 };
 
 export const Agent = () => {
-  const { data, isLoading, isFetched, isError } = useAgentDetails();
+  const { data, isLoading, isError } = useAgentDetails();
 
   if (isLoading) return <AgentLoader />;
   if (isError) return <AgentError />;
-  if (!isFetched || !data.traderInfo) return <AgentNotFound />;
+  if (!data.agentDetails) return <AgentNotFound />;
 
-  const { agentDetails, traderInfo } = data;
+  const { agentDetails } = data;
 
   return (
     <Flex vertical gap={24}>
       <AgentContent>
         <AgentDetails
-          createdAt={agentDetails?.created_at}
-          lastActiveAt={agentDetails?.last_active_at}
+          createdAt={agentDetails.created_at}
+          lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance />
-        <AgentActivity agentId={traderInfo.id} />
+        <AgentActivity agentId={agentDetails.agent_id} />
         <Strategy />
         <ChatContent />
       </AgentContent>

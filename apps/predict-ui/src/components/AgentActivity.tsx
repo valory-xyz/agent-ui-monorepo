@@ -51,6 +51,7 @@ const getActivityItems = (trades: FpmmTrade[]): ActivityItem[] => {
 };
 
 export const AgentActivity = ({ agentId }: AgentActivityProps) => {
+  console.log({ agentId });
   const { data, isLoading } = useQuery<FpmmTrades>({
     queryKey: ['getUserTrades', agentId],
     queryFn: async () =>
@@ -104,16 +105,16 @@ export const AgentActivity = ({ agentId }: AgentActivityProps) => {
   }, [data]);
 
   const loadMoreData = useCallback(() => {
-    if (data) {
-      // Simulate data loading with timeout
-      setTimeout(() => {
-        const nextTrades = data.fpmmTrades.slice(
-          trades.length,
-          Math.min(trades.length + PAGE_SIZE, data.fpmmTrades.length),
-        );
-        setTrades((prev) => [...prev, ...getActivityItems(nextTrades)]);
-      }, 1000);
-    }
+    if (!data) return;
+
+    // Simulate data loading with timeout
+    setTimeout(() => {
+      const nextTrades = data.fpmmTrades.slice(
+        trades.length,
+        Math.min(trades.length + PAGE_SIZE, data.fpmmTrades.length),
+      );
+      setTrades((prev) => [...prev, ...getActivityItems(nextTrades)]);
+    }, 1000);
   }, [data, trades.length]);
 
   return (

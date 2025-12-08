@@ -39,7 +39,7 @@ export type GetUserTradesParams = {
   orderDirection: string;
 };
 
-export type Fpmm = {
+type Fpmm = {
   id: string;
   outcomes: string[];
   currentAnswer: string;

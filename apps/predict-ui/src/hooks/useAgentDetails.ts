@@ -4,9 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockAgentDetails } from '../mocks/mockAgentDetails';
-import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
-import { AgentDetailsResponse, AgentInfoResponse, TraderAgent } from '../types';
-import { getTraderAgent } from '../utils/graphql/queries';
+import { mockAgentInfo } from '../mocks/mockAgentInfo';
+import { AgentDetailsResponse, AgentInfoResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
@@ -57,36 +56,12 @@ export const useAgentDetails = () => {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
-  const {
-    data: traderInfo,
-    isLoading: isTraderInfoLoading,
-    isFetched: isTraderInfoFetched,
-    isError: isTraderInfoError,
-  } = useQuery({
-    enabled: !!agentInfo?.safe_address,
-    queryKey: ['traderInfo', agentInfo?.safe_address],
-    queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise<{ traderAgent: TraderAgent }>((resolve) => {
-          setTimeout(() => {
-            resolve({ traderAgent: mockTraderInfo });
-          }, 2000);
-        });
-      }
-
-      return getTraderAgent({ id: `${agentInfo?.safe_address}`.toLowerCase() });
-    },
-    select: (data) => data.traderAgent,
-  });
-
   return {
     data: {
       agentInfo,
-      traderInfo,
       agentDetails,
     },
-    isLoading: isAgentInfoLoading || isTraderInfoLoading || isAgentDetailsLoading,
-    isFetched: isTraderInfoFetched,
-    isError: isAgentInfoError || isTraderInfoError || isAgentDetailsError,
+    isLoading: isAgentInfoLoading || isAgentDetailsLoading,
+    isError: isAgentInfoError || isAgentDetailsError,
   };
 };
