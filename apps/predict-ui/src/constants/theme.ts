@@ -10,6 +10,7 @@ export const COLOR = {
   BLACK_TRANSPARENT_20: 'rgba(0, 0, 0, 0.20)',
   BLACK_TRANSPARENT_30: 'rgba(0, 0, 0, 0.30)',
   BLACK_TRANSPARENT_50: 'rgba(0, 0, 0, 0.50)',
+  BLACK_BACKGROUND: 'rgba(0, 0, 0, 0.90)',
 
   WHITE_TRANSPARENT_5: 'rgba(255, 255, 255, 0.05)',
   WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
@@ -58,7 +59,8 @@ export const THEME_CONFIG: ThemeConfig = {
     },
     Tooltip: {
       paddingXS: 16,
-      paddingSM: 32,
+      paddingSM: 24,
+      colorBgSpotlight: COLOR.BLACK_BACKGROUND,
     },
   },
   algorithm: theme.darkAlgorithm,

@@ -14,6 +14,7 @@ const getValue = (value: number, currency: CurrencyCode) => {
 
 export const AgentPerformance = ({ performance }: { performance: AgentMetricsResponse }) => {
   const { metrics, stats, currency } = performance;
+
   const performanceItems = useMemo(
     () => [
       {
@@ -40,7 +41,7 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       {
         title: 'Predictions made',
         value: stats.predictions_made
-          ? Intl.NumberFormat('en-US', {}).format(stats.predictions_made)
+          ? Intl.NumberFormat('en-US').format(stats.predictions_made)
           : '0',
       },
       {
