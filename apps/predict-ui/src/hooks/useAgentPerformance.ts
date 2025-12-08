@@ -7,7 +7,7 @@ import { AgentMetricsResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-export const usePerformance = () => {
+export const useAgentPerformance = () => {
   const query = useQuery<AgentMetricsResponse>({
     queryKey: ['agentPerformance'],
     queryFn: async () => {

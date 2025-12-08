@@ -9,6 +9,7 @@ import { LoaderCard } from '../components/AgentDetailsCard/LoaderCard';
 import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
 import { Chat } from '../components/Chat/Chat';
 import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
+import { AgentPerformance } from '../components/Performance';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
@@ -79,6 +80,7 @@ export const Agent = () => {
           createdAt={agentDetails?.created_at}
           lastActiveAt={agentDetails?.last_active_at}
         />
+        <AgentPerformance />
         <AgentDetailsCard
           agent={{
             ...traderInfo,
