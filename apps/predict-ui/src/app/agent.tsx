@@ -1,11 +1,10 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
-import { Flex } from 'antd';
+import { Col, Flex, Row, Skeleton } from 'antd';
 import styled from 'styled-components';
 
 import { AgentActivity } from '../components/AgentActivity';
 import { AgentDetails } from '../components/AgentDetails';
 import { AgentDetailsCard } from '../components/AgentDetailsCard/AgentDetailsCard';
-import { LoaderCard } from '../components/AgentDetailsCard/LoaderCard';
 import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
 import { Chat } from '../components/Chat/Chat';
 import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
@@ -27,7 +26,27 @@ const AgentContent = styled.div`
 const AgentLoader = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <LoaderCard />
+      <Card>
+        <Row gutter={24} align="middle" justify="space-between" className="m-0">
+          <Col lg={12} sm={12} xs={24} className="p-0">
+            <Skeleton.Input active size="small" />
+          </Col>
+          <Col lg={12} sm={12} xs={24} className="p-0">
+            <Skeleton.Input active size="small" />
+          </Col>
+        </Row>
+      </Card>
+
+      <Card>
+        <Skeleton.Input active />
+        <Row gutter={[24, 24]} align="middle" justify="space-between" className="m-0">
+          {[0, 1, 2, 3, 4, 5].map((_) => (
+            <Col key={_} lg={8} sm={12} xs={24} className="p-0">
+              <Skeleton.Input active style={{ width: 240 }} />
+            </Col>
+          ))}
+        </Row>
+      </Card>
     </AgentContent>
   </Flex>
 );
@@ -67,7 +86,7 @@ const ChatContent = () => {
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
-  if (isLoading) return <AgentLoader />;
+  if (isLoading || 1 + 1 === 2) return <AgentLoader />;
   if (isError) return <AgentError />;
   if (!isFetched || !data.traderInfo) return <AgentNotFound />;
 
