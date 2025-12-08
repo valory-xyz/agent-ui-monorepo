@@ -39,6 +39,9 @@ export const GlobalStyles = createGlobalStyle`
   .ml-auto {
     margin-left: auto;
   }
+  .ml-8 {
+    margin-left: 8px !important;
+  }
 
   /* padding */
   .p-0 {
