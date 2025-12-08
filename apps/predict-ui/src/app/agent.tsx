@@ -4,8 +4,6 @@ import styled from 'styled-components';
 
 import { AgentActivity } from '../components/AgentActivity';
 import { AgentDetails } from '../components/AgentDetails';
-import { AgentDetailsCard } from '../components/AgentDetailsCard/AgentDetailsCard';
-import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
 import { Chat } from '../components/Chat/Chat';
 import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
@@ -86,11 +84,11 @@ const ChatContent = () => {
 export const Agent = () => {
   const { data, isLoading, isFetched, isError } = useAgentDetails();
 
-  if (isLoading || 1 + 1 === 2) return <AgentLoader />;
+  if (isLoading) return <AgentLoader />;
   if (isError) return <AgentError />;
   if (!isFetched || !data.traderInfo) return <AgentNotFound />;
 
-  const { agentDetails, agentInfo, traderInfo } = data;
+  const { agentDetails, traderInfo } = data;
 
   return (
     <Flex vertical gap={24}>
@@ -100,13 +98,6 @@ export const Agent = () => {
           lastActiveAt={agentDetails?.last_active_at}
         />
         <AgentPerformance />
-        <AgentDetailsCard
-          agent={{
-            ...traderInfo,
-            serviceAgentId: agentInfo?.agent_ids[0],
-          }}
-        />
-        <AgentStatistics agent={traderInfo} />
         <AgentActivity agentId={traderInfo.id} />
         <Strategy />
         <ChatContent />

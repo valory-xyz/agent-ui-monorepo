@@ -1,4 +1,5 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
@@ -30,10 +31,9 @@ export const useAgentDetails = () => {
       return response.json();
     },
     retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    retryDelay: exponentialBackoffDelay,
   });
 
-  // NOTE: TO BE REMOVED
   const {
     data: agentInfo,
     isLoading: isAgentInfoLoading,
@@ -57,7 +57,6 @@ export const useAgentDetails = () => {
     retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
   });
 
-  // NOTE: TO BE REMOVED
   const {
     data: traderInfo,
     isLoading: isTraderInfoLoading,
