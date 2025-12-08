@@ -63,6 +63,10 @@ export const GlobalStyles = createGlobalStyle`
     width: 100%;
   }
 
+  .font-normal {
+    font-weight: normal !important;
+  }
+
   .underline {
     text-decoration: underline !important;
     text-underline-offset: 4px;

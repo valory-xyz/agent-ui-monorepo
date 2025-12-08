@@ -86,9 +86,9 @@ export const Agent = () => {
 
   if (isLoading) return <AgentLoader />;
   if (isError) return <AgentError />;
-  if (!data.agentDetails) return <AgentNotFound />;
+  if (!data.agentDetails || !data.performance) return <AgentNotFound />;
 
-  const { agentDetails } = data;
+  const { agentDetails, performance } = data;
 
   return (
     <Flex vertical gap={24}>
@@ -97,7 +97,7 @@ export const Agent = () => {
           createdAt={agentDetails.created_at}
           lastActiveAt={agentDetails.last_active_at}
         />
-        <AgentPerformance />
+        <AgentPerformance performance={performance} />
         <AgentActivity agentId={agentDetails.agent_id} />
         <Strategy />
         <ChatContent />

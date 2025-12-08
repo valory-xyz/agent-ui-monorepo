@@ -51,7 +51,6 @@ const getActivityItems = (trades: FpmmTrade[]): ActivityItem[] => {
 };
 
 export const AgentActivity = ({ agentId }: AgentActivityProps) => {
-  console.log({ agentId });
   const { data, isLoading } = useQuery<FpmmTrades>({
     queryKey: ['getUserTrades', agentId],
     queryFn: async () =>

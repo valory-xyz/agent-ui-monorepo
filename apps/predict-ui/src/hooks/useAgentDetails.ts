@@ -1,11 +1,12 @@
-import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
-import { exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
+import { API_V1, LOCAL, ONE_MINUTE } from '@agent-ui-monorepo/util-constants-and-types';
+import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockAgentDetails } from '../mocks/mockAgentDetails';
 import { mockAgentInfo } from '../mocks/mockAgentInfo';
-import { AgentDetailsResponse, AgentInfoResponse } from '../types';
+import { mockPerformance } from '../mocks/mockPerformance';
+import { AgentDetailsResponse, AgentInfoResponse, AgentMetricsResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
@@ -17,13 +18,8 @@ export const useAgentDetails = () => {
   } = useQuery<AgentDetailsResponse>({
     queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockAgentDetails);
-          }, 2000);
-        });
-      }
+      if (IS_MOCK_ENABLED) return delay(mockAgentDetails);
+
       const response = await fetch(`${LOCAL}/agent/details`);
       if (!response.ok) throw new Error('Failed to fetch agent details');
 
@@ -40,28 +36,43 @@ export const useAgentDetails = () => {
   } = useQuery<AgentInfoResponse>({
     queryKey: [REACT_QUERY_KEYS.AGENT_INFO],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockAgentInfo);
-          }, 2000);
-        });
-      }
+      if (IS_MOCK_ENABLED) return delay(mockAgentInfo);
+
       const response = await fetch(`${LOCAL}/agent-info`);
       if (!response.ok) throw new Error('Failed to fetch agent info');
 
       return response.json();
     },
     retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    retryDelay: exponentialBackoffDelay,
+  });
+
+  const {
+    data: performance,
+    isLoading: isPerformanceLoading,
+    isError: isPerformanceError,
+  } = useQuery<AgentMetricsResponse>({
+    queryKey: [REACT_QUERY_KEYS.PERFORMANCE],
+    queryFn: async () => {
+      if (IS_MOCK_ENABLED) return delay(mockPerformance);
+
+      const response = await fetch(`${API_V1}/agent/performance`);
+      if (!response.ok) throw new Error('Failed to fetch agent performance');
+
+      return response.json();
+    },
+    refetchInterval: ONE_MINUTE, // ASK THE TEAM: Is this interval appropriate?
+    retry: 5,
+    retryDelay: exponentialBackoffDelay,
   });
 
   return {
     data: {
       agentInfo,
       agentDetails,
+      performance,
     },
-    isLoading: isAgentInfoLoading || isAgentDetailsLoading,
-    isError: isAgentInfoError || isAgentDetailsError,
+    isLoading: isAgentInfoLoading || isAgentDetailsLoading || isPerformanceLoading,
+    isError: isAgentInfoError || isAgentDetailsError || isPerformanceError,
   };
 };
