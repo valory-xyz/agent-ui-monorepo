@@ -1,9 +1,3 @@
-export type AgentInfoResponse = {
-  address: `0x${string}`;
-  safe_address: `0x${string}`;
-  trading_type: TradingType;
-};
-
 export type TraderAgent = {
   id: string;
   serviceId: string;
@@ -100,6 +94,7 @@ export type AgentDetailsResponse = {
   agent_id: string;
   created_at: string;
   last_active_at: string;
+  trading_type: TradingType;
 };
 
 export type AgentMetricsResponse = {

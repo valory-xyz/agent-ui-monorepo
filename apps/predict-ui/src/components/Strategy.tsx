@@ -22,7 +22,7 @@ const Loader = () => <Skeleton.Input style={{ width: 100 }} active size="small" 
 
 const StrategyContent = () => {
   const { isLoading, data } = useAgentDetails();
-  const type = data?.agentInfo?.trading_type;
+  const type = data?.agentDetails?.trading_type;
 
   return (
     <Flex justify="space-between" align="self-start">
@@ -30,12 +30,12 @@ const StrategyContent = () => {
 
       {isLoading ? (
         <Loader />
-      ) : !type ? (
-        NA
-      ) : (
+      ) : type ? (
         <Pill size="large" style={{ fontSize: 14 }}>
           {TRADING_TYPE_MAP[type]}
         </Pill>
+      ) : (
+        NA
       )}
     </Flex>
   );
