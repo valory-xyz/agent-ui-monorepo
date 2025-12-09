@@ -3,11 +3,11 @@ import { Col, Flex, Row, Skeleton } from 'antd';
 import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
-import { AgentActivity } from '../components/AgentActivity';
 import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
+import { PredictionHistory } from '../components/PredictionHistory';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
@@ -107,7 +107,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        <AgentActivity agentId={agentDetails.agent_id} />
+        <PredictionHistory agentId={agentDetails.agent_id} />
         <Strategy />
         <ChatContent />
       </AgentContent>

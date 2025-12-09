@@ -50,7 +50,7 @@ const getActivityItems = (trades: FpmmTrade[]): ActivityItem[] => {
   });
 };
 
-export const AgentActivity = ({ agentId }: AgentActivityProps) => {
+export const PredictionHistory = ({ agentId }: AgentActivityProps) => {
   const { data, isLoading } = useQuery<FpmmTrades>({
     queryKey: ['getUserTrades', agentId],
     queryFn: async () =>
@@ -118,13 +118,13 @@ export const AgentActivity = ({ agentId }: AgentActivityProps) => {
 
   return (
     <Card>
-      <Title level={4} className="m-0">
-        Latest activity
+      <Title level={4} className="m-0 font-normal">
+        Prediction History
       </Title>
 
       {isLoading ? (
         <NoDataContainer>
-          <Spin size="large" />
+          <Spin />
         </NoDataContainer>
       ) : items.length === 0 ? (
         <NoDataContainer>
