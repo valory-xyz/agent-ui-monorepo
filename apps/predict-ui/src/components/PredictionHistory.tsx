@@ -1,120 +1,97 @@
-import { GNOSIS_SCAN_URL, NA } from '@agent-ui-monorepo/util-constants-and-types';
-import { useQuery } from '@tanstack/react-query';
-import { Flex, Spin, Timeline, TimelineItemProps, Typography } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import type { TableProps } from 'antd';
+import { Flex, Spin, Typography } from 'antd';
+import { Space, Table, Tag } from 'antd';
 
 import { Card } from '../components/ui/Card';
 import { NoDataContainer } from '../components/ui/NoDataContainer';
-import { PREDICT_APP_URL } from '../constants/urls';
-import { FpmmTrade, FpmmTrades } from '../types';
-import { getUserTrades } from '../utils/graphql/queries';
-import { getTimeAgo } from '../utils/time';
 
 const { Title, Text } = Typography;
 
 const PAGE_SIZE = 10;
 
-type AgentActivityProps = {
-  agentId: string;
-};
+interface DataType {
+  key: string;
+  name: string;
+  age: number;
+  address: string;
+  tags: string[];
+}
 
-type ActivityItem = {
-  id: string;
-  question: string;
-  questionId: string;
-  outcome: string;
-  betAmount: string;
-  timeAgo: string;
-  time: string;
-  txHash: string;
-};
+const columns: TableProps<DataType>['columns'] = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'Age',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: 'Address',
+    dataIndex: 'address',
+    key: 'address',
+  },
+  {
+    title: 'Tags',
+    key: 'tags',
+    dataIndex: 'tags',
+    render: (_, { tags }) => (
+      <Flex gap="small" align="center" wrap>
+        {tags.map((tag) => {
+          let color = tag.length > 5 ? 'geekblue' : 'green';
+          if (tag === 'loser') {
+            color = 'volcano';
+          }
+          return (
+            <Tag color={color} key={tag}>
+              {tag.toUpperCase()}
+            </Tag>
+          );
+        })}
+      </Flex>
+    ),
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_, record) => (
+      <Space size="middle">
+        <a>Invite {record.name}</a>
+        <a>Delete</a>
+      </Space>
+    ),
+  },
+];
 
-const getActivityItems = (trades: FpmmTrade[]): ActivityItem[] => {
-  return trades.map((item) => {
-    const betAmount = parseFloat(item.collateralAmountUSD).toFixed(5);
+const data: DataType[] = [
+  {
+    key: '1',
+    name: 'John Brown',
+    age: 32,
+    address: 'New York No. 1 Lake Park',
+    tags: ['nice', 'developer'],
+  },
+  {
+    key: '2',
+    name: 'Jim Green',
+    age: 42,
+    address: 'London No. 1 Lake Park',
+    tags: ['loser'],
+  },
+  {
+    key: '3',
+    name: 'Joe Black',
+    age: 32,
+    address: 'Sydney No. 1 Lake Park',
+    tags: ['cool', 'teacher'],
+  },
+];
 
-    const outcomeValue =
-      item.fpmm.outcomes && item.outcomeIndex ? item.fpmm.outcomes[item.outcomeIndex] : null;
-
-    return {
-      id: item.id,
-      question: item.title || NA,
-      questionId: item.fpmm.id,
-      outcome: outcomeValue || NA,
-      betAmount: `$${betAmount}`,
-      timeAgo: getTimeAgo(item.creationTimestamp * 1000),
-      time: new Date(item.creationTimestamp * 1000).toLocaleString(),
-      txHash: item.transactionHash,
-    };
-  });
-};
-
-export const PredictionHistory = ({ agentId }: AgentActivityProps) => {
-  const { data, isLoading } = useQuery<FpmmTrades>({
-    queryKey: ['getUserTrades', agentId],
-    queryFn: async () =>
-      getUserTrades({
-        creator: agentId.toLowerCase(),
-        first: 1000,
-        skip: 0,
-        orderBy: 'creationTimestamp',
-        orderDirection: 'desc',
-      }),
-  });
-
-  const [trades, setTrades] = useState<ActivityItem[]>([]);
-
-  const timelineItems = (items: ActivityItem[]): TimelineItemProps[] => {
-    return items.map((item) => ({
-      children: (
-        <Flex vertical gap={8} key={item.id}>
-          <Text>
-            <b>Trader agent</b> bet{' '}
-            <a
-              href={`${GNOSIS_SCAN_URL}/tx/${item.txHash}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <b>{item.betAmount}</b>
-            </a>{' '}
-            on <b>{item.outcome}</b>
-          </Text>
-          <a
-            href={`${PREDICT_APP_URL}/questions/${item.questionId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Text>{item.question}</Text>
-          </a>
-          <Text type="secondary" title={item.time}>
-            {item.timeAgo}
-          </Text>
-        </Flex>
-      ),
-    }));
-  };
-
-  const items = timelineItems(trades);
-
-  useEffect(() => {
-    if (!data) return;
-    const lastTrades = data.fpmmTrades.slice(0, PAGE_SIZE);
-    setTrades(getActivityItems(lastTrades));
-  }, [data]);
-
-  const loadMoreData = useCallback(() => {
-    if (!data) return;
-
-    // Simulate data loading with timeout
-    setTimeout(() => {
-      const nextTrades = data.fpmmTrades.slice(
-        trades.length,
-        Math.min(trades.length + PAGE_SIZE, data.fpmmTrades.length),
-      );
-      setTrades((prev) => [...prev, ...getActivityItems(nextTrades)]);
-    }, 1000);
-  }, [data, trades.length]);
+export const PredictionHistory = () => {
+  const isLoading = false;
 
   return (
     <Card>
@@ -126,23 +103,12 @@ export const PredictionHistory = ({ agentId }: AgentActivityProps) => {
         <NoDataContainer>
           <Spin />
         </NoDataContainer>
-      ) : items.length === 0 ? (
+      ) : data.length === 0 ? (
         <NoDataContainer>
           <Text>No data available</Text>
         </NoDataContainer>
       ) : (
-        <InfiniteScroll
-          dataLength={trades.length}
-          next={loadMoreData}
-          height={380}
-          hasMore={data ? trades.length < data.fpmmTrades.length : false}
-          loader={<div />}
-        >
-          <Timeline
-            pending={data && trades.length < data.fpmmTrades.length ? 'Loading...' : null}
-            items={items}
-          />
-        </InfiniteScroll>
+        <Table<DataType> columns={columns} dataSource={data} />
       )}
     </Card>
   );
