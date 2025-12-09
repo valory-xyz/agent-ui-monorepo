@@ -1,11 +1,12 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Col, Flex, Row, Skeleton } from 'antd';
+import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
 import { AgentActivity } from '../components/AgentActivity';
 import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
-import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
+import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
@@ -52,7 +53,11 @@ const AgentLoader = () => (
 const AgentError = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <LoadingError />
+      <ErrorState
+        title="Error loading data"
+        description="Something went wrong while loading data. Please, try closing the app."
+        icon={Unplug}
+      />
     </AgentContent>
   </Flex>
 );
@@ -60,7 +65,11 @@ const AgentError = () => (
 const AgentNotFound = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <AgentNotFoundError />
+      <ErrorState
+        title="404 | Agent not found"
+        description="This address probably doesn't belong to an Olas agent."
+        icon={Frown}
+      />
     </AgentContent>
   </Flex>
 );

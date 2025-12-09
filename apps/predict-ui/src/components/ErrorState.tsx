@@ -1,5 +1,5 @@
 import { Typography } from 'antd';
-import { Frown, LucideProps, Unplug } from 'lucide-react';
+import { LucideProps } from 'lucide-react';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import styled from 'styled-components';
 
@@ -65,25 +65,5 @@ export const ErrorState = ({ title, description, icon }: ErrorStateProps) => {
         </Paragraph>
       </Content>
     </StyledCard>
-  );
-};
-
-export const LoadingError = () => {
-  return (
-    <ErrorState
-      title="Error loading data"
-      description="Something went wrong while loading data. Please, try closing the app."
-      icon={Unplug}
-    />
-  );
-};
-
-export const AgentNotFoundError = () => {
-  return (
-    <ErrorState
-      title="404 | Agent not found"
-      description="This address probably doesn't belong to an Olas agent."
-      icon={Frown}
-    />
   );
 };
