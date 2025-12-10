@@ -143,6 +143,7 @@ export const PredictionHistory = () => {
           pageSize: PAGE_SIZE,
           showSizeChanger: false,
           onChange: (page) => setCurrentPage(page),
+          total: data?.total ?? 0,
         }}
         rowHoverable={false}
       />
