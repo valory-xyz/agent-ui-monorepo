@@ -7,15 +7,24 @@ export const COLOR = {
   BACKGROUND: '#2f1d57',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
+  BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',
   BLACK_TRANSPARENT_20: 'rgba(0, 0, 0, 0.20)',
   BLACK_TRANSPARENT_30: 'rgba(0, 0, 0, 0.30)',
   BLACK_TRANSPARENT_50: 'rgba(0, 0, 0, 0.50)',
+  BLACK_TRANSPARENT_75: 'rgba(0, 0, 0, 0.75)',
   BLACK_BACKGROUND: 'rgba(0, 0, 0, 0.90)',
 
   WHITE_TRANSPARENT_5: 'rgba(255, 255, 255, 0.05)',
   WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
   WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
   WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
+  WHITE_TRANSPARENT_75: 'rgba(255, 255, 255, 0.75)',
+
+  PINK_BACKGROUND: 'rgba(255, 26, 114, 0.10)',
+  PINK: '#FF4D91',
+
+  GREEN_BACKGROUND: ' rgba(26, 255, 123, 0.10)',
+  GREEN: '#1AFF7B',
 
   RED: '#F5222D',
   BLUE: '#1677FF',
@@ -38,11 +47,6 @@ export const THEME_CONFIG: ThemeConfig = {
     },
     Spin: {
       colorPrimary: COLOR.TEXT_PRIMARY,
-    },
-    Tag: {
-      defaultBg: 'rgba(223, 229, 238, 0.1)',
-      borderRadiusSM: 30,
-      fontSizeSM: 16,
     },
     Timeline: {
       dotBorderWidth: 4,

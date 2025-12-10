@@ -13,8 +13,6 @@ import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
-const IS_PREDICTION_HISTORY_ENABLED = false;
-
 const AgentContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -109,7 +107,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        {IS_PREDICTION_HISTORY_ENABLED && <PredictionHistory />}
+        <PredictionHistory />
         <Strategy />
         <ChatContent />
       </AgentContent>

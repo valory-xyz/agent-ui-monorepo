@@ -59,12 +59,19 @@ export const GlobalStyles = createGlobalStyle`
     text-align: center;
   }
 
-  .w-full {
-    width: 100%;
+  /* font color */
+  .text-white-2 {
+    color: rgba(255, 255, 255, 0.75) !important;
   }
 
+  /* font weights */
   .font-normal {
     font-weight: normal !important;
+  }
+
+  /* sizes */
+  .w-full {
+    width: 100%;
   }
 
   .underline {
