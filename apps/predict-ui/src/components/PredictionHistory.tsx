@@ -63,7 +63,7 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
     key: 'market',
     width: '60%',
     render: (market: PredictionHistoryItem['market']) => (
-      <Text className="text-sm text-white-2">{market.title}</Text>
+      <Text className="text-sm text-white-075">{market.title}</Text>
     ),
   },
   {
@@ -72,7 +72,7 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
     key: 'prediction_side',
     width: '15%',
     render: (side: PredictionHistoryItem['prediction_side']) => (
-      <Text className="text-sm text-white-2">{side === 'yes' ? 'Yes' : 'No'}</Text>
+      <Text className="text-sm text-white-075">{side === 'yes' ? 'Yes' : 'No'}</Text>
     ),
     align: 'center',
     className: 'th-text-center',
@@ -86,21 +86,28 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
       const amount = record.status === 'pending' ? record.bet_amount : record.net_profit;
       const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
 
-      return record.status === 'lost' ? (
-        <Tag bordered={false} color={COLOR.PINK_BACKGROUND} style={{ color: COLOR.PINK }}>
-          Lost {value}
-        </Tag>
-      ) : record.status === 'won' ? (
-        <Tag bordered={false} color={COLOR.GREEN_BACKGROUND} style={{ color: COLOR.GREEN }}>
-          Won {value}
-        </Tag>
-      ) : (
+      const details = (() => {
+        if (record.status === 'won') {
+          return { color: COLOR.GREEN, background: COLOR.GREEN_BACKGROUND, text: `Won ${value}` };
+        }
+        if (record.status === 'lost') {
+          return { color: COLOR.PINK, background: COLOR.PINK_BACKGROUND, text: `Lost ${value}` };
+        }
+        return {
+          color: COLOR.WHITE_TRANSPARENT_75,
+          background: COLOR.WHITE_TRANSPARENT_5,
+          text: `Bet ${value}`,
+        };
+      })();
+
+      return (
         <Tag
           bordered={false}
-          color={COLOR.WHITE_TRANSPARENT_5}
-          style={{ color: COLOR.WHITE_TRANSPARENT_75 }}
+          color={details.background}
+          className="mx-auto"
+          style={{ color: details.color }}
         >
-          Bet {value}
+          {details.text}
         </Tag>
       );
     },

@@ -39,7 +39,8 @@ export type AgentMetricsResponse = {
   };
   stats: {
     predictions_made: number;
-    prediction_accuracy: number; // 0–1 (e.g. 0.53 = 53%)
+    /** 0-1 (e.g. 0.53 = 53%) */
+    prediction_accuracy: number;
   };
 };
 

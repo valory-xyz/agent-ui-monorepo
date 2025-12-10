@@ -36,6 +36,9 @@ export const GlobalStyles = createGlobalStyle`
   .mt-16 {
     margin-top: 16px !important;
   }
+  .mx-auto {
+    margin: 0 auto;
+  }
   .ml-auto {
     margin-left: auto;
   }
@@ -60,7 +63,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* font color */
-  .text-white-2 {
+  .text-white-075 {
     color: rgba(255, 255, 255, 0.75) !important;
   }
 
