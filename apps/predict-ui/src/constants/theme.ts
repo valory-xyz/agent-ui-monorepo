@@ -23,7 +23,7 @@ export const COLOR = {
   PINK_BACKGROUND: 'rgba(255, 26, 114, 0.10)',
   PINK: '#FF4D91',
 
-  GREEN_BACKGROUND: ' rgba(26, 255, 123, 0.10)',
+  GREEN_BACKGROUND: 'rgba(26, 255, 123, 0.10)',
   GREEN: '#1AFF7B',
 
   RED: '#F5222D',
