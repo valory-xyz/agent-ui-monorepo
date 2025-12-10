@@ -39,8 +39,8 @@ const AgentLoader = () => (
       <Card>
         <Skeleton.Input active />
         <Row gutter={[24, 24]} align="middle" justify="space-between" className="m-0">
-          {[0, 1, 2, 3, 4, 5].map((_) => (
-            <Col key={_} lg={8} sm={12} xs={24} className="p-0">
+          {[0, 1, 2, 3, 4, 5].map((index) => (
+            <Col key={index} lg={8} sm={12} xs={24} className="p-0">
               <Skeleton.Input active style={{ width: 196 }} />
             </Col>
           ))}
