@@ -10,7 +10,7 @@ import { COLOR } from '../constants/theme';
 import { usePredictionHistory } from '../hooks/usePredictionHistory';
 import { PredictionHistoryItem } from '../types';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const PAGE_SIZE = 10;
 
@@ -63,7 +63,9 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
     key: 'market',
     width: '60%',
     render: (market: PredictionHistoryItem['market']) => (
-      <Text className="text-sm text-white-075">{market.title}</Text>
+      <Paragraph className="text-sm text-white-075 m-0" ellipsis={{ rows: 2, tooltip: true }}>
+        {market.title}
+      </Paragraph>
     ),
   },
   {
@@ -134,6 +136,7 @@ export const PredictionHistory = () => {
         columns={getColumns(data?.currency ?? 'USD')}
         dataSource={data?.items ?? []}
         loading={isLoading}
+        rowKey={(record) => record.id}
         locale={{ emptyText: <NoDataAvailable /> }}
         pagination={{
           current: currentPage,
