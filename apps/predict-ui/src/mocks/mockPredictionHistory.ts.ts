@@ -11,7 +11,8 @@ export const mockPredictionHistory: AgentPredictionHistoryResponse = {
       id: 'pred_001',
       market: {
         id: 'market_abcd',
-        title: 'Will the National Development and Reform Commission of China, ...',
+        title:
+          'Will the National Development and Reform Commission of China, on or before November 30, 2025, implement new policies to promote sustainable development?',
         external_url: 'https://example.com/market/market_abcd',
       },
       prediction_side: 'yes',
@@ -26,7 +27,7 @@ export const mockPredictionHistory: AgentPredictionHistoryResponse = {
       market: {
         id: 'market_1',
         title:
-          'Will OpenAI publicly report, on or before November 29, 2025, that more than 200,000 verified US K–12 educator...',
+          'Will OpenAI publicly report, on or before November 29, 2025, that more than 200,000 verified US K–12 educators have used ChatGPT for educational purposes?',
         external_url: 'https://example.com/market/market_1',
       },
       prediction_side: 'no',
@@ -40,7 +41,8 @@ export const mockPredictionHistory: AgentPredictionHistoryResponse = {
       id: 'pred_003',
       market: {
         id: 'market_2',
-        title: 'Will any major cloud provider ...',
+        title:
+          'Will any major cloud provider, on or before November 28, 2025, announce a significant reduction in carbon emissions?',
         external_url: 'https://example.com/market/market_2',
       },
       prediction_side: 'yes',

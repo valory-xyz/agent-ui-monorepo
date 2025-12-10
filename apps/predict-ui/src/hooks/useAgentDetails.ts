@@ -1,4 +1,4 @@
-import { API_V1, FIVE_MINUTES, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { API_V1, FIVE_MINUTES } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,7 +19,7 @@ export const useAgentDetails = () => {
     queryFn: async () => {
       if (IS_MOCK_ENABLED) return delay(mockAgentDetails);
 
-      const response = await fetch(`${LOCAL}/agent/details`);
+      const response = await fetch(`${API_V1}/agent/details`);
       if (!response.ok) throw new Error('Failed to fetch agent details');
 
       return response.json();
