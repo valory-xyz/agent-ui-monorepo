@@ -4,7 +4,7 @@ import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-function
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockPredictionHistory } from '../mocks/mockPredictionHistory.ts';
+import { mockPredictionHistory } from '../mocks/mockPredictionHistory';
 import { AgentPredictionHistoryResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
