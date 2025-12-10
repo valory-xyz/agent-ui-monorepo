@@ -11,7 +11,7 @@ const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const usePredictionHistory = ({ page, pageSize }: { page: number; pageSize: number }) => {
   const query = useQuery<AgentPredictionHistoryResponse>({
-    queryKey: [REACT_QUERY_KEYS.PREDICTION_HISTORY],
+    queryKey: [REACT_QUERY_KEYS.PREDICTION_HISTORY, page, pageSize],
     queryFn: async () => {
       if (IS_MOCK_ENABLED) return delay(mockPredictionHistory);
 
