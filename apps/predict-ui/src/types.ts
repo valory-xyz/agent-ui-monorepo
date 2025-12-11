@@ -30,7 +30,6 @@ export type AgentWindow = '7d' | '30d' | '90d' | 'lifetime';
 
 export type AgentMetricsResponse = {
   agent_id: string;
-  /** e.g. "lifetime", "7d", "30d" */
   window: AgentWindow;
   currency: 'USD'; // other currencies may be added in the future
   metrics: {
@@ -66,7 +65,7 @@ export type PredictionHistoryItem = {
   /** ISO 8601 timestamp */
   created_at: string;
   /** ISO 8601 timestamp or null while pending */
-  settled_at: string | null; // null while pending
+  settled_at: string | null;
 };
 
 export type AgentPredictionHistoryResponse = {

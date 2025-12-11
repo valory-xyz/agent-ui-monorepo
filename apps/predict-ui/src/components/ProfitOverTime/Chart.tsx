@@ -12,6 +12,7 @@ import {
 import styled from 'styled-components';
 
 import { CURRENCY, CurrencyCode } from '../../constants/currency';
+import { CHART_HEIGHT } from '../../constants/sizes';
 import { COLOR } from '../../constants/theme';
 
 const TooltipContainer = styled(Flex)`
@@ -40,7 +41,7 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
 
   return (
-    <ResponsiveContainer width="100%" height={230}>
+    <ResponsiveContainer width="100%" height={CHART_HEIGHT}>
       <LineChart data={data}>
         <CartesianGrid
           stroke={COLOR.WHITE_TRANSPARENT_20}
