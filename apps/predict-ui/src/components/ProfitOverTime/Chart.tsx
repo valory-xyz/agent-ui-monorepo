@@ -40,7 +40,7 @@ const ChartTooltip = ({ currencySymbol }: { currencySymbol: string }) => (
         if (typeof value !== 'number') return NA;
         if (isNaN(value)) return NA;
         if (value === 0) return `No Profit or Loss`;
-        return `${value >= 0 ? 'Profit of ' : 'Loss of '}${currencySymbol}${value.toFixed(2)}`;
+        return `${value > 0 ? 'Profit of ' : 'Loss of '}${currencySymbol}${value.toFixed(2)}`;
       })();
       return (
         <TooltipContainer vertical gap={4}>
