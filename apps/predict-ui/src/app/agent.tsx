@@ -8,6 +8,7 @@ import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
 import { PredictionHistory } from '../components/PredictionHistory';
+import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
@@ -107,6 +108,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
+        <ProfitOverTime />
         <PredictionHistory />
         <Strategy />
         <ChatContent />
