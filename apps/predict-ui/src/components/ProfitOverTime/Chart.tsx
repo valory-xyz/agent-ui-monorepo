@@ -55,18 +55,18 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
           tickFormatter={(timestamp) =>
             new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' }).format(timestamp)
           }
-          tick={{ fill: COLOR.SECONDARY, fontSize: 12 }}
+          tick={{ fill: COLOR.SECONDARY, fontSize: 14 }}
           interval="preserveEnd"
           minTickGap={20}
           allowDataOverflow
           axisLine={false}
           tickLine={false}
-          tickMargin={12}
+          tickMargin={16}
         />
         <YAxis
           orientation="right"
           tickFormatter={(value) => `${currencySymbol}${value.toFixed(2)}`}
-          tick={{ fill: COLOR.SECONDARY, fontSize: 12 }}
+          tick={{ fill: COLOR.SECONDARY, fontSize: 14 }}
           axisLine={false}
           tickLine={false}
           width={60}
