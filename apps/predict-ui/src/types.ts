@@ -77,11 +77,6 @@ export type AgentPredictionHistoryResponse = {
   items: PredictionHistoryItem[];
 };
 
-export type ProfitOverTime = {
-  timestamp: string;
-  delta_profit: number;
-};
-
 export type AgentProfitPoint = {
   /** ISO 8601 timestamp */
   timestamp: string;

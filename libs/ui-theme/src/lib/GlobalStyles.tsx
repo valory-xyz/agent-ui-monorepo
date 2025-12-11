@@ -90,7 +90,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* antd-segment */
-  .segmented {
+  .ant-segmented {
     padding: 3px;
     .ant-segmented-item {
       border-radius: 4px;
