@@ -55,7 +55,7 @@ const AgentError = () => (
     <AgentContent>
       <ErrorState
         title="Error loading data"
-        description="Something went wrong while loading data. Please, try closing the app."
+        description="Something went wrong while loading data."
         icon={Unplug}
       />
     </AgentContent>
