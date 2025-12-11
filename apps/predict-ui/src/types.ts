@@ -91,7 +91,7 @@ export type AgentProfitPoint = {
 
 export type AgentProfitTimeseriesResponse = {
   agent_id: string;
-  currency: string;
+  currency: CurrencyCode;
   window: AgentWindow;
   points: AgentProfitPoint[];
 };

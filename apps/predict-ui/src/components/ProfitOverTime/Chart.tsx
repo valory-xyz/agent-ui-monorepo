@@ -11,12 +11,13 @@ import {
 } from 'recharts';
 import styled from 'styled-components';
 
+import { CURRENCY, CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
 
 const TooltipContainer = styled(Flex)`
   padding: 8px;
-  background-color: #fff;
-  border: 1px solid ${COLOR.BLACK_TRANSPARENT_20};
+  background-color: ${COLOR.BLACK_BACKGROUND};
+  border-radius: 8px;
   color: ${COLOR.TEXT_PRIMARY};
   font-size: 12px;
 `;
@@ -31,11 +32,13 @@ const formattedDate = (date: Date) =>
   });
 
 type ChartProps = {
-  outcome: string;
+  currency?: CurrencyCode;
   data: { timestamp: Date; value: number }[];
 };
 
-export const Chart = ({ outcome, data }: ChartProps) => {
+export const Chart = ({ currency = 'USD', data }: ChartProps) => {
+  const currencySymbol = CURRENCY[currency]?.symbol || '$';
+
   return (
     <ResponsiveContainer width="100%" height={230}>
       <LineChart data={data}>
@@ -43,10 +46,7 @@ export const Chart = ({ outcome, data }: ChartProps) => {
         <XAxis
           dataKey="timestamp"
           tickFormatter={(timestamp) =>
-            new Intl.DateTimeFormat('en-US', {
-              month: 'short',
-              day: '2-digit',
-            }).format(timestamp)
+            new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit' }).format(timestamp)
           }
           tick={{ fill: COLOR.SECONDARY, fontSize: 12 }}
           interval="preserveEnd"
@@ -57,9 +57,8 @@ export const Chart = ({ outcome, data }: ChartProps) => {
         />
         <YAxis
           orientation="right"
-          tickFormatter={(value) => `${value}%`}
+          tickFormatter={(value) => `${currencySymbol}${value.toFixed(2)}`}
           tick={{ fill: COLOR.SECONDARY, fontSize: 12 }}
-          domain={[0, 100]}
           axisLine={false}
           tickLine={false}
         />
@@ -69,7 +68,7 @@ export const Chart = ({ outcome, data }: ChartProps) => {
             return (
               <TooltipContainer vertical gap={4}>
                 <span>
-                  <b>{`${outcome} ${value}%`}</b>
+                  <b>{`${value >= 0 ? 'Profit of ' : 'Loss of '}${currencySymbol}${value?.toFixed(2)}`}</b>
                 </span>
                 <span>{label ? formattedDate(new Date(label)) : NA}</span>
               </TooltipContainer>

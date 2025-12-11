@@ -8,12 +8,12 @@ import { Chart } from './Chart';
 
 const { Title, Text, Paragraph } = Typography;
 
-const WINDOW_OPTIONS = [
+const WINDOW_OPTIONS: { label: string; value: AgentWindow }[] = [
   { label: '7D', value: '7d' },
   { label: '30D', value: '30d' },
   { label: '90D', value: '90d' },
   { label: 'All Time', value: 'lifetime' },
-];
+] as const;
 
 export const ProfitOverTime = () => {
   const [currentWindow, setCurrentWindow] = useState<AgentWindow>('7d');
@@ -25,8 +25,8 @@ export const ProfitOverTime = () => {
       value: point.delta_profit,
     })) || [];
 
-  const handleWindowChange = (value: string | number) => {
-    setCurrentWindow(value as AgentWindow);
+  const handleWindowChange = (value: AgentWindow) => {
+    setCurrentWindow(value);
   };
 
   return (
@@ -35,7 +35,11 @@ export const ProfitOverTime = () => {
         <Title level={4} className="m-0 font-normal">
           Profit Over Time
         </Title>
-        <Segmented options={WINDOW_OPTIONS} value={currentWindow} onChange={handleWindowChange} />
+        <Segmented<AgentWindow>
+          options={WINDOW_OPTIONS}
+          value={currentWindow}
+          onChange={handleWindowChange}
+        />
       </Flex>
 
       {isLoading ? (
@@ -51,7 +55,7 @@ export const ProfitOverTime = () => {
           <Text>No profit data available.</Text>
         </Paragraph>
       ) : (
-        <Chart data={points} outcome="" />
+        <Chart data={points} currency={data?.currency} />
       )}
     </Card>
   );
