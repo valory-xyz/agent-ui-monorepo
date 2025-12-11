@@ -26,10 +26,11 @@ export type TradingDetailsResponse = {
   trading_type: TradingType;
 };
 
+export type AgentWindow = '7d' | '30d' | '90d' | 'lifetime';
+
 export type AgentMetricsResponse = {
   agent_id: string;
-  /** e.g. "lifetime", "7d", "30d" */
-  window: '7d' | '30d' | '90d' | 'lifetime';
+  window: AgentWindow;
   currency: 'USD'; // other currencies may be added in the future
   metrics: {
     all_time_funds_used: number;
@@ -64,7 +65,7 @@ export type PredictionHistoryItem = {
   /** ISO 8601 timestamp */
   created_at: string;
   /** ISO 8601 timestamp or null while pending */
-  settled_at: string | null; // null while pending
+  settled_at: string | null;
 };
 
 export type AgentPredictionHistoryResponse = {
@@ -74,4 +75,17 @@ export type AgentPredictionHistoryResponse = {
   page_size: number;
   total: number;
   items: PredictionHistoryItem[];
+};
+
+export type AgentProfitPoint = {
+  /** ISO 8601 timestamp */
+  timestamp: string;
+  delta_profit: number;
+};
+
+export type AgentProfitTimeseriesResponse = {
+  agent_id: string;
+  currency: CurrencyCode;
+  window: AgentWindow;
+  points: AgentProfitPoint[];
 };

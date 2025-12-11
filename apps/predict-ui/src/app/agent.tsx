@@ -8,10 +8,13 @@ import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
 import { PredictionHistory } from '../components/PredictionHistory';
+import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
+
+const IS_CHART_ENABLED = false; // TODO: enable once backend is ready
 
 const AgentContent = styled.div`
   display: flex;
@@ -107,6 +110,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
+        {IS_CHART_ENABLED && <ProfitOverTime />}
         <PredictionHistory />
         <Strategy />
         <ChatContent />
