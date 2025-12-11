@@ -14,6 +14,8 @@ import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
+const IS_CHART_ENABLED = false; // TODO: enable once backend is ready
+
 const AgentContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -108,7 +110,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        <ProfitOverTime />
+        {IS_CHART_ENABLED && <ProfitOverTime />}
         <PredictionHistory />
         <Strategy />
         <ChatContent />
