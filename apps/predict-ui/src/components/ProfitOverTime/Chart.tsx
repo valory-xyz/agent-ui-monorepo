@@ -42,7 +42,13 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
   return (
     <ResponsiveContainer width="100%" height={230}>
       <LineChart data={data}>
-        <CartesianGrid stroke="#6A5C9A" strokeDasharray="3 3" opacity={0.3} />
+        <CartesianGrid
+          stroke={COLOR.WHITE_TRANSPARENT_20}
+          strokeDasharray="8 8"
+          strokeWidth={1}
+          opacity={0.8}
+          vertical={false}
+        />
         <XAxis
           dataKey="timestamp"
           tickFormatter={(timestamp) =>
@@ -54,6 +60,7 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
           allowDataOverflow
           axisLine={false}
           tickLine={false}
+          tickMargin={12}
         />
         <YAxis
           orientation="right"
@@ -61,6 +68,8 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
           tick={{ fill: COLOR.SECONDARY, fontSize: 12 }}
           axisLine={false}
           tickLine={false}
+          width={60}
+          tickMargin={16}
         />
         <Tooltip
           content={({ payload, label }) => {

@@ -88,4 +88,12 @@ export const GlobalStyles = createGlobalStyle`
     background: linear-gradient(180deg, #F5F7FA 0%, #FFF 100%), #FFF;
     box-shadow: 0px 0px 0px 4px #FFF inset;
   }
+
+  /* antd-segment */
+  .segmented {
+    padding: 3px;
+    .ant-segmented-item {
+      border-radius: 4px;
+    }
+  }
 `;

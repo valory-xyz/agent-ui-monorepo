@@ -66,6 +66,10 @@ export const THEME_CONFIG: ThemeConfig = {
       paddingSM: 24,
       colorBgSpotlight: COLOR.BLACK_BACKGROUND,
     },
+    Segmented: {
+      trackBg: COLOR.WHITE_TRANSPARENT_5,
+      itemSelectedBg: COLOR.WHITE_TRANSPARENT_10,
+    },
   },
   algorithm: theme.darkAlgorithm,
 };
