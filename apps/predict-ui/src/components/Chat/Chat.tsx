@@ -16,7 +16,7 @@ import { TradingStrategy } from './SystemChat';
 
 export const Chat = () => {
   const queryClient = useQueryClient();
-  const [notificationApi, contextHolder] = notification.useNotification();
+  const [, contextHolder] = notification.useNotification();
 
   const [currentText, setCurrentText] = useState('');
   const [chats, setChats] = useState<EachChat[]>([]);
@@ -34,7 +34,7 @@ export const Chat = () => {
     onSendChat(currentText, {
       onSuccess: (data) => {
         // refetch the latest data
-        queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.AGENT_INFO] });
+        queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS] });
 
         setChats((prevChats) => {
           const chatsAfterConfig = [...prevChats];
@@ -61,7 +61,7 @@ export const Chat = () => {
         }
       },
     });
-  }, [chats, currentText, onSendChat, notificationApi, queryClient]);
+  }, [chats, currentText, onSendChat, queryClient]);
 
   return (
     <CardV2>

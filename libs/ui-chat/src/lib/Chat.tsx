@@ -96,6 +96,12 @@ export const Chat = ({
         <TextArea
           value={currentText}
           onChange={(e) => onCurrentTextChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              onSend();
+            }
+          }}
           rows={3}
           placeholder={getPlaceholder(agentType)}
           style={{

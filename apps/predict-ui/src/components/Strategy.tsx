@@ -3,7 +3,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { Flex, Skeleton, Tooltip, Typography } from 'antd';
 
 import { TRADING_TYPE_MAP } from '../constants/textMaps';
-import { useAgentDetails } from '../hooks/useAgentDetails';
+import { useTradingDetails } from '../hooks/useTradingDetails';
 import { Card } from './ui/Card';
 import { Pill } from './ui/Pill';
 
@@ -21,8 +21,8 @@ const TradingStrategyTitle = () => (
 const Loader = () => <Skeleton.Input style={{ width: 100 }} active size="small" />;
 
 const StrategyContent = () => {
-  const { isLoading, data } = useAgentDetails();
-  const type = data?.agentInfo?.trading_type;
+  const { isLoading, data } = useTradingDetails();
+  const type = data?.trading_type;
 
   return (
     <Flex justify="space-between" align="self-start">
@@ -30,12 +30,12 @@ const StrategyContent = () => {
 
       {isLoading ? (
         <Loader />
-      ) : !type ? (
-        NA
-      ) : (
+      ) : type ? (
         <Pill size="large" style={{ fontSize: 14 }}>
           {TRADING_TYPE_MAP[type]}
         </Pill>
+      ) : (
+        NA
       )}
     </Flex>
   );

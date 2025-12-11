@@ -1,66 +1,55 @@
-import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { API_V1, FIVE_MINUTES } from '@agent-ui-monorepo/util-constants-and-types';
+import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockAgentInfo, mockTraderInfo } from '../mocks/mockAgentInfo';
-import { AgentInfoResponse, TraderAgent } from '../types';
-import { getTraderAgent } from '../utils/graphql/queries';
+import { mockAgentDetails } from '../mocks/mockAgentDetails';
+import { mockPerformance } from '../mocks/mockPerformance';
+import { AgentDetailsResponse, AgentMetricsResponse } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () => {
   const {
-    data: agentInfo,
-    isLoading: isAgentInfoLoading,
-    isError: isAgentInfoError,
-  } = useQuery<AgentInfoResponse>({
-    queryKey: [REACT_QUERY_KEYS.AGENT_INFO],
+    data: agentDetails,
+    isLoading: isAgentDetailsLoading,
+    isError: isAgentDetailsError,
+  } = useQuery<AgentDetailsResponse>({
+    queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockAgentInfo);
-          }, 2000);
-        });
-      }
-      const response = await fetch(`${LOCAL}/agent-info`);
-      if (!response.ok) throw new Error('Failed to fetch agent info');
+      if (IS_MOCK_ENABLED) return delay(mockAgentDetails);
+
+      const response = await fetch(`${API_V1}/agent/details`);
+      if (!response.ok) throw new Error('Failed to fetch agent details');
 
       return response.json();
     },
     retry: 5,
-    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 30000), // Exponential backoff
+    retryDelay: exponentialBackoffDelay,
   });
 
   const {
-    data: traderInfo,
-    isLoading: isTraderInfoLoading,
-    isFetched: isTraderInfoFetched,
-    isError: isTraderInfoError,
-  } = useQuery({
-    enabled: !!agentInfo?.safe_address,
-    queryKey: ['traderInfo', agentInfo?.safe_address],
+    data: performance,
+    isLoading: isPerformanceLoading,
+    isError: isPerformanceError,
+  } = useQuery<AgentMetricsResponse>({
+    queryKey: [REACT_QUERY_KEYS.PERFORMANCE],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise<{ traderAgent: TraderAgent }>((resolve) => {
-          setTimeout(() => {
-            resolve({ traderAgent: mockTraderInfo });
-          }, 2000);
-        });
-      }
+      if (IS_MOCK_ENABLED) return delay(mockPerformance);
 
-      return getTraderAgent({ id: `${agentInfo?.safe_address}`.toLowerCase() });
+      const response = await fetch(`${API_V1}/agent/performance`);
+      if (!response.ok) throw new Error('Failed to fetch agent performance');
+
+      return response.json();
     },
-    select: (data) => data.traderAgent,
+    refetchInterval: FIVE_MINUTES,
+    retry: 5,
+    retryDelay: exponentialBackoffDelay,
   });
 
   return {
-    data: {
-      agentInfo,
-      traderInfo,
-    },
-    isLoading: isAgentInfoLoading || isTraderInfoLoading,
-    isFetched: isTraderInfoFetched,
-    isError: isAgentInfoError || isTraderInfoError,
+    data: { agentDetails, performance },
+    isLoading: isAgentDetailsLoading || isPerformanceLoading,
+    isError: isAgentDetailsError || isPerformanceError,
   };
 };

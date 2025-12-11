@@ -1,8 +1,8 @@
+import { ErrorBoundary } from '@agent-ui-monorepo/ui-error-boundary';
 import { GlobalStyles } from '@agent-ui-monorepo/ui-theme';
 import { ConfigProvider as AntdConfigProvider } from 'antd';
 import styled from 'styled-components';
 
-import { ErrorBoundary } from '../components/ErrorBoundary';
 import { COLOR, THEME_CONFIG } from '../constants/theme';
 import { Agent } from './agent';
 

@@ -11,7 +11,6 @@ type ErrorBoundaryState = {
   errorMessage: string;
 };
 
-// TODO: move to libs?
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
