@@ -7,11 +7,11 @@ export const mockProfitOverTime: AgentProfitTimeseriesResponse = {
   points: [
     {
       timestamp: '2025-07-18T00:00:00Z',
-      delta_profit: 0.1,
+      delta_profit: 0.3,
     },
     {
       timestamp: '2025-07-19T00:00:00Z',
-      delta_profit: 0.9,
+      delta_profit: 0,
     },
     {
       timestamp: '2025-07-19T12:00:00Z',

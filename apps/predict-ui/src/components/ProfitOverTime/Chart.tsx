@@ -32,6 +32,28 @@ const formattedDate = (date: Date) =>
     minute: '2-digit',
   });
 
+const ChartTooltip = ({ currencySymbol }: { currencySymbol: string }) => (
+  <Tooltip
+    content={({ payload, label }) => {
+      const value = payload?.[0]?.value;
+      const text = (() => {
+        if (typeof value !== 'number') return NA;
+        if (isNaN(value)) return NA;
+        if (value === 0) return `No Profit or Loss`;
+        return `${value >= 0 ? 'Profit of ' : 'Loss of '}${currencySymbol}${value.toFixed(2)}`;
+      })();
+      return (
+        <TooltipContainer vertical gap={4}>
+          <span>
+            <b>{text}</b>
+          </span>
+          <span>{label ? formattedDate(new Date(label)) : NA}</span>
+        </TooltipContainer>
+      );
+    }}
+  />
+);
+
 type ChartProps = {
   currency?: CurrencyCode;
   data: { timestamp: Date; value: number }[];
@@ -72,23 +94,7 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
           width={60}
           tickMargin={16}
         />
-        <Tooltip
-          content={({ payload, label }) => {
-            const value = payload?.[0]?.value;
-            const text =
-              typeof value === 'number' && !isNaN(value)
-                ? `${value >= 0 ? 'Profit of ' : 'Loss of '}${currencySymbol}${value.toFixed(2)}`
-                : NA;
-            return (
-              <TooltipContainer vertical gap={4}>
-                <span>
-                  <b>{text}</b>
-                </span>
-                <span>{label ? formattedDate(new Date(label)) : NA}</span>
-              </TooltipContainer>
-            );
-          }}
-        />
+        <ChartTooltip currencySymbol={currencySymbol} />
         <Line
           type="monotone"
           dataKey="value"
