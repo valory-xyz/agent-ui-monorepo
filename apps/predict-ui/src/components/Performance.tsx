@@ -56,6 +56,10 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
 
   return (
     <Card>
+      <Title level={4} className="m-0 font-normal">
+        Performance
+      </Title>
+
       <Row gutter={[24, 16]} align="middle" className="m-0">
         {performanceItems.map((item) => (
           <Col lg={12} sm={12} xs={24} className="p-0" key={item.title}>
