@@ -1,17 +1,20 @@
 import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
-import { Flex } from 'antd';
+import { Col, Flex, Row, Skeleton } from 'antd';
+import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
-import { AgentActivity } from '../components/AgentActivity';
-import { AgentDetailsCard } from '../components/AgentDetailsCard/AgentDetailsCard';
-import { LoaderCard } from '../components/AgentDetailsCard/LoaderCard';
-import { AgentStatistics } from '../components/AgentStatistics/AgentStatistics';
+import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
-import { AgentNotFoundError, LoadingError } from '../components/ErrorState';
+import { ErrorState } from '../components/ErrorState';
+import { AgentPerformance } from '../components/Performance';
+import { PredictionHistory } from '../components/PredictionHistory';
+import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
+
+const IS_CHART_ENABLED = false; // TODO: enable once backend is ready
 
 const AgentContent = styled.div`
   display: flex;
@@ -25,7 +28,27 @@ const AgentContent = styled.div`
 const AgentLoader = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <LoaderCard />
+      <Card>
+        <Row gutter={24} align="middle" justify="space-between" className="m-0">
+          <Col lg={12} sm={12} xs={24} className="p-0">
+            <Skeleton.Input active size="small" />
+          </Col>
+          <Col lg={12} sm={12} xs={24} className="p-0">
+            <Skeleton.Input active size="small" />
+          </Col>
+        </Row>
+      </Card>
+
+      <Card>
+        <Skeleton.Input active />
+        <Row gutter={[24, 24]} align="middle" justify="space-between" className="m-0">
+          {[0, 1, 2, 3, 4, 5].map((index) => (
+            <Col key={index} lg={8} sm={12} xs={24} className="p-0">
+              <Skeleton.Input active style={{ width: 196 }} />
+            </Col>
+          ))}
+        </Row>
+      </Card>
     </AgentContent>
   </Flex>
 );
@@ -33,7 +56,11 @@ const AgentLoader = () => (
 const AgentError = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <LoadingError />
+      <ErrorState
+        title="Error loading data"
+        description="Something went wrong while loading data."
+        icon={Unplug}
+      />
     </AgentContent>
   </Flex>
 );
@@ -41,7 +68,11 @@ const AgentError = () => (
 const AgentNotFound = () => (
   <Flex vertical gap={24}>
     <AgentContent>
-      <AgentNotFoundError />
+      <ErrorState
+        title="404 | Agent not found"
+        description="This address probably doesn't belong to an Olas agent."
+        icon={Frown}
+      />
     </AgentContent>
   </Flex>
 );
@@ -63,23 +94,24 @@ const ChatContent = () => {
 };
 
 export const Agent = () => {
-  const { data, isLoading, isFetched, isError } = useAgentDetails();
+  const { data, isLoading, isError } = useAgentDetails();
 
   if (isLoading) return <AgentLoader />;
   if (isError) return <AgentError />;
-  if (!isFetched || !data.traderInfo) return <AgentNotFound />;
+  if (!data.agentDetails || !data.performance) return <AgentNotFound />;
+
+  const { agentDetails, performance } = data;
 
   return (
     <Flex vertical gap={24}>
       <AgentContent>
-        <AgentDetailsCard
-          agent={{
-            ...data.traderInfo,
-            serviceAgentId: data.agentInfo?.agent_ids[0],
-          }}
+        <AgentDetails
+          createdAt={agentDetails.created_at}
+          lastActiveAt={agentDetails.last_active_at}
         />
-        <AgentStatistics agent={data.traderInfo} />
-        <AgentActivity agentId={data.traderInfo.id} />
+        <AgentPerformance performance={performance} />
+        {IS_CHART_ENABLED && <ProfitOverTime />}
+        <PredictionHistory />
         <Strategy />
         <ChatContent />
       </AgentContent>

@@ -36,8 +36,14 @@ export const GlobalStyles = createGlobalStyle`
   .mt-16 {
     margin-top: 16px !important;
   }
+  .mx-auto {
+    margin: 0 auto;
+  }
   .ml-auto {
     margin-left: auto;
+  }
+  .ml-8 {
+    margin-left: 8px !important;
   }
 
   /* padding */
@@ -56,6 +62,17 @@ export const GlobalStyles = createGlobalStyle`
     text-align: center;
   }
 
+  /* font color */
+  .text-white-075 {
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  /* font weights */
+  .font-normal {
+    font-weight: normal !important;
+  }
+
+  /* sizes */
   .w-full {
     width: 100%;
   }
@@ -70,5 +87,13 @@ export const GlobalStyles = createGlobalStyle`
     border-radius: 12px;
     background: linear-gradient(180deg, #F5F7FA 0%, #FFF 100%), #FFF;
     box-shadow: 0px 0px 0px 4px #FFF inset;
+  }
+
+  /* antd-segment */
+  .ant-segmented {
+    padding: 3px;
+    .ant-segmented-item {
+      border-radius: 4px;
+    }
   }
 `;

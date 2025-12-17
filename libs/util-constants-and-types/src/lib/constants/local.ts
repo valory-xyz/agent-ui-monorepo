@@ -4,3 +4,5 @@
  * - Unsecured: LOCAL='http://127.0.0.1:8716'
  */
 export const LOCAL = 'http://127.0.0.1:8716';
+
+export const API_V1 = `${LOCAL}/api/v1`;
