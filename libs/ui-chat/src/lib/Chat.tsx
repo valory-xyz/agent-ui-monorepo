@@ -82,8 +82,8 @@ export const Chat = ({
 
   return (
     <>
-      <Title level={4} style={{ margin: 0 }} type={type}>
-        Update agent’s goal
+      <Title level={4} className="m-0 font-normal" type={type}>
+        Update agent's goal
       </Title>
 
       {chats.length === 0 ? (
