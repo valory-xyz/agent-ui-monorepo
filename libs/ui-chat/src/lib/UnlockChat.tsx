@@ -10,8 +10,8 @@ const { Text, Title } = Typography;
 export const UnlockChat = ({ type }: { type?: 'secondary' }) => {
   return (
     <>
-      <Title level={4} style={{ margin: 0 }} type={type}>
-        Update agent’s goal
+      <Title level={4} className="m-0 font-normal" type={type}>
+        Update agent's goal
       </Title>
 
       <Flex
