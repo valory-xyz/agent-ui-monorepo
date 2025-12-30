@@ -1,3 +1,7 @@
+import type { PillType } from '@agent-ui-monorepo/ui-pill';
+
+type TradingType = 'risky' | 'balanced';
+
 export const TRADING_TYPE_MAP = {
   risky: {
     displayName: 'Risky',
@@ -7,4 +11,4 @@ export const TRADING_TYPE_MAP = {
     displayName: 'Balanced',
     type: 'primary',
   },
-} as const;
+} satisfies Record<TradingType, { displayName: string; type: PillType }>;
