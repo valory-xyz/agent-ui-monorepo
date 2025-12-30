@@ -2,6 +2,8 @@ import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { Badge, Flex } from 'antd';
 import { CSSProperties, ReactNode } from 'react';
 
+import { HaloDot } from './HaloDot';
+
 const PILL_COLORS = {
   BLUE: '#1677FF',
   RED: '#F5222D',
@@ -69,7 +71,10 @@ export const Pill = ({ type = 'neutral', size = 'small', style, children }: Pill
           styles={{ indicator: { width: 8, height: 8, boxShadow } }}
         />
       )}
-      {children}
+      <Flex align="center" justify="center" gap={8}>
+        <HaloDot dotColor={badgeColor} />
+        {children}
+      </Flex>
     </Flex>
   );
 };
