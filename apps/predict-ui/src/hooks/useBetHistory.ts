@@ -12,7 +12,7 @@ export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: numb
   const query = useQuery<AgentPredictionHistoryResponse>({
     queryKey: [REACT_QUERY_KEYS.PREDICTION_HISTORY, page, pageSize],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) return delay(mockBetHistory, 5);
+      if (IS_MOCK_ENABLED) return delay(mockBetHistory);
 
       const response = await fetch(
         `${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`,

@@ -154,7 +154,6 @@ export const BetHistory = () => {
           dataSource={data?.items ?? []}
           loading={isLoading}
           rowKey={(record) => record.id}
-          locale={{ emptyText: <NoDataAvailable /> }}
           pagination={{
             current: currentPage,
             pageSize: PAGE_SIZE,
