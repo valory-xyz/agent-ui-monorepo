@@ -3,6 +3,7 @@ import { Col, Flex, Row, Tooltip, Typography } from 'antd';
 import { useMemo } from 'react';
 
 import { CURRENCY, CurrencyCode } from '../constants/currency';
+import { COLOR } from '../constants/theme';
 import { AgentMetricsResponse } from '../types';
 import { Card } from './ui/Card';
 
@@ -46,9 +47,11 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       },
       {
         title: 'Prediction accuracy',
-        value: stats.prediction_accuracy
-          ? `${(stats.prediction_accuracy * 100).toFixed(2)}%`
-          : '0%',
+        value:
+          stats.prediction_accuracy === null
+            ? 'Will appear with the first resolved market.'
+            : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
+        type: stats.prediction_accuracy === null ? 'text' : undefined,
       },
     ],
     [metrics, stats, currency],
@@ -72,9 +75,15 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
                   </Tooltip>
                 )}
               </Text>
-              <Title level={3} className="m-0 font-normal">
-                {item.value}
-              </Title>
+              {item.type === 'text' ? (
+                <Text className="text-sm" style={{ color: COLOR.WHITE_TRANSPARENT_75 }}>
+                  {item.value}
+                </Text>
+              ) : (
+                <Title level={3} className="m-0 font-normal">
+                  {item.value}
+                </Title>
+              )}
             </Flex>
           </Col>
         ))}

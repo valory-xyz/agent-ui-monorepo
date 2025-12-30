@@ -51,10 +51,16 @@ const PredictionHistoryCard = styled(Card)`
   }
 `;
 
+const Loading = () => (
+  <Flex align="center" justify="center" style={{ height: 200 }}>
+    <Spin spinning />
+  </Flex>
+);
+
 const NoDataAvailable = () => (
-  <Flex align="center" justify="center" vertical style={{ padding: '42px 0px' }}>
+  <Flex align="center" justify="center" vertical style={{ padding: '32px 0' }}>
     <HistoryOutlined
-      className="mb-16"
+      className="mb-24"
       style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
     />
     <Text type="secondary">No data yet.</Text>
@@ -139,9 +145,7 @@ export const BetHistory = () => {
       </Title>
 
       {isLoading ? (
-        <Flex align="center" justify="center" style={{ height: 200 }}>
-          <Spin spinning />
-        </Flex>
+        <Loading />
       ) : data?.items.length === 0 ? (
         <NoDataAvailable />
       ) : (

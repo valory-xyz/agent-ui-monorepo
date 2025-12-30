@@ -12,7 +12,7 @@ export const mockPerformance: AgentMetricsResponse = {
   },
   stats: {
     predictions_made: 0,
-    prediction_accuracy: 0,
+    prediction_accuracy: 0, // `null` indicates no data available
   },
 } as const;
 

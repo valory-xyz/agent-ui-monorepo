@@ -1,3 +1,4 @@
+import { LineChartOutlined } from '@ant-design/icons';
 import { Flex, Segmented, Spin, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -17,6 +18,17 @@ const WINDOW_OPTIONS: { label: string; value: AgentWindow }[] = [
   { label: '90D', value: '90d' },
   { label: 'All Time', value: 'lifetime' },
 ] as const;
+
+const NoDataAvailable = () => (
+  <Flex align="center" justify="center" vertical style={{ padding: '32px 0' }}>
+    <LineChartOutlined
+      className="mb-24"
+      style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
+    />
+    <Text type="secondary">No data yet.</Text>
+    <Text type="secondary">Profit over time will appear here when available.</Text>
+  </Flex>
+);
 
 const Container = styled(Flex)`
   width: 100%;
@@ -61,9 +73,7 @@ export const ProfitOverTime = () => {
           <Text className="text-sm text-white-075">Failed to load profit data.</Text>
         </Container>
       ) : points.length === 0 ? (
-        <Container justify="center" align="center">
-          <Text className="text-sm text-white-075">No profit data available.</Text>
-        </Container>
+        <NoDataAvailable />
       ) : (
         <Chart data={points} currency={data?.currency} />
       )}

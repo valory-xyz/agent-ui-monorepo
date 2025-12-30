@@ -40,8 +40,11 @@ export type AgentMetricsResponse = {
   };
   stats: {
     predictions_made: number;
-    /** 0-1 (e.g. 0.53 = 53%) */
-    prediction_accuracy: number;
+    /**
+     * 0-1 (e.g. 0.53 = 53%).
+     * `null` indicates no data available
+     */
+    prediction_accuracy: number | null;
   };
 };
 
