@@ -5,13 +5,29 @@ export const mockPerformance: AgentMetricsResponse = {
   window: 'lifetime',
   currency: 'USD',
   metrics: {
-    all_time_funds_used: 20.55,
-    all_time_profit: 2.1,
-    funds_locked_in_markets: 0.125,
-    available_funds: 10.9,
+    all_time_funds_used: 0,
+    all_time_profit: 0,
+    funds_locked_in_markets: 0,
+    available_funds: 0,
   },
   stats: {
-    predictions_made: 1002,
-    prediction_accuracy: 0.53,
+    predictions_made: 0,
+    prediction_accuracy: 0,
   },
 } as const;
+
+// export const mockPerformance: AgentMetricsResponse = {
+//   agent_id: 'agent_123',
+//   window: 'lifetime',
+//   currency: 'USD',
+//   metrics: {
+//     all_time_funds_used: 20.55,
+//     all_time_profit: 2.1,
+//     funds_locked_in_markets: 0.125,
+//     available_funds: 10.9,
+//   },
+//   stats: {
+//     predictions_made: 1002,
+//     prediction_accuracy: 0.53,
+//   },
+// } as const;

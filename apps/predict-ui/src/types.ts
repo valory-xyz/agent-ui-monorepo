@@ -49,7 +49,7 @@ export type PredictionStatus = 'pending' | 'won' | 'lost';
 
 export type PredictionSide = 'yes' | 'no';
 
-export type PredictionHistoryItem = {
+export type BetHistoryItem = {
   id: string;
   market: {
     id: string;
@@ -74,7 +74,7 @@ export type AgentPredictionHistoryResponse = {
   page: number;
   page_size: number;
   total: number;
-  items: PredictionHistoryItem[];
+  items: BetHistoryItem[];
 };
 
 export type AgentProfitPoint = {

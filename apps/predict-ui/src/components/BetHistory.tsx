@@ -1,14 +1,14 @@
 import type { TableProps } from 'antd';
-import { Flex, Tag, Typography } from 'antd';
+import { Flex, Spin, Tag, Typography } from 'antd';
 import { Table } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Card } from '../components/ui/Card';
 import { CURRENCY, CurrencyCode } from '../constants/currency';
 import { COLOR } from '../constants/theme';
-import { usePredictionHistory } from '../hooks/usePredictionHistory';
-import { PredictionHistoryItem } from '../types';
+import { useBetHistory } from '../hooks/useBetHistory';
+import { BetHistoryItem } from '../types';
+import { Card } from './ui/Card';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -51,18 +51,19 @@ const PredictionHistoryCard = styled(Card)`
 `;
 
 const NoDataAvailable = () => (
-  <Flex align="center" justify="center" style={{ padding: '42px' }}>
-    No data available.
+  <Flex align="center" justify="center" vertical style={{ padding: '42px' }}>
+    <Text type="secondary">No data yet.</Text>
+    <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>
   </Flex>
 );
 
-const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['columns'] => [
+const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns'] => [
   {
     title: 'Market',
     dataIndex: 'market',
     key: 'market',
     width: '60%',
-    render: (market: PredictionHistoryItem['market']) => (
+    render: (market: BetHistoryItem['market']) => (
       <Paragraph className="text-sm text-white-075 m-0" ellipsis={{ rows: 2, tooltip: true }}>
         {market.title}
       </Paragraph>
@@ -73,7 +74,7 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
     dataIndex: 'prediction_side',
     key: 'prediction_side',
     width: '15%',
-    render: (side: PredictionHistoryItem['prediction_side']) => (
+    render: (side: BetHistoryItem['prediction_side']) => (
       <Text className="text-sm text-white-075">{side === 'yes' ? 'Yes' : 'No'}</Text>
     ),
     align: 'center',
@@ -84,7 +85,7 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
     dataIndex: 'status',
     key: 'status',
     width: '20%',
-    render: (_text, record: PredictionHistoryItem) => {
+    render: (_text, record: BetHistoryItem) => {
       const amount = record.status === 'pending' ? record.bet_amount : record.net_profit;
       const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
 
@@ -118,10 +119,10 @@ const getColumns = (currency: CurrencyCode): TableProps<PredictionHistoryItem>['
   },
 ];
 
-export const PredictionHistory = () => {
+export const BetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { isLoading, data } = usePredictionHistory({
+  const { isLoading, data } = useBetHistory({
     page: currentPage,
     pageSize: PAGE_SIZE,
   });
@@ -129,24 +130,32 @@ export const PredictionHistory = () => {
   return (
     <PredictionHistoryCard $gap="24px">
       <Title level={4} className="m-0 font-normal">
-        Prediction History
+        Bet History
       </Title>
 
-      <Table<PredictionHistoryItem>
-        columns={getColumns(data?.currency ?? 'USD')}
-        dataSource={data?.items ?? []}
-        loading={isLoading}
-        rowKey={(record) => record.id}
-        locale={{ emptyText: <NoDataAvailable /> }}
-        pagination={{
-          current: currentPage,
-          pageSize: PAGE_SIZE,
-          showSizeChanger: false,
-          onChange: (page) => setCurrentPage(page),
-          total: data?.total ?? 0,
-        }}
-        rowHoverable={false}
-      />
+      {isLoading ? (
+        <Flex align="center" justify="center" style={{ height: 200 }}>
+          <Spin spinning />
+        </Flex>
+      ) : data?.items.length === 0 ? (
+        <NoDataAvailable />
+      ) : (
+        <Table<BetHistoryItem>
+          columns={getColumns(data?.currency ?? 'USD')}
+          dataSource={data?.items ?? []}
+          loading={isLoading}
+          rowKey={(record) => record.id}
+          locale={{ emptyText: <NoDataAvailable /> }}
+          pagination={{
+            current: currentPage,
+            pageSize: PAGE_SIZE,
+            showSizeChanger: false,
+            onChange: (page) => setCurrentPage(page),
+            total: data?.total ?? 0,
+          }}
+          rowHoverable={false}
+        />
+      )}
     </PredictionHistoryCard>
   );
 };
