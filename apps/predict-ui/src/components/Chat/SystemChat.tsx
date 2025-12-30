@@ -48,7 +48,7 @@ type TradingStrategyProps = { from: TradingType; to: TradingType };
 export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   return (
     <SystemMessage label="Trading strategy updated:">
-      <Pill size="large" style={pillStyle}>
+      <Pill type={TRADING_TYPE_MAP[from].type} size="large" style={pillStyle}>
         {TRADING_TYPE_MAP[from].displayName}
       </Pill>
       {to && (
