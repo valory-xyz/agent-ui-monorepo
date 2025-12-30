@@ -1,3 +1,4 @@
+import { HistoryOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
 import { Flex, Spin, Tag, Typography } from 'antd';
 import { Table } from 'antd';
@@ -51,7 +52,11 @@ const PredictionHistoryCard = styled(Card)`
 `;
 
 const NoDataAvailable = () => (
-  <Flex align="center" justify="center" vertical style={{ padding: '42px' }}>
+  <Flex align="center" justify="center" vertical style={{ padding: '42px 0px' }}>
+    <HistoryOutlined
+      className="mb-16"
+      style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
+    />
     <Text type="secondary">No data yet.</Text>
     <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>
   </Flex>
