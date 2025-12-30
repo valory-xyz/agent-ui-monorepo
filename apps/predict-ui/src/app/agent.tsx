@@ -11,6 +11,7 @@ import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
+import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
@@ -85,7 +86,7 @@ const ChatContent = () => {
   if (!data?.isChatEnabled) {
     return (
       <Card>
-        <UnlockChat />
+        <UnlockChat iconColor={COLOR.WHITE_TRANSPARENT_50} />
       </Card>
     );
   }
