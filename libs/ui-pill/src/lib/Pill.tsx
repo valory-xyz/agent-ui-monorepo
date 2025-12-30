@@ -2,7 +2,11 @@ import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { Badge, Flex } from 'antd';
 import { CSSProperties, ReactNode } from 'react';
 
-import { COLOR } from '../../constants/theme';
+const PILL_COLORS = {
+  BLUE: '#1677FF',
+  RED: '#F5222D',
+  GRAY: '#FFFFFF',
+};
 
 const flexStyle: CSSProperties = { display: 'inline-flex', borderRadius: 40 };
 
@@ -13,23 +17,23 @@ type PillProps = {
   children: ReactNode;
 };
 
-type PillType = NonNullable<PillProps['type']>;
+export type PillType = NonNullable<PillProps['type']>;
 
 const PILL_STYLES: Record<PillType, { background: string; badgeColor: string; boxShadow: string }> =
   {
     primary: {
       background: GLOBAL_COLORS.BLUE_TRANSPARENT_10,
-      badgeColor: COLOR.BLUE,
-      boxShadow: `0px 0 10px ${COLOR.BLUE}20`,
+      badgeColor: PILL_COLORS.BLUE,
+      boxShadow: `0px 0 10px ${PILL_COLORS.BLUE}20`,
     },
     danger: {
       background: GLOBAL_COLORS.RED_TRANSPARENT_20,
-      badgeColor: COLOR.RED,
-      boxShadow: `0px 0 10px ${COLOR.RED}20`,
+      badgeColor: PILL_COLORS.RED,
+      boxShadow: `0px 0 10px ${PILL_COLORS.RED}20`,
     },
     neutral: {
       background: GLOBAL_COLORS.GRAY_TRANSPARENT_20,
-      badgeColor: COLOR.TEXT_PRIMARY,
+      badgeColor: PILL_COLORS.GRAY,
       boxShadow: 'none',
     },
   };
@@ -40,7 +44,6 @@ const getSpacing = (size: 'small' | 'large', hasType: boolean) => ({
   marginLeft: hasType ? -28 : 0,
 });
 
-// TODO: add a ui-pill nxx lib and move this there
 export const Pill = ({ type = 'neutral', size = 'small', style, children }: PillProps) => {
   const { background, badgeColor, boxShadow } = PILL_STYLES[type];
   const spacing = getSpacing(size, !!type);

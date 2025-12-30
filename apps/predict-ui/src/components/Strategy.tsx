@@ -1,3 +1,4 @@
+import { Pill } from '@agent-ui-monorepo/ui-pill';
 import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Flex, Skeleton, Tooltip, Typography } from 'antd';
@@ -6,7 +7,6 @@ import { TRADING_TYPE_MAP } from '../constants/textMaps';
 import { COLOR } from '../constants/theme';
 import { useTradingDetails } from '../hooks/useTradingDetails';
 import { Card } from './ui/Card';
-import { Pill } from './ui/Pill';
 
 const { Title } = Typography;
 
@@ -34,8 +34,8 @@ const StrategyContent = () => {
       {isLoading ? (
         <Loader />
       ) : type ? (
-        <Pill size="large" style={{ fontSize: 14 }}>
-          {TRADING_TYPE_MAP[type]}
+        <Pill type={TRADING_TYPE_MAP[type].type} size="large" style={{ fontSize: 14 }}>
+          {TRADING_TYPE_MAP[type].displayName}
         </Pill>
       ) : (
         NA

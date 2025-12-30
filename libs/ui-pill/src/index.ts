@@ -1,1 +1,1 @@
-export * from './lib/ui-pill';
+export * from './lib/Pill';

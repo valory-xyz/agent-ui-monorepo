@@ -1,3 +1,4 @@
+import { Pill } from '@agent-ui-monorepo/ui-pill';
 import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { Flex, Typography } from 'antd';
@@ -6,7 +7,6 @@ import styled from 'styled-components';
 
 import { TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { TradingType } from '../../types';
-import { Pill } from '../ui/Pill';
 
 const { Text } = Typography;
 
@@ -49,13 +49,13 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   return (
     <SystemMessage label="Trading strategy updated:">
       <Pill size="large" style={pillStyle}>
-        {TRADING_TYPE_MAP[from]}
+        {TRADING_TYPE_MAP[from].displayName}
       </Pill>
       {to && (
         <>
           <ArrowRightOutlined style={{ fontSize: 14, color: GLOBAL_COLORS.WHITE_TRANSPARENT_50 }} />
-          <Pill size="large" style={pillStyle}>
-            {TRADING_TYPE_MAP[to]}
+          <Pill type={TRADING_TYPE_MAP[to].type} size="large" style={pillStyle}>
+            {TRADING_TYPE_MAP[to].displayName}
           </Pill>
         </>
       )}

@@ -1,4 +1,10 @@
 export const TRADING_TYPE_MAP = {
-  risky: 'Risky',
-  balanced: 'Balanced',
+  risky: {
+    displayName: 'Risky',
+    type: 'danger',
+  },
+  balanced: {
+    displayName: 'Balanced',
+    type: 'primary',
+  },
 } as const;
