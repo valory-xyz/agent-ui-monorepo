@@ -24,7 +24,7 @@ export type PillType = NonNullable<PillProps['type']>;
 const PILL_STYLES: Record<PillType, { background: string; badgeColor: string; boxShadow: string }> =
   {
     primary: {
-      background: GLOBAL_COLORS.BLUE_TRANSPARENT_10,
+      background: GLOBAL_COLORS.BLUE_TRANSPARENT_20,
       badgeColor: PILL_COLORS.BLUE,
       boxShadow: `0px 0 10px ${PILL_COLORS.BLUE}20`,
     },

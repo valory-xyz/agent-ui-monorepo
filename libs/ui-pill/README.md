@@ -1,3 +1,3 @@
 # ui-pill
 
-Pill component for displaying status or categories in a compact form.
+Pill component for displaying status or trading strategy.
