@@ -37,6 +37,7 @@ export type AgentMetricsResponse = {
     all_time_profit: number;
     funds_locked_in_markets: number;
     available_funds: number;
+    roi: number;
   };
   stats: {
     predictions_made: number;
