@@ -80,6 +80,32 @@ export type AgentPredictionHistoryResponse = {
   items: BetHistoryItem[];
 };
 
+type PositionSide = 'yes' | 'no';
+
+export type PositionDetails = {
+  id: string;
+  question: string;
+  currency: CurrencyCode;
+  totalBet: number;
+  toWin: number;
+  /** If status is pending, show remainingSeconds else net profit */
+  status: PredictionStatus;
+  /** time left in seconds */
+  remainingSeconds?: number;
+  net_profit: number;
+  bets: Array<{
+    bet: {
+      amount: number;
+      side: PositionSide;
+      externalUrl?: string;
+      placedAt?: string; // ISO 8601 timestamp (date and time)
+    };
+    /** 0..1 */
+    probability: number;
+    strategy: TradingType;
+  }>;
+};
+
 export type AgentProfitPoint = {
   /** ISO 8601 timestamp */
   timestamp: string;
