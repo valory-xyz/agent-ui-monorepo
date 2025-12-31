@@ -33,6 +33,8 @@ export const useBetDetails = ({ id }: { id: string }) => {
   const query = useQuery<PositionDetails>({
     queryKey: [REACT_QUERY_KEYS.PREDICTION_DETAILS, id],
     queryFn: async () => {
+      // if (1 + 1 === 2) throw new Error(`Failed to fetch position details for id ${id}`);
+
       if (IS_MOCK_ENABLED) return delay(mockPositionDetails);
 
       const response = await fetch(`${API_V1}/agent/position-details?id=${id}`);
@@ -42,7 +44,7 @@ export const useBetDetails = ({ id }: { id: string }) => {
     },
     refetchInterval: FIVE_MINUTES,
     retry: 5,
-    retryDelay: exponentialBackoffDelay,
+    // retryDelay: exponentialBackoffDelay,
   });
 
   return query;

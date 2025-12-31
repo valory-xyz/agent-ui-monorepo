@@ -87,7 +87,8 @@ export const mockBetHistory: AgentPredictionHistoryResponse = {
 
 export const mockPositionDetails: PositionDetails = {
   id: 'pos_123',
-  question: 'Will the National Development and Reform Commission of China ...?',
+  question:
+    'Will the National Development and Reform Commission of China publicly announce, on or before December 3, 2025, a new regulatory policy specifically aimed at curbing speculative investment in the humanoid robotics sector?',
   currency: 'USD',
   totalBet: 1.82,
   toWin: 2.04,

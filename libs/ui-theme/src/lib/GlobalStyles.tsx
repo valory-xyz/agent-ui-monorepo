@@ -58,6 +58,12 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* font size */
+  .text-lg {
+    font-size: 18px;
+  }
+  .text-md {
+    font-size: 16px;
+  }
   .text-sm {
     font-size: 14px;
   }
