@@ -169,9 +169,6 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
             </Row>
           </Card>
 
-          {/* Bets (multiple) */}
-          <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12 }}>Bets</Text>
-
           <div style={{ marginTop: 10 }}>
             {data?.bets?.length ? (
               data.bets.map((b, idx) => {
@@ -193,9 +190,8 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                     ) : null}
 
                     <Row gutter={[16, 16]}>
-                      {/* Bet */}
                       <Col xs={24} md={8}>
-                        <CardDark>
+                        <Flex vertical>
                           <Text style={styles.smallLabel}>Bet</Text>
 
                           <div
@@ -239,63 +235,45 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                           <Text style={styles.subtleText}>
                             {b.bet.placed_at ? formatPlacedAt(b.bet.placed_at) : ''}
                           </Text>
-                        </CardDark>
+                        </Flex>
                       </Col>
 
-                      {/* Probability */}
                       <Col xs={24} md={8}>
-                        <CardDark>
-                          <Text style={styles.smallLabel}>Probability</Text>
-                          <Text style={styles.bigValue}>
-                            {Number.isFinite(b.probability) ? `${Math.round(b.probability)}%` : '—'}
-                          </Text>
-                          <Text style={styles.subtleText}>&nbsp;</Text>
-                        </CardDark>
+                        <Metric
+                          label="Probability"
+                          value={
+                            Number.isFinite(b.probability) ? `${Math.round(b.probability)}%` : NA
+                          }
+                        />
                       </Col>
 
-                      {/* Strategy */}
                       <Col xs={24} md={8}>
-                        <CardDark>
-                          <>
-                            <Space align="center" size={8}>
-                              <Text style={styles.smallLabel}>Strategy</Text>
-                              <Tooltip title="Something nice!">
-                                <InfoCircleOutlined style={{ color: 'rgba(255,255,255,0.55)' }} />
-                              </Tooltip>
-                            </Space>
-
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 10,
-                                marginTop: 8,
-                              }}
-                            >
-                              <span
-                                style={{
-                                  padding: '6px 10px',
-                                  borderRadius: 12,
-                                  background: 'rgba(255,255,255,0.08)',
-                                  border: '1px solid rgba(255,255,255,0.10)',
-                                  color: 'rgba(255,255,255,0.9)',
-                                  fontWeight: 600,
-                                }}
-                              >
-                                Risky
-                              </span>
-                            </div>
-                          </>
-                        </CardDark>
+                        <Flex vertical gap={4}>
+                          <Space align="center">
+                            <Text type="secondary" className="text-sm">
+                              Strategy
+                            </Text>
+                            <Tooltip title="Something nice!">
+                              <InfoCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
+                            </Tooltip>
+                          </Space>
+                          <Tag
+                            bordered={false}
+                            color={COLOR.WHITE_TRANSPARENT_5}
+                            style={{ color: COLOR.WHITE_TRANSPARENT_75, fontSize: 14 }}
+                          >
+                            Risky
+                          </Tag>
+                        </Flex>
                       </Col>
                     </Row>
                   </React.Fragment>
                 );
               })
             ) : (
-              <CardDark>
-                <Text style={{ color: 'rgba(255,255,255,0.65)' }}>No bets found.</Text>
-              </CardDark>
+              <Flex justify="center" align="center" style={{ height: 100 }}>
+                <Text>No bets found.</Text>
+              </Flex>
             )}
           </div>
         </>

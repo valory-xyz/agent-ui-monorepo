@@ -94,6 +94,7 @@ export type PositionDetails = {
   remaining_seconds?: number;
   net_profit: number;
   bets: Array<{
+    id: string;
     bet: {
       amount: number;
       side: PositionSide;
