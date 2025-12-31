@@ -132,6 +132,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
 
 export const BetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
 
   const { isLoading, data } = useBetHistory({
     page: currentPage,
