@@ -59,22 +59,6 @@ const PetitionDetailsError = ({ errorMessage }: { errorMessage: string }) => (
   <Alert type="error" description={errorMessage} showIcon />
 );
 
-function CardDark({ children }: { children: React.ReactNode }) {
-  return (
-    <AntdCard
-      bordered={false}
-      style={{
-        background: 'rgba(0,0,0,0.16)',
-        borderRadius: 16,
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
-      bodyStyle={{ padding: 16, minHeight: 104 }}
-    >
-      {children}
-    </AntdCard>
-  );
-}
-
 const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
   <Flex vertical gap={4}>
     {typeof label === 'string' ? (
@@ -84,17 +68,16 @@ const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
     ) : (
       label
     )}
-
     <div>{typeof value === 'string' ? <Text className="text-md">{value}</Text> : value}</div>
   </Flex>
 );
 
-const Bet = ({ id, bet, probability, strategy }: BetDetails) => {
+const Bet = ({ bet, probability, strategy }: BetDetails) => {
   const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
 
   return (
     <React.Fragment>
-      <Col xs={24} md={8}>
+      <Col xs={24} sm={8} md={8}>
         <Flex vertical gap={6}>
           <Text type="secondary" className="text-sm">
             Bet
@@ -105,7 +88,7 @@ const Bet = ({ id, bet, probability, strategy }: BetDetails) => {
               {formatCurrency(bet.amount)} – {sideLabel}
             </Text>
 
-            {bet.external_url ? (
+            {bet.external_url && (
               <a
                 href={bet.external_url}
                 target="_blank"
@@ -115,7 +98,7 @@ const Bet = ({ id, bet, probability, strategy }: BetDetails) => {
               >
                 <ExportOutlined />
               </a>
-            ) : null}
+            )}
           </Flex>
 
           <Text type="secondary" className="text-xs">
@@ -124,14 +107,14 @@ const Bet = ({ id, bet, probability, strategy }: BetDetails) => {
         </Flex>
       </Col>
 
-      <Col xs={24} md={8}>
+      <Col xs={24} sm={8} md={8}>
         <Metric
           label="Probability"
           value={Number.isFinite(probability) ? `${Math.round(probability)}%` : NA}
         />
       </Col>
 
-      <Col xs={24} md={8}>
+      <Col xs={24} sm={8} md={8}>
         <Metric
           label={
             <Space align="center">
@@ -174,15 +157,12 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
       footer={null}
       centered
       width={600}
-      styles={{
-        header: { background: 'transparent' },
-        body: { paddingTop: 16 },
-      }}
+      styles={{ header: { background: 'transparent' }, body: { paddingTop: 16 } }}
     >
       {isLoading ? (
-        <CardDark>
+        <Card>
           <Skeleton active title={false} paragraph={{ rows: 3 }} />
-        </CardDark>
+        </Card>
       ) : error ? (
         <PetitionDetailsError errorMessage={error.message} />
       ) : data ? (
@@ -191,13 +171,13 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
             <Text>{data?.question ?? NA}</Text>
 
             <Row gutter={[16, 16]} className="mt-16">
-              <Col xs={24} md={8}>
+              <Col xs={24} sm={8} md={8}>
                 <Metric label="Total bet" value={formatCurrency(data.total_bet)} />
               </Col>
-              <Col xs={24} md={8}>
+              <Col xs={24} sm={8} md={8}>
                 <Metric label="To win" value={formatCurrency(data.to_win)} />
               </Col>
-              <Col xs={24} md={8}>
+              <Col xs={24} sm={8} md={8}>
                 <Metric
                   label="Status"
                   value={
@@ -222,11 +202,11 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
 
           <div>
             {data.bets?.length ? (
-              data.bets.map(({ bet, probability, strategy }, idx) => {
+              data.bets.map(({ id, bet, probability, strategy }, idx) => {
                 const isLast = idx === data.bets.length - 1;
 
                 return (
-                  <React.Fragment key={`${data.id}-${idx}`}>
+                  <React.Fragment key={id}>
                     <Row
                       gutter={[16, 16]}
                       style={{

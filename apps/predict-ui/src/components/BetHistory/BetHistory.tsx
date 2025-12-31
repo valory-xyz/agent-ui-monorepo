@@ -42,6 +42,11 @@ const PredictionHistoryCard = styled(Card)`
       }
     }
     .ant-table-tbody {
+      .ant-table-row {
+        &:hover > td {
+          background-color: ${`${COLOR.PRIMARY}33`} !important;
+        }
+      }
       .ant-table-cell {
         padding: 8px 16px;
         border-color: ${COLOR.WHITE_TRANSPARENT_10} !important;
@@ -144,7 +149,6 @@ export const BetHistory = () => {
             onChange: (page) => setCurrentPage(page),
             total: data?.total ?? 0,
           }}
-          rowHoverable={false}
           onRow={(record) => ({
             onClick: () => {
               setSelectedPositionId(record.id);
