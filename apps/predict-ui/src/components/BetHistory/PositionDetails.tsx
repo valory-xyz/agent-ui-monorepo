@@ -5,6 +5,7 @@ import {
   Card as AntdCard,
   Col,
   Divider,
+  Flex,
   Modal as AntdModal,
   Row,
   Skeleton,
@@ -13,11 +14,11 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import React, { useMemo } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import styled from 'styled-components';
 
-import { COLOR } from '../constants/theme';
-import { useBetDetails } from '../hooks/useBetHistory';
+import { COLOR } from '../../constants/theme';
+import { useBetDetails } from '../../hooks/useBetHistory';
 
 const { Text } = Typography;
 
@@ -54,17 +55,14 @@ function formatDuration(totalSeconds: number) {
   return `${mins}m`;
 }
 
-function formatPlacedAt(iso?: string) {
-  if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleString(undefined, {
+const formatPlacedAt = (iso: string) =>
+  new Date(iso).toLocaleString(undefined, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
   });
-}
 
 const PetitionDetailsError = ({ errorMessage }: { errorMessage: string }) => (
   <Alert type="error" description={errorMessage} showIcon />
@@ -86,20 +84,14 @@ function CardDark({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Metric({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div>
-      <Typography.Text style={styles.smallLabel}>{label}</Typography.Text>
-      <div style={{ marginTop: 6 }}>
-        {typeof value === 'string' ? (
-          <Typography.Text style={styles.metricValue}>{value}</Typography.Text>
-        ) : (
-          <div style={styles.metricValue as React.CSSProperties}>{value}</div>
-        )}
-      </div>
-    </div>
-  );
-}
+const Metric = ({ label, value }: { label: string; value: ReactNode }) => (
+  <Flex vertical gap={4}>
+    <Text type="secondary" className="text-sm">
+      {label}
+    </Text>
+    <div>{typeof value === 'string' ? <Text className="text-md">{value}</Text> : value}</div>
+  </Flex>
+);
 
 const styles: Record<string, React.CSSProperties> = {
   smallLabel: {
@@ -150,9 +142,8 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
       centered
       width={600}
       styles={{
-        content: {},
         header: { background: 'transparent' },
-        body: { paddingTop: 18 },
+        body: { paddingTop: 16 },
       }}
     >
       {isLoading ? (
@@ -164,18 +155,9 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
       ) : (
         <>
           <Card variant="outlined" className="mb-16" styles={{ body: { padding: 16 } }}>
-            <Typography.Paragraph
-              style={{
-                color: 'rgba(255,255,255,0.92)',
-                fontSize: 18,
-                lineHeight: 1.35,
-                marginBottom: 18,
-              }}
-            >
-              {data?.question ?? NA}
-            </Typography.Paragraph>
+            <Text>{data?.question ?? NA}</Text>
 
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} className="mt-16">
               <Col xs={24} md={8}>
                 <Metric label="Total bet" value={data ? formatCurrency(data.totalBet) : NA} />
               </Col>
@@ -186,12 +168,12 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                 <Metric
                   label="Status"
                   value={
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <Flex gap={8} align="center">
                       <ClockCircleOutlined style={{ color: 'rgba(255,255,255,0.75)' }} />
                       <span style={{ color: 'rgba(255,255,255,0.92)' }}>
                         {data ? countdownLabel : NA}
                       </span>
-                    </span>
+                    </Flex>
                   }
                 />
               </Col>
@@ -199,9 +181,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
           </Card>
 
           {/* Bets (multiple) */}
-          <Typography.Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12 }}>
-            Bets
-          </Typography.Text>
+          <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12 }}>Bets</Text>
 
           <div style={{ marginTop: 10 }}>
             {data?.bets?.length ? (
@@ -227,7 +207,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                       {/* Bet */}
                       <Col xs={24} md={8}>
                         <CardDark>
-                          <Typography.Text style={styles.smallLabel}>Bet</Typography.Text>
+                          <Text style={styles.smallLabel}>Bet</Text>
 
                           <div
                             style={{
@@ -237,9 +217,9 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                               marginTop: 6,
                             }}
                           >
-                            <Typography.Text style={styles.bigValue}>
+                            <Text style={styles.bigValue}>
                               {formatCurrency(b.bet.amount)} – {sideLabel}
-                            </Typography.Text>
+                            </Text>
 
                             <Tag
                               style={{
@@ -267,20 +247,20 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                             ) : null}
                           </div>
 
-                          <Typography.Text style={styles.subtleText}>
+                          <Text style={styles.subtleText}>
                             {b.bet.placedAt ? formatPlacedAt(b.bet.placedAt) : ''}
-                          </Typography.Text>
+                          </Text>
                         </CardDark>
                       </Col>
 
                       {/* Probability */}
                       <Col xs={24} md={8}>
                         <CardDark>
-                          <Typography.Text style={styles.smallLabel}>Probability</Typography.Text>
-                          <Typography.Text style={styles.bigValue}>
+                          <Text style={styles.smallLabel}>Probability</Text>
+                          <Text style={styles.bigValue}>
                             {Number.isFinite(b.probability) ? `${Math.round(b.probability)}%` : '—'}
-                          </Typography.Text>
-                          <Typography.Text style={styles.subtleText}>&nbsp;</Typography.Text>
+                          </Text>
+                          <Text style={styles.subtleText}>&nbsp;</Text>
                         </CardDark>
                       </Col>
 
@@ -289,7 +269,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                         <CardDark>
                           <>
                             <Space align="center" size={8}>
-                              <Typography.Text style={styles.smallLabel}>Strategy</Typography.Text>
+                              <Text style={styles.smallLabel}>Strategy</Text>
                               <Tooltip title="Something nice!">
                                 <InfoCircleOutlined style={{ color: 'rgba(255,255,255,0.55)' }} />
                               </Tooltip>
@@ -325,9 +305,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
               })
             ) : (
               <CardDark>
-                <Typography.Text style={{ color: 'rgba(255,255,255,0.65)' }}>
-                  No bets found.
-                </Typography.Text>
+                <Text style={{ color: 'rgba(255,255,255,0.65)' }}>No bets found.</Text>
               </CardDark>
             )}
           </div>

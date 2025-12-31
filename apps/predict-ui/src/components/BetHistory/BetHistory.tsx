@@ -5,12 +5,12 @@ import { Table } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { CURRENCY, CurrencyCode } from '../constants/currency';
-import { COLOR } from '../constants/theme';
-import { useBetHistory } from '../hooks/useBetHistory';
-import { BetHistoryItem } from '../types';
+import { CURRENCY, CurrencyCode } from '../../constants/currency';
+import { COLOR } from '../../constants/theme';
+import { useBetHistory } from '../../hooks/useBetHistory';
+import { BetHistoryItem } from '../../types';
+import { Card } from '../ui/Card';
 import { PositionDetailsModal } from './PositionDetails';
-import { Card } from './ui/Card';
 
 const { Title, Text, Paragraph } = Typography;
 
