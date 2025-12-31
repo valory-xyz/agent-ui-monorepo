@@ -12,29 +12,16 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
-import { PositionDetails } from '../types';
+import { useBetDetails } from '../hooks/useBetHistory';
 
 type PositionDetailsModalProps = {
   id: string;
-  open: boolean;
   onClose: () => void;
-
-  /** Optional: override endpoint if you want. Defaults to `/api/positions/:id` */
-  endpoint?: (id: string) => string;
-
-  /**
-   * Optional: if TradingType isn't string / StrategyLike, provide your own renderer.
-   * If omitted, the component tries to render a label + optional tooltip + optional avatars.
-   */
-  renderStrategy?: (strategy: unknown) => React.ReactNode;
-
-  /** Optional: format money (defaults to USD with 2 decimals) */
-  formatMoney?: (n: number) => string;
 };
 
-const defaultFormatMoney = (n: number) => `$${n.toFixed(2)}`;
+const formatCurrency = (n: number) => `$${n.toFixed(2)}`;
 
 function formatDuration(totalSeconds: number) {
   const s = Math.max(0, Math.floor(totalSeconds));
@@ -59,17 +46,8 @@ function formatPlacedAt(iso?: string) {
   });
 }
 
-export function PositionDetailsModal({
-  id,
-  open,
-  onClose,
-  endpoint = (pid) => `/api/positions/${encodeURIComponent(pid)}`,
-  renderStrategy,
-  formatMoney = defaultFormatMoney,
-}: PositionDetailsModalProps) {
-  const [data, setData] = useState<PositionDetails | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [errMsg, setErrMsg] = useState<string | null>(null);
+export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps) {
+  const { data, isLoading, error } = useBetDetails({ id });
 
   const countdownLabel = useMemo(() => {
     if (!data) return '';
@@ -79,35 +57,10 @@ export function PositionDetailsModal({
     }
   }, [data]);
 
-  useEffect(() => {
-    if (!open || !id) return;
-
-    const ac = new AbortController();
-    setLoading(true);
-    setErrMsg(null);
-
-    (async () => {
-      try {
-        const res = await fetch(endpoint(id), { signal: ac.signal });
-        if (!res.ok) throw new Error(`Request failed (${res.status})`);
-        const json = (await res.json()) as PositionDetails;
-        setData(json);
-      } catch (e) {
-        if ((e as any)?.name === 'AbortError') return;
-        setErrMsg((e as Error).message || 'Something went wrong');
-        setData(null);
-      } finally {
-        setLoading(false);
-      }
-    })();
-
-    return () => ac.abort();
-  }, [id, open, endpoint]);
-
   return (
     <Modal
       title={<span style={{ color: '#fff', fontWeight: 700 }}>Position details</span>}
-      open={open}
+      open
       onCancel={onClose}
       footer={null}
       centered
@@ -126,11 +79,11 @@ export function PositionDetailsModal({
         body: { paddingTop: 18 },
       }}
     >
-      {errMsg && (
+      {error && (
         <Alert
           type="error"
           message="Couldn’t load position details"
-          description={errMsg}
+          description={error.message}
           showIcon
           style={{
             marginBottom: 12,
@@ -152,7 +105,7 @@ export function PositionDetailsModal({
         }}
         bodyStyle={{ padding: 18 }}
       >
-        {loading ? (
+        {isLoading ? (
           <Skeleton active title paragraph={{ rows: 2 }} />
         ) : (
           <>
@@ -169,10 +122,10 @@ export function PositionDetailsModal({
 
             <Row gutter={[16, 16]}>
               <Col xs={24} md={8}>
-                <Metric label="Total bet" value={data ? formatMoney(data.totalBet) : '—'} />
+                <Metric label="Total bet" value={data ? formatCurrency(data.totalBet) : '—'} />
               </Col>
               <Col xs={24} md={8}>
-                <Metric label="To win" value={data ? formatMoney(data.toWin) : '—'} />
+                <Metric label="To win" value={data ? formatCurrency(data.toWin) : '—'} />
               </Col>
               <Col xs={24} md={8}>
                 <Metric
@@ -198,7 +151,7 @@ export function PositionDetailsModal({
       </Typography.Text>
 
       <div style={{ marginTop: 10 }}>
-        {loading ? (
+        {isLoading ? (
           <CardDark>
             <Skeleton active title={false} paragraph={{ rows: 3 }} />
           </CardDark>
@@ -231,7 +184,7 @@ export function PositionDetailsModal({
                         style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 6 }}
                       >
                         <Typography.Text style={styles.bigValue}>
-                          {formatMoney(b.bet.amount)} – {sideLabel}
+                          {formatCurrency(b.bet.amount)} – {sideLabel}
                         </Typography.Text>
 
                         <Tag
@@ -280,35 +233,31 @@ export function PositionDetailsModal({
                   {/* Strategy */}
                   <Col xs={24} md={8}>
                     <CardDark>
-                      {renderStrategy ? (
-                        renderStrategy(b.strategy)
-                      ) : (
-                        <>
-                          <Space align="center" size={8}>
-                            <Typography.Text style={styles.smallLabel}>Strategy</Typography.Text>
-                            <Tooltip title="Something nice!">
-                              <InfoCircleOutlined style={{ color: 'rgba(255,255,255,0.55)' }} />
-                            </Tooltip>
-                          </Space>
+                      <>
+                        <Space align="center" size={8}>
+                          <Typography.Text style={styles.smallLabel}>Strategy</Typography.Text>
+                          <Tooltip title="Something nice!">
+                            <InfoCircleOutlined style={{ color: 'rgba(255,255,255,0.55)' }} />
+                          </Tooltip>
+                        </Space>
 
-                          <div
-                            style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}
+                        >
+                          <span
+                            style={{
+                              padding: '6px 10px',
+                              borderRadius: 12,
+                              background: 'rgba(255,255,255,0.08)',
+                              border: '1px solid rgba(255,255,255,0.10)',
+                              color: 'rgba(255,255,255,0.9)',
+                              fontWeight: 600,
+                            }}
                           >
-                            <span
-                              style={{
-                                padding: '6px 10px',
-                                borderRadius: 12,
-                                background: 'rgba(255,255,255,0.08)',
-                                border: '1px solid rgba(255,255,255,0.10)',
-                                color: 'rgba(255,255,255,0.9)',
-                                fontWeight: 600,
-                              }}
-                            >
-                              Risky
-                            </span>
-                          </div>
-                        </>
-                      )}
+                            Risky
+                          </span>
+                        </div>
+                      </>
                     </CardDark>
                   </Col>
                 </Row>

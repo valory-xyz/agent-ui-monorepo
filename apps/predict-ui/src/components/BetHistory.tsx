@@ -9,6 +9,7 @@ import { CURRENCY, CurrencyCode } from '../constants/currency';
 import { COLOR } from '../constants/theme';
 import { useBetHistory } from '../hooks/useBetHistory';
 import { BetHistoryItem } from '../types';
+import { PositionDetailsModal } from './PositionDetails';
 import { Card } from './ui/Card';
 
 const { Title, Text, Paragraph } = Typography;
@@ -133,6 +134,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
 export const BetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
+  const [selectedPositionId, setSelectedPositionId] = useState<string | null>(null);
 
   const { isLoading, data } = useBetHistory({
     page: currentPage,
@@ -163,6 +165,23 @@ export const BetHistory = () => {
             total: data?.total ?? 0,
           }}
           rowHoverable={false}
+          onRow={(record) => ({
+            onClick: () => {
+              setSelectedPositionId(record.id);
+              setIsPositionDetailsModalOpen(true);
+            },
+            style: { cursor: 'pointer' },
+          })}
+        />
+      )}
+
+      {selectedPositionId && isPositionDetailsModalOpen && (
+        <PositionDetailsModal
+          id={selectedPositionId}
+          onClose={() => {
+            setIsPositionDetailsModalOpen(false);
+            setSelectedPositionId(null);
+          }}
         />
       )}
     </PredictionHistoryCard>
