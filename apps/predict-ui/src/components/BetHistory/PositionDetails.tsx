@@ -13,7 +13,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import React, { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { CURRENCY, CurrencyCode } from '../../constants/currency';
@@ -60,10 +60,6 @@ const formatPlacedAt = (iso: string) =>
     minute: '2-digit',
   });
 
-const PetitionDetailsError = ({ errorMessage }: { errorMessage: string }) => (
-  <Alert type="error" description={errorMessage} showIcon />
-);
-
 const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
   <Flex vertical gap={4}>
     {typeof label === 'string' ? (
@@ -81,7 +77,7 @@ const Bet = ({ bet, probability, strategy, currency }: BetDetails & { currency: 
   const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
 
   return (
-    <React.Fragment>
+    <>
       <Col xs={24} sm={8} md={8}>
         <Flex vertical gap={6}>
           <Text type="secondary" className="text-sm">
@@ -115,7 +111,7 @@ const Bet = ({ bet, probability, strategy, currency }: BetDetails & { currency: 
       <Col xs={24} sm={8} md={8}>
         <Metric
           label="Probability"
-          value={Number.isFinite(probability) ? `${Math.round(probability)}%` : NA}
+          value={Number.isFinite(probability) ? `${probability * 100}%` : NA}
         />
       </Col>
 
@@ -142,7 +138,7 @@ const Bet = ({ bet, probability, strategy, currency }: BetDetails & { currency: 
           }
         />
       </Col>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -169,7 +165,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
           <Skeleton active title={false} paragraph={{ rows: 3 }} />
         </Card>
       ) : error ? (
-        <PetitionDetailsError errorMessage={error.message} />
+        <Alert type="error" description={error.message} showIcon />
       ) : data ? (
         <>
           <Card variant="outlined" className="mb-8" styles={{ body: { padding: 16 } }}>
@@ -221,7 +217,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                 const isLast = idx === data.bets.length - 1;
 
                 return (
-                  <React.Fragment key={id}>
+                  <Fragment key={id}>
                     <Row
                       gutter={[16, 16]}
                       style={{
@@ -237,7 +233,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                         currency={data.currency}
                       />
                     </Row>
-                  </React.Fragment>
+                  </Fragment>
                 );
               })
             ) : (

@@ -25,7 +25,6 @@ export const getTimeAgo = (ms: number, showPostfix = true) => {
   }
 };
 
-// Time constants in seconds
 const SECONDS_IN_MINUTE = 60;
 const SECONDS_IN_HOUR = 60 * 60; // 3600
 const SECONDS_IN_DAY = 24 * 60 * 60; // 86400
