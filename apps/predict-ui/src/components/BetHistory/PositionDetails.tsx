@@ -1,4 +1,4 @@
-import { NA } from '@agent-ui-monorepo/util-constants-and-types';
+import { NA, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 import { ClockCircleOutlined, ExportOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import {
   Alert,
@@ -16,8 +16,10 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
+import { CURRENCY, CurrencyCode } from '../../constants/currency';
 import { TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { COLOR } from '../../constants/theme';
+import { PREDICT_APP_URL } from '../../constants/urls';
 import { useBetDetails } from '../../hooks/useBetHistory';
 import { BetDetails } from '../../types';
 import { BetStatus } from './BetStatus';
@@ -44,7 +46,10 @@ const Card = styled(AntdCard)`
   border-color: ${COLOR.WHITE_TRANSPARENT_10};
 `;
 
-const formatCurrency = (n: number) => `$${n.toFixed(2)}`;
+const formatCurrency = (n: number, currency: CurrencyCode) => {
+  const currencySymbol = CURRENCY[currency]?.symbol || '$';
+  return `${currencySymbol}${n.toFixed(2)}`;
+};
 
 const formatPlacedAt = (iso: string) =>
   new Date(iso).toLocaleString(undefined, {
@@ -72,7 +77,7 @@ const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
   </Flex>
 );
 
-const Bet = ({ bet, probability, strategy }: BetDetails) => {
+const Bet = ({ bet, probability, strategy, currency }: BetDetails & { currency: CurrencyCode }) => {
   const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
 
   return (
@@ -85,7 +90,7 @@ const Bet = ({ bet, probability, strategy }: BetDetails) => {
 
           <Flex align="baseline" gap={8}>
             <Text>
-              {formatCurrency(bet.amount)} – {sideLabel}
+              {formatCurrency(bet.amount, currency)} – {sideLabel}
             </Text>
 
             {bet.external_url && (
@@ -93,8 +98,8 @@ const Bet = ({ bet, probability, strategy }: BetDetails) => {
                 href={bet.external_url}
                 target="_blank"
                 rel="noreferrer"
-                style={{ color: COLOR.WHITE_TRANSPARENT_75 }}
                 aria-label="Open market"
+                style={{ color: COLOR.WHITE_TRANSPARENT_75, marginBottom: 8 }}
               >
                 <ExportOutlined />
               </a>
@@ -121,7 +126,7 @@ const Bet = ({ bet, probability, strategy }: BetDetails) => {
               <Text type="secondary" className="text-sm">
                 Strategy
               </Text>
-              <Tooltip title="Something nice!">
+              <Tooltip title="Betting strategy at the time this bet was placed">
                 <InfoCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
               </Tooltip>
             </Space>
@@ -146,7 +151,7 @@ type PositionDetailsModalProps = {
   onClose: () => void;
 };
 
-export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps) {
+export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps) => {
   const { data, isLoading, error } = useBetDetails({ id });
 
   return (
@@ -168,14 +173,24 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
       ) : data ? (
         <>
           <Card variant="outlined" className="mb-8" styles={{ body: { padding: 16 } }}>
-            <Text>{data?.question ?? NA}</Text>
+            <Text>
+              <a
+                href={`${PREDICT_APP_URL}/questions/${data.id}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open market"
+                style={{ color: COLOR.WHITE_TRANSPARENT_75, marginBottom: 8 }}
+              >
+                {data.question} {UNICODE_SYMBOLS.EXTERNAL_LINK}
+              </a>
+            </Text>
 
             <Row gutter={[16, 16]} className="mt-16">
               <Col xs={24} sm={8} md={8}>
-                <Metric label="Total bet" value={formatCurrency(data.total_bet)} />
+                <Metric label="Total bet" value={formatCurrency(data.total_bet, data.currency)} />
               </Col>
               <Col xs={24} sm={8} md={8}>
-                <Metric label="To win" value={formatCurrency(data.to_win)} />
+                <Metric label="To win" value={formatCurrency(data.to_win, data.currency)} />
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Metric
@@ -214,7 +229,13 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                         padding: 16,
                       }}
                     >
-                      <Bet id={data.id} bet={bet} probability={probability} strategy={strategy} />
+                      <Bet
+                        id={data.id}
+                        bet={bet}
+                        probability={probability}
+                        strategy={strategy}
+                        currency={data.currency}
+                      />
                     </Row>
                   </React.Fragment>
                 );
@@ -229,4 +250,4 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
       ) : null}
     </Modal>
   );
-}
+};
