@@ -82,6 +82,19 @@ export type AgentPredictionHistoryResponse = {
 
 type PositionSide = 'yes' | 'no';
 
+export type BetDetails = {
+  id: string;
+  bet: {
+    amount: number;
+    side: PositionSide;
+    external_url?: string;
+    placed_at?: string; // ISO 8601 timestamp (date and time)
+  };
+  /** 0..1 */
+  probability: number;
+  strategy: TradingType;
+};
+
 export type PositionDetails = {
   id: string;
   question: string;
@@ -93,18 +106,7 @@ export type PositionDetails = {
   /** time left in seconds */
   remaining_seconds?: number;
   net_profit: number;
-  bets: Array<{
-    id: string;
-    bet: {
-      amount: number;
-      side: PositionSide;
-      external_url?: string;
-      placed_at?: string; // ISO 8601 timestamp (date and time)
-    };
-    /** 0..1 */
-    probability: number;
-    strategy: TradingType;
-  }>;
+  bets: Array<BetDetails>;
 };
 
 export type AgentProfitPoint = {

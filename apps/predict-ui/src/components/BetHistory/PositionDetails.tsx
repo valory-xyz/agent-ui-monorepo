@@ -4,7 +4,6 @@ import {
   Alert,
   Card as AntdCard,
   Col,
-  Divider,
   Flex,
   Modal as AntdModal,
   Row,
@@ -17,8 +16,10 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
+import { TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { COLOR } from '../../constants/theme';
 import { useBetDetails } from '../../hooks/useBetHistory';
+import { BetDetails } from '../../types';
 import { BetStatus } from './BetStatus';
 
 const { Text } = Typography;
@@ -74,37 +75,87 @@ function CardDark({ children }: { children: React.ReactNode }) {
   );
 }
 
-const Metric = ({ label, value }: { label: string; value: ReactNode }) => (
+const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
   <Flex vertical gap={4}>
-    <Text type="secondary" className="text-sm">
-      {label}
-    </Text>
+    {typeof label === 'string' ? (
+      <Text type="secondary" className="text-sm">
+        {label}
+      </Text>
+    ) : (
+      label
+    )}
+
     <div>{typeof value === 'string' ? <Text className="text-md">{value}</Text> : value}</div>
   </Flex>
 );
 
-const styles: Record<string, React.CSSProperties> = {
-  smallLabel: {
-    color: 'rgba(255,255,255,0.55)',
-    fontSize: 12,
-    letterSpacing: 0.2,
-  },
-  metricValue: {
-    color: 'rgba(255,255,255,0.92)',
-    fontSize: 22,
-    fontWeight: 700,
-  },
-  bigValue: {
-    color: 'rgba(255,255,255,0.92)',
-    fontSize: 20,
-    fontWeight: 700,
-  },
-  subtleText: {
-    color: 'rgba(255,255,255,0.45)',
-    fontSize: 12,
-    marginTop: 6,
-    display: 'block',
-  },
+const Bet = ({ id, bet, probability, strategy }: BetDetails) => {
+  const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
+
+  return (
+    <React.Fragment>
+      <Col xs={24} md={8}>
+        <Flex vertical gap={6}>
+          <Text type="secondary" className="text-sm">
+            Bet
+          </Text>
+
+          <Flex align="baseline" gap={8}>
+            <Text>
+              {formatCurrency(bet.amount)} – {sideLabel}
+            </Text>
+
+            {bet.external_url ? (
+              <a
+                href={bet.external_url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ color: COLOR.WHITE_TRANSPARENT_75 }}
+                aria-label="Open market"
+              >
+                <ExportOutlined />
+              </a>
+            ) : null}
+          </Flex>
+
+          <Text type="secondary" className="text-xs">
+            {bet.placed_at ? formatPlacedAt(bet.placed_at) : ''}
+          </Text>
+        </Flex>
+      </Col>
+
+      <Col xs={24} md={8}>
+        <Metric
+          label="Probability"
+          value={Number.isFinite(probability) ? `${Math.round(probability)}%` : NA}
+        />
+      </Col>
+
+      <Col xs={24} md={8}>
+        <Metric
+          label={
+            <Space align="center">
+              <Text type="secondary" className="text-sm">
+                Strategy
+              </Text>
+              <Tooltip title="Something nice!">
+                <InfoCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
+              </Tooltip>
+            </Space>
+          }
+          value={
+            <Tag
+              bordered={false}
+              color={COLOR.WHITE_TRANSPARENT_5}
+              style={{ color: COLOR.WHITE_TRANSPARENT_75, fontSize: 14 }}
+            >
+              {TRADING_TYPE_MAP[strategy].displayName}
+            </Tag>
+          }
+        />
+      </Col>
+    </React.Fragment>
+  );
 };
 
 type PositionDetailsModalProps = {
@@ -136,7 +187,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
         <PetitionDetailsError errorMessage={error.message} />
       ) : data ? (
         <>
-          <Card variant="outlined" className="mb-16" styles={{ body: { padding: 16 } }}>
+          <Card variant="outlined" className="mb-8" styles={{ body: { padding: 16 } }}>
             <Text>{data?.question ?? NA}</Text>
 
             <Row gutter={[16, 16]} className="mt-16">
@@ -169,103 +220,21 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
             </Row>
           </Card>
 
-          <div style={{ marginTop: 10 }}>
-            {data?.bets?.length ? (
-              data.bets.map((b, idx) => {
-                const sideLabel = b.bet.side === 'yes' ? 'Yes' : 'No';
-                const sideTagColor =
-                  b.bet.side === 'yes' ? 'rgba(82,196,26,0.25)' : 'rgba(245,34,45,0.25)';
-                const sideBorderColor =
-                  b.bet.side === 'yes' ? 'rgba(82,196,26,0.45)' : 'rgba(245,34,45,0.45)';
+          <div>
+            {data.bets?.length ? (
+              data.bets.map(({ bet, probability, strategy }, idx) => {
+                const isLast = idx === data.bets.length - 1;
 
                 return (
                   <React.Fragment key={`${data.id}-${idx}`}>
-                    {idx > 0 ? (
-                      <Divider
-                        style={{
-                          margin: '12px 0',
-                          borderColor: 'rgba(255,255,255,0.08)',
-                        }}
-                      />
-                    ) : null}
-
-                    <Row gutter={[16, 16]}>
-                      <Col xs={24} md={8}>
-                        <Flex vertical>
-                          <Text style={styles.smallLabel}>Bet</Text>
-
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'baseline',
-                              gap: 8,
-                              marginTop: 6,
-                            }}
-                          >
-                            <Text style={styles.bigValue}>
-                              {formatCurrency(b.bet.amount)} – {sideLabel}
-                            </Text>
-
-                            <Tag
-                              style={{
-                                marginLeft: 6,
-                                borderRadius: 999,
-                                padding: '0 10px',
-                                border: `1px solid ${sideBorderColor}`,
-                                background: sideTagColor,
-                                color: 'rgba(255,255,255,0.9)',
-                              }}
-                            >
-                              {sideLabel}
-                            </Tag>
-
-                            {b.bet.external_url ? (
-                              <a
-                                href={b.bet.external_url}
-                                target="_blank"
-                                rel="noreferrer"
-                                style={{ color: 'rgba(255,255,255,0.75)' }}
-                                aria-label="Open market"
-                              >
-                                <ExportOutlined />
-                              </a>
-                            ) : null}
-                          </div>
-
-                          <Text style={styles.subtleText}>
-                            {b.bet.placed_at ? formatPlacedAt(b.bet.placed_at) : ''}
-                          </Text>
-                        </Flex>
-                      </Col>
-
-                      <Col xs={24} md={8}>
-                        <Metric
-                          label="Probability"
-                          value={
-                            Number.isFinite(b.probability) ? `${Math.round(b.probability)}%` : NA
-                          }
-                        />
-                      </Col>
-
-                      <Col xs={24} md={8}>
-                        <Flex vertical gap={4}>
-                          <Space align="center">
-                            <Text type="secondary" className="text-sm">
-                              Strategy
-                            </Text>
-                            <Tooltip title="Something nice!">
-                              <InfoCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
-                            </Tooltip>
-                          </Space>
-                          <Tag
-                            bordered={false}
-                            color={COLOR.WHITE_TRANSPARENT_5}
-                            style={{ color: COLOR.WHITE_TRANSPARENT_75, fontSize: 14 }}
-                          >
-                            Risky
-                          </Tag>
-                        </Flex>
-                      </Col>
+                    <Row
+                      gutter={[16, 16]}
+                      style={{
+                        borderBottom: isLast ? 'none' : `1px solid ${COLOR.WHITE_TRANSPARENT_10}`,
+                        padding: 16,
+                      }}
+                    >
+                      <Bet id={data.id} bet={bet} probability={probability} strategy={strategy} />
                     </Row>
                   </React.Fragment>
                 );
