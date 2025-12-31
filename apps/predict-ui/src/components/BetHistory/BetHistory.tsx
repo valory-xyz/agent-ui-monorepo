@@ -1,15 +1,16 @@
 import { HistoryOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { Flex, Spin, Tag, Typography } from 'antd';
+import { Flex, Spin, Typography } from 'antd';
 import { Table } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { CURRENCY, CurrencyCode } from '../../constants/currency';
+import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
 import { useBetHistory } from '../../hooks/useBetHistory';
 import { BetHistoryItem } from '../../types';
 import { Card } from '../ui/Card';
+import { BetStatus } from './BetStatus';
 import { PositionDetailsModal } from './PositionDetails';
 
 const { Title, Text, Paragraph } = Typography;
@@ -97,35 +98,14 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'status',
     key: 'status',
     width: '20%',
-    render: (_text, record: BetHistoryItem) => {
-      const amount = record.status === 'pending' ? record.bet_amount : record.net_profit;
-      const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
-
-      const details = (() => {
-        if (record.status === 'won') {
-          return { color: COLOR.GREEN, background: COLOR.GREEN_BACKGROUND, text: `Won ${value}` };
-        }
-        if (record.status === 'lost') {
-          return { color: COLOR.PINK, background: COLOR.PINK_BACKGROUND, text: `Lost ${value}` };
-        }
-        return {
-          color: COLOR.WHITE_TRANSPARENT_75,
-          background: COLOR.WHITE_TRANSPARENT_5,
-          text: `Bet ${value}`,
-        };
-      })();
-
-      return (
-        <Tag
-          bordered={false}
-          color={details.background}
-          className="mx-auto"
-          style={{ color: details.color }}
-        >
-          {details.text}
-        </Tag>
-      );
-    },
+    render: (_text, record: BetHistoryItem) => (
+      <BetStatus
+        status={record.status}
+        bet_amount={record.bet_amount}
+        net_profit={record.net_profit}
+        currency={currency}
+      />
+    ),
     align: 'center',
     className: 'th-text-center',
   },

@@ -90,18 +90,18 @@ export const mockPositionDetails: PositionDetails = {
   question:
     'Will the National Development and Reform Commission of China publicly announce, on or before December 3, 2025, a new regulatory policy specifically aimed at curbing speculative investment in the humanoid robotics sector?',
   currency: 'USD',
-  totalBet: 1.82,
-  toWin: 2.04,
+  total_bet: 1.82,
+  to_win: 2.04,
   status: 'pending',
-  remainingSeconds: 240000,
+  remaining_seconds: 240000,
   net_profit: 0,
   bets: [
     {
       bet: {
         amount: 1.82,
         side: 'yes',
-        externalUrl: 'https://example.com/market/market_abcd',
-        placedAt: '2025-12-09T17:55:00.000Z',
+        external_url: 'https://example.com/market/market_abcd',
+        placed_at: '2025-12-09T17:55:00.000Z',
       },
       probability: 0.64,
       strategy: 'risky',

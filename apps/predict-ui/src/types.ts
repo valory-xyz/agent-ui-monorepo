@@ -86,19 +86,19 @@ export type PositionDetails = {
   id: string;
   question: string;
   currency: CurrencyCode;
-  totalBet: number;
-  toWin: number;
-  /** If status is pending, show remainingSeconds else net profit */
+  total_bet: number;
+  to_win: number;
+  /** If status is pending, show remaining_seconds else net profit */
   status: PredictionStatus;
   /** time left in seconds */
-  remainingSeconds?: number;
+  remaining_seconds?: number;
   net_profit: number;
   bets: Array<{
     bet: {
       amount: number;
       side: PositionSide;
-      externalUrl?: string;
-      placedAt?: string; // ISO 8601 timestamp (date and time)
+      external_url?: string;
+      placed_at?: string; // ISO 8601 timestamp (date and time)
     };
     /** 0..1 */
     probability: number;

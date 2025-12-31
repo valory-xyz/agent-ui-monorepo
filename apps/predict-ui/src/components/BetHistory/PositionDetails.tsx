@@ -14,11 +14,12 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { COLOR } from '../../constants/theme';
 import { useBetDetails } from '../../hooks/useBetHistory';
+import { BetStatus } from './BetStatus';
 
 const { Text } = Typography;
 
@@ -43,17 +44,6 @@ const Card = styled(AntdCard)`
 `;
 
 const formatCurrency = (n: number) => `$${n.toFixed(2)}`;
-
-function formatDuration(totalSeconds: number) {
-  const s = Math.max(0, Math.floor(totalSeconds));
-  const days = Math.floor(s / 86400);
-  const hours = Math.floor((s % 86400) / 3600);
-  const mins = Math.floor((s % 3600) / 60);
-
-  if (days > 0) return `${days}d ${hours}h`;
-  if (hours > 0) return `${hours}h ${mins}m`;
-  return `${mins}m`;
-}
 
 const formatPlacedAt = (iso: string) =>
   new Date(iso).toLocaleString(undefined, {
@@ -125,14 +115,6 @@ type PositionDetailsModalProps = {
 export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps) {
   const { data, isLoading, error } = useBetDetails({ id });
 
-  const countdownLabel = useMemo(() => {
-    if (!data) return '';
-    const { status, remainingSeconds } = data;
-    if (status === 'pending' && remainingSeconds) {
-      return formatDuration(remainingSeconds);
-    }
-  }, [data]);
-
   return (
     <Modal
       title={<Text className="font-lg">Position details</Text>}
@@ -152,27 +134,34 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
         </CardDark>
       ) : error ? (
         <PetitionDetailsError errorMessage={error.message} />
-      ) : (
+      ) : data ? (
         <>
           <Card variant="outlined" className="mb-16" styles={{ body: { padding: 16 } }}>
             <Text>{data?.question ?? NA}</Text>
 
             <Row gutter={[16, 16]} className="mt-16">
               <Col xs={24} md={8}>
-                <Metric label="Total bet" value={data ? formatCurrency(data.totalBet) : NA} />
+                <Metric label="Total bet" value={formatCurrency(data.total_bet)} />
               </Col>
               <Col xs={24} md={8}>
-                <Metric label="To win" value={data ? formatCurrency(data.toWin) : NA} />
+                <Metric label="To win" value={formatCurrency(data.to_win)} />
               </Col>
               <Col xs={24} md={8}>
                 <Metric
                   label="Status"
                   value={
-                    <Flex gap={8} align="center">
-                      <ClockCircleOutlined style={{ color: 'rgba(255,255,255,0.75)' }} />
-                      <span style={{ color: 'rgba(255,255,255,0.92)' }}>
-                        {data ? countdownLabel : NA}
-                      </span>
+                    <Flex gap={8} align="center" style={{ width: 'max-content' }}>
+                      <BetStatus
+                        currency={data.currency}
+                        status={data.status}
+                        remaining_seconds={data.remaining_seconds}
+                        bet_amount={data.total_bet}
+                        net_profit={data.net_profit}
+                        styles={{ fontSize: '105%' }}
+                        extra={
+                          <ClockCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
+                        }
+                      />
                     </Flex>
                   }
                 />
@@ -234,9 +223,9 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                               {sideLabel}
                             </Tag>
 
-                            {b.bet.externalUrl ? (
+                            {b.bet.external_url ? (
                               <a
-                                href={b.bet.externalUrl}
+                                href={b.bet.external_url}
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{ color: 'rgba(255,255,255,0.75)' }}
@@ -248,7 +237,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
                           </div>
 
                           <Text style={styles.subtleText}>
-                            {b.bet.placedAt ? formatPlacedAt(b.bet.placedAt) : ''}
+                            {b.bet.placed_at ? formatPlacedAt(b.bet.placed_at) : ''}
                           </Text>
                         </CardDark>
                       </Col>
@@ -310,7 +299,7 @@ export function PositionDetailsModal({ id, onClose }: PositionDetailsModalProps)
             )}
           </div>
         </>
-      )}
+      ) : null}
     </Modal>
   );
 }
