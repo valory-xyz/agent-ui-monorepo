@@ -33,8 +33,7 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       {
         title: 'All time profit',
         value: getValue(metrics.all_time_profit || 0, currency),
-        tooltip:
-          'The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of XX%.',
+        tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
       },
       {
         title: 'Funds locked in markets',

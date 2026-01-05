@@ -9,6 +9,7 @@ export const mockPerformance: AgentMetricsResponse = {
     all_time_profit: 2.1,
     funds_locked_in_markets: 0.125,
     available_funds: 10.9,
+    roi: 0.44,
   },
   stats: {
     predictions_made: 1002,
