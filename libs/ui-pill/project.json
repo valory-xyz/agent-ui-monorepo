@@ -1,0 +1,9 @@
+{
+  "name": "ui-pill",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui-pill/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project ui-pill --web",
+  "targets": {}
+}

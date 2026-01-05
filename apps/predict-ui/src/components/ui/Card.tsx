@@ -39,6 +39,9 @@ export const Card = styled.div<{ $padding?: string; $gap?: string }>`
   }
 `;
 
+/**
+ * A variant of Card with slightly different styles (used for predict ui Chat)
+ */
 export const CardV2 = styled(AntdCard)`
   position: relative;
   backdrop-filter: blur(10px);

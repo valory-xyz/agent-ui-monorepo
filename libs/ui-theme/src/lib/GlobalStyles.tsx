@@ -33,6 +33,12 @@ export const GlobalStyles = createGlobalStyle`
   .mb-8 {
     margin-bottom: 8px !important;
   }
+  .mb-16 {
+    margin-bottom: 16px !important;
+  }
+  .mb-24 {
+    margin-bottom: 24px !important;
+  }
   .mt-16 {
     margin-top: 16px !important;
   }

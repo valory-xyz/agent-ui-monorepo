@@ -41,8 +41,11 @@ export type AgentMetricsResponse = {
   };
   stats: {
     predictions_made: number;
-    /** 0-1 (e.g. 0.53 = 53%) */
-    prediction_accuracy: number;
+    /**
+     * 0-1 (e.g. 0.53 = 53%).
+     * `null` indicates no data available
+     */
+    prediction_accuracy: number | null;
   };
 };
 
@@ -50,7 +53,7 @@ export type PredictionStatus = 'pending' | 'won' | 'lost';
 
 export type PredictionSide = 'yes' | 'no';
 
-export type PredictionHistoryItem = {
+export type BetHistoryItem = {
   id: string;
   market: {
     id: string;
@@ -75,7 +78,7 @@ export type AgentPredictionHistoryResponse = {
   page: number;
   page_size: number;
   total: number;
-  items: PredictionHistoryItem[];
+  items: BetHistoryItem[];
 };
 
 export type AgentProfitPoint = {

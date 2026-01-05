@@ -1,6 +1,6 @@
 import { AgentPredictionHistoryResponse } from '../types';
 
-export const mockPredictionHistory: AgentPredictionHistoryResponse = {
+export const mockBetHistory: AgentPredictionHistoryResponse = {
   agent_id: 'agent_123',
   currency: 'USD',
   page: 1,

@@ -4,13 +4,14 @@ import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
 import { AgentDetails } from '../components/AgentDetails';
+import { BetHistory } from '../components/BetHistory';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
-import { PredictionHistory } from '../components/PredictionHistory';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { Card } from '../components/ui/Card';
+import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
@@ -85,7 +86,7 @@ const ChatContent = () => {
   if (!data?.isChatEnabled) {
     return (
       <Card>
-        <UnlockChat />
+        <UnlockChat iconColor={COLOR.WHITE_TRANSPARENT_50} />
       </Card>
     );
   }
@@ -111,7 +112,7 @@ export const Agent = () => {
         />
         <AgentPerformance performance={performance} />
         {IS_CHART_ENABLED && <ProfitOverTime />}
-        <PredictionHistory />
+        <BetHistory />
         <Strategy />
         <ChatContent />
       </AgentContent>

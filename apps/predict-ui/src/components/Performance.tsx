@@ -3,10 +3,18 @@ import { Col, Flex, Row, Tooltip, Typography } from 'antd';
 import { useMemo } from 'react';
 
 import { CURRENCY, CurrencyCode } from '../constants/currency';
+import { COLOR } from '../constants/theme';
 import { AgentMetricsResponse } from '../types';
 import { Card } from './ui/Card';
 
 const { Text, Title } = Typography;
+
+type PerformanceItem = {
+  title: string;
+  value: string;
+  tooltip?: string;
+  variant?: 'text' | 'title';
+};
 
 const getValue = (value: number, currency: CurrencyCode) => {
   return `${CURRENCY[currency]?.symbol || '$'}${value || 0} `;
@@ -15,7 +23,7 @@ const getValue = (value: number, currency: CurrencyCode) => {
 export const AgentPerformance = ({ performance }: { performance: AgentMetricsResponse }) => {
   const { metrics, stats, currency } = performance;
 
-  const performanceItems = useMemo(
+  const performanceItems = useMemo<PerformanceItem[]>(
     () => [
       {
         title: 'All time funds used',
@@ -45,9 +53,11 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       },
       {
         title: 'Prediction accuracy',
-        value: stats.prediction_accuracy
-          ? `${(stats.prediction_accuracy * 100).toFixed(2)}%`
-          : '0%',
+        value:
+          stats.prediction_accuracy === null
+            ? 'Will appear with the first resolved market.'
+            : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
+        variant: stats.prediction_accuracy === null ? 'text' : 'title',
       },
     ],
     [metrics, stats, currency],
@@ -71,9 +81,15 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
                   </Tooltip>
                 )}
               </Text>
-              <Title level={3} className="m-0 font-normal">
-                {item.value}
-              </Title>
+              {item.variant === 'text' ? (
+                <Text className="text-sm" style={{ color: COLOR.WHITE_TRANSPARENT_75 }}>
+                  {item.value}
+                </Text>
+              ) : (
+                <Title level={3} className="m-0 font-normal">
+                  {item.value}
+                </Title>
+              )}
             </Flex>
           </Col>
         ))}

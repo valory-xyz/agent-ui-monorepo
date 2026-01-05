@@ -1,21 +1,24 @@
+import { Pill } from '@agent-ui-monorepo/ui-pill';
 import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Flex, Skeleton, Tooltip, Typography } from 'antd';
 
 import { TRADING_TYPE_MAP } from '../constants/textMaps';
+import { COLOR } from '../constants/theme';
 import { useTradingDetails } from '../hooks/useTradingDetails';
 import { Card } from './ui/Card';
-import { Pill } from './ui/Pill';
 
 const { Title } = Typography;
 
 const TradingStrategyTitle = () => (
-  <Title level={5} style={{ margin: 0 }} type="secondary">
-    Trading strategy
+  <Flex align="center" gap={6}>
+    <Title level={5} type="secondary" style={{ margin: 0 }} className="font-normal">
+      Trading strategy
+    </Title>
     <Tooltip title="The set of rules the agent follows to decide how much to bet on a market. A strategy can consider different types of information (like confidence in an outcome, market profitability or other signals) to guide its decisions.">
-      <InfoCircleOutlined style={{ marginLeft: 6 }} />
+      <InfoCircleOutlined style={{ color: COLOR.SECONDARY }} />
     </Tooltip>
-  </Title>
+  </Flex>
 );
 
 const Loader = () => <Skeleton.Input style={{ width: 100 }} active size="small" />;
@@ -31,8 +34,8 @@ const StrategyContent = () => {
       {isLoading ? (
         <Loader />
       ) : type ? (
-        <Pill size="large" style={{ fontSize: 14 }}>
-          {TRADING_TYPE_MAP[type]}
+        <Pill type={TRADING_TYPE_MAP[type].type} size="large" style={{ fontSize: 14 }}>
+          {TRADING_TYPE_MAP[type].displayName}
         </Pill>
       ) : (
         NA
