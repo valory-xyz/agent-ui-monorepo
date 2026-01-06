@@ -4,7 +4,7 @@ import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
 import { AgentDetails } from '../components/AgentDetails';
-import { BetHistory } from '../components/BetHistory';
+import { BetHistory } from '../components/BetHistory/BetHistory';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';

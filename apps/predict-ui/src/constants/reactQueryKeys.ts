@@ -4,4 +4,5 @@ export const REACT_QUERY_KEYS = {
   PERFORMANCE: 'agentPerformance' as const,
   PROFIT_OVER_TIME: 'profitOverTime' as const,
   PREDICTION_HISTORY: 'predictionHistory' as const,
+  PREDICTION_DETAILS: 'predictionDetails' as const,
 } as const;

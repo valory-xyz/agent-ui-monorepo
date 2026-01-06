@@ -5,6 +5,7 @@ export const COLOR = {
   SECONDARY: 'rgba(255, 255, 255, 0.5)',
   TEXT_PRIMARY: '#FFFFFF',
   BACKGROUND: '#2f1d57',
+  MODAL_BACKGROUND: '#2B194A',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
   BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',

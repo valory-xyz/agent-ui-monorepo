@@ -1,4 +1,4 @@
-import { AgentPredictionHistoryResponse } from '../types';
+import { AgentPredictionHistoryResponse, PositionDetails } from '../types';
 
 export const mockBetHistory: AgentPredictionHistoryResponse = {
   agent_id: 'agent_123',
@@ -83,3 +83,39 @@ export const mockBetHistory: AgentPredictionHistoryResponse = {
     },
   ],
 } as const;
+
+export const mockPositionDetails: PositionDetails = {
+  id: 'pos_123',
+  question:
+    'Will the National Development and Reform Commission of China publicly announce, on or before December 3, 2025, a new regulatory policy specifically aimed at curbing speculative investment in the humanoid robotics sector?',
+  currency: 'USD',
+  total_bet: 1.82,
+  to_win: 2.04,
+  status: 'pending',
+  remaining_seconds: 240000,
+  net_profit: 0,
+  bets: [
+    {
+      id: 'bet_001',
+      bet: {
+        amount: 1.82,
+        side: 'yes',
+        external_url: 'https://example.com/market/market_abcd',
+        placed_at: '2025-12-09T17:55:00.000Z',
+      },
+      probability: 0.64,
+      strategy: 'risky',
+    },
+    {
+      id: 'bet_002',
+      bet: {
+        amount: 1.82,
+        side: 'yes',
+        external_url: 'https://example.com/market/market_abcd',
+        placed_at: '2025-12-09T17:55:00.000Z',
+      },
+      probability: 0.64,
+      strategy: 'risky',
+    },
+  ],
+};
