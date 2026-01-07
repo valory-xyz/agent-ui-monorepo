@@ -96,12 +96,6 @@ import { Component } from '@agent-ui-monorepo/ui-chat';
 import { constants } from '@agent-ui-monorepo/util-constants-and-types';
 ```
 
-### Nx Workspace
-
-- Visualize dependencies: `npx nx graph`
-- Avoid circular dependencies between libraries
-- Keep libraries focused and single-purpose
-
 ## Testing
 
 - Write tests for new features and bug fixes
