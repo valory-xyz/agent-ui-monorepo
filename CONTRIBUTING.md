@@ -130,8 +130,8 @@ docs: update CONTRIBUTING.md with testing guidelines
 When creating a pull request, use the following format for the title:
 
 ```
-feat(agentsfun-ui): add wallet connection feature
-fix(babydegen-ui): resolve navigation issue
+(agentsfun-ui) feat: add wallet connection feature
+(babydegen-ui) fix: resolve navigation issue
 docs: update CONTRIBUTING.md with testing guidelines
 ```
 
