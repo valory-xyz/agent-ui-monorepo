@@ -4,17 +4,14 @@ type TradingType = 'risky' | 'balanced';
 
 export const TRADING_TYPE_MAP: Record<
   TradingType,
-  { displayName: string; type: PillType; description: string }
+  { displayName: string; type: PillType; }
 > = {
   risky: {
     displayName: 'Risky',
     type: 'danger',
-    description:
-      'Aggressively pursuing high rewards using the Kelly criterion for dynamic bet sizing.',
   },
   balanced: {
     displayName: 'Balanced',
     type: 'primary',
-    description: 'Moderate risk strategy balancing profit and safety.',
   },
 };

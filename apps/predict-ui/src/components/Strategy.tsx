@@ -49,7 +49,7 @@ const StrategyContent = () => {
               {strategy.displayName}
             </Title>
             <Paragraph style={{ margin: '8px 0 0 0', color: COLOR.WHITE_TRANSPARENT_75 }}>
-              {strategy.description}
+              {data?.trading_type_description}
             </Paragraph>
           </>
         ) : (
