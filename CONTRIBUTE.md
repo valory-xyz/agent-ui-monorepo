@@ -129,7 +129,7 @@ docs: update CONTRIBUTING.md with testing guidelines
 
 1. **Run code quality checks**
    ```bash
-   yarn lint
+   npx nx run-many --target=lint --all
    npx nx affected --target=test
    npx nx affected --target=build
    ```
