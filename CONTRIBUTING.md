@@ -51,9 +51,9 @@ git checkout -b chore/description
 
 ### 4. Test Your Changes
 
-- Run the affected app locally: `npx nx serve [app-name]`
-- Run tests: `npx nx test [app-name]`
-- Run linting: `npx nx lint [app-name]`
+- Run the affected app locally: `yarn nx serve [app-name]`
+- Run tests: `yarn nx test [app-name]`
+- Run linting: `yarn nx lint [app-name]`
 - Ensure all checks pass before submitting
 
 ### 5. Submit a Pull Request
@@ -120,6 +120,16 @@ Follow conventional commit format:
 
 **Examples:**
 ```
+feat: add wallet connection feature
+fix: resolve navigation issue
+docs: update CONTRIBUTING.md with testing guidelines
+```
+
+### PR Title
+
+When creating a pull request, use the following format for the title:
+
+```
 feat(agentsfun-ui): add wallet connection feature
 fix(babydegen-ui): resolve navigation issue
 docs: update CONTRIBUTING.md with testing guidelines
@@ -130,8 +140,8 @@ docs: update CONTRIBUTING.md with testing guidelines
 1. **Run code quality checks**
    ```bash
    yarn lint
-   npx nx affected --target=test
-   npx nx affected --target=build
+   yarn nx affected --target=test
+   yarn nx affected --target=build
    ```
 
 2. **Ensure your branch is up to date** with the base branch
