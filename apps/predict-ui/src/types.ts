@@ -24,6 +24,7 @@ export type AgentDetailsResponse = {
 export type TradingDetailsResponse = {
   agent_id: string;
   trading_type: TradingType;
+  trading_type_description: string;
 };
 
 export type AgentWindow = '7d' | '30d' | '90d' | 'lifetime';
