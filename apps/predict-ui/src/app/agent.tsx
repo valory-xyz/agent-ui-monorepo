@@ -15,8 +15,6 @@ import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
 
-const IS_CHART_ENABLED = false; // TODO: enable once backend is ready
-
 const AgentContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,7 +109,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        {IS_CHART_ENABLED && <ProfitOverTime />}
+        <ProfitOverTime />
         <BetHistory />
         <Strategy />
         <ChatContent />
