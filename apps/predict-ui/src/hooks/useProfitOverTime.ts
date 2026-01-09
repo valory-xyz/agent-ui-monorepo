@@ -3,7 +3,7 @@ import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-function
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockProfitOverTime } from '../mocks/mockProfitOverTime';
+import { getMockProfitOverTime } from '../mocks/mockProfitOverTime';
 import { AgentProfitTimeseriesResponse, AgentWindow } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
@@ -12,7 +12,7 @@ export const useProfitOverTime = ({ window }: { window: AgentWindow }) => {
   const query = useQuery<AgentProfitTimeseriesResponse>({
     queryKey: [REACT_QUERY_KEYS.PROFIT_OVER_TIME, window],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) return delay(mockProfitOverTime);
+      if (IS_MOCK_ENABLED) return delay(getMockProfitOverTime(window));
 
       const response = await fetch(`${API_V1}/agent/profit-over-time?window=${window}`);
       if (!response.ok) throw new Error('Failed to fetch profit over time');
