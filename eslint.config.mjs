@@ -1,14 +1,44 @@
 import nx from '@nx/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
   ...nx.configs['flat/base'],
-  ...nx.configs['flat/typescript'],
-  ...nx.configs['flat/javascript'],
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+    languageOptions: {
+      sourceType: 'module',
+      ecmaVersion: 'latest',
+    },
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        sourceType: 'module',
+        ecmaVersion: 'latest',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+    },
+    rules: {
+      // Keep this minimal to avoid typescript-estree recommended helper
+    },
+  },
   {
     ignores: [
       '**/dist',
+      '**/build',
+      '**/.next',
+      '**/.github',
+      '**/node_modules',
+      '**/*.log',
+      '**/.idea',
+      '**/.vscode',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
     ],
@@ -45,6 +75,7 @@ export default [
     plugins: {
       prettier: prettier,
       'simple-import-sort': simpleImportSort,
+      '@typescript-eslint': tsPlugin,
     },
     rules: {
       'prettier/prettier': [
