@@ -35,6 +35,7 @@ export const Chat = () => {
       onSuccess: (data) => {
         // refetch the latest data
         queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS] });
+        queryClient.invalidateQueries({ queryKey: [REACT_QUERY_KEYS.TRADING_DETAILS] });
 
         setChats((prevChats) => {
           const chatsAfterConfig = [...prevChats];
