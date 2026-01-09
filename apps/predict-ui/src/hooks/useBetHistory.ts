@@ -14,9 +14,13 @@ export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: numb
     queryFn: async () => {
       if (IS_MOCK_ENABLED) return delay(mockBetHistory);
 
-      const response = await fetch(
-        `${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`,
-      );
+      const [response] = await Promise.all([
+        fetch(
+          `${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`,
+        ),
+        // artificial delay to simulate network latency
+        new Promise((resolve) => setTimeout(resolve, 2000)),
+      ]);
       if (!response.ok) throw new Error('Failed to fetch prediction history');
 
       return response.json();
