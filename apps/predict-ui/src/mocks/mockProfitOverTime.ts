@@ -10,9 +10,7 @@ const getRandomDeltaProfit = (numberOfPoints: number) =>
     };
   });
 
-export const getMockProfitOverTime = (
-  window: AgentWindow,
-): AgentProfitTimeseriesResponse => {
+export const getMockProfitOverTime = (window: AgentWindow): AgentProfitTimeseriesResponse => {
   if (window === '90d') {
     return {
       agent_id: 'agent_123',

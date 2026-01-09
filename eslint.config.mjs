@@ -1,34 +1,18 @@
-import nx from '@nx/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
+import { FlatCompat } from '@eslint/eslintrc';
+import js from '@eslint/js';
+import nx from '@nx/eslint-plugin';
+
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+  recommendedConfig: js.configs.recommended,
+});
 
 export default [
   ...nx.configs['flat/base'],
-  {
-    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
-    languageOptions: {
-      sourceType: 'module',
-      ecmaVersion: 'latest',
-    },
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 'latest',
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tsPlugin,
-    },
-    rules: {
-      // Keep this minimal to avoid typescript-estree recommended helper
-    },
-  },
+  ...nx.configs['flat/typescript'],
+  ...nx.configs['flat/javascript'],
   {
     ignores: [
       '**/dist',
@@ -44,24 +28,6 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {
-      '@nx/enforce-module-boundaries': [
-        'error',
-        {
-          enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
-          depConstraints: [
-            {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
-            },
-          ],
-        },
-      ],
-    },
-  },
-  {
     files: [
       '**/*.ts',
       '**/*.tsx',
@@ -75,7 +41,6 @@ export default [
     plugins: {
       prettier: prettier,
       'simple-import-sort': simpleImportSort,
-      '@typescript-eslint': tsPlugin,
     },
     rules: {
       'prettier/prettier': [

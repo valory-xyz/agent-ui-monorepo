@@ -15,9 +15,7 @@ export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: numb
       if (IS_MOCK_ENABLED) return delay(mockBetHistory);
 
       const [response] = await Promise.all([
-        fetch(
-          `${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`,
-        ),
+        fetch(`${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`),
         // artificial delay to simulate network latency
         new Promise((resolve) => setTimeout(resolve, 2000)),
       ]);
