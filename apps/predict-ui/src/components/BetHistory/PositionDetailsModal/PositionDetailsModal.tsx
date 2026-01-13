@@ -71,7 +71,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
 
   return (
     <Modal
-      title={<Text className="font-lg">Position details</Text>}
+      title={<Text className="text-lg">Position details</Text>}
       open
       onCancel={onClose}
       footer={null}
@@ -146,7 +146,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   label: (
                     <Flex align="center" style={{ width: '100%' }}>
                       <Text type="secondary" style={{ width: 180 }}>
-                        {`Bet ${hasOneBet ? '' : idx + 1}`}
+                        {hasOneBet ? 'Bet' : `Bet ${idx + 1}`}
                       </Text>
                       <Flex align="center" gap={8}>
                         <Text>{formatCurrency(bet.amount, data.currency)}</Text>
@@ -156,7 +156,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   ),
                   children: (
                     <Bet
-                      id={data.id}
+                      id={id}
                       bet={bet}
                       intelligence={intelligence}
                       strategy={strategy}

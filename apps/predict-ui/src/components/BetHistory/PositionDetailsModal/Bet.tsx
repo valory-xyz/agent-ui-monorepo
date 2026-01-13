@@ -102,7 +102,7 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
           </Flex>
         }
         tooltip={<IntelligenceTooltip />}
-        noBorder={bet.placed_at ? false : true}
+        noBorder={!bet.placed_at}
       />
 
       {bet.placed_at && (
