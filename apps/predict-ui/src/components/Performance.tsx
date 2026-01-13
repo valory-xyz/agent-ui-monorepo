@@ -74,7 +74,11 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
         message={
           <Flex gap={8} vertical>
             <span style={{ fontWeight: 500 }}>Data update in progress</span>
-            <span>Some performance data may be temporarily incomplete. A fix is in progress.</span>
+            <span>
+              Mech fees for invalid markets and markets in which agents did not place bets are
+              currently unaccounted for. This leads to an underreporting of costs. A fix is in
+              progress.
+            </span>
           </Flex>
         }
         type="warning"
