@@ -16,8 +16,7 @@ export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: numb
 
       const [response] = await Promise.all([
         fetch(`${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`),
-        // artificial delay to simulate network latency
-        new Promise((resolve) => setTimeout(resolve, 2000)),
+        delay(undefined, 1),
       ]);
       if (!response.ok) throw new Error('Failed to fetch prediction history');
 
