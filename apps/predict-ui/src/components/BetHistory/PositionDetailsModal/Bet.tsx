@@ -97,8 +97,7 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
               <Text type="secondary">Confidence score</Text>
             </Text>
             <Text className="text-md">
-              {Math.round(intelligence.utility_score)}%{' '}
-              <Text type="secondary">Utility score</Text>
+              {Math.round(intelligence.utility_score)}% <Text type="secondary">Utility score</Text>
             </Text>
           </Flex>
         }
