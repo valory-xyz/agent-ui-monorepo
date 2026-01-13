@@ -156,7 +156,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   ),
                   children: (
                     <Bet
-                      id={data.id}
+                      id={id}
                       bet={bet}
                       intelligence={intelligence}
                       strategy={strategy}
