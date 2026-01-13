@@ -89,15 +89,15 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
         desc={
           <Flex vertical gap={8}>
             <Text>
-              {Math.round(intelligence.implied_probability * 100)}%{' '}
+              {Math.round(intelligence.implied_probability)}%{' '}
               <Text type="secondary">Implied probability</Text>
             </Text>
             <Text className="text-md">
-              {Math.round(intelligence.confidence_score * 100)}%{' '}
+              {Math.round(intelligence.confidence_score)}%{' '}
               <Text type="secondary">Confidence score</Text>
             </Text>
             <Text className="text-md">
-              {Math.round(intelligence.utility_score * 100)}%{' '}
+              {Math.round(intelligence.utility_score)}%{' '}
               <Text type="secondary">Utility score</Text>
             </Text>
           </Flex>
