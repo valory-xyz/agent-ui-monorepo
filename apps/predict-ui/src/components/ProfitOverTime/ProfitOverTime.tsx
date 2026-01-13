@@ -23,7 +23,11 @@ const NoDataAvailable = () => (
   <Flex align="center" justify="center" vertical style={{ padding: '32px 0' }}>
     <LineChartOutlined
       className="mb-24"
-      style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
+      style={{
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: COLOR.WHITE_TRANSPARENT_50,
+      }}
     />
     <Text type="secondary">No data yet.</Text>
     <Text type="secondary">Profit over time will appear here when available.</Text>
@@ -33,13 +37,15 @@ const NoDataAvailable = () => (
 const Container = styled(Flex)`
   width: 100%;
   height: ${CHART_HEIGHT}px;
-  background-color: ${COLOR.WHITE_TRANSPARENT_5};
+  background-color: ${COLOR.WHITE_TRANSPARENT_05};
   border-radius: 8px;
 `;
 
 export const ProfitOverTime = () => {
   const [currentWindow, setCurrentWindow] = useState<AgentWindow>('7d');
-  const { isLoading, data, isError } = useProfitOverTime({ window: currentWindow });
+  const { isLoading, data, isError } = useProfitOverTime({
+    window: currentWindow,
+  });
 
   const points = useMemo(() => {
     if (!data || data.points.length === 0) return [];

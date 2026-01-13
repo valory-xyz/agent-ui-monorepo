@@ -91,8 +91,12 @@ export type BetDetails = {
     external_url?: string;
     placed_at?: string; // ISO 8601 timestamp (date and time)
   };
-  /** 0..1 */
-  probability: number;
+  intelligence: {
+    prediction_tool: string;
+    implied_probability: number;
+    confidence_score: number;
+    utility_score: number;
+  };
   strategy: TradingType;
 };
 

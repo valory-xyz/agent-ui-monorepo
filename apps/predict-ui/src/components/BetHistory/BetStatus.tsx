@@ -27,11 +27,19 @@ export const BetStatus = ({
 
   const details = (() => {
     if (status === 'won') {
-      return { color: COLOR.GREEN, background: COLOR.GREEN_BACKGROUND, text: `Won ${value}` };
+      return {
+        color: COLOR.GREEN,
+        background: COLOR.GREEN_BACKGROUND,
+        text: `Won ${value}`,
+      };
     }
 
     if (status === 'lost') {
-      return { color: COLOR.PINK, background: COLOR.PINK_BACKGROUND, text: `Lost ${value}` };
+      return {
+        color: COLOR.PINK,
+        background: COLOR.PINK_BACKGROUND,
+        text: `Lost ${value}`,
+      };
     }
 
     // If status is pending and remaining_seconds is provided
@@ -39,14 +47,14 @@ export const BetStatus = ({
     if (remaining_seconds !== undefined) {
       return {
         color: COLOR.WHITE_TRANSPARENT_75,
-        background: COLOR.WHITE_TRANSPARENT_5,
+        background: COLOR.WHITE_TRANSPARENT_05,
         text: formatDuration(remaining_seconds),
       };
     }
 
     return {
       color: COLOR.WHITE_TRANSPARENT_75,
-      background: COLOR.WHITE_TRANSPARENT_5,
+      background: COLOR.WHITE_TRANSPARENT_05,
       text: `Bet ${value}`,
     };
   })();

@@ -100,10 +100,14 @@ export const mockPositionDetails: PositionDetails = {
       bet: {
         amount: 1.82,
         side: 'yes',
-        external_url: 'https://example.com/market/market_abcd',
-        placed_at: '2025-12-09T17:55:00.000Z',
+        external_url: 'https://example.com...',
       },
-      probability: 0.64,
+      intelligence: {
+        prediction_tool: 'prediction-online',
+        implied_probability: 15.0,
+        confidence_score: 85.0,
+        utility_score: 95.0,
+      },
       strategy: 'risky',
     },
     {
@@ -114,7 +118,12 @@ export const mockPositionDetails: PositionDetails = {
         external_url: 'https://example.com/market/market_abcd',
         placed_at: '2025-12-09T17:55:00.000Z',
       },
-      probability: 0.64,
+      intelligence: {
+        prediction_tool: 'prediction-online',
+        implied_probability: 15.0,
+        confidence_score: 85.0,
+        utility_score: 95.0,
+      },
       strategy: 'risky',
     },
   ],

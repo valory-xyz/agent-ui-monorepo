@@ -11,7 +11,7 @@ import { useBetHistory } from '../../hooks/useBetHistory';
 import { BetHistoryItem } from '../../types';
 import { Card } from '../ui/Card';
 import { BetStatus } from './BetStatus';
-import { PositionDetailsModal } from './PositionDetails';
+import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -25,7 +25,7 @@ const PredictionHistoryCard = styled(Card)`
         padding: 8px 16px;
         color: ${COLOR.WHITE_TRANSPARENT_50};
         font-weight: normal;
-        background: ${COLOR.WHITE_TRANSPARENT_5};
+        background: ${COLOR.WHITE_TRANSPARENT_05};
         border-bottom: none;
         &:first-child {
           border-bottom-left-radius: 8px;
@@ -68,7 +68,11 @@ const NoDataAvailable = () => (
   <Flex align="center" justify="center" vertical style={{ padding: '32px 0' }}>
     <HistoryOutlined
       className="mb-24"
-      style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
+      style={{
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: COLOR.WHITE_TRANSPARENT_50,
+      }}
     />
     <Text type="secondary">No data yet.</Text>
     <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>

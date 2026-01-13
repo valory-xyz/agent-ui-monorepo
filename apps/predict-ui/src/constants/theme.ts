@@ -15,7 +15,7 @@ export const COLOR = {
   BLACK_TRANSPARENT_75: 'rgba(0, 0, 0, 0.75)',
   BLACK_BACKGROUND: 'rgba(0, 0, 0, 0.90)',
 
-  WHITE_TRANSPARENT_5: 'rgba(255, 255, 255, 0.05)',
+  WHITE_TRANSPARENT_05: 'rgba(255, 255, 255, 0.05)',
   WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
   WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
   WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
@@ -68,7 +68,7 @@ export const THEME_CONFIG: ThemeConfig = {
       colorBgSpotlight: COLOR.BLACK_BACKGROUND,
     },
     Segmented: {
-      trackBg: COLOR.WHITE_TRANSPARENT_5,
+      trackBg: COLOR.WHITE_TRANSPARENT_05,
       itemSelectedBg: COLOR.WHITE_TRANSPARENT_10,
     },
   },
