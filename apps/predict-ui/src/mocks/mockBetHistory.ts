@@ -116,7 +116,7 @@ export const mockPositionDetails: PositionDetails = {
         amount: 1.82,
         side: 'yes',
         external_url: 'https://example.com/market/market_abcd',
-        placed_at: '2025-12-09T17:55:00.000Z',
+        placed_at: '2025-11-25T17:55:00.000Z',
       },
       intelligence: {
         prediction_tool: 'prediction-online',
