@@ -1,6 +1,6 @@
-import nx from '@nx/eslint-plugin';
 import prettier from 'eslint-plugin-prettier';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import nx from '@nx/eslint-plugin';
 
 export default [
   ...nx.configs['flat/base'],
@@ -9,27 +9,16 @@ export default [
   {
     ignores: [
       '**/dist',
+      '**/build',
+      '**/.next',
+      '**/.github',
+      '**/node_modules',
+      '**/*.log',
+      '**/.idea',
+      '**/.vscode',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
     ],
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
-    rules: {
-      '@nx/enforce-module-boundaries': [
-        'error',
-        {
-          enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
-          depConstraints: [
-            {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
-            },
-          ],
-        },
-      ],
-    },
   },
   {
     files: [
