@@ -71,7 +71,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
 
   return (
     <Modal
-      title={<Text className="font-lg">Position details</Text>}
+      title={<Text className="text-lg">Position details</Text>}
       open
       onCancel={onClose}
       footer={null}
