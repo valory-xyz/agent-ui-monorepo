@@ -78,9 +78,9 @@ const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
   </Flex>
 );
 
-type BetInfoProps = { title: string; tooltip?: string; desc: ReactNode; noBorder?: boolean };
+type BetInfoProps = { title: string; tooltip?: ReactNode; desc: ReactNode; noBorder?: boolean };
 const BetInfo = ({ title, tooltip, desc, noBorder }: BetInfoProps) => (
-  <BetInfoFlex gap={4} noBorder={noBorder}>
+  <BetInfoFlex noBorder={noBorder}>
     <Text type="secondary" style={{ width: 180 }}>
       {title}
       {tooltip && (
@@ -95,7 +95,7 @@ const BetInfo = ({ title, tooltip, desc, noBorder }: BetInfoProps) => (
 
 const Bet = ({ bet, intelligence, strategy }: BetDetails) => {
   return (
-    <Flex vertical>
+    <Flex vertical style={{ marginBottom: 20 }}>
       <BetInfo title="Strategy" desc={`${TRADING_TYPE_MAP[strategy].displayName}`} />
 
       <BetInfo
@@ -216,11 +216,14 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                 ghost
                 items={data.bets.map(({ id, bet, intelligence, strategy }, idx) => {
                   const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
+                  const isLast = idx === data.bets.length - 1;
                   return {
                     key: id,
                     label: (
-                      <Flex justify="space-between" align="center" style={{ width: '100%' }}>
-                        <Text className="text-md">Bet {idx + 1}</Text>
+                      <Flex align="center" gap={4} style={{ width: '100%' }}>
+                        <Text type="secondary" style={{ width: 180 }}>
+                          Bet {idx + 1}
+                        </Text>
                         <Flex align="center" gap={8}>
                           <Text className="text-md">
                             {formatCurrency(bet.amount, data.currency)} {sideLabel}
@@ -243,15 +246,18 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     children: (
                       <Bet id={data.id} bet={bet} intelligence={intelligence} strategy={strategy} />
                     ),
+                    style: isLast
+                      ? undefined
+                      : {
+                          borderBottom: `1px solid ${COLOR.WHITE_TRANSPARENT_10}`,
+                          marginBottom: 20,
+                        },
                   };
                 })}
-                style={
-                  {
-                    // background: COLOR.BLACK_TRANSPARENT_20,
-                    // borderRadius: 12,
-                    // border: `1px solid ${COLOR.WHITE_TRANSPARENT_10}`,
-                  }
-                }
+                style={{
+                  // background: COLOR.BLACK_TRANSPARENT_20,
+                  borderRadius: 0,
+                }}
               />
             ) : (
               <Flex justify="center" align="center" style={{ height: 100 }}>
