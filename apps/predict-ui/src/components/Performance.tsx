@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Col, Flex, Row, Tooltip, Typography } from 'antd';
+import { InfoCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { Alert, Col, Flex, Row, Tooltip, Typography } from 'antd';
 import { useMemo } from 'react';
 
 import { CURRENCY, CurrencyCode } from '../constants/currency';
@@ -68,6 +68,30 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       <Title level={4} className="m-0 font-normal">
         Performance
       </Title>
+
+      <Alert
+        // TODO: temporarily added until we use new merged LM&MM subgraph. Remove when not needed
+        message={
+          <Flex gap={8} vertical>
+            <span style={{ fontWeight: 500 }}>Data update in progress</span>
+            <span>Some performance data may be temporarily incomplete. A fix is in progress.</span>
+          </Flex>
+        }
+        type="warning"
+        showIcon
+        icon={
+          <WarningOutlined
+            style={{ fontSize: 18, marginTop: '2px', color: 'rgba(255, 255, 0, 1)' }}
+          />
+        }
+        style={{
+          padding: '12px',
+          alignItems: 'flex-start',
+          background: 'rgba(255, 255, 0, 0.1)',
+          borderColor: 'rgba(255, 255, 0, 0.1)',
+          color: 'rgba(255, 255, 0, 1)',
+        }}
+      />
 
       <Row gutter={[24, 16]} align="middle" className="m-0">
         {performanceItems.map((item) => (
