@@ -25,25 +25,32 @@ const formatPlacedAt = (iso: string) =>
     minute: '2-digit',
   });
 
+const intelligenceTooltipItems = [
+  {
+    label: 'Implied probability',
+    description: "The agent's estimated likelihood for the market's outcome.",
+  },
+  {
+    label: 'Confidence score',
+    description: 'How certain the agent is about its estimate.',
+  },
+  {
+    label: 'Utility score',
+    description: "How informative the agent's research was for making this estimate.",
+  },
+];
+
 const IntelligenceTooltip = () => (
   <Flex vertical gap={8}>
     <Text className="text-sm">How the agent evaluated this market when the bet was placed:</Text>
     <ul style={{ paddingLeft: 12 }}>
-      <li>
-        <Text className="text-sm">
-          <b>Implied probability</b>: The agent’s estimated likelihood for the market’s outcome.
-        </Text>
-      </li>
-      <li>
-        <Text className="text-sm">
-          <b>Confidence score</b>: How certain the agent is about its estimate.
-        </Text>
-      </li>
-      <li>
-        <Text className="text-sm">
-          <b>Utility score</b>: How informative the agent’s research was for making this estimate.
-        </Text>
-      </li>
+      {intelligenceTooltipItems.map((item) => (
+        <li key={item.label}>
+          <Text className="text-sm">
+            <b>{item.label}</b>: {item.description}
+          </Text>
+        </li>
+      ))}
     </ul>
   </Flex>
 );
