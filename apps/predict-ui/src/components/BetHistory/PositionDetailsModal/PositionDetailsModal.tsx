@@ -138,7 +138,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
             <Collapse
               defaultActiveKey={[data.bets[0]?.id]}
               items={data.bets.map(({ id, bet, intelligence, strategy }, idx) => {
-                const sideLabel = bet.side === 'yes' ? 'Yes' : 'No';
+                const sideLabel = bet.side.toLowerCase() === 'yes' ? 'Yes' : 'No';
                 const isLast = idx === data.bets.length - 1;
                 const hasOneBet = data.bets.length === 1;
                 return {
