@@ -1,5 +1,5 @@
-import { LineChartOutlined } from '@ant-design/icons';
-import { Flex, Segmented, Spin, Typography } from 'antd';
+import { LineChartOutlined, WarningOutlined } from '@ant-design/icons';
+import { Alert, Flex, Segmented, Spin, Typography } from 'antd';
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 
@@ -69,6 +69,34 @@ export const ProfitOverTime = () => {
           />
         )}
       </Flex>
+
+      <Alert
+        // TODO: temporarily added until we use new merged LM&MM subgraph. Remove when not needed
+        message={
+          <Flex gap={8} vertical>
+            <span style={{ fontWeight: 500 }}>Data update in progress</span>
+            <span>
+              Mech fees for invalid markets and markets in which agents did not place bets are
+              currently unaccounted for. This leads to an underreporting of costs. A fix is in
+              progress.
+            </span>
+          </Flex>
+        }
+        type="warning"
+        showIcon
+        icon={
+          <WarningOutlined
+            style={{ fontSize: 18, marginTop: '2px', color: 'rgba(255, 255, 0, 1)' }}
+          />
+        }
+        style={{
+          padding: '12px',
+          alignItems: 'flex-start',
+          background: 'rgba(255, 255, 0, 0.1)',
+          borderColor: 'rgba(255, 255, 0, 0.1)',
+          color: 'rgba(255, 255, 0, 1)',
+        }}
+      />
 
       {isLoading ? (
         <Container justify="center" align="center">
