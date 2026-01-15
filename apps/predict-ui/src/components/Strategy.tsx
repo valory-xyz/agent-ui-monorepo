@@ -13,7 +13,7 @@ const { Title, Paragraph, Text } = Typography;
 const StrategyBody = styled.div`
   padding: 16px;
   border-radius: 10px;
-  background: ${COLOR.WHITE_TRANSPARENT_5};
+  background: ${COLOR.WHITE_TRANSPARENT_50};
   .ant-skeleton-paragraph {
     margin-bottom: 0;
     margin-block-start: 16px !important;

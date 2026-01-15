@@ -79,11 +79,13 @@ const BetInfo = ({ title, tooltip, desc, noBorder, borderTop }: BetInfoProps) =>
 export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLast?: boolean }) => {
   return (
     <Flex vertical style={isLast ? {} : { marginBottom: 20 }}>
-      <BetInfo
-        title="Strategy"
-        desc={`${TRADING_TYPE_MAP[strategy].displayName}`}
-        borderTop={true}
-      />
+      {strategy && (
+        <BetInfo
+          title="Strategy"
+          desc={`${TRADING_TYPE_MAP[strategy].displayName}`}
+          borderTop={true}
+        />
+      )}
 
       <BetInfo
         title="Prediction tool"

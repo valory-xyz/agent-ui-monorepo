@@ -98,7 +98,7 @@ export type BetDetails = {
     confidence_score: number;
     utility_score: number;
   };
-  strategy: TradingType;
+  strategy: TradingType | null;
 };
 
 export type PositionDetails = {
