@@ -5,6 +5,7 @@ export const COLOR = {
   SECONDARY: 'rgba(255, 255, 255, 0.5)',
   TEXT_PRIMARY: '#FFFFFF',
   BACKGROUND: '#2f1d57',
+  MODAL_BACKGROUND: '#2B194A',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
   BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',
@@ -14,7 +15,7 @@ export const COLOR = {
   BLACK_TRANSPARENT_75: 'rgba(0, 0, 0, 0.75)',
   BLACK_BACKGROUND: 'rgba(0, 0, 0, 0.90)',
 
-  WHITE_TRANSPARENT_5: 'rgba(255, 255, 255, 0.05)',
+  WHITE_TRANSPARENT_05: 'rgba(255, 255, 255, 0.05)',
   WHITE_TRANSPARENT_10: 'rgba(255, 255, 255, 0.1)',
   WHITE_TRANSPARENT_20: 'rgba(255, 255, 255, 0.2)',
   WHITE_TRANSPARENT_50: 'rgba(255, 255, 255, 0.50)',
@@ -67,7 +68,7 @@ export const THEME_CONFIG: ThemeConfig = {
       colorBgSpotlight: COLOR.BLACK_BACKGROUND,
     },
     Segmented: {
-      trackBg: COLOR.WHITE_TRANSPARENT_5,
+      trackBg: COLOR.WHITE_TRANSPARENT_05,
       itemSelectedBg: COLOR.WHITE_TRANSPARENT_10,
     },
   },

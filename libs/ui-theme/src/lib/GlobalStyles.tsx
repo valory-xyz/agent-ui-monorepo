@@ -39,6 +39,9 @@ export const GlobalStyles = createGlobalStyle`
   .mb-24 {
     margin-bottom: 24px !important;
   }
+  .mt-8 {
+    margin-top: 8px !important;
+  }
   .mt-16 {
     margin-top: 16px !important;
   }
@@ -58,6 +61,12 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   /* font size */
+  .text-lg {
+    font-size: 18px;
+  }
+  .text-md {
+    font-size: 16px;
+  }
   .text-sm {
     font-size: 14px;
   }

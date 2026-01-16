@@ -3,8 +3,8 @@ import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-function
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockBetHistory } from '../mocks/mockBetHistory';
-import { AgentPredictionHistoryResponse } from '../types';
+import { mockBetHistory, mockPositionDetails } from '../mocks/mockBetHistory';
+import { AgentPredictionHistoryResponse, PositionDetails } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
@@ -23,6 +23,23 @@ export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: numb
       return response.json();
     },
     refetchInterval: FIVE_MINUTES,
+    retry: 5,
+    retryDelay: exponentialBackoffDelay,
+  });
+
+  return query;
+};
+
+export const usePositionDetails = ({ id }: { id: string }) => {
+  const query = useQuery<PositionDetails>({
+    queryKey: [REACT_QUERY_KEYS.PREDICTION_DETAILS, id],
+    queryFn: async () => {
+      if (IS_MOCK_ENABLED) return delay(mockPositionDetails);
+
+      const response = await fetch(`${API_V1}/agent/position-details/${id}`);
+      if (!response.ok) throw new Error('Failed to fetch position details');
+      return response.json();
+    },
     retry: 5,
     retryDelay: exponentialBackoffDelay,
   });

@@ -1,15 +1,17 @@
 import { HistoryOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { Flex, Spin, Tag, Typography } from 'antd';
+import { Flex, Spin, Typography } from 'antd';
 import { Table } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { CURRENCY, CurrencyCode } from '../constants/currency';
-import { COLOR } from '../constants/theme';
-import { useBetHistory } from '../hooks/useBetHistory';
-import { BetHistoryItem } from '../types';
-import { Card } from './ui/Card';
+import { CurrencyCode } from '../../constants/currency';
+import { COLOR } from '../../constants/theme';
+import { useBetHistory } from '../../hooks/useBetHistory';
+import { BetHistoryItem } from '../../types';
+import { Card } from '../ui/Card';
+import { BetStatus } from './BetStatus';
+import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -23,7 +25,7 @@ const PredictionHistoryCard = styled(Card)`
         padding: 8px 16px;
         color: ${COLOR.WHITE_TRANSPARENT_50};
         font-weight: normal;
-        background: ${COLOR.WHITE_TRANSPARENT_5};
+        background: ${COLOR.WHITE_TRANSPARENT_05};
         border-bottom: none;
         &:first-child {
           border-bottom-left-radius: 8px;
@@ -40,6 +42,11 @@ const PredictionHistoryCard = styled(Card)`
       }
     }
     .ant-table-tbody {
+      .ant-table-row {
+        &:hover > td {
+          background-color: ${`${COLOR.PRIMARY}33`} !important;
+        }
+      }
       .ant-table-cell {
         padding: 8px 16px;
         border-color: ${COLOR.WHITE_TRANSPARENT_10} !important;
@@ -61,7 +68,11 @@ const NoDataAvailable = () => (
   <Flex align="center" justify="center" vertical style={{ padding: '32px 0' }}>
     <HistoryOutlined
       className="mb-24"
-      style={{ fontSize: 32, fontWeight: 'bold', color: COLOR.WHITE_TRANSPARENT_50 }}
+      style={{
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: COLOR.WHITE_TRANSPARENT_50,
+      }}
     />
     <Text type="secondary">No data yet.</Text>
     <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>
@@ -96,35 +107,14 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'status',
     key: 'status',
     width: '20%',
-    render: (_text, record: BetHistoryItem) => {
-      const amount = record.status === 'pending' ? record.bet_amount : record.net_profit;
-      const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
-
-      const details = (() => {
-        if (record.status === 'won') {
-          return { color: COLOR.GREEN, background: COLOR.GREEN_BACKGROUND, text: `Won ${value}` };
-        }
-        if (record.status === 'lost') {
-          return { color: COLOR.PINK, background: COLOR.PINK_BACKGROUND, text: `Lost ${value}` };
-        }
-        return {
-          color: COLOR.WHITE_TRANSPARENT_75,
-          background: COLOR.WHITE_TRANSPARENT_5,
-          text: `Bet ${value}`,
-        };
-      })();
-
-      return (
-        <Tag
-          bordered={false}
-          color={details.background}
-          className="mx-auto"
-          style={{ color: details.color }}
-        >
-          {details.text}
-        </Tag>
-      );
-    },
+    render: (_text, record: BetHistoryItem) => (
+      <BetStatus
+        status={record.status}
+        bet_amount={record.bet_amount}
+        net_profit={record.net_profit}
+        currency={currency}
+      />
+    ),
     align: 'center',
     className: 'th-text-center',
   },
@@ -132,6 +122,8 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
 
 export const BetHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
+  const [selectedPositionId, setSelectedPositionId] = useState<string | null>(null);
 
   const { isLoading, data } = useBetHistory({
     page: currentPage,
@@ -161,7 +153,23 @@ export const BetHistory = () => {
             onChange: (page) => setCurrentPage(page),
             total: data?.total ?? 0,
           }}
-          rowHoverable={false}
+          onRow={(record) => ({
+            onClick: () => {
+              setSelectedPositionId(record.id);
+              setIsPositionDetailsModalOpen(true);
+            },
+            style: { cursor: 'pointer' },
+          })}
+        />
+      )}
+
+      {selectedPositionId && isPositionDetailsModalOpen && (
+        <PositionDetailsModal
+          id={selectedPositionId}
+          onClose={() => {
+            setIsPositionDetailsModalOpen(false);
+            setSelectedPositionId(null);
+          }}
         />
       )}
     </PredictionHistoryCard>
