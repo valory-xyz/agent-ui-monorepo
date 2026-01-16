@@ -1,5 +1,5 @@
 import { Tag } from 'antd';
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, useMemo } from 'react';
 
 import { CURRENCY, CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
@@ -25,7 +25,7 @@ export const BetStatus = ({
   const amount = status === 'pending' ? bet_amount : net_profit;
   const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
 
-  const details = (() => {
+  const details = useMemo(() => {
     if (status === 'won') {
       return {
         color: COLOR.GREEN,
@@ -57,7 +57,7 @@ export const BetStatus = ({
       background: COLOR.WHITE_TRANSPARENT_05,
       text: `Bet ${value}`,
     };
-  })();
+  }, [remaining_seconds, status, value]);
 
   return (
     <Tag
