@@ -108,7 +108,7 @@ export const mockPositionDetails: PositionDetails = {
         confidence_score: 85.0,
         utility_score: 95.0,
       },
-      strategy: 'risky',
+      strategy: null,
     },
     {
       id: 'bet_002',
