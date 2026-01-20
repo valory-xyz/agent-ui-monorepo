@@ -1,11 +1,29 @@
 import { theme, ThemeConfig } from 'antd';
 
-export const COLOR = {
+import { agentType } from '../utils/agentMap';
+
+// Trader theme (purple)
+const traderColors = {
   PRIMARY: '#884dff',
-  SECONDARY: 'rgba(255, 255, 255, 0.5)',
-  TEXT_PRIMARY: '#FFFFFF',
   BACKGROUND: '#2f1d57',
   MODAL_BACKGROUND: '#2B194A',
+};
+
+// Polystrat theme (dark grey)
+const polystratColors = {
+  PRIMARY: '#6B7280',
+  BACKGROUND: '#1F2937',
+  MODAL_BACKGROUND: '#111827',
+};
+
+const agentColors = agentType === 'trader' ? traderColors : polystratColors;
+
+export const COLOR = {
+  PRIMARY: agentColors.PRIMARY,
+  SECONDARY: 'rgba(255, 255, 255, 0.5)',
+  TEXT_PRIMARY: '#FFFFFF',
+  BACKGROUND: agentColors.BACKGROUND,
+  MODAL_BACKGROUND: agentColors.MODAL_BACKGROUND,
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
   BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',
