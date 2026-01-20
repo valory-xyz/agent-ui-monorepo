@@ -94,13 +94,13 @@ export const mockPositionDetails: PositionDetails = {
   status: 'pending',
   remaining_seconds: 240000,
   net_profit: 0,
+  external_url: 'https://example.com/market/market_abcd',
   bets: [
     {
       id: 'bet_001',
       bet: {
         amount: 1.82,
         side: 'yes',
-        external_url: 'https://example.com...',
       },
       intelligence: {
         prediction_tool: 'prediction-online',
@@ -115,7 +115,6 @@ export const mockPositionDetails: PositionDetails = {
       bet: {
         amount: 1.82,
         side: 'yes',
-        external_url: 'https://example.com/market/market_abcd',
         placed_at: '2025-11-25T17:55:00.000Z',
       },
       intelligence: {
