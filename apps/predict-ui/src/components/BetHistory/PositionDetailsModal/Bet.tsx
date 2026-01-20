@@ -91,6 +91,7 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
         title="Prediction tool"
         desc={`${intelligence.prediction_tool}`}
         tooltip="The tool the agent used to research and generate its prediction for this market."
+        borderTop={!strategy}
       />
 
       <BetInfo

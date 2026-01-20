@@ -16,7 +16,6 @@ import styled from 'styled-components';
 
 import { CURRENCY, CurrencyCode } from '../../../constants/currency';
 import { COLOR } from '../../../constants/theme';
-import { PREDICT_APP_URL } from '../../../constants/urls';
 import { usePositionDetails } from '../../../hooks/useBetHistory';
 import { BetStatus } from '../BetStatus';
 import { Bet } from './Bet';
@@ -94,7 +93,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
           <Card variant="outlined" className="mb-8" styles={{ body: { padding: 16 } }}>
             <Text>
               <a
-                href={`${PREDICT_APP_URL}/questions/${data.id}`}
+                href={data.external_url}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Open market"

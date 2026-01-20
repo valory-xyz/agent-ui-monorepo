@@ -113,6 +113,7 @@ export type PositionDetails = {
   remaining_seconds?: number;
   net_profit: number;
   bets: Array<BetDetails>;
+  external_url: string;
 };
 
 export type AgentProfitPoint = {
