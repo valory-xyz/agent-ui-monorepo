@@ -43,7 +43,7 @@ export const Card = styled.div<{ $padding?: string; $gap?: string }>`
 /**
  * A variant of Card with slightly different styles (used for predict ui Chat)
  */
-export const CardV2 = styled(AntdCard)<{ $hasBackgroundImage?: boolean }>`
+export const CardV2 = styled(AntdCard)`
   position: relative;
   backdrop-filter: blur(10px);
   border: 1px solid ${COLOR.WHITE_TRANSPARENT_10};
@@ -58,8 +58,7 @@ export const CardV2 = styled(AntdCard)<{ $hasBackgroundImage?: boolean }>`
   }
 
   &::before {
-    ${({ $hasBackgroundImage = true }) =>
-      cardBeforeStyles({ hasBackgroundImage: $hasBackgroundImage })}
+    ${() => cardBeforeStyles({ hasBackgroundImage: isTraderAgent })}
     border-radius: 16px;
   }
 

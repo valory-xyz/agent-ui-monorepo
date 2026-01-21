@@ -11,6 +11,7 @@ import { useCallback, useState } from 'react';
 import { REACT_QUERY_KEYS } from '../../constants/reactQueryKeys';
 import { mockChat } from '../../mocks/mockChat';
 import { ChatResponse } from '../../types';
+import { agentType } from '../../utils/agentMap';
 import { CardV2 } from '../ui/Card';
 import { TradingStrategy } from './SystemChat';
 
@@ -73,7 +74,7 @@ export const Chat = () => {
         chats={chats}
         onCurrentTextChange={setCurrentText}
         onSend={handleSend}
-        agentType="predict"
+        agentType={agentType}
         size="large"
       />
       {contextHolder}

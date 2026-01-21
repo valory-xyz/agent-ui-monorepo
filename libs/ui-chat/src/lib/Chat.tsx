@@ -65,7 +65,15 @@ export const Chat = ({
   size = 'small',
 }: ChatProps) => {
   const btnStyle = useMemo(() => {
-    if (agentType === 'predict') {
+    if (agentType === 'trader') {
+      return {
+        ...commonBtnStyles,
+        color: GLOBAL_COLORS.BLACK,
+        background: GLOBAL_COLORS.WHITE,
+      };
+    }
+
+    if (agentType === 'polymarket_trader') {
       return {
         ...commonBtnStyles,
         color: GLOBAL_COLORS.BLACK,

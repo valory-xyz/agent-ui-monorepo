@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-export type AgentType = 'modius' | 'optimus' | 'predict' | 'agentsFun';
+export type AgentType = 'modius' | 'optimus' | 'trader' | 'agentsFun' | 'polymarket_trader';
 
 export type EachChat = {
   text: ReactNode;

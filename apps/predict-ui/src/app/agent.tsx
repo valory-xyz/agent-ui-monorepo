@@ -14,7 +14,7 @@ import { Card } from '../components/ui/Card';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
-import { agentType } from '../utils/agentMap';
+import { isTraderAgent } from '../utils/agentMap';
 
 const AgentContent = styled.div`
   display: flex;
@@ -110,7 +110,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        {agentType === 'trader' && <ProfitOverTime />}
+        {isTraderAgent && <ProfitOverTime />}
         <BetHistory />
         <Strategy />
         <ChatContent />
