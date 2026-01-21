@@ -11,7 +11,7 @@ const StyledApp = styled.div`
   min-height: 100vh;
   overflow: auto;
   background-color: ${COLOR.BACKGROUND};
-  background-image: ${() => (isTraderAgent ? "url('/images/background.png')" : 'none')};
+  background-image: ${isTraderAgent ? "url('/images/background.png')" : 'none'};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
