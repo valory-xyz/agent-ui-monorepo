@@ -2,6 +2,7 @@ import { GLOBAL_COLORS } from '@agent-ui-monorepo/ui-theme';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button, Flex, Input, Typography } from 'antd';
 import { CSSProperties, useMemo } from 'react';
+import styled from 'styled-components';
 
 import { LOGO_MAP } from './constants';
 import { ChatSize, EachChat } from './types';
@@ -12,6 +13,12 @@ const { TextArea } = Input;
 const { Title } = Typography;
 
 const commonBtnStyles: CSSProperties = { position: 'absolute', top: 8, right: 8 };
+
+const TextAreaContainer = styled(Flex)`
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+`;
 
 const getPlaceholder = (agentType: AgentType) => {
   if (agentType === 'agentsFun') {
@@ -100,7 +107,7 @@ export const Chat = ({
         <ViewChats size={size} agentType={agentType} chats={chats} />
       )}
 
-      <Flex style={{ position: 'relative', width: '100%' }} className="agent-chat-input">
+      <TextAreaContainer className="agent-chat-input">
         <TextArea
           value={currentText}
           onChange={(e) => onCurrentTextChange(e.target.value)}
@@ -116,6 +123,8 @@ export const Chat = ({
             resize: 'none',
             paddingRight: 64,
             fontSize: size === 'large' ? 16 : 14,
+            borderColor:
+              agentType === 'polymarket_trader' ? GLOBAL_COLORS.WHITE_TRANSPARENT_10 : undefined,
           }}
         />
         <Button
@@ -125,7 +134,7 @@ export const Chat = ({
           icon={<ArrowLeftOutlined style={{ rotate: '90deg' }} />}
           style={btnStyle}
         />
-      </Flex>
+      </TextAreaContainer>
     </>
   );
 };

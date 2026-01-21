@@ -69,7 +69,7 @@ const ViewEachChat = ({ chat, isFirst, agentType, size }: ViewEachChatProps) => 
     };
 
     const backgroundStyles: CSSProperties = (() => {
-      if (agentType === 'trader') {
+      if (agentType === 'polymarket_trader' || agentType === 'trader') {
         return {
           background: GLOBAL_COLORS.WHITE_TRANSPARENT_10,
           backdropFilter: 'blur(10px)',

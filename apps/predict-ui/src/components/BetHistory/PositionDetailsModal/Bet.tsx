@@ -72,7 +72,7 @@ const BetInfo = ({ title, tooltip, desc, noBorder, borderTop }: BetInfoProps) =>
         </Tooltip>
       )}
     </Text>
-    <Text>{desc}</Text>
+    <Text className="text-white-075">{desc}</Text>
   </BetInfoFlex>
 );
 
@@ -98,17 +98,20 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
         title="Intelligence"
         desc={
           <Flex vertical gap={8}>
-            <Text>
-              {Math.round(intelligence.implied_probability)}%{' '}
+            <Flex gap={6}>
+              <Text className="text-white-075">
+                {Math.round(intelligence.implied_probability)}%
+              </Text>
               <Text type="secondary">Implied probability</Text>
-            </Text>
-            <Text className="text-md">
-              {Math.round(intelligence.confidence_score)}%{' '}
+            </Flex>
+            <Flex gap={6}>
+              <Text className="text-white-075">{Math.round(intelligence.confidence_score)}%</Text>
               <Text type="secondary">Confidence score</Text>
-            </Text>
-            <Text className="text-md">
-              {Math.round(intelligence.utility_score)}% <Text type="secondary">Utility score</Text>
-            </Text>
+            </Flex>
+            <Flex gap={6}>
+              <Text className="text-white-075">{Math.round(intelligence.utility_score)}%</Text>
+              <Text type="secondary">Utility score</Text>
+            </Flex>
           </Flex>
         }
         tooltip={<IntelligenceTooltip />}
