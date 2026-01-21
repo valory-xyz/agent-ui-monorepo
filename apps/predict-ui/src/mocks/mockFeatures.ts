@@ -1,5 +1,5 @@
 import { Features } from '../types';
 
 export const mockFeatures: Features = {
-  isChatEnabled: false,
+  isChatEnabled: true,
 } as const;
