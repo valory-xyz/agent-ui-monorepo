@@ -28,6 +28,7 @@ export const COLOR = {
   MODAL_BACKGROUND: agentColors.MODAL_BACKGROUND,
   CARD_BACKGROUND: agentColors.CARD_BACKGROUND,
   TOOLTIP_BORDER: agentColors.TOOLTIP_BORDER,
+  BORDER_NEUTRAL_SECONDARY: 'rgba(61, 82, 102, 0.50)',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
   BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',
@@ -77,9 +78,14 @@ export const THEME_CONFIG: ThemeConfig = {
       lineWidth: 4,
     },
     Button: {
-      defaultBg: 'transparent',
-      defaultHoverBg: COLOR.BLACK_TRANSPARENT_20,
-      defaultBorderColor: COLOR.TEXT_PRIMARY,
+      colorText: COLOR.TEXT_PRIMARY,
+    },
+    Pagination: {
+      itemBg: 'transparent',
+      itemActiveBg: COLOR.BORDER_NEUTRAL_SECONDARY,
+      colorPrimary: COLOR.TEXT_PRIMARY,
+      colorText: COLOR.WHITE_TRANSPARENT_50,
+      colorTextDisabled: COLOR.WHITE_TRANSPARENT_50,
     },
     Typography: {
       fontSize: 16,
