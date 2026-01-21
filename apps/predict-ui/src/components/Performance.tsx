@@ -21,53 +21,55 @@ const getValue = (value: number, currency: CurrencyCode) => {
   return `${CURRENCY[currency]?.symbol || '$'}${value || 0} `;
 };
 
+const isPerformanceItem = (item: PerformanceItem | null): item is PerformanceItem => item !== null;
+
 export const AgentPerformance = ({ performance }: { performance: AgentMetricsResponse }) => {
   const { metrics, stats, currency } = performance;
 
-  const performanceItems = useMemo<PerformanceItem[]>(
-    () =>
-      [
-        {
-          title: 'All time funds used',
-          value: getValue(metrics.all_time_funds_used || 0, currency),
-          tooltip: 'Total funds your agent has allocated to prediction-market bets over time.',
-        },
-        isTraderAgent
-          ? {
-              title: 'All time profit',
-              value: getValue(metrics.all_time_profit || 0, currency),
-              tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
-            }
-          : null,
-        {
-          title: 'Funds locked in markets',
-          value: getValue(metrics.funds_locked_in_markets || 0, currency),
-          tooltip: 'Total funds placed on prediction markets that haven’t resolved yet.',
-        },
-        {
-          title: 'Available funds',
-          value: getValue(metrics.available_funds || 0, currency),
-          tooltip: 'Funds currently available for your agent to place new bets.',
-        },
-        {
-          title: 'Predictions made',
-          value: stats.predictions_made
-            ? Intl.NumberFormat('en-US').format(stats.predictions_made)
-            : '0',
-        },
-        isTraderAgent
-          ? {
-              title: 'Prediction accuracy',
-              value:
-                stats.prediction_accuracy === null
-                  ? 'Will appear with the first resolved market.'
-                  : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
-              variant: stats.prediction_accuracy === null ? 'text' : 'title',
-            }
-          : null,
-      ].filter(Boolean) as PerformanceItem[],
-    [metrics, stats, currency],
-  );
+  const performanceItems = useMemo<PerformanceItem[]>(() => {
+    const items: Array<PerformanceItem | null> = [
+      {
+        title: 'All time funds used',
+        value: getValue(metrics.all_time_funds_used || 0, currency),
+        tooltip: 'Total funds your agent has allocated to prediction-market bets over time.',
+      },
+      isTraderAgent
+        ? {
+            title: 'All time profit',
+            value: getValue(metrics.all_time_profit || 0, currency),
+            tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
+          }
+        : null,
+      {
+        title: 'Funds locked in markets',
+        value: getValue(metrics.funds_locked_in_markets || 0, currency),
+        tooltip: 'Total funds placed on prediction markets that haven’t resolved yet.',
+      },
+      {
+        title: 'Available funds',
+        value: getValue(metrics.available_funds || 0, currency),
+        tooltip: 'Funds currently available for your agent to place new bets.',
+      },
+      {
+        title: 'Predictions made',
+        value: stats.predictions_made
+          ? Intl.NumberFormat('en-US').format(stats.predictions_made)
+          : '0',
+      },
+      isTraderAgent
+        ? {
+            title: 'Prediction accuracy',
+            value:
+              stats.prediction_accuracy === null
+                ? 'Will appear with the first resolved market.'
+                : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
+            variant: stats.prediction_accuracy === null ? 'text' : 'title',
+          }
+        : null,
+    ];
+
+    return items.filter(isPerformanceItem);
+  }, [metrics, stats, currency]);
 
   return (
     <Card>
