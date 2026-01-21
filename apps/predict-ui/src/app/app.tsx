@@ -29,7 +29,7 @@ export function App() {
           </AntdConfigProvider>
         </ErrorBoundary>
       </StyledApp>
-      <GlobalStyles />
+      <GlobalStyles tooltipBorderColor={isTraderAgent ? undefined : COLOR.TOOLTIP_BORDER} />
     </>
   );
 }
