@@ -83,7 +83,7 @@ export const Chat = ({
     if (agentType === 'polymarket_trader') {
       return {
         ...commonBtnStyles,
-        color: GLOBAL_COLORS.BLACK,
+        color: GLOBAL_COLORS.POLYSTRAT_BACKGROUND,
         background: GLOBAL_COLORS.WHITE,
       };
     }
