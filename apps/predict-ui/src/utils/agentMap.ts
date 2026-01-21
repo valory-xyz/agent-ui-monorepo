@@ -9,3 +9,5 @@ export const agentType =
 export const agentName = agentType === 'trader' ? 'Trader' : 'Polystrat';
 
 export const agentChainName = agentType === 'trader' ? 'gnosis' : 'polygon';
+
+export const isTraderAgent = agentType === 'trader';

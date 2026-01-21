@@ -4,13 +4,14 @@ import { ConfigProvider as AntdConfigProvider } from 'antd';
 import styled from 'styled-components';
 
 import { COLOR, THEME_CONFIG } from '../constants/theme';
+import { isTraderAgent } from '../utils/agentMap';
 import { Agent } from './agent';
 
 const StyledApp = styled.div`
   min-height: 100vh;
   overflow: auto;
   background-color: ${COLOR.BACKGROUND};
-  background-image: url('/images/background.png');
+  background-image: ${() => (isTraderAgent ? "url('/images/background.png')" : 'none')};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
