@@ -5,5 +5,5 @@ React application for Predict UI, designed to be consumed by the agent and avail
 ## Multi-Agent Support
 
 This app supports two different agents:
-- **Trader** (`trader`): Operates on Gnosis chain
+- **Omenstrat** (`omenstrat_trader`): Operates on Gnosis chain
 - **Polystrat** (`polymarket_trader`): Operates on Polygon chain (default)

@@ -1,6 +1,6 @@
 import { theme, ThemeConfig } from 'antd';
 
-import { isTraderAgent } from '../utils/agentMap';
+import { isOmenstratAgent } from '../utils/agentMap';
 
 const traderColors = {
   PRIMARY: '#884dff',
@@ -18,7 +18,7 @@ const polystratColors = {
   TOOLTIP_BORDER: '#3D5266',
 };
 
-const agentColors = isTraderAgent ? traderColors : polystratColors;
+const agentColors = isOmenstratAgent ? traderColors : polystratColors;
 
 export const COLOR = {
   PRIMARY: agentColors.PRIMARY,
@@ -93,7 +93,7 @@ export const THEME_CONFIG: ThemeConfig = {
     Tooltip: {
       paddingXS: 16,
       paddingSM: 24,
-      colorBgSpotlight: isTraderAgent ? COLOR.BLACK_BACKGROUND : agentColors.BACKGROUND,
+      colorBgSpotlight: isOmenstratAgent ? COLOR.BLACK_BACKGROUND : agentColors.BACKGROUND,
     },
     Segmented: {
       trackBg: COLOR.WHITE_TRANSPARENT_05,

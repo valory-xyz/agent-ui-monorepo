@@ -2,7 +2,7 @@ import { Card as AntdCard } from 'antd';
 import styled, { css } from 'styled-components';
 
 import { COLOR } from '../../constants/theme';
-import { isTraderAgent } from '../../utils/agentMap';
+import { isOmenstratAgent } from '../../utils/agentMap';
 
 const cardBeforeStyles = css`
   content: '';
@@ -11,13 +11,13 @@ const cardBeforeStyles = css`
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: ${isTraderAgent ? "url('/images/card.png')" : 'none'};
+  background-image: ${isOmenstratAgent ? "url('/images/card.png')" : 'none'};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   opacity: 0.5;
   z-index: 1;
-  background-color: ${isTraderAgent ? 'transparent' : COLOR.CARD_BACKGROUND};
+  background-color: ${isOmenstratAgent ? 'transparent' : COLOR.CARD_BACKGROUND};
 `;
 
 export const Card = styled.div<{ $padding?: string; $gap?: string }>`

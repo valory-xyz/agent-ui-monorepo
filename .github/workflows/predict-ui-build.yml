@@ -3,7 +3,7 @@ name: Build and Release Predict UI
 on:
   push:
     tags:
-      - 'v*-trader'
+      - 'v*-omenstrat-trader'
       - 'v*-polymarket-trader'
   workflow_dispatch:
 
@@ -41,8 +41,8 @@ jobs:
       - name: Set variables
         run: |
           TAG="${{ github.ref_name }}"
-          if [[ "$TAG" == *-trader ]]; then
-            echo "REACT_APP_AGENT_NAME=trader" >> $GITHUB_ENV
+          if [[ "$TAG" == *-omenstrat-trader ]]; then
+            echo "REACT_APP_AGENT_NAME=omenstrat_trader" >> $GITHUB_ENV
           elif [[ "$TAG" == *-polymarket-trader ]]; then
             echo "REACT_APP_AGENT_NAME=polymarket_trader" >> $GITHUB_ENV
           else

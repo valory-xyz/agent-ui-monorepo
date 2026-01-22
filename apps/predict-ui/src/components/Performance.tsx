@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { CURRENCY, CurrencyCode } from '../constants/currency';
 import { COLOR } from '../constants/theme';
 import { AgentMetricsResponse } from '../types';
-import { isTraderAgent } from '../utils/agentMap';
+import { isOmenstratAgent } from '../utils/agentMap';
 import { Card } from './ui/Card';
 
 const { Text, Title } = Typography;
@@ -33,7 +33,7 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
         value: getValue(metrics.all_time_funds_used || 0, currency),
         tooltip: 'Total funds your agent has allocated to prediction-market bets over time.',
       },
-      isTraderAgent
+      isOmenstratAgent
         ? {
             title: 'All time profit',
             value: getValue(metrics.all_time_profit || 0, currency),
@@ -56,7 +56,7 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
           ? Intl.NumberFormat('en-US').format(stats.predictions_made)
           : '0',
       },
-      isTraderAgent
+      isOmenstratAgent
         ? {
             title: 'Prediction accuracy',
             value:

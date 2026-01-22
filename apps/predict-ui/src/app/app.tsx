@@ -4,14 +4,14 @@ import { ConfigProvider as AntdConfigProvider } from 'antd';
 import styled from 'styled-components';
 
 import { COLOR, THEME_CONFIG } from '../constants/theme';
-import { isTraderAgent } from '../utils/agentMap';
+import { isOmenstratAgent } from '../utils/agentMap';
 import { Agent } from './agent';
 
 const StyledApp = styled.div`
   min-height: 100vh;
   overflow: auto;
   background-color: ${COLOR.BACKGROUND};
-  background-image: ${isTraderAgent ? "url('/images/background.png')" : 'none'};
+  background-image: ${isOmenstratAgent ? "url('/images/background.png')" : 'none'};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -29,7 +29,7 @@ export function App() {
           </AntdConfigProvider>
         </ErrorBoundary>
       </StyledApp>
-      <GlobalStyles tooltipBorderColor={isTraderAgent ? undefined : COLOR.TOOLTIP_BORDER} />
+      <GlobalStyles tooltipBorderColor={isOmenstratAgent ? undefined : COLOR.TOOLTIP_BORDER} />
     </>
   );
 }

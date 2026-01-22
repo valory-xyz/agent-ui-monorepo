@@ -72,7 +72,7 @@ export const Chat = ({
   size = 'small',
 }: ChatProps) => {
   const btnStyle = useMemo(() => {
-    if (agentType === 'trader') {
+    if (agentType === 'omenstrat_trader') {
       return {
         ...commonBtnStyles,
         color: GLOBAL_COLORS.BLACK,
