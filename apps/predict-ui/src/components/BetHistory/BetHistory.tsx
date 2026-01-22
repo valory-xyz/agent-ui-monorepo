@@ -167,7 +167,7 @@ export const BetHistory = () => {
         />
       )}
 
-      {selectedPositionId && isPositionDetailsModalOpen && isOmenstratAgent && (
+      {selectedPositionId && isPositionDetailsModalOpen && (
         <PositionDetailsModal
           id={selectedPositionId}
           onClose={() => {
