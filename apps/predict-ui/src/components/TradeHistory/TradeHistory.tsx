@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
 import { useTradeHistory } from '../../hooks/useTradeHistory';
-import { BetHistoryItem } from '../../types';
+import { TradeHistoryItem } from '../../types';
 import { isOmenstratAgent } from '../../utils/agentMap';
 import { Card } from '../ui/Card';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
@@ -82,13 +82,13 @@ const NoDataAvailable = () => (
   </Flex>
 );
 
-const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns'] => [
+const getColumns = (currency: CurrencyCode): TableProps<TradeHistoryItem>['columns'] => [
   {
     title: 'Market',
     dataIndex: 'market',
     key: 'market',
     width: '60%',
-    render: (market: BetHistoryItem['market']) => (
+    render: (market: TradeHistoryItem['market']) => (
       <Paragraph className="text-sm text-white-075 m-0" ellipsis={{ rows: 2, tooltip: true }}>
         {market.title}
       </Paragraph>
@@ -99,7 +99,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'prediction_side',
     key: 'prediction_side',
     width: '15%',
-    render: (side: BetHistoryItem['prediction_side']) => (
+    render: (side: TradeHistoryItem['prediction_side']) => (
       <Text className="text-sm text-white-075">{side === 'yes' ? 'Yes' : 'No'}</Text>
     ),
     align: 'center',
@@ -110,7 +110,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'status',
     key: 'status',
     width: '20%',
-    render: (_text, record: BetHistoryItem) => (
+    render: (_text, record: TradeHistoryItem) => (
       <TradeStatus
         status={record.status}
         bet_amount={record.bet_amount}
@@ -144,7 +144,7 @@ export const TradeHistory = () => {
       ) : data?.items.length === 0 ? (
         <NoDataAvailable />
       ) : (
-        <Table<BetHistoryItem>
+        <Table<TradeHistoryItem>
           columns={getColumns(data?.currency ?? 'USD')}
           dataSource={data?.items ?? []}
           loading={isLoading}
