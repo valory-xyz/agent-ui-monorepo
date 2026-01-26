@@ -55,7 +55,7 @@ export const BetStatus = ({
     return {
       color: COLOR.WHITE_TRANSPARENT_75,
       background: COLOR.WHITE_TRANSPARENT_05,
-      text: `Bet ${value}`,
+      text: `Traded ${value}`,
     };
   }, [remaining_seconds, status, value]);
 

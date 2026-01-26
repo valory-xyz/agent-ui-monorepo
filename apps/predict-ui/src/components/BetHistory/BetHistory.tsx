@@ -76,7 +76,9 @@ const NoDataAvailable = () => (
       }}
     />
     <Text type="secondary">No data yet.</Text>
-    <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>
+    <Text type="secondary">
+      Trade history will appear here when your agent places its first bet.
+    </Text>
   </Flex>
 );
 
@@ -134,7 +136,7 @@ export const BetHistory = () => {
   return (
     <PredictionHistoryCard $gap="24px">
       <Title level={4} className="m-0 font-normal">
-        Bet History
+        Trade History
       </Title>
 
       {isLoading ? (

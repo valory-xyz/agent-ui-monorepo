@@ -105,7 +105,10 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
 
             <Row gutter={[16, 16]} className="mt-16">
               <Col xs={24} sm={8} md={8}>
-                <Metric label="Total bet" value={formatCurrency(data.total_bet, data.currency)} />
+                <Metric
+                  label="Total amount"
+                  value={formatCurrency(data.total_bet, data.currency)}
+                />
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Metric label="To win" value={formatCurrency(data.to_win, data.currency)} />
@@ -145,7 +148,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   label: (
                     <Flex align="center" style={{ width: '100%' }}>
                       <Text type="secondary" style={{ width: 180 }}>
-                        {hasOneBet ? 'Bet' : `Bet ${idx + 1}`}
+                        {hasOneBet ? 'Trade' : `Trade ${idx + 1}`}
                       </Text>
                       <Flex align="center" gap={8}>
                         <Text className="text-white-075">
