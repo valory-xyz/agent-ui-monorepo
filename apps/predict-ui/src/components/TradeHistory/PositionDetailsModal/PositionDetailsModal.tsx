@@ -16,7 +16,7 @@ import styled from 'styled-components';
 
 import { CURRENCY, CurrencyCode } from '../../../constants/currency';
 import { COLOR } from '../../../constants/theme';
-import { usePositionDetails } from '../../../hooks/useBetHistory';
+import { usePositionDetails } from '../../../hooks/useTradeHistory';
 import { TradeStatus } from '../TradeStatus';
 import { Trade } from './Trade';
 
@@ -177,7 +177,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
             />
           ) : (
             <Flex justify="center" align="center" style={{ height: 100 }}>
-              <Text>No bets found.</Text>
+              <Text>No trades found.</Text>
             </Flex>
           )}
         </>

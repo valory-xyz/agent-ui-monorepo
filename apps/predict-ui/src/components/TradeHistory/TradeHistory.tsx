@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
-import { useBetHistory } from '../../hooks/useBetHistory';
+import { useTradeHistory } from '../../hooks/useTradeHistory';
 import { BetHistoryItem } from '../../types';
 import { isOmenstratAgent } from '../../utils/agentMap';
 import { Card } from '../ui/Card';
@@ -128,7 +128,7 @@ export const TradeHistory = () => {
   const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<string | null>(null);
 
-  const { isLoading, data } = useBetHistory({
+  const { isLoading, data } = useTradeHistory({
     page: currentPage,
     pageSize: PAGE_SIZE,
   });

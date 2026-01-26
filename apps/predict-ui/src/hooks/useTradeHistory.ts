@@ -3,16 +3,16 @@ import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-function
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockBetHistory, mockPositionDetails } from '../mocks/mockBetHistory';
+import { mockPositionDetails, mockTradeHistory } from '../mocks/mockTradeHistory';
 import { AgentPredictionHistoryResponse, PositionDetails } from '../types';
 
 const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
-export const useBetHistory = ({ page, pageSize }: { page: number; pageSize: number }) => {
+export const useTradeHistory = ({ page, pageSize }: { page: number; pageSize: number }) => {
   const query = useQuery<AgentPredictionHistoryResponse>({
     queryKey: [REACT_QUERY_KEYS.PREDICTION_HISTORY, page, pageSize],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) return delay(mockBetHistory);
+      if (IS_MOCK_ENABLED) return delay(mockTradeHistory);
 
       const [response] = await Promise.all([
         fetch(`${API_V1}/agent/prediction-history?page=${page}&page_size=${pageSize}`),
