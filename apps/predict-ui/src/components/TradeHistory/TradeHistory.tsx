@@ -11,8 +11,8 @@ import { useBetHistory } from '../../hooks/useBetHistory';
 import { BetHistoryItem } from '../../types';
 import { isOmenstratAgent } from '../../utils/agentMap';
 import { Card } from '../ui/Card';
-import { BetStatus } from './BetStatus';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
+import { TradeStatus } from './TradeStatus';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -77,7 +77,7 @@ const NoDataAvailable = () => (
     />
     <Text type="secondary">No data yet.</Text>
     <Text type="secondary">
-      Trade history will appear here when your agent places its first bet.
+      Trade history will appear here when your agent places its first trade.
     </Text>
   </Flex>
 );
@@ -111,7 +111,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     key: 'status',
     width: '20%',
     render: (_text, record: BetHistoryItem) => (
-      <BetStatus
+      <TradeStatus
         status={record.status}
         bet_amount={record.bet_amount}
         net_profit={record.net_profit}
@@ -123,7 +123,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
   },
 ];
 
-export const BetHistory = () => {
+export const TradeHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<string | null>(null);

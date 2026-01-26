@@ -17,8 +17,8 @@ import styled from 'styled-components';
 import { CURRENCY, CurrencyCode } from '../../../constants/currency';
 import { COLOR } from '../../../constants/theme';
 import { usePositionDetails } from '../../../hooks/useBetHistory';
-import { BetStatus } from '../BetStatus';
-import { Bet } from './Bet';
+import { TradeStatus } from '../TradeStatus';
+import { Trade } from './Trade';
 
 const { Text } = Typography;
 
@@ -118,7 +118,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   label="Status"
                   value={
                     <Flex gap={8} align="center" style={{ width: 'max-content' }}>
-                      <BetStatus
+                      <TradeStatus
                         currency={data.currency}
                         status={data.status}
                         remaining_seconds={data.remaining_seconds}
@@ -159,7 +159,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     </Flex>
                   ),
                   children: (
-                    <Bet
+                    <Trade
                       id={id}
                       bet={bet}
                       intelligence={intelligence}

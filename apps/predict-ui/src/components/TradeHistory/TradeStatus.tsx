@@ -13,7 +13,7 @@ type BetStatusProps = Pick<BetHistoryItem, 'status' | 'bet_amount' | 'net_profit
   styles?: CSSProperties;
 };
 
-export const BetStatus = ({
+export const TradeStatus = ({
   status,
   bet_amount,
   net_profit,

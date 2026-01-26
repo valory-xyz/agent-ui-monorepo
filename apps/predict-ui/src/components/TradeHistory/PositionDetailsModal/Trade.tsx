@@ -42,7 +42,7 @@ const intelligenceTooltipItems = [
 
 const IntelligenceTooltip = () => (
   <Flex vertical gap={8}>
-    <Text className="text-sm">How the agent evaluated this market when the bet was placed:</Text>
+    <Text className="text-sm">How the agent evaluated this market when the trade was placed:</Text>
     <ul style={{ paddingLeft: 12 }}>
       {intelligenceTooltipItems.map((item) => (
         <li key={item.label}>
@@ -76,7 +76,12 @@ const BetInfo = ({ title, tooltip, desc, noBorder, borderTop }: BetInfoProps) =>
   </BetInfoFlex>
 );
 
-export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLast?: boolean }) => {
+export const Trade = ({
+  bet,
+  intelligence,
+  strategy,
+  isLast,
+}: BetDetails & { isLast?: boolean }) => {
   return (
     <Flex vertical style={isLast ? {} : { marginBottom: 20 }}>
       {strategy && (
