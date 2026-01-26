@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { CURRENCY, CurrencyCode } from '../constants/currency';
 import { COLOR } from '../constants/theme';
 import { AgentMetricsResponse } from '../types';
+import { isOmenstratAgent } from '../utils/agentMap';
 import { Card } from './ui/Card';
 
 const { Text, Title } = Typography;
@@ -20,21 +21,25 @@ const getValue = (value: number, currency: CurrencyCode) => {
   return `${CURRENCY[currency]?.symbol || '$'}${value || 0} `;
 };
 
+const isPerformanceItem = (item: PerformanceItem | null): item is PerformanceItem => item !== null;
+
 export const AgentPerformance = ({ performance }: { performance: AgentMetricsResponse }) => {
   const { metrics, stats, currency } = performance;
 
-  const performanceItems = useMemo<PerformanceItem[]>(
-    () => [
+  const performanceItems = useMemo<PerformanceItem[]>(() => {
+    const items: Array<PerformanceItem | null> = [
       {
         title: 'All time funds used',
         value: getValue(metrics.all_time_funds_used || 0, currency),
-        tooltip: 'Total funds used by the agent over its lifetime',
+        tooltip: 'Total funds your agent has allocated to prediction-market bets over time.',
       },
-      {
-        title: 'All time profit',
-        value: getValue(metrics.all_time_profit || 0, currency),
-        tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
-      },
+      isOmenstratAgent
+        ? {
+            title: 'All time profit',
+            value: getValue(metrics.all_time_profit || 0, currency),
+            tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
+          }
+        : null,
       {
         title: 'Funds locked in markets',
         value: getValue(metrics.funds_locked_in_markets || 0, currency),
@@ -51,17 +56,20 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
           ? Intl.NumberFormat('en-US').format(stats.predictions_made)
           : '0',
       },
-      {
-        title: 'Prediction accuracy',
-        value:
-          stats.prediction_accuracy === null
-            ? 'Will appear with the first resolved market.'
-            : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
-        variant: stats.prediction_accuracy === null ? 'text' : 'title',
-      },
-    ],
-    [metrics, stats, currency],
-  );
+      isOmenstratAgent
+        ? {
+            title: 'Prediction accuracy',
+            value:
+              stats.prediction_accuracy === null
+                ? 'Will appear with the first resolved market.'
+                : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
+            variant: stats.prediction_accuracy === null ? 'text' : 'title',
+          }
+        : null,
+    ];
+
+    return items.filter(isPerformanceItem);
+  }, [metrics, stats, currency]);
 
   return (
     <Card>

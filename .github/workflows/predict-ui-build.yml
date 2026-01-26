@@ -3,7 +3,8 @@ name: Build and Release Predict UI
 on:
   push:
     tags:
-      - 'v*-predict'
+      - 'v*-omenstrat-trader'
+      - 'v*-polymarket-trader'
   workflow_dispatch:
 
 jobs:
@@ -36,6 +37,18 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+
+      - name: Set variables
+        run: |
+          TAG="${{ github.ref_name }}"
+          if [[ "$TAG" == *-omenstrat-trader ]]; then
+            echo "REACT_APP_AGENT_NAME=omenstrat_trader" >> $GITHUB_ENV
+          elif [[ "$TAG" == *-polymarket-trader ]]; then
+            echo "REACT_APP_AGENT_NAME=polymarket_trader" >> $GITHUB_ENV
+          else
+            echo "Unknown tag format: $TAG"
+            exit 1
+          fi
 
       - name: Build predict-ui app
         run: yarn nx build predict-ui

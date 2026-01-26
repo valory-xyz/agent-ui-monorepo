@@ -1,6 +1,10 @@
 import { createGlobalStyle } from 'styled-components';
 
-export const GlobalStyles = createGlobalStyle`
+interface GlobalStylesProps {
+  tooltipBorderColor?: string;
+}
+
+export const GlobalStyles = createGlobalStyle<GlobalStylesProps>`
   body {
     margin: 0;
     padding: 0;
@@ -15,6 +19,13 @@ export const GlobalStyles = createGlobalStyle`
     width: max-content;
     gap: 6px;
   }
+
+  ${({ tooltipBorderColor }) =>
+    tooltipBorderColor &&
+    `.ant-tooltip-inner {
+      border: 1px solid ${tooltipBorderColor};
+    }
+  `}
 
   u {
     text-underline-offset: 6px;

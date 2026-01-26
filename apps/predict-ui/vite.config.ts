@@ -31,6 +31,7 @@ export default defineConfig(() => ({
   define: {
     'process.env': {
       IS_MOCK_ENABLED: process.env.IS_MOCK_ENABLED,
+      REACT_APP_AGENT_NAME: process.env.REACT_APP_AGENT_NAME,
     },
   },
 }));

@@ -19,7 +19,6 @@
       "@agent-ui-monorepo/ui-error-boundary": [
         "libs/ui-error-boundary/src/index.ts"
       ],
-      "@agent-ui-monorepo/ui-navbar": ["libs/ui-navbar/src/index.ts"],
       "@agent-ui-monorepo/ui-theme": ["libs/ui-theme/src/index.ts"],
       "@agent-ui-monorepo/ui-pill": ["libs/ui-pill/src/index.ts"],
       "@agent-ui-monorepo/util-constants-and-types": [

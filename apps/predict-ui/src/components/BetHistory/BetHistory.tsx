@@ -9,6 +9,7 @@ import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
 import { useBetHistory } from '../../hooks/useBetHistory';
 import { BetHistoryItem } from '../../types';
+import { isOmenstratAgent } from '../../utils/agentMap';
 import { Card } from '../ui/Card';
 import { BetStatus } from './BetStatus';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
@@ -146,6 +147,7 @@ export const BetHistory = () => {
           dataSource={data?.items ?? []}
           loading={isLoading}
           rowKey={(record) => record.id}
+          rowHoverable={isOmenstratAgent}
           pagination={{
             current: currentPage,
             pageSize: PAGE_SIZE,
@@ -155,10 +157,12 @@ export const BetHistory = () => {
           }}
           onRow={(record) => ({
             onClick: () => {
-              setSelectedPositionId(record.id);
-              setIsPositionDetailsModalOpen(true);
+              if (isOmenstratAgent) {
+                setSelectedPositionId(record.id);
+                setIsPositionDetailsModalOpen(true);
+              }
             },
-            style: { cursor: 'pointer' },
+            style: isOmenstratAgent ? { cursor: 'pointer' } : undefined,
           })}
         />
       )}

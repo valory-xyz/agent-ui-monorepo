@@ -148,7 +148,9 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                         {hasOneBet ? 'Bet' : `Bet ${idx + 1}`}
                       </Text>
                       <Flex align="center" gap={8}>
-                        <Text>{formatCurrency(bet.amount, data.currency)}</Text>
+                        <Text className="text-white-075">
+                          {formatCurrency(bet.amount, data.currency)}
+                        </Text>
                         <Text type="secondary">{sideLabel}</Text>
                       </Flex>
                     </Flex>

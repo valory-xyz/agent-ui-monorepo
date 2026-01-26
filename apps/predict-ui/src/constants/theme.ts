@@ -1,11 +1,34 @@
 import { theme, ThemeConfig } from 'antd';
 
-export const COLOR = {
+import { isOmenstratAgent } from '../utils/agentMap';
+
+const traderColors = {
   PRIMARY: '#884dff',
-  SECONDARY: 'rgba(255, 255, 255, 0.5)',
-  TEXT_PRIMARY: '#FFFFFF',
   BACKGROUND: '#2f1d57',
   MODAL_BACKGROUND: '#2B194A',
+  CARD_BACKGROUND: '#2B194A',
+  TOOLTIP_BORDER: 'rgba(0, 0, 0, 0.90)',
+};
+
+const polystratColors = {
+  PRIMARY: '#6B7280',
+  BACKGROUND: '#192B3B',
+  MODAL_BACKGROUND: '#2A4053',
+  CARD_BACKGROUND: '#2A4053',
+  TOOLTIP_BORDER: '#3D5266',
+};
+
+const agentColors = isOmenstratAgent ? traderColors : polystratColors;
+
+export const COLOR = {
+  PRIMARY: agentColors.PRIMARY,
+  SECONDARY: 'rgba(255, 255, 255, 0.5)',
+  TEXT_PRIMARY: '#FFFFFF',
+  BACKGROUND: agentColors.BACKGROUND,
+  MODAL_BACKGROUND: agentColors.MODAL_BACKGROUND,
+  CARD_BACKGROUND: agentColors.CARD_BACKGROUND,
+  TOOLTIP_BORDER: agentColors.TOOLTIP_BORDER,
+  BORDER_NEUTRAL_SECONDARY: 'rgba(61, 82, 102, 0.50)',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
   BLACK_TRANSPARENT_5: 'rgba(0, 0, 0, 0.05)',
@@ -55,9 +78,14 @@ export const THEME_CONFIG: ThemeConfig = {
       lineWidth: 4,
     },
     Button: {
-      defaultBg: 'transparent',
-      defaultHoverBg: COLOR.BLACK_TRANSPARENT_20,
-      defaultBorderColor: COLOR.TEXT_PRIMARY,
+      colorText: COLOR.TEXT_PRIMARY,
+    },
+    Pagination: {
+      itemBg: 'transparent',
+      itemActiveBg: COLOR.BORDER_NEUTRAL_SECONDARY,
+      colorPrimary: COLOR.TEXT_PRIMARY,
+      colorText: COLOR.WHITE_TRANSPARENT_50,
+      colorTextDisabled: COLOR.WHITE_TRANSPARENT_50,
     },
     Typography: {
       fontSize: 16,
@@ -65,7 +93,7 @@ export const THEME_CONFIG: ThemeConfig = {
     Tooltip: {
       paddingXS: 16,
       paddingSM: 24,
-      colorBgSpotlight: COLOR.BLACK_BACKGROUND,
+      colorBgSpotlight: isOmenstratAgent ? COLOR.BLACK_BACKGROUND : agentColors.BACKGROUND,
     },
     Segmented: {
       trackBg: COLOR.WHITE_TRANSPARENT_05,
