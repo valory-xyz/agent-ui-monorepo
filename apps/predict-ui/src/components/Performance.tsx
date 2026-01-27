@@ -31,13 +31,13 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       {
         title: 'All time funds used',
         value: getValue(metrics.all_time_funds_used || 0, currency),
-        tooltip: 'Total funds your agent has allocated to prediction-market bets over time.',
+        tooltip: 'Total funds your agent has allocated to prediction-market trades over time.',
       },
       isOmenstratAgent
         ? {
             title: 'All time profit',
             value: getValue(metrics.all_time_profit || 0, currency),
-            tooltip: `The total net profit your agent has generated across all bets. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
+            tooltip: `The total net profit your agent has generated across all trades. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
           }
         : null,
       {
@@ -48,7 +48,7 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
       {
         title: 'Available funds',
         value: getValue(metrics.available_funds || 0, currency),
-        tooltip: 'Funds currently available for your agent to place new bets.',
+        tooltip: 'Funds currently available for your agent to place new trades.',
       },
       {
         title: 'Predictions made',

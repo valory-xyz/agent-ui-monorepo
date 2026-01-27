@@ -4,12 +4,12 @@ import { Frown, Unplug } from 'lucide-react';
 import styled from 'styled-components';
 
 import { AgentDetails } from '../components/AgentDetails';
-import { BetHistory } from '../components/BetHistory/BetHistory';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
+import { TradeHistory } from '../components/TradeHistory/TradeHistory';
 import { Card } from '../components/ui/Card';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
@@ -111,7 +111,7 @@ export const Agent = () => {
         />
         <AgentPerformance performance={performance} />
         {isOmenstratAgent && <ProfitOverTime />}
-        <BetHistory />
+        <TradeHistory />
         <Strategy />
         <ChatContent />
       </AgentContent>

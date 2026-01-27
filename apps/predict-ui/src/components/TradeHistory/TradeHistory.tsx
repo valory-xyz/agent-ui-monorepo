@@ -7,12 +7,12 @@ import styled from 'styled-components';
 
 import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
-import { useBetHistory } from '../../hooks/useBetHistory';
-import { BetHistoryItem } from '../../types';
+import { useTradeHistory } from '../../hooks/useTradeHistory';
+import { TradeHistoryItem } from '../../types';
 import { isOmenstratAgent } from '../../utils/agentMap';
 import { Card } from '../ui/Card';
-import { BetStatus } from './BetStatus';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
+import { TradeStatus } from './TradeStatus';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -76,17 +76,19 @@ const NoDataAvailable = () => (
       }}
     />
     <Text type="secondary">No data yet.</Text>
-    <Text type="secondary">Bet history will appear here when your agent places its first bet.</Text>
+    <Text type="secondary">
+      Trade history will appear here when your agent places its first trade.
+    </Text>
   </Flex>
 );
 
-const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns'] => [
+const getColumns = (currency: CurrencyCode): TableProps<TradeHistoryItem>['columns'] => [
   {
     title: 'Market',
     dataIndex: 'market',
     key: 'market',
     width: '60%',
-    render: (market: BetHistoryItem['market']) => (
+    render: (market: TradeHistoryItem['market']) => (
       <Paragraph className="text-sm text-white-075 m-0" ellipsis={{ rows: 2, tooltip: true }}>
         {market.title}
       </Paragraph>
@@ -97,7 +99,7 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'prediction_side',
     key: 'prediction_side',
     width: '15%',
-    render: (side: BetHistoryItem['prediction_side']) => (
+    render: (side: TradeHistoryItem['prediction_side']) => (
       <Text className="text-sm text-white-075">{side === 'yes' ? 'Yes' : 'No'}</Text>
     ),
     align: 'center',
@@ -108,8 +110,8 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
     dataIndex: 'status',
     key: 'status',
     width: '20%',
-    render: (_text, record: BetHistoryItem) => (
-      <BetStatus
+    render: (_text, record: TradeHistoryItem) => (
+      <TradeStatus
         status={record.status}
         bet_amount={record.bet_amount}
         net_profit={record.net_profit}
@@ -121,12 +123,12 @@ const getColumns = (currency: CurrencyCode): TableProps<BetHistoryItem>['columns
   },
 ];
 
-export const BetHistory = () => {
+export const TradeHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPositionDetailsModalOpen, setIsPositionDetailsModalOpen] = useState(false);
   const [selectedPositionId, setSelectedPositionId] = useState<string | null>(null);
 
-  const { isLoading, data } = useBetHistory({
+  const { isLoading, data } = useTradeHistory({
     page: currentPage,
     pageSize: PAGE_SIZE,
   });
@@ -134,7 +136,7 @@ export const BetHistory = () => {
   return (
     <PredictionHistoryCard $gap="24px">
       <Title level={4} className="m-0 font-normal">
-        Bet History
+        Trade History
       </Title>
 
       {isLoading ? (
@@ -142,7 +144,7 @@ export const BetHistory = () => {
       ) : data?.items.length === 0 ? (
         <NoDataAvailable />
       ) : (
-        <Table<BetHistoryItem>
+        <Table<TradeHistoryItem>
           columns={getColumns(data?.currency ?? 'USD')}
           dataSource={data?.items ?? []}
           loading={isLoading}

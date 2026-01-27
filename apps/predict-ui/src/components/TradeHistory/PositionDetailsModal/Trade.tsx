@@ -5,11 +5,11 @@ import styled from 'styled-components';
 
 import { TRADING_TYPE_MAP } from '../../../constants/textMaps';
 import { COLOR } from '../../../constants/theme';
-import { BetDetails } from '../../../types';
+import { TradeDetails } from '../../../types';
 
 const { Text } = Typography;
 
-const BetInfoFlex = styled(Flex)<{ noBorder?: boolean; borderTop?: boolean }>`
+const TradeInfoFlex = styled(Flex)<{ noBorder?: boolean; borderTop?: boolean }>`
   margin-left: 24px;
   padding: 8px 0;
   ${(props) => !props.noBorder && `border-bottom: 1px solid ${COLOR.WHITE_TRANSPARENT_10};`}
@@ -42,7 +42,7 @@ const intelligenceTooltipItems = [
 
 const IntelligenceTooltip = () => (
   <Flex vertical gap={8}>
-    <Text className="text-sm">How the agent evaluated this market when the bet was placed:</Text>
+    <Text className="text-sm">How the agent evaluated this market when the trade was placed:</Text>
     <ul style={{ paddingLeft: 12 }}>
       {intelligenceTooltipItems.map((item) => (
         <li key={item.label}>
@@ -55,15 +55,15 @@ const IntelligenceTooltip = () => (
   </Flex>
 );
 
-type BetInfoProps = {
+type TradeInfoProps = {
   title: string;
   tooltip?: ReactNode;
   desc: ReactNode;
   noBorder?: boolean;
   borderTop?: boolean;
 };
-const BetInfo = ({ title, tooltip, desc, noBorder, borderTop }: BetInfoProps) => (
-  <BetInfoFlex noBorder={noBorder} borderTop={borderTop}>
+const TradeInfo = ({ title, tooltip, desc, noBorder, borderTop }: TradeInfoProps) => (
+  <TradeInfoFlex noBorder={noBorder} borderTop={borderTop}>
     <Text type="secondary" style={{ width: 180 }}>
       {title}
       {tooltip && (
@@ -73,28 +73,33 @@ const BetInfo = ({ title, tooltip, desc, noBorder, borderTop }: BetInfoProps) =>
       )}
     </Text>
     <Text className="text-white-075">{desc}</Text>
-  </BetInfoFlex>
+  </TradeInfoFlex>
 );
 
-export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLast?: boolean }) => {
+export const Trade = ({
+  bet,
+  intelligence,
+  strategy,
+  isLast,
+}: TradeDetails & { isLast?: boolean }) => {
   return (
     <Flex vertical style={isLast ? {} : { marginBottom: 20 }}>
       {strategy && (
-        <BetInfo
+        <TradeInfo
           title="Strategy"
           desc={`${TRADING_TYPE_MAP[strategy].displayName}`}
           borderTop={true}
         />
       )}
 
-      <BetInfo
+      <TradeInfo
         title="Prediction tool"
         desc={`${intelligence.prediction_tool}`}
         tooltip="The tool the agent used to research and generate its prediction for this market."
         borderTop={!strategy}
       />
 
-      <BetInfo
+      <TradeInfo
         title="Intelligence"
         desc={
           <Flex vertical gap={8}>
@@ -119,11 +124,11 @@ export const Bet = ({ bet, intelligence, strategy, isLast }: BetDetails & { isLa
       />
 
       {bet.placed_at && (
-        <BetInfoFlex noBorder={true}>
+        <TradeInfoFlex noBorder={true}>
           <Text type="secondary" className="text-sm">
             {formatPlacedAt(bet.placed_at)}
           </Text>
-        </BetInfoFlex>
+        </TradeInfoFlex>
       )}
     </Flex>
   );

@@ -3,17 +3,17 @@ import { CSSProperties, ReactNode, useMemo } from 'react';
 
 import { CURRENCY, CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
-import { BetHistoryItem } from '../../types';
+import { TradeHistoryItem } from '../../types';
 import { formatDuration } from '../../utils/time';
 
-type BetStatusProps = Pick<BetHistoryItem, 'status' | 'bet_amount' | 'net_profit'> & {
+type TradeStatusProps = Pick<TradeHistoryItem, 'status' | 'bet_amount' | 'net_profit'> & {
   currency: CurrencyCode;
   remaining_seconds?: number;
   extra?: ReactNode;
   styles?: CSSProperties;
 };
 
-export const BetStatus = ({
+export const TradeStatus = ({
   status,
   bet_amount,
   net_profit,
@@ -21,7 +21,7 @@ export const BetStatus = ({
   remaining_seconds,
   extra,
   styles,
-}: BetStatusProps) => {
+}: TradeStatusProps) => {
   const amount = status === 'pending' ? bet_amount : net_profit;
   const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
 
@@ -55,7 +55,7 @@ export const BetStatus = ({
     return {
       color: COLOR.WHITE_TRANSPARENT_75,
       background: COLOR.WHITE_TRANSPARENT_05,
-      text: `Bet ${value}`,
+      text: `Traded ${value}`,
     };
   }, [remaining_seconds, status, value]);
 
