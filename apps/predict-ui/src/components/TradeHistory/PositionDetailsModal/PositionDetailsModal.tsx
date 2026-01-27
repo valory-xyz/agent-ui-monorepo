@@ -111,7 +111,10 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
-                <Metric label="To win" value={formatCurrency(data.to_win, data.currency)} />
+                <Metric
+                  label={data.status === 'won' ? 'Won' : 'To win'}
+                  value={formatCurrency(data.to_win, data.currency)}
+                />
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Metric
