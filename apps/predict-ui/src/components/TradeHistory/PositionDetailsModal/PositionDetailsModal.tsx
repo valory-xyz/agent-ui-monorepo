@@ -44,7 +44,7 @@ const Card = styled(AntdCard)`
 
 const formatCurrency = (n: number, currency: CurrencyCode) => {
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
-  return `${currencySymbol}${n.toFixed(2)}`;
+  return `${currencySymbol}${n.toFixed(3)}`;
 };
 
 const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
