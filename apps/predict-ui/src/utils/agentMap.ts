@@ -3,7 +3,7 @@ import { AgentType } from '@agent-ui-monorepo/ui-chat';
 /**
  * Supported agents map
  * - omenstrat_trader: Trader agent
- * - polymarket_trader: Polystrat agent
+ * - polystrat_trader: Polystrat agent
  */
 export const agentType: AgentType = (() => {
   const name = process.env.REACT_APP_AGENT_NAME;
@@ -12,12 +12,12 @@ export const agentType: AgentType = (() => {
     return 'omenstrat_trader';
   }
 
-  if (name === 'polymarket_trader') {
-    return 'polymarket_trader';
+  if (name === 'polystrat_trader') {
+    return 'polystrat_trader';
   }
 
   throw new Error(
-    `Invalid REACT_APP_AGENT_NAME: "${name}". Expected "omenstrat_trader" or "polymarket_trader".`,
+    `Invalid REACT_APP_AGENT_NAME: "${name}". Expected "omenstrat_trader" or "polystrat_trader".`,
   );
 })();
 export const isOmenstratAgent = agentType === 'omenstrat_trader';

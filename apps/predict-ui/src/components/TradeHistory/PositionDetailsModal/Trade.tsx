@@ -92,12 +92,14 @@ export const Trade = ({
         />
       )}
 
-      <TradeInfo
-        title="Prediction tool"
-        desc={`${intelligence.prediction_tool}`}
-        tooltip="The tool the agent used to research and generate its prediction for this market."
-        borderTop={!strategy}
-      />
+      {intelligence.prediction_tool && (
+        <TradeInfo
+          title="Prediction tool"
+          desc={`${intelligence.prediction_tool}`}
+          tooltip="The tool the agent used to research and generate its prediction for this market."
+          borderTop={!strategy}
+        />
+      )}
 
       <TradeInfo
         title="Intelligence"
@@ -120,6 +122,7 @@ export const Trade = ({
           </Flex>
         }
         tooltip={<IntelligenceTooltip />}
+        borderTop={!strategy && !intelligence.prediction_tool}
         noBorder={!bet.placed_at}
       />
 

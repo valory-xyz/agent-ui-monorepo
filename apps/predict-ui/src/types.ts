@@ -93,7 +93,7 @@ export type TradeDetails = {
     placed_at?: string; // ISO 8601 timestamp (date and time)
   };
   intelligence: {
-    prediction_tool: string;
+    prediction_tool: string | null;
     implied_probability: number;
     confidence_score: number;
     utility_score: number;
