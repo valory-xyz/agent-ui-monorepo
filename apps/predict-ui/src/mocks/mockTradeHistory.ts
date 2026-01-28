@@ -103,7 +103,7 @@ export const mockPositionDetails: PositionDetails = {
         side: 'yes',
       },
       intelligence: {
-        prediction_tool: 'prediction-online',
+        prediction_tool: null,
         implied_probability: 15.0,
         confidence_score: 85.0,
         utility_score: 95.0,
