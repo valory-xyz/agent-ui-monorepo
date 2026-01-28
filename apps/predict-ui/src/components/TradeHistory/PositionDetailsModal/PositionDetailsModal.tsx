@@ -44,7 +44,7 @@ const Card = styled(AntdCard)`
 
 const formatCurrency = (n: number, currency: CurrencyCode) => {
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
-  return `${currencySymbol}${n.toFixed(2)}`;
+  return `${currencySymbol}${n.toFixed(3)}`;
 };
 
 const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
@@ -111,7 +111,10 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
-                <Metric label="To win" value={formatCurrency(data.to_win, data.currency)} />
+                <Metric
+                  label={data.status === 'won' ? 'Won' : 'To win'}
+                  value={formatCurrency(data.to_win, data.currency)}
+                />
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Metric

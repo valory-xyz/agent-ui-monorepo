@@ -89,8 +89,8 @@ export const mockPositionDetails: PositionDetails = {
   question:
     'Will the National Development and Reform Commission of China publicly announce, on or before December 3, 2025, a new regulatory policy specifically aimed at curbing speculative investment in the humanoid robotics sector?',
   currency: 'USD',
-  total_bet: 1.82,
-  to_win: 2.04,
+  total_bet: 1.82467,
+  to_win: 2.0467,
   status: 'pending',
   remaining_seconds: 240000,
   net_profit: 0,
@@ -99,7 +99,7 @@ export const mockPositionDetails: PositionDetails = {
     {
       id: 'bet_001',
       bet: {
-        amount: 1.82,
+        amount: 1.829634,
         side: 'yes',
       },
       intelligence: {
