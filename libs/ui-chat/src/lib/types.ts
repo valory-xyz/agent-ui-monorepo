@@ -5,7 +5,7 @@ export type AgentType =
   | 'optimus'
   | 'omenstrat_trader'
   | 'agentsFun'
-  | 'polymarket_trader';
+  | 'polystrat_trader';
 
 export type EachChat = {
   text: ReactNode;

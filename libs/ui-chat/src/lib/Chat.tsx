@@ -80,7 +80,7 @@ export const Chat = ({
       };
     }
 
-    if (agentType === 'polymarket_trader') {
+    if (agentType === 'polystrat_trader') {
       return {
         ...commonBtnStyles,
         color: GLOBAL_COLORS.POLYSTRAT_BACKGROUND,
@@ -124,7 +124,7 @@ export const Chat = ({
             paddingRight: 64,
             fontSize: size === 'large' ? 16 : 14,
             borderColor:
-              agentType === 'polymarket_trader' ? GLOBAL_COLORS.WHITE_TRANSPARENT_10 : undefined,
+              agentType === 'polystrat_trader' ? GLOBAL_COLORS.WHITE_TRANSPARENT_10 : undefined,
           }}
         />
         <Button
