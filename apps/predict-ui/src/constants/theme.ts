@@ -51,6 +51,11 @@ export const COLOR = {
   GREEN: '#1AFF7B',
 
   RED: '#F5222D',
+  RED_BACKGROUND: 'rgba(245, 34, 45, 0.1)',
+
+  YELLOW: 'rgba(255, 255, 0, 1)',
+  YELLOW_BACKGROUND: 'rgba(255, 255, 0, 0.1)',
+
   BLUE: '#1677FF',
   LIGHT_GRAY: '#F8F9FA',
 };

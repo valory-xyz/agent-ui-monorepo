@@ -44,8 +44,8 @@ export const TradeStatus = ({
 
     if (status === 'invalid') {
       return {
-        color: COLOR.PINK,
-        background: COLOR.PINK_BACKGROUND,
+        color: COLOR.YELLOW,
+        background: COLOR.YELLOW_BACKGROUND,
         text: `Invalid`,
       };
     }
