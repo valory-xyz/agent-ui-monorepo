@@ -50,7 +50,7 @@ export type AgentMetricsResponse = {
   };
 };
 
-export type PredictionStatus = 'pending' | 'won' | 'lost';
+export type PredictionStatus = 'pending' | 'won' | 'lost' | 'invalid';
 
 export type PredictionSide = 'yes' | 'no';
 
