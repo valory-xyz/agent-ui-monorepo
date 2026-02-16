@@ -12,7 +12,7 @@ import { COLOR } from '../../constants/theme';
 import { useAgentDetails } from '../../hooks/useAgentDetails';
 import { useTradeHistory } from '../../hooks/useTradeHistory';
 import { TradeHistoryItem } from '../../types';
-import { isOmenstratAgent } from '../../utils/agentMap';
+import { isOmenstratAgent, isPolystratAgent } from '../../utils/agentMap';
 import { getPolymarketProfileUrl } from '../../utils/urls';
 import { Card } from '../ui/Card';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
@@ -80,7 +80,7 @@ const PolymarketButtonSection = () => {
   const { data: agentDetailsData } = useAgentDetails();
 
   const agentSafeAddress = agentDetailsData?.agentDetails?.agent_id;
-  const profileUrl = getPolymarketProfileUrl(agentSafeAddress ?? '');
+  const profileUrl = getPolymarketProfileUrl(agentSafeAddress);
 
   if (!profileUrl) return null;
 
@@ -175,7 +175,7 @@ export const TradeHistory = () => {
         <Title level={4} className="m-0 font-normal">
           Trade History
         </Title>
-        {!isOmenstratAgent && <PolymarketButtonSection />}
+        {isPolystratAgent && <PolymarketButtonSection />}
       </Flex>
 
       {isLoading ? (
