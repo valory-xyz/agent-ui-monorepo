@@ -8,6 +8,7 @@ export const GNOSIS_STAKING_SUBGRAPH_URL = 'https://staking-gnosis.subgraph.auto
 export const REGISTRY_AGENTS_URL = 'https://registry.olas.network/ethereum/agents';
 export const REGISTRY_SERVICES_URL = 'https://registry.olas.network/gnosis/services';
 export const PREDICT_APP_URL = 'https://predict.olas.network';
+export const POLYMARKET_PROFILE_BASE_URL = 'https://polymarket.com/profile';
 
 // coingecko
 export const COINGECKO_OLAS_IN_USD_PRICE_URL =

@@ -1,15 +1,19 @@
 import { HistoryOutlined } from '@ant-design/icons';
 import type { TableProps } from 'antd';
-import { Flex, Spin, Typography } from 'antd';
+import { Button, Flex, Spin, Typography } from 'antd';
 import { Table } from 'antd';
+import { ArrowUpRight } from 'lucide-react';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { PolymarketIcon } from '../../assets/Polymarket';
 import { CurrencyCode } from '../../constants/currency';
 import { COLOR } from '../../constants/theme';
+import { useAgentDetails } from '../../hooks/useAgentDetails';
 import { useTradeHistory } from '../../hooks/useTradeHistory';
 import { TradeHistoryItem } from '../../types';
 import { isOmenstratAgent } from '../../utils/agentMap';
+import { getPolymarketProfileUrl } from '../../utils/urls';
 import { Card } from '../ui/Card';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
 import { TradeStatus } from './TradeStatus';
@@ -58,6 +62,38 @@ const PredictionHistoryCard = styled(Card)`
     }
   }
 `;
+
+const PolymarketButton = styled(Button)`
+  padding: 4px 8px;
+  border-radius: 8px;
+  height: auto;
+  background: ${COLOR.WHITE_TRANSPARENT_10};
+  color: ${COLOR.WHITE_TRANSPARENT_75};
+
+  &:hover {
+    color: ${COLOR.WHITE_TRANSPARENT_75} !important;
+    background: ${COLOR.WHITE_TRANSPARENT_05} !important;
+  }
+`;
+
+const PolymarketButtonSection = () => {
+  const { data: agentDetailsData } = useAgentDetails();
+
+  const agentSafeAddress = agentDetailsData?.agentDetails?.agent_id;
+  const profileUrl = getPolymarketProfileUrl(agentSafeAddress ?? '');
+
+  if (!profileUrl) return null;
+
+  return (
+    <PolymarketButton href={profileUrl} target="_blank" rel="noopener noreferrer">
+      <Flex align="center" gap={6}>
+        <PolymarketIcon />
+        View on Polymarket
+        <ArrowUpRight size={16} />
+      </Flex>
+    </PolymarketButton>
+  );
+};
 
 const Loading = () => (
   <Flex align="center" justify="center" style={{ height: 200 }}>
@@ -135,9 +171,12 @@ export const TradeHistory = () => {
 
   return (
     <PredictionHistoryCard $gap="24px">
-      <Title level={4} className="m-0 font-normal">
-        Trade History
-      </Title>
+      <Flex align="center" justify="space-between">
+        <Title level={4} className="m-0 font-normal">
+          Trade History
+        </Title>
+        {!isOmenstratAgent && <PolymarketButtonSection />}
+      </Flex>
 
       {isLoading ? (
         <Loading />
