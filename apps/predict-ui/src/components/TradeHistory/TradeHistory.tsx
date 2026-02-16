@@ -72,7 +72,7 @@ const PolymarketButton = styled(Button)`
 
   &:hover {
     color: ${COLOR.WHITE_TRANSPARENT_75} !important;
-    background: ${COLOR.WHITE_TRANSPARENT_05} !important;
+    background: ${COLOR.WHITE_TRANSPARENT_20} !important;
   }
 `;
 
