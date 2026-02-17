@@ -42,8 +42,16 @@ export const TradeStatus = ({
       };
     }
 
-    // If status is pending and remaining_seconds is provided
-    // show countdown
+    if (status === 'invalid') {
+      return {
+        color: COLOR.YELLOW,
+        background: COLOR.YELLOW_BACKGROUND,
+        text: `Invalid`,
+      };
+    }
+
+    // If status is pending and remaining_seconds is provided, show countdown
+    // Otherwise show the traded amount
     if (remaining_seconds !== undefined) {
       return {
         color: COLOR.WHITE_TRANSPARENT_75,

@@ -5,7 +5,7 @@ export const mockTradeHistory: AgentPredictionHistoryResponse = {
   currency: 'USD',
   page: 1,
   page_size: 10,
-  total: 5,
+  total: 6,
   items: [
     {
       id: 'pred_001',
@@ -77,6 +77,20 @@ export const mockTradeHistory: AgentPredictionHistoryResponse = {
       prediction_side: 'yes',
       bet_amount: 0.05,
       status: 'won',
+      net_profit: 0.12,
+      created_at: '2025-11-16T13:45:00Z',
+      settled_at: '2025-12-01T16:10:00Z',
+    },
+    {
+      id: 'pred_006',
+      market: {
+        id: 'market_4',
+        title: 'Will Bitcoin close above $50,000 on December 31, 2025?',
+        external_url: 'https://example.com/market/market_4',
+      },
+      prediction_side: 'yes',
+      bet_amount: 0.05,
+      status: 'invalid',
       net_profit: 0.12,
       created_at: '2025-11-16T13:45:00Z',
       settled_at: '2025-12-01T16:10:00Z',

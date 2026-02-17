@@ -1,7 +1,6 @@
 import { UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import {
-  Alert,
   Card as AntdCard,
   Col,
   Collapse,
@@ -17,6 +16,7 @@ import styled from 'styled-components';
 import { CURRENCY, CurrencyCode } from '../../../constants/currency';
 import { COLOR } from '../../../constants/theme';
 import { usePositionDetails } from '../../../hooks/useTradeHistory';
+import { Alert } from '../../ui/Alert';
 import { TradeStatus } from '../TradeStatus';
 import { Trade } from './Trade';
 
@@ -41,6 +41,15 @@ const Card = styled(AntdCard)`
   border-radius: 12px;
   border-color: ${COLOR.WHITE_TRANSPARENT_10};
 `;
+
+const InvalidMarketAlert = () => (
+  <Alert
+    type="warning"
+    message="Invalid market"
+    description="This market was marked invalid. The payout for an invalid market can be full, partial, or $0 depending on how it was settled."
+    style={{ marginBottom: 16 }}
+  />
+);
 
 const formatCurrency = (n: number, currency: CurrencyCode) => {
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
@@ -87,9 +96,10 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
           <Skeleton active title={false} paragraph={{ rows: 3 }} />
         </Card>
       ) : error ? (
-        <Alert type="error" description={error.message} showIcon />
+        <Alert type="error" message={error.message} />
       ) : data ? (
         <>
+          {data.status === 'invalid' && <InvalidMarketAlert />}
           <Card variant="outlined" className="mb-8" styles={{ body: { padding: 16 } }}>
             <Text>
               <a
@@ -112,7 +122,11 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Metric
-                  label={data.status === 'won' ? 'Won' : 'To win'}
+                  label={(() => {
+                    if (data.status === 'invalid') return 'Payout';
+                    if (data.status === 'won') return 'Won';
+                    return 'To win';
+                  })()}
                   value={formatCurrency(data.to_win, data.currency)}
                 />
               </Col>
@@ -129,7 +143,9 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                         net_profit={data.net_profit}
                         styles={{ fontSize: '105%' }}
                         extra={
-                          <ClockCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
+                          data.status === 'pending' ? (
+                            <ClockCircleOutlined style={{ color: COLOR.WHITE_TRANSPARENT_75 }} />
+                          ) : null
                         }
                       />
                     </Flex>

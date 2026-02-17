@@ -50,7 +50,7 @@ export type AgentMetricsResponse = {
   };
 };
 
-export type PredictionStatus = 'pending' | 'won' | 'lost';
+export type PredictionStatus = 'pending' | 'won' | 'lost' | 'invalid';
 
 export type PredictionSide = 'yes' | 'no';
 
@@ -107,7 +107,7 @@ export type PositionDetails = {
   currency: CurrencyCode;
   total_bet: number;
   to_win: number;
-  /** If status is pending, show remaining_seconds else net profit */
+  /** For pending status, display remaining_seconds; for won/lost/invalid, display net_profit */
   status: PredictionStatus;
   /** time left in seconds */
   remaining_seconds?: number;
