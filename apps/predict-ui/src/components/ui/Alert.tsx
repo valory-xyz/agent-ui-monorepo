@@ -14,20 +14,20 @@ type AlertProps = {
   style?: CSSProperties;
 };
 
-const StyledAlert = styled(AntdAlert)<{ alertType: AlertType }>`
+const StyledAlert = styled(AntdAlert)<{ $alertType: AlertType }>`
   padding: 12px;
   align-items: flex-start;
   background: ${(props) =>
-    props.alertType === 'warning' ? COLOR.YELLOW_BACKGROUND : COLOR.RED_BACKGROUND};
+    props.$alertType === 'warning' ? COLOR.YELLOW_BACKGROUND : COLOR.RED_BACKGROUND};
   border-color: ${(props) =>
-    props.alertType === 'warning' ? COLOR.YELLOW_BACKGROUND : COLOR.RED_BACKGROUND};
-  color: ${(props) => (props.alertType === 'warning' ? COLOR.YELLOW : COLOR.RED)};
+    props.$alertType === 'warning' ? COLOR.YELLOW_BACKGROUND : COLOR.RED_BACKGROUND};
+  color: ${(props) => (props.$alertType === 'warning' ? COLOR.YELLOW : COLOR.RED)};
 `;
 
 export const Alert = ({ type, message, description, style }: AlertProps) => {
   return (
     <StyledAlert
-      alertType={type}
+      $alertType={type}
       message={
         <Flex gap={8} vertical>
           <span style={{ fontWeight: 500 }}>{message}</span>
