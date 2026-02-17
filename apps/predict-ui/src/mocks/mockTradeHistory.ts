@@ -5,7 +5,7 @@ export const mockTradeHistory: AgentPredictionHistoryResponse = {
   currency: 'USD',
   page: 1,
   page_size: 10,
-  total: 5,
+  total: 6,
   items: [
     {
       id: 'pred_001',

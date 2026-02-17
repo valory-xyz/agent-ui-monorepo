@@ -50,8 +50,8 @@ export const TradeStatus = ({
       };
     }
 
-    // If status is pending and remaining_seconds is provided
-    // show countdown
+    // If status is pending and remaining_seconds is provided, show countdown
+    // Otherwise show the traded amount
     if (remaining_seconds !== undefined) {
       return {
         color: COLOR.WHITE_TRANSPARENT_75,
