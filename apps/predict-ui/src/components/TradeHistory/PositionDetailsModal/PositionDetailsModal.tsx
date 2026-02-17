@@ -127,7 +127,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     if (data.status === 'won') return 'Won';
                     return 'To win';
                   })()}
-                  value={formatCurrency(data.to_win, data.currency)}
+                  value={formatCurrency(data.payout, data.currency)}
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
