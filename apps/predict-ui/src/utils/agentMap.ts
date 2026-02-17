@@ -21,3 +21,4 @@ export const agentType: AgentType = (() => {
   );
 })();
 export const isOmenstratAgent = agentType === 'omenstrat_trader';
+export const isPolystratAgent = agentType === 'polystrat_trader';
