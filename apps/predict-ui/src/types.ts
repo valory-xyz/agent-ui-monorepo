@@ -106,7 +106,7 @@ export type PositionDetails = {
   question: string;
   currency: CurrencyCode;
   total_bet: number;
-  to_win: number;
+  payout: number;
   /** For pending status, display remaining_seconds; for won/lost/invalid, display net_profit */
   status: PredictionStatus;
   /** time left in seconds */
