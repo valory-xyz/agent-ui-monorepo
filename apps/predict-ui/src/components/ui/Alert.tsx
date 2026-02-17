@@ -31,7 +31,7 @@ export const Alert = ({ type, message, description, style }: AlertProps) => {
       message={
         <Flex gap={8} vertical>
           <span style={{ fontWeight: 500 }}>{message}</span>
-          <span>{description}</span>
+          {description && <span>{description}</span>}
         </Flex>
       }
       type={type}
