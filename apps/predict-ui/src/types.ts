@@ -16,7 +16,7 @@ export type ChatResponse = {
 };
 
 export type AgentDetailsResponse = {
-  agent_id: string;
+  id: string;
   created_at: string;
   last_active_at: string;
 };

@@ -79,7 +79,7 @@ const PolymarketButton = styled(Button)`
 const PolymarketButtonSection = () => {
   const { data: agentDetailsData } = useAgentDetails();
 
-  const agentSafeAddress = agentDetailsData?.agentDetails?.agent_id;
+  const agentSafeAddress = agentDetailsData?.agentDetails?.id;
   const profileUrl = getPolymarketProfileUrl(agentSafeAddress);
 
   if (!profileUrl) return null;
