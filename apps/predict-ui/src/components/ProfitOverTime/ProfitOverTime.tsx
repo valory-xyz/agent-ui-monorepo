@@ -57,10 +57,15 @@ export const ProfitOverTime = () => {
 
   return (
     <Card $gap="24px">
-      <Flex justify="space-between" align="center">
-        <Title level={4} className="m-0 font-normal">
-          Profit Over Time
-        </Title>
+      <Flex justify="space-between" align="start">
+        <Flex vertical gap={4}>
+          <Title level={4} className="m-0 font-normal">
+            Profit Over Time
+          </Title>
+          <Text type="secondary" className="text-sm" style={{ maxWidth: 320 }}>
+            Each timeframe begins at $0, highlighting profit movement within the selected range
+          </Text>
+        </Flex>
         {points.length > 0 && (
           <Segmented<AgentWindow>
             options={WINDOW_OPTIONS}

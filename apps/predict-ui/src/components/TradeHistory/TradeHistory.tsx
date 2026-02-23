@@ -12,7 +12,7 @@ import { COLOR } from '../../constants/theme';
 import { useAgentDetails } from '../../hooks/useAgentDetails';
 import { useTradeHistory } from '../../hooks/useTradeHistory';
 import { TradeHistoryItem } from '../../types';
-import { isOmenstratAgent, isPolystratAgent } from '../../utils/agentMap';
+import { isPolystratAgent } from '../../utils/agentMap';
 import { getPolymarketProfileUrl } from '../../utils/urls';
 import { Card } from '../ui/Card';
 import { PositionDetailsModal } from './PositionDetailsModal/PositionDetailsModal';
@@ -188,7 +188,6 @@ export const TradeHistory = () => {
           dataSource={data?.items ?? []}
           loading={isLoading}
           rowKey={(record) => record.id}
-          rowHoverable={isOmenstratAgent}
           pagination={{
             current: currentPage,
             pageSize: PAGE_SIZE,
@@ -198,12 +197,10 @@ export const TradeHistory = () => {
           }}
           onRow={(record) => ({
             onClick: () => {
-              if (isOmenstratAgent) {
-                setSelectedPositionId(record.id);
-                setIsPositionDetailsModalOpen(true);
-              }
+              setSelectedPositionId(record.id);
+              setIsPositionDetailsModalOpen(true);
             },
-            style: isOmenstratAgent ? { cursor: 'pointer' } : undefined,
+            style: { cursor: 'pointer' },
           })}
         />
       )}
