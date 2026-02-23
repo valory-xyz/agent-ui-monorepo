@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import { CURRENCY, CurrencyCode } from '../constants/currency';
 import { COLOR } from '../constants/theme';
 import { AgentMetricsResponse } from '../types';
-import { isOmenstratAgent } from '../utils/agentMap';
 import { Card } from './ui/Card';
 
 const { Text, Title } = Typography;
@@ -33,13 +32,11 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
         value: getValue(metrics.all_time_funds_used || 0, currency),
         tooltip: 'Total funds your agent has allocated to prediction-market trades over time.',
       },
-      isOmenstratAgent
-        ? {
-            title: 'All time profit',
-            value: getValue(metrics.all_time_profit || 0, currency),
-            tooltip: `The total net profit your agent has generated across all trades. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
-          }
-        : null,
+      {
+        title: 'All time profit',
+        value: getValue(metrics.all_time_profit || 0, currency),
+        tooltip: `The total net profit your agent has generated across all trades. With your All-time funds used, this gives an ROI of ${((metrics.roi ?? 0) * 100).toFixed(2)}%.`,
+      },
       {
         title: 'Funds locked in markets',
         value: getValue(metrics.funds_locked_in_markets || 0, currency),
@@ -56,16 +53,14 @@ export const AgentPerformance = ({ performance }: { performance: AgentMetricsRes
           ? Intl.NumberFormat('en-US').format(stats.predictions_made)
           : '0',
       },
-      isOmenstratAgent
-        ? {
-            title: 'Prediction accuracy',
-            value:
-              stats.prediction_accuracy === null
-                ? 'Will appear with the first resolved market.'
-                : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
-            variant: stats.prediction_accuracy === null ? 'text' : 'title',
-          }
-        : null,
+      {
+        title: 'Prediction accuracy',
+        value:
+          stats.prediction_accuracy === null
+            ? 'Will appear with the first resolved market.'
+            : `${(stats.prediction_accuracy * 100).toFixed(2)}%`,
+        variant: stats.prediction_accuracy === null ? 'text' : 'title',
+      },
     ];
 
     return items.filter(isPerformanceItem);

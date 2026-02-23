@@ -14,7 +14,6 @@ import { Card } from '../components/ui/Card';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
-import { isOmenstratAgent } from '../utils/agentMap';
 
 const AgentContent = styled.div`
   display: flex;
@@ -110,7 +109,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         <AgentPerformance performance={performance} />
-        {isOmenstratAgent && <ProfitOverTime />}
+        <ProfitOverTime />
         <TradeHistory />
         <Strategy />
         <ChatContent />
