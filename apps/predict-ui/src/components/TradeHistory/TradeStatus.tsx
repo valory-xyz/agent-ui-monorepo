@@ -1,3 +1,4 @@
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { Tag } from 'antd';
 import { CSSProperties, ReactNode, useMemo } from 'react';
 
@@ -13,6 +14,11 @@ type TradeStatusProps = Pick<TradeHistoryItem, 'status' | 'bet_amount' | 'net_pr
   styles?: CSSProperties;
 };
 
+type StatusLabel = 'Won' | 'Lost' | 'Traded';
+
+const getStatusText = (statusLabel: StatusLabel, value?: string) =>
+  value ? `${statusLabel} ${value}` : NA;
+
 export const TradeStatus = ({
   status,
   bet_amount,
@@ -23,14 +29,15 @@ export const TradeStatus = ({
   styles,
 }: TradeStatusProps) => {
   const amount = status === 'pending' ? bet_amount : net_profit;
-  const value = `${CURRENCY[currency].symbol}${Math.abs(amount)}`;
+  const currencySymbol = CURRENCY[currency]?.symbol || '$';
+  const value = amount !== null ? `${currencySymbol}${Math.abs(amount)}` : '';
 
   const details = useMemo(() => {
     if (status === 'won') {
       return {
         color: COLOR.GREEN,
         background: COLOR.GREEN_BACKGROUND,
-        text: `Won ${value}`,
+        text: getStatusText('Won', value),
       };
     }
 
@@ -38,7 +45,7 @@ export const TradeStatus = ({
       return {
         color: COLOR.PINK,
         background: COLOR.PINK_BACKGROUND,
-        text: `Lost ${value}`,
+        text: getStatusText('Lost', value),
       };
     }
 
@@ -63,7 +70,7 @@ export const TradeStatus = ({
     return {
       color: COLOR.WHITE_TRANSPARENT_75,
       background: COLOR.WHITE_TRANSPARENT_05,
-      text: `Traded ${value}`,
+      text: getStatusText('Traded', value),
     };
   }, [remaining_seconds, status, value]);
 
