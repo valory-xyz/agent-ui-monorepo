@@ -16,7 +16,7 @@ type TradeStatusProps = Pick<TradeHistoryItem, 'status' | 'bet_amount' | 'net_pr
 
 type StatusLabel = 'Won' | 'Lost' | 'Traded';
 
-const getStatusText = (statusLabel: StatusLabel, value: string) =>
+const getStatusText = (statusLabel: StatusLabel, value?: string) =>
   value ? `${statusLabel} ${value}` : NA;
 
 export const TradeStatus = ({
@@ -30,7 +30,7 @@ export const TradeStatus = ({
 }: TradeStatusProps) => {
   const amount = status === 'pending' ? bet_amount : net_profit;
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
-  const value = amount ? `${currencySymbol}${Math.abs(amount)}` : '';
+  const value = amount !== null ? `${currencySymbol}${Math.abs(amount)}` : '';
 
   const details = useMemo(() => {
     if (status === 'won') {

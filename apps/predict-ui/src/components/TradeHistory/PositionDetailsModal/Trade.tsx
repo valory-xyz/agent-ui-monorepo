@@ -96,7 +96,7 @@ export const Trade = ({
       {intelligence.prediction_tool && (
         <TradeInfo
           title="Prediction tool"
-          desc={`${intelligence?.prediction_tool}` || NA}
+          desc={intelligence.prediction_tool ?? NA}
           tooltip="The tool the agent used to research and generate its prediction for this market."
           borderTop={!strategy}
         />

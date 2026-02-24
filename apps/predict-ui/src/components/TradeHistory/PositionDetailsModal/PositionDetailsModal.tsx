@@ -51,8 +51,8 @@ const InvalidMarketAlert = () => (
   />
 );
 
-const formatCurrency = (amount: number, currency: CurrencyCode) => {
-  if (amount === null) return NA;
+const formatCurrency = (amount: number | null, currency: CurrencyCode) => {
+  if (amount == null) return NA;
 
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
   return `${currencySymbol}${amount.toFixed(3)}`;
@@ -119,7 +119,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
               <Col xs={24} sm={8} md={8}>
                 <Metric
                   label="Total amount"
-                  value={formatCurrency(data?.total_bet, data?.currency)}
+                  value={formatCurrency(data.total_bet, data.currency)}
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
@@ -129,7 +129,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     if (data.status === 'won') return 'Won';
                     return 'To win';
                   })()}
-                  value={formatCurrency(data?.payout, data?.currency)}
+                  value={formatCurrency(data.payout, data.currency)}
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
@@ -139,10 +139,10 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     <Flex gap={8} align="center" style={{ width: 'max-content' }}>
                       <TradeStatus
                         status={data.status}
-                        currency={data?.currency}
-                        remaining_seconds={data?.remaining_seconds}
-                        bet_amount={data?.total_bet}
-                        net_profit={data?.net_profit}
+                        currency={data.currency}
+                        remaining_seconds={data.remaining_seconds}
+                        bet_amount={data.total_bet}
+                        net_profit={data.net_profit}
                         styles={{ fontSize: '105%' }}
                         extra={
                           data.status === 'pending' ? (
@@ -173,7 +173,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                       </Text>
                       <Flex align="center" gap={8}>
                         <Text className="text-white-075">
-                          {formatCurrency(bet?.amount, data?.currency)}
+                          {formatCurrency(bet?.amount, data.currency)}
                         </Text>
                         <Text type="secondary">{sideLabel}</Text>
                       </Flex>
