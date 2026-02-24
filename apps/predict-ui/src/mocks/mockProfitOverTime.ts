@@ -6,7 +6,7 @@ const getRandomDeltaProfit = (numberOfPoints: number) =>
     date.setDate(date.getDate() - (numberOfPoints - 1 - i));
     return {
       timestamp: date.toISOString(),
-      delta_profit: parseFloat((Math.random() * 10 - 2).toFixed(2)),
+      delta_profit: parseFloat((Math.random() * 100 - 2).toFixed(2)),
     };
   });
 
