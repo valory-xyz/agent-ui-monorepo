@@ -87,7 +87,7 @@ export const Trade = ({
       {strategy && (
         <TradeInfo
           title="Strategy"
-          desc={`${TRADING_TYPE_MAP[strategy].displayName}`}
+          desc={`${TRADING_TYPE_MAP[strategy]?.displayName || 'N/A'}`}
           borderTop={true}
         />
       )}
@@ -95,7 +95,7 @@ export const Trade = ({
       {intelligence.prediction_tool && (
         <TradeInfo
           title="Prediction tool"
-          desc={`${intelligence.prediction_tool}`}
+          desc={`${intelligence?.prediction_tool}` || 'N/A'}
           tooltip="The tool the agent used to research and generate its prediction for this market."
           borderTop={!strategy}
         />
@@ -123,10 +123,10 @@ export const Trade = ({
         }
         tooltip={<IntelligenceTooltip />}
         borderTop={!strategy && !intelligence.prediction_tool}
-        noBorder={!bet.placed_at}
+        noBorder={!bet?.placed_at}
       />
 
-      {bet.placed_at && (
+      {bet?.placed_at && (
         <TradeInfoFlex noBorder={true}>
           <Text type="secondary" className="text-sm">
             {formatPlacedAt(bet.placed_at)}

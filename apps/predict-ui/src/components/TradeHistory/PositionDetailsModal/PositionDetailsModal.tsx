@@ -1,4 +1,4 @@
-import { UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
+import { NA, UNICODE_SYMBOLS } from '@agent-ui-monorepo/util-constants-and-types';
 import { ClockCircleOutlined } from '@ant-design/icons';
 import {
   Card as AntdCard,
@@ -51,9 +51,11 @@ const InvalidMarketAlert = () => (
   />
 );
 
-const formatCurrency = (n: number, currency: CurrencyCode) => {
+const formatCurrency = (amount: number, currency: CurrencyCode) => {
+  if (amount === null) return NA;
+
   const currencySymbol = CURRENCY[currency]?.symbol || '$';
-  return `${currencySymbol}${n.toFixed(3)}`;
+  return `${currencySymbol}${amount.toFixed(3)}`;
 };
 
 const Metric = ({ label, value }: { label: ReactNode; value: ReactNode }) => (
@@ -117,7 +119,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
               <Col xs={24} sm={8} md={8}>
                 <Metric
                   label="Total amount"
-                  value={formatCurrency(data.total_bet, data.currency)}
+                  value={formatCurrency(data?.total_bet, data?.currency)}
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
@@ -127,7 +129,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                     if (data.status === 'won') return 'Won';
                     return 'To win';
                   })()}
-                  value={formatCurrency(data.payout, data.currency)}
+                  value={formatCurrency(data?.payout, data?.currency)}
                 />
               </Col>
               <Col xs={24} sm={8} md={8}>
@@ -136,11 +138,11 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                   value={
                     <Flex gap={8} align="center" style={{ width: 'max-content' }}>
                       <TradeStatus
-                        currency={data.currency}
                         status={data.status}
-                        remaining_seconds={data.remaining_seconds}
-                        bet_amount={data.total_bet}
-                        net_profit={data.net_profit}
+                        currency={data?.currency}
+                        remaining_seconds={data?.remaining_seconds}
+                        bet_amount={data?.total_bet}
+                        net_profit={data?.net_profit}
                         styles={{ fontSize: '105%' }}
                         extra={
                           data.status === 'pending' ? (
@@ -171,7 +173,7 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                       </Text>
                       <Flex align="center" gap={8}>
                         <Text className="text-white-075">
-                          {formatCurrency(bet.amount, data.currency)}
+                          {formatCurrency(bet?.amount, data?.currency)}
                         </Text>
                         <Text type="secondary">{sideLabel}</Text>
                       </Flex>
