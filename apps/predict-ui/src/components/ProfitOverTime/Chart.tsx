@@ -85,12 +85,12 @@ export const Chart = ({ currency = 'USD', data }: ChartProps) => {
           tickMargin={16}
         />
         <YAxis
+          width="auto"
           orientation="right"
           tickFormatter={(value) => `${currencySymbol}${value.toFixed(2)}`}
           tick={{ fill: COLOR.SECONDARY, fontSize: 14 }}
           axisLine={false}
           tickLine={false}
-          width={60}
           tickMargin={16}
         />
         <ChartTooltip currencySymbol={currencySymbol} />
