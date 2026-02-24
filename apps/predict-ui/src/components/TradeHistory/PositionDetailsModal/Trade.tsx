@@ -1,3 +1,4 @@
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Flex, Tooltip, Typography } from 'antd';
 import { ReactNode } from 'react';
@@ -87,7 +88,7 @@ export const Trade = ({
       {strategy && (
         <TradeInfo
           title="Strategy"
-          desc={`${TRADING_TYPE_MAP[strategy]?.displayName || 'N/A'}`}
+          desc={`${TRADING_TYPE_MAP[strategy]?.displayName || NA}`}
           borderTop={true}
         />
       )}
@@ -95,7 +96,7 @@ export const Trade = ({
       {intelligence.prediction_tool && (
         <TradeInfo
           title="Prediction tool"
-          desc={`${intelligence?.prediction_tool}` || 'N/A'}
+          desc={`${intelligence?.prediction_tool}` || NA}
           tooltip="The tool the agent used to research and generate its prediction for this market."
           borderTop={!strategy}
         />

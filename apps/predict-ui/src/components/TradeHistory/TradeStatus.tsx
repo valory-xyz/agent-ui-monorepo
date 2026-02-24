@@ -1,3 +1,4 @@
+import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { Tag } from 'antd';
 import { CSSProperties, ReactNode, useMemo } from 'react';
 
@@ -16,7 +17,7 @@ type TradeStatusProps = Pick<TradeHistoryItem, 'status' | 'bet_amount' | 'net_pr
 type StatusLabel = 'Won' | 'Lost' | 'Traded';
 
 const getStatusText = (statusLabel: StatusLabel, value: string) =>
-  value ? `${statusLabel} ${value}` : 'NA';
+  value ? `${statusLabel} ${value}` : NA;
 
 export const TradeStatus = ({
   status,
