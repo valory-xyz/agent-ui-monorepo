@@ -88,7 +88,7 @@ export const Trade = ({
       {strategy && (
         <TradeInfo
           title="Strategy"
-          desc={`${TRADING_TYPE_MAP[strategy]?.displayName || NA}`}
+          desc={TRADING_TYPE_MAP[strategy]?.displayName ?? NA}
           borderTop={true}
         />
       )}
