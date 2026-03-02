@@ -29,7 +29,7 @@ const formatPlacedAt = (iso: string) =>
 const intelligenceTooltipItems = [
   {
     label: 'Implied probability',
-    description: "The agent's estimated likelihood for the market's outcome.",
+    description: 'The agent’s estimated likelihood for the market’s outcome.',
   },
   {
     label: 'Confidence score',
@@ -37,9 +37,9 @@ const intelligenceTooltipItems = [
   },
   {
     label: 'Utility score',
-    description: "How informative the agent's research was for making this estimate.",
+    description: 'How informative the agent’s research was for making this estimate.',
   },
-];
+] as const;
 
 const IntelligenceTooltip = () => (
   <Flex vertical gap={8}>

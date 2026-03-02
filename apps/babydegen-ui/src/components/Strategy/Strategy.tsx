@@ -14,7 +14,7 @@ const { Title, Text } = Typography;
 
 const TradingStrategyTitle = () => (
   <Title level={5} style={{ marginBottom: 0, marginTop: 4 }} type="secondary">
-    Strategy
+    Trading strategy
     <Tooltip
       title={`Your ${agentName} agent’s strategy sets the threshold parameters that guide its investment decisions. Each strategy comes with a predefined set of thresholds that shape your agent’s activity.`}
     >
@@ -92,7 +92,7 @@ const StrategyContent = () => {
 };
 
 /**
- * Strategy and protocols
+ * Trading strategy and protocols
  */
 export const Strategy = () => (
   <Card className="card-gradient">
