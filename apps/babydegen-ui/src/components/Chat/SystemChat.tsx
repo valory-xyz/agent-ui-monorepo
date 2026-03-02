@@ -39,7 +39,7 @@ const SystemMessage = ({ type, label, children }: SystemMessageProps) => (
 type TradingStrategyProps = { from: TradingType; to: TradingType };
 
 /**
- * Trading strategy update message.
+ * Strategy update message.
  */
 export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   const getType = useCallback((type: TradingType) => {
@@ -48,7 +48,7 @@ export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   }, []);
 
   return (
-    <SystemMessage label="Trading strategy updated:" type="strategy">
+    <SystemMessage label="Strategy updated:" type="strategy">
       <Pill type={getType(from)} size="large" style={{ marginLeft: 0 }}>
         {TRADING_TYPE_MAP[from]}
       </Pill>

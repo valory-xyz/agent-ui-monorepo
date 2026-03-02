@@ -23,7 +23,7 @@ const StrategyBody = styled.div`
 const StrategyHeader = () => (
   <Flex align="center" gap={8}>
     <Title level={5} type="secondary" style={{ margin: 0 }} className="font-normal">
-      Trading strategy
+      Strategy
     </Title>
     <Tooltip title="The set of rules the agent follows to decide how much to allocate to a market. A strategy can consider different types of information (like confidence in an outcome, market profitability or other signals) to guide its decisions.">
       <InfoCircleOutlined style={{ color: COLOR.SECONDARY }} />
@@ -61,7 +61,7 @@ const StrategyContent = () => {
 };
 
 /**
- * Trading strategy overview card.
+ * Strategy overview card.
  */
 export const Strategy = () => (
   <Card $padding="24px 32px">
