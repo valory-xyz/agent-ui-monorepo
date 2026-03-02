@@ -43,11 +43,11 @@ const SystemMessage = ({ label, children }: SystemMessageProps) => (
 type TradingStrategyProps = { from: TradingType; to: TradingType };
 
 /**
- * Trading strategy update message.
+ * Strategy update message.
  */
 export const TradingStrategy = ({ from, to }: TradingStrategyProps) => {
   return (
-    <SystemMessage label="Trading strategy updated:">
+    <SystemMessage label="Strategy updated:">
       <Pill type={TRADING_TYPE_MAP[from].type} size="large" style={pillStyle}>
         {TRADING_TYPE_MAP[from].displayName}
       </Pill>
