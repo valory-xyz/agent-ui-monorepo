@@ -122,11 +122,11 @@ describe('useChats', () => {
   });
 
   // IS_MOCK_ENABLED is a module-level constant evaluated at import time.
-  // Testing it requires loading the module in a fresh env where the var is set
-  // before the first import — that is done via a dedicated setupFile or a
-  // separate Jest project; it cannot be tested reliably in the same file
-  // without React module-registry collisions from jest.isolateModules.
-  it('does not call fetch when IS_MOCK_ENABLED env is unset (non-mock path runs)', async () => {
+  // Fully testing different values requires loading the module in a fresh env
+  // where the var is set before the first import (for example via a dedicated
+  // setupFile or a separate Jest project). Here we only sanity-check that,
+  // with IS_MOCK_ENABLED set to 'false', the non-mock path uses global.fetch.
+  it('calls fetch when IS_MOCK_ENABLED env is false (non-mock path runs)', async () => {
     // env is 'false' from beforeEach; the real fetch path should execute
     const { result } = renderHook(() => useChats(mockResponse), {
       wrapper: createWrapper(),
