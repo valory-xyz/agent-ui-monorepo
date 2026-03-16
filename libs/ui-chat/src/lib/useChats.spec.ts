@@ -2,7 +2,13 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { createElement } from 'react';
 
-let useChats: (typeof import('./useChats'))['useChats'];
+import { useChats } from './useChats';
+
+// IS_MOCK_ENABLED is a module-level constant read at import time.
+// It defaults to false (process.env.IS_MOCK_ENABLED !== 'true'), so a plain
+// static import gives us the non-mock path without any resetModules dance.
+// Testing IS_MOCK_ENABLED='true' requires a dedicated spec file with the env
+// var set in setupFilesAfterEnv. See CLAUDE.md for the full decision tree.
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -16,11 +22,6 @@ const mockResponse = { result: 'success' };
 
 describe('useChats', () => {
   beforeEach(() => {
-    jest.resetModules();
-    process.env['IS_MOCK_ENABLED'] = 'false';
-    const hookModule = require('./useChats') as typeof import('./useChats');
-    useChats = hookModule.useChats;
-
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse),
@@ -28,10 +29,8 @@ describe('useChats', () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
-    const g: Record<string, unknown> = global as unknown as Record<string, unknown>;
+    const g = global as unknown as Record<string, unknown>;
     delete g['fetch'];
-    delete process.env['IS_MOCK_ENABLED'];
   });
 
   it('returns isPending and mutateAsync on mount', () => {
@@ -125,13 +124,21 @@ describe('useChats', () => {
     ).rejects.toThrow('Failed to send chat, please try again.');
   });
 
-  // IS_MOCK_ENABLED is a module-level constant evaluated at import time.
-  // Testing the mock path (IS_MOCK_ENABLED='true') requires a dedicated spec
-  // file with that value set in setupFilesAfterEnv — jest.resetModules() +
-  // dynamic require() would break React hook state here. See CLAUDE.md for
-  // the full decision tree on env-var-dependent module testing.
-  it('calls fetch when IS_MOCK_ENABLED env is false (non-mock path runs)', async () => {
-    // env is 'false' from beforeEach; the real fetch path should execute
+  it('throws when fetch fails at the network level', async () => {
+    global.fetch = jest.fn().mockRejectedValue(new TypeError('Failed to fetch'));
+
+    const { result } = renderHook(() => useChats(mockResponse), {
+      wrapper: createWrapper(),
+    });
+
+    await expect(
+      act(async () => {
+        await result.current.mutateAsync('hello');
+      }),
+    ).rejects.toThrow('Failed to fetch');
+  });
+
+  it('calls fetch when IS_MOCK_ENABLED is false (non-mock path runs)', async () => {
     const { result } = renderHook(() => useChats(mockResponse), {
       wrapper: createWrapper(),
     });
