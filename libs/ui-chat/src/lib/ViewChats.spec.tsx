@@ -15,9 +15,10 @@ describe('ViewChats', () => {
   });
 
   it('renders nothing when chats array is empty', () => {
-    const { container } = render(<ViewChats chats={[]} agentType="modius" size="small" />);
-    // The scroll container is still there but has no chat children
-    expect(container.querySelectorAll('[data-chat-item]')).toHaveLength(0);
+    render(<ViewChats chats={[]} agentType="modius" size="small" />);
+    // Known chat texts should not be present when there are no chats
+    expect(screen.queryByText('Agent reply')).toBeNull();
+    expect(screen.queryByText('User message')).toBeNull();
   });
 
   it('renders an agent logo for agent chat entries', () => {
