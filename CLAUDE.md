@@ -228,3 +228,8 @@ Workflows in `.github/workflows/`:
 | `gitleaks.yml` | All pushes | Secret scanning |
 
 To release an app, push a tag in the format `v{version}-{app}`, e.g. `v1.2.0-predict`.
+
+
+## Plans
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
