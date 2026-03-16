@@ -198,6 +198,7 @@ afterEach(() => jest.restoreAllMocks());
 - **Retry logic:** use `exponentialBackoffDelay` from `util-functions` for all React Query `retryDelay`
 - **Imports:** ESLint enforces `simple-import-sort` — run `yarn lint:fix` before committing
 - **Formatting:** Prettier with single quotes (`.prettierrc`)
+- **TypeScript:** Never use `any` or `as any` — use `unknown`, a proper type, or a typed intermediate variable
 
 ---
 

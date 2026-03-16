@@ -19,6 +19,16 @@
 
 ---
 
+## Test Conventions
+
+- **No `any`:** Never use `as any` or type `any` in test files. Use `unknown`, the actual class type, or a typed intermediate variable.
+- **Null guards:** Instead of `result!.foo`, use `if (!result) throw new Error('...')` then access `result.foo`.
+- **Fetch mocking:** Use `global.fetch = jest.fn()` (not `jest.spyOn(global, 'fetch')`) in jsdom environments.
+- **Module-level env vars:** If a module reads `process.env.X` at import time, use `jest.isolateModules` + `require()` — but note this breaks React hooks; prefer a dedicated spec file with the env var set in `setupFilesAfterFramework`.
+- **JSX in spec files:** Use `.spec.tsx` extension whenever the file contains JSX, even if it only tests a `.ts` source.
+
+---
+
 ## Phase 1 — Shared Libraries
 **Branch:** `test/phase-1-shared-libs` | **Projects:** `util-functions`, `util-constants-and-types`, `ui-error-boundary`, `ui-pill`, `ui-theme`, `ui-chat`
 
