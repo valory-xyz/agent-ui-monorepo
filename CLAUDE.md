@@ -162,7 +162,9 @@ export const renderWithQueryClient = (ui: ReactNode) => {
 
 ### Testing modules with env-var-dependent module-level code
 
-Use `jest.resetModules()` + dynamic `require()` — do NOT use static imports:
+**Standard pattern — `jest.resetModules()` + dynamic `require()`:**
+
+Set the env var, then call `jest.resetModules()` so the next `require()` re-evaluates the module fresh. Do NOT use static imports.
 
 ```ts
 beforeEach(() => {
@@ -175,6 +177,12 @@ it('sets omenstrat agent', () => {
   expect(agentType).toBe('omenstrat_trader');
 });
 ```
+
+**`jest.isolateModules` — only when you need multiple env shapes in one file and the module under test has no React hooks:**
+
+`jest.isolateModules` gives each callback its own module registry, so you can test different env values in the same file without cross-contamination. However it can break React hook state; **do not use it for modules that render components or call hooks**.
+
+**React components that read env at import time:** create a dedicated spec file per env shape and set the env var in `setupFilesAfterEnv` (or the Jest `globals` config). This avoids both `resetModules` churn and hook-state issues.
 
 ### Mocking fetch
 

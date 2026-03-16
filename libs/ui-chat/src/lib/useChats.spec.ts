@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { createElement } from 'react';
 
-let useChats: typeof import('./useChats')['useChats'];
+let useChats: (typeof import('./useChats'))['useChats'];
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -126,10 +126,10 @@ describe('useChats', () => {
   });
 
   // IS_MOCK_ENABLED is a module-level constant evaluated at import time.
-  // Fully testing different values requires loading the module in a fresh env
-  // where the var is set before the first import (for example via a dedicated
-  // setupFile or a separate Jest project). Here we only sanity-check that,
-  // with IS_MOCK_ENABLED set to 'false', the non-mock path uses global.fetch.
+  // Testing the mock path (IS_MOCK_ENABLED='true') requires a dedicated spec
+  // file with that value set in setupFilesAfterEnv — jest.resetModules() +
+  // dynamic require() would break React hook state here. See CLAUDE.md for
+  // the full decision tree on env-var-dependent module testing.
   it('calls fetch when IS_MOCK_ENABLED env is false (non-mock path runs)', async () => {
     // env is 'false' from beforeEach; the real fetch path should execute
     const { result } = renderHook(() => useChats(mockResponse), {

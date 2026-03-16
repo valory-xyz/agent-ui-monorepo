@@ -55,9 +55,7 @@ describe('ViewChats', () => {
       const { rerender } = render(
         <ViewChats chats={[agentChat]} agentType="modius" size="small" />,
       );
-      rerender(
-        <ViewChats chats={[agentChat, userChat]} agentType="modius" size="small" />,
-      );
+      rerender(<ViewChats chats={[agentChat, userChat]} agentType="modius" size="small" />);
 
       // The effect uses setTimeout with 0 delay — run it without errors
       await act(async () => {
