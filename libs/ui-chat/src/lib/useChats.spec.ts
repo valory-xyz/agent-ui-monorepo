@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { act, renderHook } from '@testing-library/react';
 import { createElement } from 'react';
 
-import { useChats } from './useChats';
+let useChats: typeof import('./useChats')['useChats'];
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -16,11 +16,15 @@ const mockResponse = { result: 'success' };
 
 describe('useChats', () => {
   beforeEach(() => {
+    jest.resetModules();
+    process.env['IS_MOCK_ENABLED'] = 'false';
+    const hookModule = require('./useChats') as typeof import('./useChats');
+    useChats = hookModule.useChats;
+
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockResponse),
     } as Response);
-    process.env['IS_MOCK_ENABLED'] = 'false';
   });
 
   afterEach(() => {
