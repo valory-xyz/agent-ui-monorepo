@@ -39,7 +39,7 @@ describe('generateAgentName', () => {
     const name = generateAgentName(address);
     const suffix = name.split('-')[1];
 
-    expect(suffix).toMatch(/\d{2}$/);
+    expect(suffix).toMatch(/^[a-z]+\d{2}$/);
   });
 
   it('contains exactly one hyphen separator', () => {
