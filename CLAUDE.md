@@ -129,7 +129,8 @@ process.env.IS_MOCK_ENABLED = 'false';
 
 ## Testing
 
-Test infrastructure is already configured per project. See [docs/testing/TEST_PLAN.md](docs/testing/TEST_PLAN.md) for the full 6-phase coverage plan.
+Test infrastructure is already configured per project. See [docs/testing/TEST_PLAN.md](docs/testing/TEST_PLAN.md) for the full 12-phase coverage plan targeting 100%.
+The plan is broken into incremental PRs so coverage climbs steadily: phases 1–4 reach ~35%, phases 5–8 reach ~65%, phases 9–12 reach ~100%.
 
 ### Test file placement
 
