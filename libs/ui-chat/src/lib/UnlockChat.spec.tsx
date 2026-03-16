@@ -25,16 +25,37 @@ describe('UnlockChat', () => {
     expect(icon).toBeTruthy();
   });
 
-  it('accepts type="secondary" without crashing', () => {
-    expect(() => render(<UnlockChat type="secondary" />)).not.toThrow();
+  it('applies MEDIUM_GRAY as the default color on the lock icon', () => {
+    const { container } = render(<UnlockChat />);
+    const icon = container.querySelector('[role="img"]') as HTMLElement;
+    // jsdom normalizes hex to rgb() — use a reference element to get the same normalization
+    const ref = document.createElement('span');
+    ref.style.color = GLOBAL_COLORS.MEDIUM_GRAY;
+    expect(icon.style.color).toBe(ref.style.color);
   });
 
-  it('accepts a custom iconColor without crashing', () => {
-    expect(() => render(<UnlockChat iconColor="#FF0000" />)).not.toThrow();
+  it('applies a custom iconColor to the lock icon', () => {
+    const { container } = render(<UnlockChat iconColor="#FF0000" />);
+    const icon = container.querySelector('[role="img"]') as HTMLElement;
+    const ref = document.createElement('span');
+    ref.style.color = '#FF0000';
+    expect(icon.style.color).toBe(ref.style.color);
   });
 
-  it('uses GLOBAL_COLORS.MEDIUM_GRAY as the default icon color', () => {
-    // Verify the default is the expected constant value
-    expect(GLOBAL_COLORS.MEDIUM_GRAY).toBe('#6C757D');
+  it('different iconColor values produce different icon styles', () => {
+    const { container: c1 } = render(<UnlockChat iconColor="#FF0000" />);
+    const { container: c2 } = render(<UnlockChat iconColor="#0000FF" />);
+    const color1 = (c1.querySelector('[role="img"]') as HTMLElement).style.color;
+    const color2 = (c2.querySelector('[role="img"]') as HTMLElement).style.color;
+    expect(color1).not.toBe(color2);
+  });
+
+  it('renders the full instruction text', () => {
+    render(<UnlockChat />);
+    expect(
+      screen.getByText(
+        'Add your Gemini API key in Agent Settings on the Pearl Home screen to unlock this feature.',
+      ),
+    ).toBeTruthy();
   });
 });

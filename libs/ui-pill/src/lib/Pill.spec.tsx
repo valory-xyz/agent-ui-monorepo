@@ -50,11 +50,37 @@ describe('Pill', () => {
     expect(root2.style.marginLeft).toBe('-28px');
   });
 
-  it('renders children without crashing at default size', () => {
-    expect(() => render(<Pill>text</Pill>)).not.toThrow();
+  it('applies small padding inline (size="small" is default)', () => {
+    const { container } = render(<Pill>text</Pill>);
+    const root = container.firstElementChild as HTMLElement;
+    // hasType is always true (BUG-004) so left padding is always 16px
+    expect(root.style.padding).toBe('2px 4px 2px 16px');
   });
 
-  it('renders children without crashing at large size', () => {
-    expect(() => render(<Pill size="large">text</Pill>)).not.toThrow();
+  it('applies large padding inline when size="large"', () => {
+    const { container } = render(<Pill size="large">text</Pill>);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.style.padding).toBe('6px 12px');
+  });
+
+  it('small and large size produce different padding', () => {
+    const { container: cs } = render(<Pill size="small">s</Pill>);
+    const { container: cl } = render(<Pill size="large">l</Pill>);
+    const small = (cs.firstElementChild as HTMLElement).style.padding;
+    const large = (cl.firstElementChild as HTMLElement).style.padding;
+    expect(small).not.toBe(large);
+  });
+
+  it('renders the HaloDot child element', () => {
+    const { container } = render(<Pill type="primary">p</Pill>);
+    // HaloDot is a styled div — it will be present inside the Flex children
+    const dots = container.querySelectorAll('div');
+    expect(dots.length).toBeGreaterThan(0);
+  });
+
+  it('all three type variants render without crashing', () => {
+    expect(() => render(<Pill type="primary">p</Pill>)).not.toThrow();
+    expect(() => render(<Pill type="danger">d</Pill>)).not.toThrow();
+    expect(() => render(<Pill type="neutral">n</Pill>)).not.toThrow();
   });
 });

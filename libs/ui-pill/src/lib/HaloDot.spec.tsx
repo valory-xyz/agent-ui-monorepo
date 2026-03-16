@@ -3,31 +3,54 @@ import { render } from '@testing-library/react';
 import { HaloDot } from './HaloDot';
 
 describe('HaloDot', () => {
-  it('renders without crashing', () => {
+  it('renders a single div element', () => {
     const { container } = render(<HaloDot dotColor="#FF0000" />);
-    expect(container.firstElementChild).toBeTruthy();
-  });
-
-  it('renders a single root element', () => {
-    const { container } = render(<HaloDot dotColor="#FF0000" />);
+    expect(container.firstElementChild?.tagName).toBe('DIV');
     expect(container.children).toHaveLength(1);
   });
 
-  it('accepts a custom dotColor without throwing', () => {
-    expect(() => render(<HaloDot dotColor="#00FF00" />)).not.toThrow();
+  it('different dotColors produce different CSS classes (styled-components applies distinct styles)', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" />);
+    const { container: c2 } = render(<HaloDot dotColor="#00FF00" />);
+    expect(c1.firstElementChild?.className).not.toBe(c2.firstElementChild?.className);
   });
 
-  it('accepts a custom haloColor without throwing', () => {
-    expect(() => render(<HaloDot dotColor="#FF0000" haloColor="#0000FF" />)).not.toThrow();
+  it('different sizes produce different CSS classes', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" size={6} />);
+    const { container: c2 } = render(<HaloDot dotColor="#FF0000" size={12} />);
+    expect(c1.firstElementChild?.className).not.toBe(c2.firstElementChild?.className);
   });
 
-  it('accepts custom size and haloScale without throwing', () => {
-    expect(() => render(<HaloDot dotColor="#FF0000" size={12} haloScale={3} />)).not.toThrow();
+  it('different haloScales produce different CSS classes', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" haloScale={2} />);
+    const { container: c2 } = render(<HaloDot dotColor="#FF0000" haloScale={4} />);
+    expect(c1.firstElementChild?.className).not.toBe(c2.firstElementChild?.className);
   });
 
-  it('renders with default props (no size or haloScale required)', () => {
-    // Only dotColor is required — defaults should not cause a crash
-    const { container } = render(<HaloDot dotColor="#FFFFFF" />);
-    expect(container.firstElementChild).toBeTruthy();
+  // opacity: 0.25 when haloColor === dotColor (default), 0.9 otherwise — different classes
+  it('matching haloColor (default) produces different CSS class than mismatched haloColor', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" />);
+    const { container: c2 } = render(<HaloDot dotColor="#FF0000" haloColor="#0000FF" />);
+    expect(c1.firstElementChild?.className).not.toBe(c2.firstElementChild?.className);
+  });
+
+  it('default size=6 and explicit size=6 produce the same CSS class', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" />);
+    const { container: c2 } = render(<HaloDot dotColor="#FF0000" size={6} />);
+    expect(c1.firstElementChild?.className).toBe(c2.firstElementChild?.className);
+  });
+
+  it('default haloScale=2 and explicit haloScale=2 produce the same CSS class', () => {
+    const { container: c1 } = render(<HaloDot dotColor="#FF0000" />);
+    const { container: c2 } = render(<HaloDot dotColor="#FF0000" haloScale={2} />);
+    expect(c1.firstElementChild?.className).toBe(c2.firstElementChild?.className);
+  });
+
+  it('injects dotColor into the document styles', () => {
+    render(<HaloDot dotColor="#AABB11" />);
+    const injectedCSS = Array.from(document.querySelectorAll('style'))
+      .map((s) => s.textContent ?? '')
+      .join('');
+    expect(injectedCSS).toContain('#AABB11');
   });
 });
