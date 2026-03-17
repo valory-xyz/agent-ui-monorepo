@@ -22,7 +22,7 @@ libs/
 
 docs/
   testing/
-    TEST_PLAN.md  # 6-phase test coverage plan (target: 40%)
+    TEST_PLAN.md  # 5-phase test coverage plan (target: 100%)
     BUGS.md       # Bugs found during static analysis
 ```
 
