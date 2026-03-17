@@ -3,6 +3,14 @@
 **Goal:** 100% coverage across all meaningful source files, delivered in 5 PRs.
 **Starting state:** 2 test files exist (`generateAgentName.spec.ts`, `app.spec.tsx` smoke test).
 
+| Phase | Status | Tests | Coverage highlights |
+|---|---|---|---|
+| 1 — Shared Libraries | ✅ Done | 130 passing | `util-functions` 100%, `util-constants-and-types` 100%, `ui-error-boundary` 100%, `ui-theme` 100%, `ui-pill` 100% stmts/funcs (88.9% branch — BUG-004 dead branch), `ui-chat` 92.3% stmts |
+| 2 — `predict-ui` | 🔲 Pending | — | — |
+| 3 — `babydegen-ui` | 🔲 Pending | — | — |
+| 4 — `agentsfun-ui` | 🔲 Pending | — | — |
+| 5 — Coverage gaps | 🔲 Pending | — | — |
+
 ---
 
 ## Explicitly Skipped (no runtime logic to test)
@@ -19,24 +27,34 @@
 
 ---
 
-## Phase 1 — Shared Libraries
+## Test Conventions
+
+- **No `any`:** Never use `as any` or type `any` in test files. Use `unknown`, the actual class type, or a typed intermediate variable.
+- **Null guards:** Instead of `result!.foo`, use `if (!result) throw new Error('...')` then access `result.foo`.
+- **Fetch mocking:** Use `global.fetch = jest.fn()` (not `jest.spyOn(global, 'fetch')`) in jsdom environments.
+- **Module-level env vars:** Default to `jest.resetModules()` + dynamic `require()` after setting the env var. Use `jest.isolateModules` only when testing multiple env shapes in one file and the module has no React hooks (it can break hook state). For React components, use a dedicated spec file with the env var set in `setupFilesAfterEnv`. See CLAUDE.md for the full decision tree.
+- **JSX in spec files:** Use `.spec.tsx` extension whenever the file contains JSX, even if it only tests a `.ts` source.
+
+---
+
+## Phase 1 — Shared Libraries ✅
 **Branch:** `test/phase-1-shared-libs` | **Projects:** `util-functions`, `util-constants-and-types`, `ui-error-boundary`, `ui-pill`, `ui-theme`, `ui-chat`
 
 | File | Spec | Key cases |
 |---|---|---|
-| `util-functions/delay.ts` | `delay.spec.ts` | Resolves with value; custom duration; `delayInSeconds=0`; works with `null` / object generics |
-| `util-functions/reactQuery.ts` | `reactQuery.spec.ts` | Attempts 0–5 return 1000→30000; capped at 30000 for attempt 10+ |
-| `util-functions/generateAgentName.ts` | *(extend existing)* | Output ends in 2 digits; one `-` separator; suffix in `[0,99]`; empty string no-throw |
-| `util-constants-and-types/constants` | `constants.spec.ts` | `NA='n/a'`; `UNICODE_SYMBOLS` has all 4 keys; all address constants are 42-char hex |
-| `ui-error-boundary/ErrorBoundary.tsx` | `ErrorBoundary.spec.tsx` | Renders children; shows default / custom message on throw; `console.error` called; children hidden after error; `getDerivedStateFromError` returns correct state |
-| `ui-pill/Pill.tsx` | `Pill.spec.tsx` | Renders children; all 3 types apply correct background; small/large spacing; `HaloDot` always present; BUG-004 regression (`marginLeft` always `-28`) |
-| `ui-pill/HaloDot.tsx` | `HaloDot.spec.tsx` | Default `size=6`, `haloScale=2`; `haloColor` defaults to `dotColor`; custom `haloColor` accepted |
-| `ui-theme/GlobalColors.ts` | `GlobalColors.spec.ts` | All expected keys present; every value is a non-empty string |
-| `ui-chat/utils.ts` | `utils.spec.ts` | Notification shown; returns `null` for empty/agent/system chats; rollback when user sent string; returns `null` for ReactNode text (BUG-003 regression); original array not mutated |
-| `ui-chat/UnlockChat.tsx` | `UnlockChat.spec.tsx` | Heading visible; lock icon rendered; instruction text present; custom `iconColor` applied |
-| `ui-chat/Chat.tsx` | `Chat.spec.tsx` | Empty chats shows logo; non-empty shows `ViewChats`; `onSend` on button click + Enter; Shift+Enter no-op; `isLoading` shows spinner; correct placeholder per `agentType`; button styles per agent type |
-| `ui-chat/ViewChats.tsx` | `ViewChats.spec.tsx` | All chats rendered; user chat right-aligned; agent chat has logo; system chat has spacer; string text → ReactMarkdown; ReactNode text → direct render; scrolls to bottom on new messages |
-| `ui-chat/useChats.ts` | `useChats.spec.ts` | Mock mode resolves `mockChat`; real: POSTs to `/configure_strategies`; extracts `data.error` on failure; default error message when no `error` field; ignores JSON parse errors |
+| `util-functions/delay.ts` | `delay.spec.ts` ✅ | Resolves with value; custom duration; `delayInSeconds=0`; `null`/object/number generics; timer precision boundaries |
+| `util-functions/reactQuery.ts` | `reactQuery.spec.ts` ✅ | Attempts 0–5 exact ms values; cap at 30000 for attempt 5+ |
+| `util-functions/generateAgentName.ts` | `generateAgentName.spec.ts` ✅ (extended) | Format regex; determinism; different addresses differ; non-hex input; suffix range `[0,99]`; empty string; all-zeros; very long address |
+| `util-constants-and-types/constants` | `constants.spec.ts` ✅ | `NA`; `UNICODE_SYMBOLS` shape + non-empty values; all 7 time constants with ascending-order invariant; `LOCAL`, `API_V1`, `GNOSIS_SCAN_URL`, `X_URL`, `X_POST_URL`, `AGENTS_FUN_URL`; `OLAS_ADDRESS` hex format |
+| `ui-error-boundary/ErrorBoundary.tsx` | `ErrorBoundary.spec.tsx` ✅ | Renders children; default + custom message on throw; children hidden; `console.error` called; `getDerivedStateFromError` returns `{ hasError, errorMessage }`; recovery via key change |
+| `ui-pill/Pill.tsx` | `Pill.spec.tsx` ✅ | Renders children; all 3 types' background colors; `size="small"` padding `2px 4px 2px 16px`; `size="large"` padding `6px 12px`; `HaloDot` present; BUG-004 regression (`marginLeft` always `-28px`) |
+| `ui-pill/HaloDot.tsx` | `HaloDot.spec.tsx` ✅ | Renders a `div`; different `dotColor`/`size`/`haloScale` produce distinct CSS classes; matching `haloColor` (opacity 0.25) vs mismatched (opacity 0.9) produce distinct classes; default props produce same class as explicit defaults; `dotColor` injected into document styles |
+| `ui-theme/GlobalColors.ts` | `GlobalColors.spec.ts` ✅ | Defined; all 12 expected keys; every value non-empty string; `WHITE`/`BLACK` exact values |
+| `ui-chat/utils.ts` | `utils.spec.tsx` ✅ | Error notification shown + fallback message; `null` for empty/agent/system chats; rollback state + `updatedChats` for user string; `null` for ReactNode (BUG-003 regression); original array not mutated |
+| `ui-chat/UnlockChat.tsx` | `UnlockChat.spec.tsx` ✅ | Heading + full instruction text; lock icon; `MEDIUM_GRAY` applied to icon by default; custom `iconColor` applied; different colors produce different styles |
+| `ui-chat/Chat.tsx` | `Chat.spec.tsx` ✅ | Empty chats → logo; non-empty → `ViewChats`; `onSend` on click + Enter; Shift+Enter no-op; loading spinner; placeholder per `agentType`; button color/background for all 4 agent type branches; textarea font size for `small`/`large` |
+| `ui-chat/ViewChats.tsx` | `ViewChats.spec.tsx` ✅ | All chats rendered; agent logo per type (all 5); user chat no logo; system chat no logo; string → ReactMarkdown; ReactNode direct render; scroll-to-bottom on change; `size="large"` |
+| `ui-chat/useChats.ts` | `useChats.spec.ts` ✅ | `isPending`/`mutateAsync` shape; POSTs correct endpoint + headers + body; resolves with JSON; throws `data.error`; throws default message; throws on JSON parse failure; network error propagated; non-mock path uses `fetch` |
 
 ---
 

@@ -1,4 +1,3 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { useMutation } from '@tanstack/react-query';
 
