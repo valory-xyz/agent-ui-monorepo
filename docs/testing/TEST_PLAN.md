@@ -215,15 +215,8 @@ export const renderHookWithQueryClient = <T,>(hook: () => T) =>
 
 ### Testing modules that throw at load (BUG-001 pattern)
 ```ts
-beforeEach(() => {
-  jest.resetModules();
-  process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';
-});
-
-it('loads with correct agentType', () => {
-  const { agentType } = require('../utils/agentMap'); // dynamic — re-evaluates after resetModules
-  expect(agentType).toBe('omenstrat_trader');
-});
+beforeEach(() => { jest.resetModules(); process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader'; });
+const { agentType } = require('../utils/agentMap'); // dynamic import after resetModules
 ```
 
 ### Suppress ErrorBoundary noise
