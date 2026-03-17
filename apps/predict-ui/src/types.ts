@@ -119,6 +119,11 @@ export type PositionDetails = {
 export type AgentProfitPoint = {
   /** ISO 8601 timestamp */
   timestamp: string;
+  /**
+   * Window-relative cumulative PnL at this timestamp.
+   * Starts at 0 at the beginning of the selected window, may go negative.
+   * Units: same `currency` as the surrounding timeseries response.
+   */
   cumulative_profit: number;
 };
 
