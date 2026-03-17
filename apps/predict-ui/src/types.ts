@@ -119,7 +119,7 @@ export type PositionDetails = {
 export type AgentProfitPoint = {
   /** ISO 8601 timestamp */
   timestamp: string;
-  delta_profit: number;
+  cumulative_profit: number;
 };
 
 export type AgentProfitTimeseriesResponse = {
