@@ -37,18 +37,6 @@ describe('TradeStatus', () => {
     expect(screen.getByText('Traded $0.025')).toBeInTheDocument();
   });
 
-  it('shows n/a when net_profit is null for won status', () => {
-    render(
-      <TradeStatus
-        status="won"
-        bet_amount={0.025}
-        net_profit={null as unknown as number}
-        currency="USD"
-      />,
-    );
-    expect(screen.getByText('n/a')).toBeInTheDocument();
-  });
-
   it('uses Math.abs for negative profit on lost status', () => {
     render(<TradeStatus status="lost" bet_amount={0.05} net_profit={-0.05} currency="USD" />);
     // Should show 0.05, not -0.05

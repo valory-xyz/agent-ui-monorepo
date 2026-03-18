@@ -52,7 +52,11 @@ describe('AllocationPie', () => {
       isLoading: false,
     });
     const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
-    expect(getByTestId('doughnut-chart')).toBeInTheDocument();
+    const chart = getByTestId('doughnut-chart');
+    expect(chart).toBeInTheDocument();
+    const raw = chart.getAttribute('data-labels');
+    if (!raw) throw new Error('data-labels attribute missing');
+    expect(JSON.parse(raw)).toEqual(['balancerPool', 'velodrome']);
   });
 
   it('renders Doughnut with empty/fallback data when allocations is null', () => {

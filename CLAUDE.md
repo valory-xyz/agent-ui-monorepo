@@ -107,7 +107,7 @@ Each app reads env vars at build time via Vite. Copy `.env.example` → `.env` b
 
 | Variable | Values | Effect |
 |----------|--------|--------|
-| `REACT_APP_AGENT_NAME` | `omenstrat_trader` \| `polystrat_trader` | Determines agent type; warns and defaults to `omenstrat_trader` if missing or invalid — see [BUGS.md](docs/testing/BUGS.md) BUG-001 (fixed) |
+| `REACT_APP_AGENT_NAME` | `omenstrat_trader` \| `polystrat_trader` | Determines agent type; warns and defaults to `omenstrat_trader` if missing or invalid |
 | `IS_MOCK_ENABLED` | `true` \| `false` | Use mock data instead of live API calls |
 
 ### `babydegen-ui` — required
@@ -120,7 +120,7 @@ Each app reads env vars at build time via Vite. Copy `.env.example` → `.env` b
 ### Testing — set in Jest setup
 
 ```ts
-// Required for predict-ui tests (agentMap.ts throws without this)
+// Required for predict-ui tests (agentMap.ts reads env at module load time)
 process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';
 process.env.IS_MOCK_ENABLED = 'false';
 ```
