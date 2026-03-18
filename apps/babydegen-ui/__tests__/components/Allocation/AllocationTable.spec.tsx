@@ -20,15 +20,15 @@ describe('AllocationTable', () => {
   it('shows loading state when isLoading=true', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: true });
     const { container } = render(<AllocationTable />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-spin')).toBeTruthy();
+    expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
   it('renders column headers', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<AllocationTable />, { wrapper: createWrapper() });
-    expect(screen.getByText('Pool')).toBeTruthy();
-    expect(screen.getByText('Details')).toBeTruthy();
-    expect(screen.getByText('APR')).toBeTruthy();
+    expect(screen.getByText('Pool')).toBeInTheDocument();
+    expect(screen.getByText('Details')).toBeInTheDocument();
+    expect(screen.getByText('APR')).toBeInTheDocument();
   });
 
   it('renders a row for each allocation', () => {
@@ -42,8 +42,8 @@ describe('AllocationTable', () => {
       isLoading: false,
     });
     render(<AllocationTable />, { wrapper: createWrapper() });
-    expect(screen.getByText('0.3% fee')).toBeTruthy();
-    expect(screen.getByText('0.05% fee')).toBeTruthy();
+    expect(screen.getByText('0.3% fee')).toBeInTheDocument();
+    expect(screen.getByText('0.05% fee')).toBeInTheDocument();
   });
 
   it('renders APR values with % suffix', () => {
@@ -54,14 +54,14 @@ describe('AllocationTable', () => {
       isLoading: false,
     });
     render(<AllocationTable />, { wrapper: createWrapper() });
-    expect(screen.getByText('7.5%')).toBeTruthy();
+    expect(screen.getByText('7.5%')).toBeInTheDocument();
   });
 
   it('renders empty table when allocations is undefined', () => {
     usePortfolio.mockReturnValue({ data: {}, isLoading: false });
     const { container } = render(<AllocationTable />, { wrapper: createWrapper() });
     // Table renders with no rows
-    expect(container.querySelector('.ant-table')).toBeTruthy();
+    expect(container.querySelector('.ant-table')).toBeInTheDocument();
     expect(screen.queryByRole('row', { name: /detail/ })).toBeNull();
   });
 });

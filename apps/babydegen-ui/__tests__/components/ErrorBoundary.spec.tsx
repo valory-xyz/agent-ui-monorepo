@@ -17,7 +17,7 @@ describe('ErrorBoundary (babydegen-ui)', () => {
         <div>child content</div>
       </ErrorBoundary>,
     );
-    expect(screen.getByText('child content')).toBeTruthy();
+    expect(screen.getByText('child content')).toBeInTheDocument();
   });
 
   it('renders default error message when a child throws', () => {
@@ -26,7 +26,7 @@ describe('ErrorBoundary (babydegen-ui)', () => {
         <ThrowingComponent shouldThrow />
       </ErrorBoundary>,
     );
-    expect(screen.getByText('Something went wrong.')).toBeTruthy();
+    expect(screen.getByText('Something went wrong.')).toBeInTheDocument();
   });
 
   it('renders custom message when provided and child throws', () => {
@@ -35,7 +35,7 @@ describe('ErrorBoundary (babydegen-ui)', () => {
         <ThrowingComponent shouldThrow />
       </ErrorBoundary>,
     );
-    expect(screen.getByText('Custom error occurred')).toBeTruthy();
+    expect(screen.getByText('Custom error occurred')).toBeInTheDocument();
   });
 
   it('hides children when error occurs', () => {

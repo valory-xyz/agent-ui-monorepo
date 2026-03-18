@@ -22,13 +22,13 @@ describe('BreakdownModal', () => {
   it('renders modal title when open', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<BreakdownModal open={true} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Portfolio breakdown')).toBeTruthy();
+    expect(screen.getByText('Portfolio breakdown')).toBeInTheDocument();
   });
 
   it('shows "No data available" when data is null', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<BreakdownModal open={true} />, { wrapper: createWrapper() });
-    expect(screen.getByText('No data available.')).toBeTruthy();
+    expect(screen.getByText('No data available.')).toBeInTheDocument();
   });
 
   it('renders table with breakdown data', () => {
@@ -42,8 +42,8 @@ describe('BreakdownModal', () => {
       isLoading: false,
     });
     render(<BreakdownModal open={true} />, { wrapper: createWrapper() });
-    expect(screen.getByText('ETH')).toBeTruthy();
-    expect(screen.getByText('USDC')).toBeTruthy();
+    expect(screen.getByText('ETH')).toBeInTheDocument();
+    expect(screen.getByText('USDC')).toBeInTheDocument();
   });
 
   it('does not render content when closed', () => {

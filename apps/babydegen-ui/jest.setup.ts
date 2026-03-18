@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom';
+
 // Required for babydegen-ui tests: agentMap.ts reads env at module load time.
 // All static imports of agentMap will use 'modius' as agentType.
 process.env.REACT_APP_AGENT_NAME = 'modius';

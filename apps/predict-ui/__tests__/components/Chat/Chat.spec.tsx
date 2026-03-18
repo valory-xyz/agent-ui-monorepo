@@ -55,12 +55,12 @@ describe('Chat (predict-ui)', () => {
 
   it('renders the textarea for input', () => {
     render(<Chat />, { wrapper: createWrapper() });
-    expect(screen.getByRole('textbox')).toBeTruthy();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('renders the send button', () => {
     render(<Chat />, { wrapper: createWrapper() });
-    expect(screen.getByRole('button')).toBeTruthy();
+    expect(screen.getByRole('button')).toBeInTheDocument();
   });
 
   it('does not call mutateAsync for empty input', async () => {
@@ -75,7 +75,7 @@ describe('Chat (predict-ui)', () => {
       mutateAsync: mockMutateAsync,
     });
     const { container } = render(<Chat />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-btn-loading')).toBeTruthy();
+    expect(container.querySelector('.ant-btn-loading')).toBeInTheDocument();
   });
 
   it('sends message on Enter key press with text', async () => {
@@ -95,7 +95,7 @@ describe('Chat (predict-ui)', () => {
     fireEvent.change(textarea, { target: { value: 'hello agent' } });
     fireEvent.click(screen.getByRole('button'));
 
-    await waitFor(() => expect(screen.getByText('hello agent')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('hello agent')).toBeInTheDocument());
   });
 
   it('invalidates 3 queries on success', async () => {
@@ -135,7 +135,7 @@ describe('Chat (predict-ui)', () => {
     });
 
     await waitFor(() =>
-      expect(screen.getByText('Market conditions favour balanced strategy.')).toBeTruthy(),
+      expect(screen.getByText('Market conditions favour balanced strategy.')).toBeInTheDocument(),
     );
   });
 
@@ -152,7 +152,7 @@ describe('Chat (predict-ui)', () => {
       trading_type: 'risky',
     });
 
-    await waitFor(() => expect(screen.getByText('Strategy updated:')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('Strategy updated:')).toBeInTheDocument());
   });
 
   it('onSuccess: does not push agent chat when reasoning is absent/empty', async () => {
@@ -165,7 +165,7 @@ describe('Chat (predict-ui)', () => {
     capturedOnSuccess({ reasoning: '' });
 
     // Only the user message (not an agent message)
-    await waitFor(() => expect(screen.getByText('q')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('q')).toBeInTheDocument());
     expect(screen.queryByText(/conditions/)).toBeNull();
   });
 

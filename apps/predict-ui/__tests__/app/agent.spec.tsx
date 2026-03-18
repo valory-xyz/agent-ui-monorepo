@@ -53,7 +53,7 @@ describe('Agent', () => {
       data: { agentDetails: undefined, performance: undefined },
     });
     const { container } = render(<Agent />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-skeleton')).toBeTruthy();
+    expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
   it('renders error state when isError=true', () => {
@@ -63,7 +63,7 @@ describe('Agent', () => {
       data: { agentDetails: undefined, performance: undefined },
     });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByText('Error loading data')).toBeTruthy();
+    expect(screen.getByText('Error loading data')).toBeInTheDocument();
   });
 
   it('renders not-found state when data is missing', () => {
@@ -73,7 +73,7 @@ describe('Agent', () => {
       data: { agentDetails: undefined, performance: undefined },
     });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByText('404 | Agent not found')).toBeTruthy();
+    expect(screen.getByText('404 | Agent not found')).toBeInTheDocument();
   });
 
   it('renders full content when data is available', () => {
@@ -83,7 +83,7 @@ describe('Agent', () => {
       data: { agentDetails: mockAgentDetails, performance: mockPerformance },
     });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByText('Performance')).toBeTruthy();
+    expect(screen.getByText('Performance')).toBeInTheDocument();
   });
 
   it('renders UnlockChat when isChatEnabled=false and features loaded', () => {
@@ -97,7 +97,7 @@ describe('Agent', () => {
       data: { isChatEnabled: false },
     });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByText("Update agent's goal")).toBeTruthy();
+    expect(screen.getByText("Update agent's goal")).toBeInTheDocument();
   });
 
   it('shows nothing for ChatContent when features are loading', () => {

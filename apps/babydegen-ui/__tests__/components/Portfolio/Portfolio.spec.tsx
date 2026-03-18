@@ -22,13 +22,13 @@ describe('Portfolio', () => {
   it('renders Portfolio title', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<Portfolio />, { wrapper: createWrapper() });
-    expect(screen.getByText('Portfolio')).toBeTruthy();
+    expect(screen.getByText('Portfolio')).toBeInTheDocument();
   });
 
   it('renders loading skeleton when isLoading', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: true });
     const { container } = render(<Portfolio />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-skeleton-input')).toBeTruthy();
+    expect(container.querySelector('.ant-skeleton-input')).toBeInTheDocument();
   });
 
   it('renders portfolio balance from data', () => {
@@ -37,7 +37,7 @@ describe('Portfolio', () => {
       isLoading: false,
     });
     render(<Portfolio />, { wrapper: createWrapper() });
-    expect(screen.getByText('1,234.56')).toBeTruthy();
+    expect(screen.getByText('1,234.56')).toBeInTheDocument();
   });
 
   it('renders ROI from data', () => {
@@ -46,7 +46,7 @@ describe('Portfolio', () => {
       isLoading: false,
     });
     render(<Portfolio />, { wrapper: createWrapper() });
-    expect(screen.getByText('12')).toBeTruthy();
+    expect(screen.getByText('12')).toBeInTheDocument();
   });
 
   it('renders See breakdown button', () => {
@@ -55,14 +55,14 @@ describe('Portfolio', () => {
       isLoading: false,
     });
     render(<Portfolio />, { wrapper: createWrapper() });
-    expect(screen.getByText('See breakdown')).toBeTruthy();
+    expect(screen.getByText('See breakdown')).toBeInTheDocument();
   });
 
   it('See breakdown button is disabled when portfolio_value is not a number', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<Portfolio />, { wrapper: createWrapper() });
     const btn = screen.getByText('See breakdown').closest('button');
-    expect(btn).toBeTruthy();
+    expect(btn).toBeInTheDocument();
     expect((btn as HTMLButtonElement).disabled).toBe(true);
   });
 });

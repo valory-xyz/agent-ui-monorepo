@@ -8,17 +8,17 @@ describe('ErrorState', () => {
     render(
       <ErrorState title="Error loading data" description="Something went wrong." icon={Unplug} />,
     );
-    expect(screen.getByText('Error loading data')).toBeTruthy();
+    expect(screen.getByText('Error loading data')).toBeInTheDocument();
   });
 
   it('renders the description', () => {
     render(<ErrorState title="Error" description="Please try again." icon={Unplug} />);
-    expect(screen.getByText('Please try again.')).toBeTruthy();
+    expect(screen.getByText('Please try again.')).toBeInTheDocument();
   });
 
   it('renders an SVG icon element', () => {
     const { container } = render(<ErrorState title="Error" description="Details" icon={Frown} />);
-    expect(container.querySelector('svg')).toBeTruthy();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
   it('renders without crashing with all required props', () => {

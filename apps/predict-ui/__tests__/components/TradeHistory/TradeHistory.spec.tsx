@@ -29,7 +29,7 @@ describe('TradeHistory', () => {
   it('shows loading spinner when isLoading=true', () => {
     (useTradeHistory as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
     const { container } = render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-spin')).toBeTruthy();
+    expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
   it('shows empty state when items is empty', () => {
@@ -38,7 +38,7 @@ describe('TradeHistory', () => {
       data: { items: [], currency: 'USD', total: 0 },
     });
     render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(screen.getByText('No data yet.')).toBeTruthy();
+    expect(screen.getByText('No data yet.')).toBeInTheDocument();
   });
 
   it('renders the "Trade History" heading', () => {
@@ -47,7 +47,7 @@ describe('TradeHistory', () => {
       data: { items: [], currency: 'USD', total: 0 },
     });
     render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(screen.getByText('Trade History')).toBeTruthy();
+    expect(screen.getByText('Trade History')).toBeInTheDocument();
   });
 
   it('renders table rows when items are present', () => {
@@ -71,7 +71,7 @@ describe('TradeHistory', () => {
       },
     });
     render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(screen.getByText('Will X happen?')).toBeTruthy();
+    expect(screen.getByText('Will X happen?')).toBeInTheDocument();
   });
 
   it('does not render Polymarket button for omenstrat (non-polystrat) agent', () => {
@@ -104,7 +104,7 @@ describe('TradeHistory', () => {
       },
     });
     render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(screen.getByText('Yes')).toBeTruthy();
+    expect(screen.getByText('Yes')).toBeInTheDocument();
   });
 
   it('renders "No" for prediction_side=no', () => {
@@ -128,7 +128,7 @@ describe('TradeHistory', () => {
       },
     });
     render(<TradeHistory />, { wrapper: createWrapper() });
-    expect(screen.getByText('No')).toBeTruthy();
+    expect(screen.getByText('No')).toBeInTheDocument();
   });
 
   it('opens PositionDetailsModal when a row is clicked', () => {
@@ -158,6 +158,6 @@ describe('TradeHistory', () => {
 
     // The modal state is toggled; PositionDetailsModal is conditionally rendered
     // We verify the row click doesn't throw
-    expect(screen.getByText('Clickable market')).toBeTruthy();
+    expect(screen.getByText('Clickable market')).toBeInTheDocument();
   });
 });

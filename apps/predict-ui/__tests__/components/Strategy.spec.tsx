@@ -23,7 +23,7 @@ describe('Strategy', () => {
   it('shows a loading skeleton when isLoading=true', () => {
     (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
     const { container } = render(<Strategy />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-skeleton')).toBeTruthy();
+    expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
   it('shows strategy name and description when data is available', () => {
@@ -36,8 +36,8 @@ describe('Strategy', () => {
       },
     });
     render(<Strategy />, { wrapper: createWrapper() });
-    expect(screen.getByText('Balanced')).toBeTruthy();
-    expect(screen.getByText('Balanced risk and reward.')).toBeTruthy();
+    expect(screen.getByText('Balanced')).toBeInTheDocument();
+    expect(screen.getByText('Balanced risk and reward.')).toBeInTheDocument();
   });
 
   it('shows n/a when data has no trading_type', () => {
@@ -46,13 +46,13 @@ describe('Strategy', () => {
       data: undefined,
     });
     render(<Strategy />, { wrapper: createWrapper() });
-    expect(screen.getByText('n/a')).toBeTruthy();
+    expect(screen.getByText('n/a')).toBeInTheDocument();
   });
 
   it('renders the "Strategy" header label', () => {
     (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: false, data: undefined });
     render(<Strategy />, { wrapper: createWrapper() });
-    expect(screen.getByText('Strategy')).toBeTruthy();
+    expect(screen.getByText('Strategy')).toBeInTheDocument();
   });
 
   it('renders risky strategy correctly', () => {
@@ -65,7 +65,7 @@ describe('Strategy', () => {
       },
     });
     render(<Strategy />, { wrapper: createWrapper() });
-    expect(screen.getByText('Risky')).toBeTruthy();
-    expect(screen.getByText('High risk approach.')).toBeTruthy();
+    expect(screen.getByText('Risky')).toBeInTheDocument();
+    expect(screen.getByText('High risk approach.')).toBeInTheDocument();
   });
 });

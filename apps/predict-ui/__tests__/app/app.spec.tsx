@@ -24,6 +24,6 @@ describe('App (predict-ui)', () => {
   it('renders an ErrorBoundary wrapper (renders children)', () => {
     const { container } = render(<App />);
     // App renders inside a div — just verify something is rendered
-    expect(container.firstChild).toBeTruthy();
+    expect(container.firstChild).toBeInTheDocument();
   });
 });

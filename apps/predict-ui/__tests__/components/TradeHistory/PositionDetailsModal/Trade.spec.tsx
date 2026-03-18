@@ -22,7 +22,7 @@ const baseTrade: TradeDetails = {
 describe('Trade', () => {
   it('renders strategy display name when strategy is provided', () => {
     render(<Trade {...baseTrade} />);
-    expect(screen.getByText('Risky')).toBeTruthy();
+    expect(screen.getByText('Risky')).toBeInTheDocument();
   });
 
   it('does not render strategy row when strategy is null', () => {
@@ -33,7 +33,7 @@ describe('Trade', () => {
 
   it('renders prediction tool when provided', () => {
     render(<Trade {...baseTrade} />);
-    expect(screen.getByText('prediction-online')).toBeTruthy();
+    expect(screen.getByText('prediction-online')).toBeInTheDocument();
   });
 
   it('does not render prediction tool row when prediction_tool is null', () => {
@@ -48,9 +48,9 @@ describe('Trade', () => {
   it('renders rounded intelligence scores', () => {
     render(<Trade {...baseTrade} />);
     // 75.3 → 75, 85.7 → 86, 60.2 → 60
-    expect(screen.getByText('75%')).toBeTruthy();
-    expect(screen.getByText('86%')).toBeTruthy();
-    expect(screen.getByText('60%')).toBeTruthy();
+    expect(screen.getByText('75%')).toBeInTheDocument();
+    expect(screen.getByText('86%')).toBeInTheDocument();
+    expect(screen.getByText('60%')).toBeInTheDocument();
   });
 
   it('renders placed_at date when bet.placed_at is provided', () => {
@@ -68,6 +68,6 @@ describe('Trade', () => {
     };
     render(<Trade {...trade} />);
     // "Intelligence" section should still be there
-    expect(screen.getByText('Intelligence')).toBeTruthy();
+    expect(screen.getByText('Intelligence')).toBeInTheDocument();
   });
 });

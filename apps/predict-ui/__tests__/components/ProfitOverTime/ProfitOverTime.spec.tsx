@@ -34,7 +34,7 @@ describe('ProfitOverTime', () => {
       data: undefined,
     });
     render(<ProfitOverTime />, { wrapper: createWrapper() });
-    expect(screen.getByText('Profit Over Time')).toBeTruthy();
+    expect(screen.getByText('Profit Over Time')).toBeInTheDocument();
   });
 
   it('shows a loading spinner when isLoading=true', () => {
@@ -44,7 +44,7 @@ describe('ProfitOverTime', () => {
       data: undefined,
     });
     const { container } = render(<ProfitOverTime />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-spin')).toBeTruthy();
+    expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
   it('shows error message when isError=true', () => {
@@ -54,7 +54,7 @@ describe('ProfitOverTime', () => {
       data: undefined,
     });
     render(<ProfitOverTime />, { wrapper: createWrapper() });
-    expect(screen.getByText('Failed to load profit data.')).toBeTruthy();
+    expect(screen.getByText('Failed to load profit data.')).toBeInTheDocument();
   });
 
   it('shows empty state when data has no points', () => {
@@ -64,7 +64,7 @@ describe('ProfitOverTime', () => {
       data: { agent_id: 'a', currency: 'USD', window: '7d', points: [] },
     });
     render(<ProfitOverTime />, { wrapper: createWrapper() });
-    expect(screen.getByText('No data yet.')).toBeTruthy();
+    expect(screen.getByText('No data yet.')).toBeInTheDocument();
   });
 
   it('renders chart when data has points', () => {
@@ -83,7 +83,7 @@ describe('ProfitOverTime', () => {
     });
     const { container } = render(<ProfitOverTime />, { wrapper: createWrapper() });
     // Recharts renders a responsive container
-    expect(container.querySelector('.recharts-responsive-container')).toBeTruthy();
+    expect(container.querySelector('.recharts-responsive-container')).toBeInTheDocument();
   });
 
   it('hides window switcher when no data points', () => {
@@ -109,6 +109,6 @@ describe('ProfitOverTime', () => {
       },
     });
     render(<ProfitOverTime />, { wrapper: createWrapper() });
-    expect(screen.getByText('7D')).toBeTruthy();
+    expect(screen.getByText('7D')).toBeInTheDocument();
   });
 });

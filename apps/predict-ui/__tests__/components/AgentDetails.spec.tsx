@@ -6,12 +6,12 @@ import { AgentDetails } from '../../src/components/AgentDetails';
 describe('AgentDetails', () => {
   it('renders "Created:" label', () => {
     render(<AgentDetails />);
-    expect(screen.getByText('Created:')).toBeTruthy();
+    expect(screen.getByText('Created:')).toBeInTheDocument();
   });
 
   it('renders "Last active:" label', () => {
     render(<AgentDetails />);
-    expect(screen.getByText('Last active:')).toBeTruthy();
+    expect(screen.getByText('Last active:')).toBeInTheDocument();
   });
 
   it('shows NA when createdAt is not provided', () => {

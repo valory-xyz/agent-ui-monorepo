@@ -56,7 +56,7 @@ describe('PositionDetailsModal', () => {
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
     // Modal renders in a portal; use document.querySelector
-    expect(document.querySelector('.ant-skeleton')).toBeTruthy();
+    expect(document.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
   it('shows error alert when error is present', () => {
@@ -66,7 +66,7 @@ describe('PositionDetailsModal', () => {
       error: new Error('Network error'),
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Network error')).toBeTruthy();
+    expect(screen.getByText('Network error')).toBeInTheDocument();
   });
 
   it('renders question when data is available', () => {
@@ -77,7 +77,7 @@ describe('PositionDetailsModal', () => {
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
     // Text includes the EXTERNAL_LINK unicode symbol appended in the component
-    expect(screen.getByText(/Will something happen\?/)).toBeTruthy();
+    expect(screen.getByText(/Will something happen\?/)).toBeInTheDocument();
   });
 
   it('shows invalid market alert when status is invalid', () => {
@@ -88,7 +88,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Invalid market')).toBeTruthy();
+    expect(screen.getByText('Invalid market')).toBeInTheDocument();
   });
 
   it('shows "Payout" label for invalid status', () => {
@@ -99,7 +99,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Payout')).toBeTruthy();
+    expect(screen.getByText('Payout')).toBeInTheDocument();
   });
 
   it('shows "Won" label for won status', () => {
@@ -110,7 +110,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Won')).toBeTruthy();
+    expect(screen.getByText('Won')).toBeInTheDocument();
   });
 
   it('shows "To win" label for pending status', () => {
@@ -120,7 +120,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('To win')).toBeTruthy();
+    expect(screen.getByText('To win')).toBeInTheDocument();
   });
 
   it('shows "No trades found." when bets array is empty', () => {
@@ -131,7 +131,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('No trades found.')).toBeTruthy();
+    expect(screen.getByText('No trades found.')).toBeInTheDocument();
   });
 
   it('uses "Trade" label for single bet', () => {
@@ -141,7 +141,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Trade')).toBeTruthy();
+    expect(screen.getByText('Trade')).toBeInTheDocument();
   });
 
   it('uses "Trade 1", "Trade 2" labels for multiple bets', () => {
@@ -158,7 +158,7 @@ describe('PositionDetailsModal', () => {
       error: null,
     });
     render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
-    expect(screen.getByText('Trade 1')).toBeTruthy();
-    expect(screen.getByText('Trade 2')).toBeTruthy();
+    expect(screen.getByText('Trade 1')).toBeInTheDocument();
+    expect(screen.getByText('Trade 2')).toBeInTheDocument();
   });
 });

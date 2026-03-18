@@ -22,7 +22,7 @@ describe('Allocation', () => {
   it('renders Allocation title', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     render(<Allocation />, { wrapper: createWrapper() });
-    expect(screen.getByText('Allocation')).toBeTruthy();
+    expect(screen.getByText('Allocation')).toBeInTheDocument();
   });
 
   it('renders without crashing', () => {

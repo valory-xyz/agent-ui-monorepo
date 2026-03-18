@@ -42,25 +42,25 @@ describe('WithdrawInvestedFunds', () => {
   describe('default state (InitiateWithdrawal)', () => {
     it('renders "Funds to withdraw" label and initiate button', () => {
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Funds to withdraw')).toBeTruthy();
-      expect(screen.getByText('Initiate withdrawal')).toBeTruthy();
+      expect(screen.getByText('Funds to withdraw')).toBeInTheDocument();
+      expect(screen.getByText('Initiate withdrawal')).toBeInTheDocument();
     });
 
     it('shows formatted funds amount when data is available', () => {
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('$1000.00 USDC')).toBeTruthy();
+      expect(screen.getByText('$1000.00 USDC')).toBeInTheDocument();
     });
 
     it('shows n/a when funds data is null', () => {
       useFunds.mockReturnValue({ isLoading: false, data: null });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('n/a')).toBeTruthy();
+      expect(screen.getByText('n/a')).toBeInTheDocument();
     });
 
     it('shows skeleton when funds is loading', () => {
       useFunds.mockReturnValue({ isLoading: true, data: null });
       const { container } = render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(container.querySelector('.ant-skeleton')).toBeTruthy();
+      expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
     });
 
     it('initiate button is disabled when address field is empty', () => {
@@ -107,7 +107,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Withdrawal failed due to error!')).toBeTruthy();
+      expect(screen.getByText('Withdrawal failed due to error!')).toBeInTheDocument();
     });
 
     it('shows WithdrawFailed when status=failed', () => {
@@ -118,7 +118,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Withdrawal failed due to error!')).toBeTruthy();
+      expect(screen.getByText('Withdrawal failed due to error!')).toBeInTheDocument();
     });
 
     it('shows transaction link in failed state when available', () => {
@@ -129,7 +129,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText(/Transaction details/)).toBeTruthy();
+      expect(screen.getByText(/Transaction details/)).toBeInTheDocument();
     });
   });
 
@@ -142,7 +142,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Withdrawal complete!')).toBeTruthy();
+      expect(screen.getByText('Withdrawal complete!')).toBeInTheDocument();
     });
 
     it('shows transaction link in success state when available', () => {
@@ -153,7 +153,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText(/Transaction details/)).toBeTruthy();
+      expect(screen.getByText(/Transaction details/)).toBeInTheDocument();
     });
   });
 
@@ -166,7 +166,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Initiating withdrawal...')).toBeTruthy();
+      expect(screen.getByText('Initiating withdrawal...')).toBeInTheDocument();
     });
 
     it('shows loading message when status=withdrawing', () => {
@@ -177,7 +177,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Withdrawal in progress...')).toBeTruthy();
+      expect(screen.getByText('Withdrawal in progress...')).toBeInTheDocument();
     });
 
     it('still renders FundsToWithdraw alongside loading state', () => {
@@ -188,7 +188,7 @@ describe('WithdrawInvestedFunds', () => {
         initiateWithdraw: mockInitiate,
       });
       render(<WithdrawInvestedFunds />, { wrapper: Wrapper });
-      expect(screen.getByText('Funds to withdraw')).toBeTruthy();
+      expect(screen.getByText('Funds to withdraw')).toBeInTheDocument();
     });
   });
 });

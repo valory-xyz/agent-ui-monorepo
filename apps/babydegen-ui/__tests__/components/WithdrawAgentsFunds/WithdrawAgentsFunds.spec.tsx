@@ -10,23 +10,23 @@ jest.mock('../../../src/components/WithdrawAgentsFunds/WithdrawInvestedFunds', (
 describe('WithdrawAgentsFunds', () => {
   it('renders "Withdraw agents funds" title initially', () => {
     render(<WithdrawAgentsFunds />);
-    expect(screen.getByText('Withdraw agents funds')).toBeTruthy();
+    expect(screen.getByText('Withdraw agents funds')).toBeInTheDocument();
   });
 
   it('renders Withdraw button initially', () => {
     render(<WithdrawAgentsFunds />);
-    expect(screen.getByText('Withdraw')).toBeTruthy();
+    expect(screen.getByText('Withdraw')).toBeInTheDocument();
   });
 
   it('shows WithdrawInvestedFunds after clicking Withdraw', () => {
     render(<WithdrawAgentsFunds />);
     fireEvent.click(screen.getByText('Withdraw'));
-    expect(screen.getByText('WithdrawInvestedFunds')).toBeTruthy();
+    expect(screen.getByText('WithdrawInvestedFunds')).toBeInTheDocument();
   });
 
   it('changes title to "Withdraw invested funds" after clicking Withdraw', () => {
     render(<WithdrawAgentsFunds />);
     fireEvent.click(screen.getByText('Withdraw'));
-    expect(screen.getByText('Withdraw invested funds')).toBeTruthy();
+    expect(screen.getByText('Withdraw invested funds')).toBeInTheDocument();
   });
 });

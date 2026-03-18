@@ -5,12 +5,12 @@ import { CardTitle } from '../../src/ui/CardTitle';
 describe('CardTitle', () => {
   it('renders the text prop', () => {
     render(<CardTitle text="My Title" />);
-    expect(screen.getByText('My Title')).toBeTruthy();
+    expect(screen.getByText('My Title')).toBeInTheDocument();
   });
 
   it('renders ReactNode text prop', () => {
     render(<CardTitle text={<span>Node Title</span>} />);
-    expect(screen.getByText('Node Title')).toBeTruthy();
+    expect(screen.getByText('Node Title')).toBeInTheDocument();
   });
 
   it('renders without crashing', () => {

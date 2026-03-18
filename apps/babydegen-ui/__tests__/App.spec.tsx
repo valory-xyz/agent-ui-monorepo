@@ -46,14 +46,14 @@ describe('App (babydegen-ui)', () => {
 
   it('renders Chat and Strategy when isChatEnabled=true', () => {
     render(<App />);
-    expect(screen.getByText('Chat')).toBeTruthy();
-    expect(screen.getByText('Strategy')).toBeTruthy();
+    expect(screen.getByText('Chat')).toBeInTheDocument();
+    expect(screen.getByText('Strategy')).toBeInTheDocument();
   });
 
   it('renders UnlockChat when isChatEnabled=false', () => {
     useFeatures.mockReturnValue({ isLoading: false, data: { isChatEnabled: false } });
     render(<App />);
-    expect(screen.getByText('UnlockChat')).toBeTruthy();
+    expect(screen.getByText('UnlockChat')).toBeInTheDocument();
     expect(screen.queryByText('Chat')).toBeNull();
   });
 

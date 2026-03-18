@@ -5,7 +5,7 @@ import { Card, CardV2 } from '../../../src/components/ui/Card';
 describe('Card', () => {
   it('renders children', () => {
     const { getByText } = render(<Card>content here</Card>);
-    expect(getByText('content here')).toBeTruthy();
+    expect(getByText('content here')).toBeInTheDocument();
   });
 
   it('renders without crashing with default props', () => {
@@ -24,7 +24,7 @@ describe('Card', () => {
 describe('CardV2', () => {
   it('renders children', () => {
     const { getByText } = render(<CardV2>content here</CardV2>);
-    expect(getByText('content here')).toBeTruthy();
+    expect(getByText('content here')).toBeInTheDocument();
   });
 
   it('renders without crashing', () => {

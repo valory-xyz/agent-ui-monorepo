@@ -23,29 +23,29 @@ const mockPerformance: AgentMetricsResponse = {
 describe('AgentPerformance', () => {
   it('renders the "Performance" heading', () => {
     render(<AgentPerformance performance={mockPerformance} />);
-    expect(screen.getByText('Performance')).toBeTruthy();
+    expect(screen.getByText('Performance')).toBeInTheDocument();
   });
 
   it('renders all 6 metric labels', () => {
     render(<AgentPerformance performance={mockPerformance} />);
-    expect(screen.getByText('All time funds used')).toBeTruthy();
-    expect(screen.getByText('All time profit')).toBeTruthy();
-    expect(screen.getByText('Funds locked in markets')).toBeTruthy();
-    expect(screen.getByText('Available funds')).toBeTruthy();
-    expect(screen.getByText('Predictions made')).toBeTruthy();
-    expect(screen.getByText('Prediction accuracy')).toBeTruthy();
+    expect(screen.getByText('All time funds used')).toBeInTheDocument();
+    expect(screen.getByText('All time profit')).toBeInTheDocument();
+    expect(screen.getByText('Funds locked in markets')).toBeInTheDocument();
+    expect(screen.getByText('Available funds')).toBeInTheDocument();
+    expect(screen.getByText('Predictions made')).toBeInTheDocument();
+    expect(screen.getByText('Prediction accuracy')).toBeInTheDocument();
   });
 
   it('formats predictions_made with Intl.NumberFormat', () => {
     render(<AgentPerformance performance={mockPerformance} />);
     // 1002 → "1,002"
-    expect(screen.getByText('1,002')).toBeTruthy();
+    expect(screen.getByText('1,002')).toBeInTheDocument();
   });
 
   it('renders prediction_accuracy as percentage', () => {
     render(<AgentPerformance performance={mockPerformance} />);
     // 0.53 → "53.00%"
-    expect(screen.getByText('53.00%')).toBeTruthy();
+    expect(screen.getByText('53.00%')).toBeInTheDocument();
   });
 
   it('shows text variant message when prediction_accuracy is null', () => {
@@ -54,7 +54,7 @@ describe('AgentPerformance', () => {
       stats: { ...mockPerformance.stats, prediction_accuracy: null },
     };
     render(<AgentPerformance performance={perf} />);
-    expect(screen.getByText('Will appear with the first resolved market.')).toBeTruthy();
+    expect(screen.getByText('Will appear with the first resolved market.')).toBeInTheDocument();
   });
 
   it('shows "0.00%" when prediction_accuracy is 0', () => {
@@ -63,6 +63,6 @@ describe('AgentPerformance', () => {
       stats: { ...mockPerformance.stats, prediction_accuracy: 0 },
     };
     render(<AgentPerformance performance={perf} />);
-    expect(screen.getByText('0.00%')).toBeTruthy();
+    expect(screen.getByText('0.00%')).toBeInTheDocument();
   });
 });

@@ -10,20 +10,14 @@ describe('AssetBadges', () => {
 
   it('renders a single asset by name', () => {
     render(<AssetBadges assets={['ETH']} />);
-    expect(screen.getByText('ETH')).toBeTruthy();
+    expect(screen.getByText('ETH')).toBeInTheDocument();
   });
 
   it('renders multiple assets', () => {
-    render(<AssetBadges assets={['ETH', 'USDC']} />);
-    expect(screen.getByText('ETH')).toBeTruthy();
-    expect(screen.getByText('USDC')).toBeTruthy();
-  });
-
-  it('renders three assets', () => {
     render(<AssetBadges assets={['ETH', 'USDC', 'DAI']} />);
-    expect(screen.getByText('ETH')).toBeTruthy();
-    expect(screen.getByText('USDC')).toBeTruthy();
-    expect(screen.getByText('DAI')).toBeTruthy();
+    ['ETH', 'USDC', 'DAI'].forEach((asset) => {
+      expect(screen.getByText(asset)).toBeInTheDocument();
+    });
   });
 
   it('renders the correct number of asset badges', () => {
@@ -35,7 +29,7 @@ describe('AssetBadges', () => {
   it('renders single asset without wrapping Flex (no Flex for length === 1)', () => {
     const { container } = render(<AssetBadges assets={['BTC']} />);
     // Single asset renders AssetBadge directly (no Flex wrapper)
-    expect(container.firstChild).toBeTruthy();
-    expect(screen.getByText('BTC')).toBeTruthy();
+    expect(container.firstChild).toBeInTheDocument();
+    expect(screen.getByText('BTC')).toBeInTheDocument();
   });
 });

@@ -32,7 +32,7 @@ describe('AllocationPie', () => {
   it('renders loading skeleton when isLoading=true', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: true });
     const { container } = render(<AllocationPie />, { wrapper: createWrapper() });
-    expect(container.querySelector('.ant-skeleton')).toBeTruthy();
+    expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
   it('renders Doughnut chart when data is available', () => {
@@ -52,7 +52,7 @@ describe('AllocationPie', () => {
       isLoading: false,
     });
     const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
-    expect(getByTestId('doughnut-chart')).toBeTruthy();
+    expect(getByTestId('doughnut-chart')).toBeInTheDocument();
   });
 
   it('renders Doughnut with empty/fallback data when allocations is null', () => {
@@ -60,7 +60,7 @@ describe('AllocationPie', () => {
     const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
     // Falls back to emptyChartData — chart still rendered
     const chart1 = getByTestId('doughnut-chart');
-    expect(chart1).toBeTruthy();
+    expect(chart1).toBeInTheDocument();
     const labels1 = chart1.getAttribute('data-labels');
     if (!labels1) throw new Error('data-labels attribute missing');
     expect(JSON.parse(labels1)).toEqual([]);
@@ -70,7 +70,7 @@ describe('AllocationPie', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
     const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
     const chart2 = getByTestId('doughnut-chart');
-    expect(chart2).toBeTruthy();
+    expect(chart2).toBeInTheDocument();
     const labels2 = chart2.getAttribute('data-labels');
     if (!labels2) throw new Error('data-labels attribute missing');
     expect(JSON.parse(labels2)).toEqual([]);

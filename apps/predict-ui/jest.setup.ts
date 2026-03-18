@@ -1,3 +1,5 @@
+import '@testing-library/jest-dom';
+
 // Required for predict-ui tests: agentMap.ts reads env at module load time.
 // All static imports of agentMap will use 'omenstrat_trader' as agentType.
 process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';

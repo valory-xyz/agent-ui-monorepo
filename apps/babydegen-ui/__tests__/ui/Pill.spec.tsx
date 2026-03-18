@@ -5,7 +5,7 @@ import { Pill } from '../../src/ui/Pill';
 describe('Pill (babydegen-ui)', () => {
   it('renders children', () => {
     render(<Pill>Balanced</Pill>);
-    expect(screen.getByText('Balanced')).toBeTruthy();
+    expect(screen.getByText('Balanced')).toBeInTheDocument();
   });
 
   it('renders without crashing with type="primary"', () => {
@@ -27,6 +27,6 @@ describe('Pill (babydegen-ui)', () => {
   it('applies custom style prop', () => {
     const { container } = render(<Pill style={{ marginLeft: 0 }}>styled</Pill>);
     const flexEl = container.firstElementChild as HTMLElement;
-    expect(flexEl).toBeTruthy();
+    expect(flexEl).toBeInTheDocument();
   });
 });
