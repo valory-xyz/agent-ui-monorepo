@@ -138,6 +138,23 @@ describe('useChats', () => {
     ).rejects.toThrow('Failed to fetch');
   });
 
+  it('throws the default message when a 200 response contains invalid JSON', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.reject(new SyntaxError('invalid json')),
+    } as Response);
+
+    const { result } = renderHook(() => useChats(mockResponse), {
+      wrapper: createWrapper(),
+    });
+
+    await expect(
+      act(async () => {
+        await result.current.mutateAsync('hello');
+      }),
+    ).rejects.toThrow('Failed to send chat, please try again.');
+  });
+
   it('calls fetch when IS_MOCK_ENABLED is false (non-mock path runs)', async () => {
     const { result } = renderHook(() => useChats(mockResponse), {
       wrapper: createWrapper(),

@@ -1,7 +1,7 @@
 import { NA } from '@agent-ui-monorepo/util-constants-and-types';
 import { render, screen } from '@testing-library/react';
 
-import { AgentDetails } from '../../src/components/AgentDetails';
+import { AgentDetails, getTime } from '../../src/components/AgentDetails';
 
 describe('AgentDetails', () => {
   it('renders "Created:" label', () => {
@@ -39,5 +39,15 @@ describe('AgentDetails', () => {
     render(<AgentDetails />);
     const naElements = screen.getAllByText(NA);
     expect(naElements.length).toBe(2);
+  });
+
+  it('returns null from getTime when ISO input is undefined', () => {
+    expect(getTime(undefined)).toBeNull();
+  });
+
+  it('returns a relative time string from getTime when ISO input is valid', () => {
+    const value = getTime('2020-01-01T00:00:00Z');
+    expect(typeof value).toBe('string');
+    expect(value).toContain('ago');
   });
 });

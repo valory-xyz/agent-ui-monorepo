@@ -6,7 +6,7 @@ import { getTimeAgo } from '../utils/time';
 
 const { Text } = Typography;
 
-const getTime = (isoString?: string) => {
+export const getTime = (isoString?: string) => {
   if (!isoString) return null;
   const date = new Date(isoString).getTime();
   return getTimeAgo(date);

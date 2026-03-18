@@ -8,8 +8,8 @@
 | 1 — Shared Libraries | ✅ Done | 130 passing | `util-functions` 100%, `util-constants-and-types` 100%, `ui-error-boundary` 100%, `ui-theme` 100%, `ui-pill` 100% statements/functions (88.9% branch — BUG-004 dead branch), `ui-chat` 94.2% statements |
 | 2 — `predict-ui` | ✅ Done | 103 passing | 94.75% statements / 87.85% branch / 91.2% functions / 95.3% lines |
 | 3 — `babydegen-ui` | ✅ Done | 79 passing | 96.15% statements / 95.12% branch / 93.18% functions / 97.89% lines |
-| 4 — `agentsfun-ui` | 🔲 Pending | — | Currently 35.6% statements (smoke test only) |
-| 5 — Coverage gaps | 🔲 Pending | — | — |
+| 4 — `agentsfun-ui` | ✅ Done | 66 passing | 100% statements / 100% branch / 100% functions / 100% lines |
+| 5 — Coverage gaps | ✅ Done | targeted follow-up specs added | Shared invalid-JSON handling fixed; mock-shape validation added; predict/babydegen gap cases covered |
 
 ---
 
@@ -159,54 +159,66 @@
 
 ---
 
-## Phase 4 — `agentsfun-ui`
-**Branch:** `test/phase-4-agentsfun-ui`
+## Phase 4 — `agentsfun-ui` ✅
+**Branch:** `mohandas/ope-1376-phase-4-and-5-implement-unit-testing-for-agentsui-monorepo`
+**Coverage:** 100% statements / 100% branch / 100% functions / 100% lines (63 tests)
+
+### Bugs fixed in this phase
+- `agentsfun-ui/Persona.tsx` — error state now renders before the loading/null fallback so hook failures are visible instead of silently showing the skeleton forever
+
+### Infrastructure added
+- `apps/agentsfun-ui/jest.setup.ts` — adds `jest-dom`, `matchMedia` mock, and default `IS_MOCK_ENABLED=false`
+- `apps/agentsfun-ui/jest.config.ts` — aligned with the other apps: `__tests__/` roots, explicit coverage collection, stale in-source spec excluded from coverage
+- `apps/agentsfun-ui/tsconfig.spec.json` — now includes `__tests__/` specs
 
 ### Utilities & Hooks
 
 | File | Key cases |
 |---|---|
-| `utils/date.ts` | Known dates map to correct "Mon D" strings; epoch → "Jan 1" |
-| `hooks/useAgentDetails` | Calls correct endpoint; returns `{ name, username, personaDescription }`; loading/error |
-| `hooks/useFeatures` | Same pattern as other apps |
-| `hooks/usePerformance` | Calls correct endpoint; loading/data/error |
-| `hooks/useXActivity` | Calls correct endpoint; loading/data/error |
-| `hooks/useMemecoinActivity` | Calls correct endpoint; loading/data/error |
-| `hooks/useGeneratedMedia` | Calls correct endpoint; loading/data/error |
+| `utils/date.ts` | "Mon D" formatting path covered with deterministic month/day assertions |
+| `hooks/useAgentDetails` | Live fetch success/error; retry/refetch config; mock-mode path; null-data poll interval |
+| `hooks/useFeatures` | Live fetch success/error; feature-flag refetch intervals; capped retry delay; mock-mode path |
+| `hooks/usePerformance` | Live fetch success/error; metrics mapping to derived fields; missing metrics fallback; mock-mode path |
+| `hooks/useXActivity` | Live fetch success/error; retry config; mock-mode path |
+| `hooks/useMemecoinActivity` | Live fetch success/error; retry config; mock-mode path |
+| `hooks/useGeneratedMedia` | Live fetch success/error; retry config; mock-mode path |
 
 ### Components
 
 | Component | Key cases |
 |---|---|
 | `ui/Card.tsx` | Renders children |
-| `ui/ErrorState.tsx` | Shows `message` prop |
-| `ui/EmptyState.tsx` | Renders placeholder content |
-| `Persona.tsx` | Loading skeleton; error state; name + username link + description shown; X URL correct; expand/collapse for long description |
-| `Performance.tsx` | Loading/error/data states; metrics rendered |
-| `MemecoinActivity.tsx` | Loading/empty/data states |
-| `XActivity.tsx` | Loading/empty/data states |
-| `AiGeneratedMedia.tsx` | Loading/empty/data states |
-| `Chat/Chat.tsx` | Same as predict-ui Chat for `agentType='agentsFun'` |
+| `ui/ErrorState.tsx` | Shows `message` prop + error artwork |
+| `ui/EmptyState.tsx` | Renders string and `ReactNode` placeholder content |
+| `Persona.tsx` | Loading skeleton; no-data fallback; error state; name + username link + description shown; X URL correct; ellipsis symbol branches covered; empty personaDescription |
+| `Performance.tsx` | Loading/error/data states; tooltip icon present for metric with tooltip, absent without; both tooltips present; formatted numbers |
+| `MemecoinActivity.tsx` | Loading/error/empty/data states; all supported action variants; unknown-action fallback; card title verified; timestamp rendered per row |
+| `XActivity.tsx` | Loading/error/empty/data states; hashtag tokenization; timestamp/no-timestamp branches; single + multiple media items with sequential alt text |
+| `AiGeneratedMedia.tsx` | Loading/error/empty/data states; card title verified; image/video click-through; sequential alt text for multiple images; video `onPlay` pause; unknown-type fallback |
+| `Chat/Chat.tsx` | Empty + whitespace guards; optimistic user message; success reasoning append; rollback and no-rollback error paths; pending state |
 | `ErrorBoundary.tsx` | Same as Phase 1 `ErrorBoundary` |
-| `app/app.tsx` | Extend existing test; chat enabled/disabled; ErrorBoundary present |
+| `app/app.tsx` | Chat enabled/disabled/loading branches; ErrorBoundary fallback path |
 
 ---
 
-## Phase 5 — Coverage Gaps & Mock Data Validation
-**Branch:** `test/phase-5-coverage-gaps`
+## Phase 5 — Coverage Gaps & Mock Data Validation ✅
+**Branch:** `mohandas/ope-1376-phase-4-and-5-implement-unit-testing-for-agentsui-monorepo`
+
+### Bugs fixed in this phase
+- `ui-chat/useChats.ts` — successful `200` responses with invalid JSON now throw the default user-facing error instead of leaking a raw parse failure
 
 Sweep for any files missed or partially covered in phases 1–4:
 
 | Area | Action |
 |---|---|
-| Mock data shape validation | Each app's `mocks/` — structural check that exports match their TypeScript types |
-| `util-constants-and-types` address format | All blockchain addresses match `^0x[0-9a-fA-F]{40}$` |
-| Constants cross-check | `FIVE_SECONDS < FIVE_MINUTES`; all `REACT_QUERY_KEYS` values unique |
-| `ui-chat/useChats` edge cases | Server returns 200 but invalid JSON → graceful error |
-| `predict-ui/useAgentDetails` combined state | Both queries failing simultaneously → `isError=true` |
-| `predict-ui/AgentDetails` internal `getTime` | `getTime(undefined) === null`; valid ISO → non-null |
-| `babydegen-ui/useWithdrawFunds` refetch | status `'processing'` → still polls; completed → stops |
-| Coverage report audit | Run `--coverage` and add targeted tests for any file still below 80% |
+| Mock data shape validation | ✅ Added structural validation specs for `agentsfun-ui`, `predict-ui`, and `babydegen-ui` mocks |
+| `util-constants-and-types` address format | ✅ Already covered in Phase 1 constants suite |
+| Constants cross-check | ✅ Added `predict-ui` `REACT_QUERY_KEYS` uniqueness spec; time ordering already covered in Phase 1 |
+| `ui-chat/useChats` edge cases | ✅ Added `200` + invalid JSON regression test and fixed implementation |
+| `predict-ui/useAgentDetails` combined state | ✅ Added direct aggregation spec for dual-error state |
+| `predict-ui/AgentDetails` internal `getTime` | ✅ Exported helper and added `undefined` + valid ISO tests |
+| `babydegen-ui/useWithdrawFunds` refetch | ✅ Added refetch interval spec for in-progress vs completed polling |
+| Coverage report audit | ✅ Forced fresh `agentsfun-ui` coverage run; verified 100/100/100/100 |
 
 ---
 

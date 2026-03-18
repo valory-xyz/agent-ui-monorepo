@@ -52,7 +52,11 @@ describe('generateAgentName', () => {
   it('numeric suffix is in range [0, 99]', () => {
     const address = '0x1234567890abcdef1234567890abcdef12345678';
     const name = generateAgentName(address);
-    const numericSuffix = parseInt(name.match(/\d{2}$/)![0], 10);
+    const numericSuffixMatch = name.match(/\d{2}$/);
+
+    if (!numericSuffixMatch) throw new Error('Expected a two-digit numeric suffix');
+
+    const numericSuffix = parseInt(numericSuffixMatch[0], 10);
 
     expect(numericSuffix).toBeGreaterThanOrEqual(0);
     expect(numericSuffix).toBeLessThanOrEqual(99);

@@ -33,6 +33,10 @@ export const useChats = <T>(mockChat: T) =>
         throw new Error(errorMessage);
       }
 
-      return response.json();
+      try {
+        return await response.json();
+      } catch {
+        throw new Error('Failed to send chat, please try again.');
+      }
     },
   });
