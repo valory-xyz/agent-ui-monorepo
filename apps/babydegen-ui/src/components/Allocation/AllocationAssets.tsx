@@ -15,7 +15,6 @@ const AssetBadge = ({ asset, isLast = true }: AssetBadgeProps) => (
 export const AssetBadges = ({ assets }: { assets: string[] }) => {
   if (assets.length === 0) return null;
   if (assets.length === 1) return <AssetBadge asset={assets[0]} />;
-  if (!assets.map) return null;
 
   return (
     <Flex wrap="wrap" gap={2}>

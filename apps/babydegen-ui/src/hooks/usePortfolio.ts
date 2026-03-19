@@ -1,5 +1,5 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
-import { devMock } from '@agent-ui-monorepo/util-functions';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockPortfolio } from '../mocks/mockPortfolio';
@@ -9,12 +9,7 @@ export const usePortfolio = () => {
   const query = useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      const mock = devMock(
-        () =>
-          new Promise<PortfolioResponse>((resolve) =>
-            setTimeout(() => resolve(mockPortfolio), 2000),
-          ),
-      );
+      const mock = devMock(() => delay(mockPortfolio, 2000));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/portfolio`);

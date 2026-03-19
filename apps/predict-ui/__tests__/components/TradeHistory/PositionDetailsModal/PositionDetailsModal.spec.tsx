@@ -161,4 +161,62 @@ describe('PositionDetailsModal', () => {
     expect(screen.getByText('Trade 1')).toBeInTheDocument();
     expect(screen.getByText('Trade 2')).toBeInTheDocument();
   });
+
+  it('renders "No" side label for a bet with side=no', () => {
+    const noSideData: PositionDetails = {
+      ...mockPositionData,
+      bets: [{ ...mockPositionData.bets[0], id: 'bet_no', bet: { amount: 1.0, side: 'no' } }],
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: noSideData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    expect(screen.getByText('No')).toBeInTheDocument();
+  });
+
+  it('falls back to "$" for an unknown currency code at runtime', () => {
+    const unknownCurrencyData: PositionDetails = {
+      ...mockPositionData,
+      currency: 'XYZ' as unknown as PositionDetails['currency'],
+      total_bet: 1.5,
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: unknownCurrencyData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    // currencySymbol falls back to '$' for unknown currency
+    expect(document.body.textContent).toContain('$1.500');
+  });
+
+  it('shows n/a for total_bet when it is null', () => {
+    const nullBetData: PositionDetails = {
+      ...mockPositionData,
+      total_bet: null as unknown as number,
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: nullBetData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    // formatCurrency(null, ...) returns NA ('n/a')
+    const allText = document.body.textContent ?? '';
+    expect(allText).toContain('n/a');
+  });
+
+  it('renders without crashing when data is absent with no loading and no error', () => {
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: undefined,
+      error: null,
+    });
+    // The ternary returns null; the modal shell still mounts in a portal
+    expect(() =>
+      render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() }),
+    ).not.toThrow();
+  });
 });

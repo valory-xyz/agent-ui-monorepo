@@ -1,5 +1,5 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
-import { devMock } from '@agent-ui-monorepo/util-functions';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockFunds } from '../../mocks/mockFundsWithdrawal';
@@ -9,9 +9,7 @@ export const useFunds = () =>
   useQuery<WithdrawalFunds>({
     queryKey: ['withdrawalFunds'],
     queryFn: async () => {
-      const mock = devMock(
-        () => new Promise<WithdrawalFunds>((resolve) => setTimeout(() => resolve(mockFunds), 2000)),
-      );
+      const mock = devMock(() => delay(mockFunds, 2000));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/withdrawal/amount`);

@@ -44,6 +44,32 @@ describe('TradeStatus', () => {
     expect(text).toBeInTheDocument();
   });
 
+  it('falls back to "$" for an unknown currency code at runtime', () => {
+    render(
+      <TradeStatus
+        status="won"
+        bet_amount={1}
+        net_profit={2}
+        currency={'XYZ' as unknown as import('../../../src/constants/currency').CurrencyCode}
+      />,
+    );
+    expect(screen.getByText('Won $2')).toBeInTheDocument();
+  });
+
+  it('shows n/a when net_profit is null for won status', () => {
+    render(
+      <TradeStatus
+        status="won"
+        bet_amount={0.025}
+        net_profit={null as unknown as number}
+        currency="USD"
+      />,
+    );
+    // amount is null → value is '' → getStatusText returns NA ('n/a')
+    const { NA } = jest.requireActual('@agent-ui-monorepo/util-constants-and-types');
+    expect(screen.getByText(NA)).toBeInTheDocument();
+  });
+
   it('renders extra content when extra prop is provided', () => {
     render(
       <TradeStatus

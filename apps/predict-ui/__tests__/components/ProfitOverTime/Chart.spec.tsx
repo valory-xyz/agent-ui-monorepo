@@ -9,19 +9,27 @@ global.ResizeObserver = class ResizeObserver {
   disconnect = jest.fn();
 };
 
-// Capture the Tooltip content function so we can invoke it in tests
+// Capture the Tooltip content function and axis tick formatters so we can invoke them in tests
 type TooltipContentProps = {
   payload?: { value?: unknown }[];
   label?: string;
 };
 let capturedTooltipContent: ((props: TooltipContentProps) => React.ReactNode) | undefined;
+let capturedXTickFormatter: ((value: unknown) => string) | undefined;
+let capturedYTickFormatter: ((value: number) => string) | undefined;
 
 jest.mock('recharts', () => ({
   ResponsiveContainer: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   LineChart: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   CartesianGrid: () => null,
-  XAxis: () => null,
-  YAxis: () => null,
+  XAxis: ({ tickFormatter }: { tickFormatter?: (value: unknown) => string }) => {
+    capturedXTickFormatter = tickFormatter;
+    return null;
+  },
+  YAxis: ({ tickFormatter }: { tickFormatter?: (value: number) => string }) => {
+    capturedYTickFormatter = tickFormatter;
+    return null;
+  },
   Line: () => null,
   Tooltip: ({ content }: { content: (props: TooltipContentProps) => React.ReactNode }) => {
     capturedTooltipContent = content;
@@ -38,6 +46,8 @@ const mockData = [
 describe('Chart', () => {
   beforeEach(() => {
     capturedTooltipContent = undefined;
+    capturedXTickFormatter = undefined;
+    capturedYTickFormatter = undefined;
   });
 
   it('renders without crashing with data', () => {
@@ -111,6 +121,49 @@ describe('Chart', () => {
         ) as React.ReactElement,
       );
       expect(container.textContent).toContain('Profit of $2.00');
+    });
+  });
+
+  describe('XAxis tickFormatter', () => {
+    it('formats a Date timestamp as "Mon DD"', () => {
+      render(<Chart data={mockData} />);
+      if (!capturedXTickFormatter) throw new Error('XAxis tickFormatter not captured');
+      const date = new Date('2024-01-15T00:00:00Z');
+      const formatted = capturedXTickFormatter(date);
+      // Intl.DateTimeFormat with month: 'short', day: '2-digit' → e.g. "Jan 15"
+      expect(formatted).toMatch(/Jan/);
+      expect(formatted).toMatch(/15/);
+    });
+  });
+
+  describe('YAxis tickFormatter', () => {
+    it('formats a positive value with currency symbol', () => {
+      render(<Chart data={mockData} />);
+      if (!capturedYTickFormatter) throw new Error('YAxis tickFormatter not captured');
+      expect(capturedYTickFormatter(1.5)).toBe('$1.50');
+    });
+
+    it('formats zero value', () => {
+      render(<Chart data={mockData} />);
+      if (!capturedYTickFormatter) throw new Error('YAxis tickFormatter not captured');
+      expect(capturedYTickFormatter(0)).toBe('$0.00');
+    });
+
+    it('formats a negative value', () => {
+      render(<Chart data={mockData} />);
+      if (!capturedYTickFormatter) throw new Error('YAxis tickFormatter not captured');
+      expect(capturedYTickFormatter(-2.5)).toBe('$-2.50');
+    });
+
+    it('falls back to "$" for an unknown currency code', () => {
+      render(
+        <Chart
+          data={mockData}
+          currency={'XYZ' as unknown as import('../../../src/constants/currency').CurrencyCode}
+        />,
+      );
+      if (!capturedYTickFormatter) throw new Error('YAxis tickFormatter not captured');
+      expect(capturedYTickFormatter(1.0)).toBe('$1.00');
     });
   });
 });
