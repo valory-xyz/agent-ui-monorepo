@@ -51,7 +51,7 @@ export const ProfitOverTime = () => {
     if (!data || data.points.length === 0) return [];
     return data.points.map((point) => ({
       timestamp: new Date(point.timestamp),
-      value: point.delta_profit,
+      value: point.cumulative_profit,
     }));
   }, [data]);
 
