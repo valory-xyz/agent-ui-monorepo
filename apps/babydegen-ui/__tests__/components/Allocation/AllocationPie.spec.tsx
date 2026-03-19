@@ -97,6 +97,18 @@ describe('AllocationPie', () => {
     expect(JSON.parse(labels3)).toEqual([]);
   });
 
+  it('renders Doughnut with fallback when allocations is not an array', () => {
+    usePortfolio.mockReturnValue({
+      data: { allocations: 'not-an-array' as unknown as [] },
+      isLoading: false,
+    });
+    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const chart = getByTestId('doughnut-chart');
+    const labels = chart.getAttribute('data-labels');
+    if (!labels) throw new Error('data-labels attribute missing');
+    expect(JSON.parse(labels)).toEqual([]);
+  });
+
   it('chart labels match allocation types for valid data', () => {
     usePortfolio.mockReturnValue({
       data: {

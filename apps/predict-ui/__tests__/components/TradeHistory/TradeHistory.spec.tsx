@@ -37,6 +37,13 @@ describe('TradeHistory', () => {
     expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
+  it('renders empty table when data is undefined and not loading', () => {
+    (useTradeHistory as jest.Mock).mockReturnValue({ isLoading: false, data: undefined });
+    render(<TradeHistory />, { wrapper: createWrapper() });
+    // data?.items ?? [] falls back to [], Table renders with no rows
+    expect(screen.getByText('Trade History')).toBeInTheDocument();
+  });
+
   it('shows empty state when items is empty', () => {
     (useTradeHistory as jest.Mock).mockReturnValue({
       isLoading: false,
