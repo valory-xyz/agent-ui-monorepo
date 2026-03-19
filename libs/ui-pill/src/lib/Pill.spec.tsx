@@ -38,23 +38,28 @@ describe('Pill', () => {
     expect(root.style.opacity).toBe('0.5');
   });
 
-  // BUG-004 regression: hasType is always true so marginLeft is always -28
-  it('marginLeft is always -28 regardless of type (BUG-004)', () => {
-    const { container: c1 } = render(<Pill type="neutral">n</Pill>);
-    const { container: c2 } = render(<Pill type="primary">p</Pill>);
-
-    const root1 = c1.firstElementChild as HTMLElement;
-    const root2 = c2.firstElementChild as HTMLElement;
-
-    expect(root1.style.marginLeft).toBe('-28px');
-    expect(root2.style.marginLeft).toBe('-28px');
+  it('Pill with type has marginLeft -28px', () => {
+    const { container } = render(<Pill type="primary">p</Pill>);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.style.marginLeft).toBe('-28px');
   });
 
-  it('applies small padding inline (size="small" is default)', () => {
+  it('Pill without type has marginLeft 0 (BUG-004 fixed)', () => {
+    const { container } = render(<Pill>n</Pill>);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.style.marginLeft).toBe('0px');
+  });
+
+  it('applies small padding with left 16px when type is set', () => {
+    const { container } = render(<Pill type="primary">text</Pill>);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.style.padding).toBe('2px 4px 2px 16px');
+  });
+
+  it('applies small padding with left 8px when no type (size="small" default)', () => {
     const { container } = render(<Pill>text</Pill>);
     const root = container.firstElementChild as HTMLElement;
-    // hasType is always true (BUG-004) so left padding is always 16px
-    expect(root.style.padding).toBe('2px 4px 2px 16px');
+    expect(root.style.padding).toBe('2px 4px 2px 8px');
   });
 
   it('applies large padding inline when size="large"', () => {

@@ -21,13 +21,9 @@ export const handleChatError = ({ error, chats }: HandleChatErrorParams): Handle
     return null;
   }
 
-  // Return rollback state
-  if (typeof lastChat.text === 'string') {
-    return {
-      updatedChats: chats.slice(0, -1),
-      restoredText: lastChat.text,
-    };
-  }
-
-  return null;
+  // Return rollback state — lastChat.type === 'user' guarantees text is string
+  return {
+    updatedChats: chats.slice(0, -1),
+    restoredText: lastChat.text,
+  };
 };

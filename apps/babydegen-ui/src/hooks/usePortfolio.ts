@@ -9,7 +9,7 @@ export const usePortfolio = () => {
   const query = useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      const mock = devMock(() => delay(mockPortfolio, 2000));
+      const mock = devMock(() => delay(mockPortfolio, 2));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/portfolio`);
