@@ -13,7 +13,8 @@ describe('CardTitle', () => {
     expect(screen.getByText('Node Title')).toBeInTheDocument();
   });
 
-  it('renders without crashing', () => {
-    expect(() => render(<CardTitle text="Test" />)).not.toThrow();
+  it('renders a string passed as text prop', () => {
+    render(<CardTitle text="Test" />);
+    expect(screen.getByText('Test')).toBeInTheDocument();
   });
 });

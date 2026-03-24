@@ -10,22 +10,23 @@ const { usePortfolio } = jest.requireMock('../../../src/hooks/usePortfolio') as 
   usePortfolio: jest.Mock;
 };
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return ({ children }: { children: React.ReactNode }) =>
-    createElement(QueryClientProvider, { client: queryClient }, children);
-};
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
 
 describe('AllocationTable', () => {
   it('shows loading state when isLoading=true', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: true });
-    const { container } = render(<AllocationTable />, { wrapper: createWrapper() });
+    const { container } = render(<AllocationTable />, { wrapper });
     expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
   it('renders column headers', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
-    render(<AllocationTable />, { wrapper: createWrapper() });
+    render(<AllocationTable />, { wrapper });
     expect(screen.getByText('Pool')).toBeInTheDocument();
     expect(screen.getByText('Details')).toBeInTheDocument();
     expect(screen.getByText('APR')).toBeInTheDocument();
@@ -41,7 +42,7 @@ describe('AllocationTable', () => {
       },
       isLoading: false,
     });
-    render(<AllocationTable />, { wrapper: createWrapper() });
+    render(<AllocationTable />, { wrapper });
     expect(screen.getByText('0.3% fee')).toBeInTheDocument();
     expect(screen.getByText('0.05% fee')).toBeInTheDocument();
   });
@@ -53,13 +54,13 @@ describe('AllocationTable', () => {
       },
       isLoading: false,
     });
-    render(<AllocationTable />, { wrapper: createWrapper() });
+    render(<AllocationTable />, { wrapper });
     expect(screen.getByText('7.5%')).toBeInTheDocument();
   });
 
   it('renders empty table when allocations is undefined', () => {
     usePortfolio.mockReturnValue({ data: {}, isLoading: false });
-    const { container } = render(<AllocationTable />, { wrapper: createWrapper() });
+    const { container } = render(<AllocationTable />, { wrapper });
     // Table renders with no rows
     expect(container.querySelector('.ant-table')).toBeInTheDocument();
     expect(screen.queryByRole('row', { name: /detail/ })).toBeNull();

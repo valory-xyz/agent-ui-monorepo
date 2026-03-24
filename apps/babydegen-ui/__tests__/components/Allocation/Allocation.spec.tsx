@@ -10,23 +10,17 @@ const { usePortfolio } = jest.requireMock('../../../src/hooks/usePortfolio') as 
   usePortfolio: jest.Mock;
 };
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) =>
-    createElement(QueryClientProvider, { client: queryClient }, children);
-};
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
 
 describe('Allocation', () => {
   it('renders Allocation title', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
-    render(<Allocation />, { wrapper: createWrapper() });
+    render(<Allocation />, { wrapper });
     expect(screen.getByText('Allocation')).toBeInTheDocument();
-  });
-
-  it('renders without crashing', () => {
-    usePortfolio.mockReturnValue({ data: null, isLoading: false });
-    expect(() => render(<Allocation />, { wrapper: createWrapper() })).not.toThrow();
   });
 });
