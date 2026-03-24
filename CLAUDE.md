@@ -220,13 +220,7 @@ afterEach(() => jest.restoreAllMocks());
 
 ## Known Bugs
 
-Documented in [docs/testing/BUGS.md](docs/testing/BUGS.md):
-
-| ID      | Severity             | Summary                                                                           |
-| ------- | -------------------- | --------------------------------------------------------------------------------- |
-| BUG-003 | ~~Medium~~ **Fixed** | `EachChat` split to discriminated union; `handleChatError` simplified             |
-| BUG-004 | ~~Low~~ **Fixed**    | `Pill` `type` made optional; `<Pill>` without type now gets `marginLeft: 0`       |
-| BUG-005 | Low (partial)        | `donut-center-plugin.ts` ctx-after-destroy guarded; `onload` race deferred to E2E |
+No open bugs. See [docs/testing/BUGS.md](docs/testing/BUGS.md) for history.
 
 ---
 
