@@ -4,7 +4,7 @@
  * @returns time in format "12 days ago" or "5 hours ago"
  */
 export const getTimeAgo = (ms: number, showPostfix = true) => {
-  const differenceInMs = Date.now() - ms;
+  const differenceInMs = Math.max(0, Date.now() - ms);
 
   // Calculate time differences
   const differenceInMinutes = Math.floor(differenceInMs / (1000 * 60));
@@ -15,13 +15,13 @@ export const getTimeAgo = (ms: number, showPostfix = true) => {
   const postfix = showPostfix ? ` ago` : '';
 
   if (differenceInMonths > 0) {
-    return `${differenceInMonths} month${differenceInMonths > 1 ? 's' : ''}${postfix}`;
+    return `${differenceInMonths} month${differenceInMonths !== 1 ? 's' : ''}${postfix}`;
   } else if (differenceInDays > 0) {
-    return `${differenceInDays} day${differenceInDays > 1 ? 's' : ''}${postfix}`;
+    return `${differenceInDays} day${differenceInDays !== 1 ? 's' : ''}${postfix}`;
   } else if (differenceInHours > 0) {
-    return `${differenceInHours} hour${differenceInHours > 1 ? 's' : ''}${postfix}`;
+    return `${differenceInHours} hour${differenceInHours !== 1 ? 's' : ''}${postfix}`;
   } else {
-    return `${differenceInMinutes} minute${differenceInMinutes > 1 ? 's' : ''}${postfix}`;
+    return `${differenceInMinutes} minute${differenceInMinutes !== 1 ? 's' : ''}${postfix}`;
   }
 };
 

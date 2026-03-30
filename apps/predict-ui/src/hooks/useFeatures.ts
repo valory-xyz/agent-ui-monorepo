@@ -1,23 +1,19 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { FIVE_MINUTES, FIVE_SECONDS } from '@agent-ui-monorepo/util-constants-and-types';
+import { devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockFeatures } from '../mocks/mockFeatures';
 import { Features } from '../types';
 
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
-
 export const useFeatures = () => {
   const query = useQuery<Features>({
     queryKey: ['features'],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockFeatures);
-          }, 2000);
-        });
-      }
+      const mock = devMock(
+        () => new Promise<Features>((resolve) => setTimeout(() => resolve(mockFeatures), 2000)),
+      );
+      if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/features`);
       if (!response.ok) throw new Error('Failed to fetch features');

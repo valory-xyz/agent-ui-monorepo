@@ -1,4 +1,5 @@
 import { Address, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { devMock } from '@agent-ui-monorepo/util-functions';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -8,14 +9,14 @@ import {
 } from '../../mocks/mockFundsWithdrawal';
 import { WithdrawalInitiateResponse, WithdrawalStatus } from '../../types';
 
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
-
 const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawalInitiateResponse> => {
-  if (IS_MOCK_ENABLED) {
-    return new Promise<WithdrawalInitiateResponse>((resolve) =>
-      setTimeout(() => resolve(mockWithdrawInitiateResponse), 2000),
-    );
-  }
+  const mock = devMock(
+    () =>
+      new Promise<WithdrawalInitiateResponse>((resolve) =>
+        setTimeout(() => resolve(mockWithdrawInitiateResponse), 2000),
+      ),
+  );
+  if (mock !== null) return mock;
 
   const response = await fetch(`${LOCAL}/withdrawal/initiate`, {
     method: 'POST',
@@ -58,11 +59,13 @@ export const useWithdrawFunds = () => {
         throw new Error('Withdrawal ID is required to fetch status.');
       }
 
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) =>
-          setTimeout(() => resolve(mockWithdrawStatusResponse), 2000),
-        );
-      }
+      const mock = devMock(
+        () =>
+          new Promise<WithdrawalStatus>((resolve) =>
+            setTimeout(() => resolve(mockWithdrawStatusResponse), 2000),
+          ),
+      );
+      if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/withdrawal/status/${withdrawId}`);
 

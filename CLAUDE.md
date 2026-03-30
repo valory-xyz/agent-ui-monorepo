@@ -107,7 +107,7 @@ Each app reads env vars at build time via Vite. Copy `.env.example` → `.env` b
 
 | Variable | Values | Effect |
 |----------|--------|--------|
-| `REACT_APP_AGENT_NAME` | `omenstrat_trader` \| `polystrat_trader` | Determines agent type; **throws at module load if missing or invalid** — see [BUGS.md](docs/testing/BUGS.md) BUG-001 |
+| `REACT_APP_AGENT_NAME` | `omenstrat_trader` \| `polystrat_trader` | Determines agent type; warns and defaults to `omenstrat_trader` if missing or invalid |
 | `IS_MOCK_ENABLED` | `true` \| `false` | Use mock data instead of live API calls |
 
 ### `babydegen-ui` — required
@@ -120,7 +120,7 @@ Each app reads env vars at build time via Vite. Copy `.env.example` → `.env` b
 ### Testing — set in Jest setup
 
 ```ts
-// Required for predict-ui tests (agentMap.ts throws without this)
+// Required for predict-ui tests (agentMap.ts reads env at module load time)
 process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';
 process.env.IS_MOCK_ENABLED = 'false';
 ```
@@ -134,12 +134,19 @@ The plan is broken into incremental PRs so coverage climbs steadily: phases 1–
 
 ### Test file placement
 
-Place spec files next to the source file they test:
+Place spec files in the app's `__tests__/` directory, mirroring the `src/` structure:
 
 ```
-src/lib/utils.ts
-src/lib/utils.spec.ts   ✓
+src/hooks/useFeatures.ts
+__tests__/hooks/useFeatures.spec.ts   ✓
 ```
+
+Import paths from `__tests__/[subpath]/file.spec.ts` back into `src/`:
+- depth 1 (`__tests__/hooks/`) → `../../src/hooks/foo`
+- depth 2 (`__tests__/components/Chat/`) → `../../../src/components/Chat/foo`
+- depth 3 (`__tests__/components/TradeHistory/PositionDetailsModal/`) → `../../../../src/...`
+
+Use `.spec.tsx` extension whenever the file contains JSX, even if the source under test is a `.ts` file.
 
 ### Test environments
 
@@ -216,11 +223,9 @@ Documented in [docs/testing/BUGS.md](docs/testing/BUGS.md):
 
 | ID | Severity | Summary |
 |----|----------|---------|
-| BUG-001 | Critical | `predict-ui/agentMap.ts` IIFE throws at module load if env var is missing |
-| BUG-002 | Medium | `getTimeAgo()` returns negative strings for future timestamps |
 | BUG-003 | Medium | `handleChatError` silently drops ReactNode user messages on error |
 | BUG-004 | Low | `Pill` `hasType` is always `true` — dead code branch |
-| BUG-005 | Low | `donut-center-plugin.ts` `onload` race condition + stale context |
+| BUG-005 | Low (partial) | `donut-center-plugin.ts` ctx-after-destroy guarded; `onload` race deferred to E2E |
 
 ---
 

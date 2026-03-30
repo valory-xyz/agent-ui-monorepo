@@ -5,10 +5,10 @@
 
 | Phase | Status | Tests | Coverage highlights |
 |---|---|---|---|
-| 1 — Shared Libraries | ✅ Done | 130 passing | `util-functions` 100%, `util-constants-and-types` 100%, `ui-error-boundary` 100%, `ui-theme` 100%, `ui-pill` 100% stmts/funcs (88.9% branch — BUG-004 dead branch), `ui-chat` 92.3% stmts |
-| 2 — `predict-ui` | 🔲 Pending | — | — |
-| 3 — `babydegen-ui` | 🔲 Pending | — | — |
-| 4 — `agentsfun-ui` | 🔲 Pending | — | — |
+| 1 — Shared Libraries | ✅ Done | 130 passing | `util-functions` 100%, `util-constants-and-types` 100%, `ui-error-boundary` 100%, `ui-theme` 100%, `ui-pill` 100% statements/functions (88.9% branch — BUG-004 dead branch), `ui-chat` 94.2% statements |
+| 2 — `predict-ui` | ✅ Done | 103 passing | 94.75% statements / 87.85% branch / 91.2% functions / 95.3% lines |
+| 3 — `babydegen-ui` | ✅ Done | 79 passing | 96.15% statements / 95.12% branch / 93.18% functions / 97.89% lines |
+| 4 — `agentsfun-ui` | 🔲 Pending | — | Currently 35.6% statements (smoke test only) |
 | 5 — Coverage gaps | 🔲 Pending | — | — |
 
 ---
@@ -29,11 +29,11 @@
 
 ## Test Conventions
 
+- **File placement:** `apps/<app>/__tests__/[subpath]/file.spec.ts` — mirrors `src/` structure. Import paths: depth-1 → `../../src/`, depth-2 → `../../../src/`, depth-3 → `../../../../src/`.
 - **No `any`:** Never use `as any` or type `any` in test files. Use `unknown`, the actual class type, or a typed intermediate variable.
 - **Null guards:** Instead of `result!.foo`, use `if (!result) throw new Error('...')` then access `result.foo`.
 - **Fetch mocking:** Use `global.fetch = jest.fn()` (not `jest.spyOn(global, 'fetch')`) in jsdom environments.
 - **Module-level env vars:** Default to `jest.resetModules()` + dynamic `require()` after setting the env var. Use `jest.isolateModules` only when testing multiple env shapes in one file and the module has no React hooks (it can break hook state). For React components, use a dedicated spec file with the env var set in `setupFilesAfterEnv`. See CLAUDE.md for the full decision tree.
-- **JSX in spec files:** Use `.spec.tsx` extension whenever the file contains JSX, even if it only tests a `.ts` source.
 
 ---
 
@@ -58,86 +58,104 @@
 
 ---
 
-## Phase 2 — `predict-ui`
-**Branch:** `test/phase-2-predict-ui` | **Setup:** `process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader'`
+## Phase 2 — `predict-ui` ✅
+**Branch:** `mohandas/ope-1376-phase-2-and-3-implement-unit-testing-for-agentsui-monorepo`
+**Coverage:** 94.75% statements / 87.85% branch / 91.2% functions / 95.3% lines (103 tests)
+
+### Bugs fixed in this phase
+- **BUG-001** fixed: `agentMap.ts` IIFE replaced with `console.warn` + graceful fallback to `'omenstrat_trader'`
+- **BUG-002** fixed: `getTimeAgo` guards with `Math.max(0, Date.now() - ms)` — also fixed pluralisation (`!== 1` instead of `> 1` so "0 minutes" is correct)
+
+### Infrastructure added
+- `apps/predict-ui/jest.config.ts` — project Jest config with `babel-jest` transform
+- `apps/predict-ui/jest.setup.ts` — sets `REACT_APP_AGENT_NAME`, `IS_MOCK_ENABLED`, and `window.matchMedia` mock (required by Ant Design `useBreakpoint`)
+- `apps/predict-ui/tsconfig.spec.json` — TypeScript config for test compilation
 
 ### Utilities & Constants
 
 | File | Spec | Key cases |
 |---|---|---|
-| `utils/time.ts` — `getTimeAgo` | `time.spec.ts` | Minutes/hours/days/months (singular + plural); `showPostfix=false`; BUG-002: future timestamp documents negative output |
-| `utils/time.ts` — `formatDuration` | *(same file)* | `0→"0m"`; `30→"0m"`; `60→"1m"`; `3600→"1h 0m"`; `86400→"1d 0h"`; `-100→"0m"` |
-| `utils/urls.ts` | `urls.spec.ts` | With address → full URL; `undefined` → `undefined`; `""` → `undefined` |
-| `utils/agentMap.ts` | `agentMap.spec.ts` | Use `jest.resetModules()` + dynamic `require()`. omenstrat → correct flags; polystrat → correct flags; invalid/undefined → throws (BUG-001 documented) |
-| `constants/currency.ts` | `currency.spec.ts` | All 4 keys exist; every symbol is `$` |
-| `constants/textMaps.ts` | `textMaps.spec.ts` | `risky` → `'danger'`/`'Risky'`; `balanced` → `'primary'`/`'Balanced'` |
+| `utils/time.ts` — `getTimeAgo` | `time.spec.ts` ✅ | Minutes/hours/days/months (singular + plural); `showPostfix=false`; BUG-002 regression: future timestamp → "0 minutes ago" |
+| `utils/time.ts` — `formatDuration` | *(same file)* ✅ | `0→"0m"`; `30→"0m"`; `60→"1m"`; `3600→"1h 0m"`; `86400→"1d 0h"`; `-100→"0m"` |
+| `utils/urls.ts` | `urls.spec.ts` ✅ | With address → full URL; `undefined` → `undefined`; `""` → `undefined` |
+| `utils/agentMap.ts` | `agentMap.spec.ts` ✅ | `jest.resetModules()` + dynamic `require()`. omenstrat/polystrat → correct type; invalid/undefined → warns + defaults (BUG-001 regression) |
+| `constants/currency.ts` | `currency.spec.ts` ✅ | All 4 keys including `USDC.e`; every symbol is `$` |
+| `constants/textMaps.ts` | `textMaps.spec.ts` ✅ | `risky` → `'Risky'`; `balanced` → `'Balanced'` |
 
-### Hooks (use `renderHookWithQueryClient` + mock `fetch`)
+### Hooks (mock `fetch` globally; note: hooks use `retry: 5`/`Infinity` overriding `QueryClient` defaults)
 
-| Hook | Key cases |
-|---|---|
-| `useAgentDetails` | Calls `/agent/details` + `/agent/performance`; loading/data/error states |
-| `useTradeHistory` | URL includes `page` + `page_size`; data/error states |
-| `usePositionDetails` | Calls `/agent/position-details/{id}`; data/error states |
-| `useProfitOverTime` | URL includes `window`; all 4 window values work |
-| `useTradingDetails` | Calls `/agent/trading-details`; data/error states |
-| `useFeatures` | Calls `/features`; refetch interval `FIVE_MINUTES` when enabled, `FIVE_SECONDS` when not |
+| Hook | Spec | Key cases |
+|---|---|---|
+| `useAgentDetails` | `useAgentDetails.spec.ts` ✅ | Calls `/agent/details` + `/agent/performance`; loading/data states |
+| `useTradeHistory` | `useTradeHistory.spec.ts` ✅ | URL includes `page` + `page_size`; data state; mocks `delay` from `util-functions` (1-second pause in queryFn) |
+| `usePositionDetails` | *(same file)* ✅ | Calls `/agent/position-details/{id}`; data state |
+| `useProfitOverTime` | `useProfitOverTime.spec.ts` ✅ | URL includes `window`; all window values work |
+| `useTradingDetails` | `useTradingDetails.spec.ts` ✅ | Calls `/agent/trading-details`; data state |
+| `useFeatures` | `useFeatures.spec.ts` ✅ | Calls `/features`; `isChatEnabled` returned |
 
 ### Components (mock all hooks with `jest.mock`)
 
-| Component | Key cases |
-|---|---|
-| `ui/Card.tsx` | Renders children; `$gap` and `$padding` props applied |
-| `ui/Alert.tsx` | Renders with `type="error"` and `type="warning"`; passes through props |
-| `ErrorState.tsx` | Title, description, icon all rendered |
-| `AgentDetails.tsx` | ISO dates → `getTimeAgo` output; missing props → "n/a" |
-| `Performance.tsx` | All 6 metrics rendered; `null` accuracy → text variant; `0` accuracy → "0.00%"; numbers Intl-formatted |
-| `Strategy.tsx` | Loading skeleton; strategy name + description shown; `null` data → "n/a" |
-| `TradeStatus.tsx` | won/lost/invalid/pending states; `remaining_seconds` → countdown; `null` profit → "n/a"; `Math.abs` on negative profit |
-| `TradeHistory.tsx` | Loading/empty/data states; row click opens modal; pagination; Polymarket button conditional on `isPolystratAgent` |
-| `Trade.tsx` | Strategy shown/hidden; prediction tool shown/hidden; intelligence scores rounded; `placed_at` date formatted |
-| `PositionDetailsModal.tsx` | Loading/error/invalid states; won/to-win/payout labels; single vs multiple bets; `onClose` callback |
-| `ProfitOverTime.tsx` | Loading/error/empty/data states; window switcher hidden when no data |
-| `ProfitOverTime/Chart.tsx` | Tooltip: positive/negative/zero/NaN/undefined values; missing label → "n/a" |
-| `Chat/SystemChat.tsx` | "Strategy updated:" label; from/to Pills with correct types |
-| `Chat/Chat.tsx` | Empty/whitespace → no send; valid text sends and clears; user message added; `reasoning` → agent chat; strategy change → system chat; error → rollback; 3 queries invalidated on success |
-| `app/agent.tsx` | Loading/error/not-found/full-render states; chat enabled/disabled/loading |
-| `app/app.tsx` | Smoke test; `ErrorBoundary` + `AntdConfigProvider` present |
+| Component | Spec | Key cases |
+|---|---|---|
+| `ui/Card.tsx` | `Card.spec.tsx` ✅ | Renders children; `CardV2` variant |
+| `ui/Alert.tsx` | `Alert.spec.tsx` ✅ | `type="error"` and `type="warning"`; message + description |
+| `ErrorState.tsx` | `ErrorState.spec.tsx` ✅ | Title, description, SVG icon |
+| `AgentDetails.tsx` | `AgentDetails.spec.tsx` ✅ | ISO dates → relative time; missing props → NA |
+| `Performance.tsx` | `Performance.spec.tsx` ✅ | All 6 metrics; `null` accuracy → text; `0` accuracy → "0.00%"; Intl formatting |
+| `Strategy.tsx` | `Strategy.spec.tsx` ✅ | Loading skeleton; strategy name + description; no data → n/a |
+| `TradeStatus.tsx` | `TradeStatus.spec.tsx` ✅ | won/lost/invalid/pending states; countdown; null profit → n/a; `Math.abs` on negative |
+| `TradeHistory.tsx` | `TradeHistory.spec.tsx` ✅ | Loading/empty/data states; Polymarket button absent for omenstrat; "Yes"/"No" for prediction_side; row click opens modal |
+| `Trade.tsx` | `Trade.spec.tsx` ✅ | Strategy shown/hidden; prediction tool shown/hidden; rounded scores; `placed_at` date |
+| `PositionDetailsModal.tsx` | `PositionDetailsModal.spec.tsx` ✅ | Loading/error/invalid states; Won/To win/Payout labels; single vs multiple bets |
+| `ProfitOverTime.tsx` | `ProfitOverTime.spec.tsx` ✅ | Loading/error/empty/data states; window switcher visibility |
+| `ProfitOverTime/Chart.tsx` | `Chart.spec.tsx` ✅ | Renders with data/empty/custom currency; mocks Recharts to capture tooltip content fn; profit/loss/zero/NaN/undefined/empty payload/empty label tooltip cases |
+| `Chat/SystemChat.tsx` | `SystemChat.spec.tsx` ✅ | "Strategy updated:" label; from/to pills |
+| `Chat/Chat.tsx` | `Chat.spec.tsx` ✅ | Empty input → no send; loading state; sends on Enter; 3 queries invalidated on success; onSuccess adds agent reasoning/system chat; onError rolls back text input |
+| `app/agent.tsx` | `agent.spec.tsx` ✅ | Loading/error/not-found/full-render; UnlockChat when chat disabled; null when features loading |
+| `app/app.tsx` | `app.spec.tsx` ✅ | Smoke test |
 
 ---
 
-## Phase 3 — `babydegen-ui`
-**Branch:** `test/phase-3-babydegen-ui`
+## Phase 3 — `babydegen-ui` ✅
+**Branch:** `mohandas/ope-1376-phase-2-and-3-implement-unit-testing-for-agentsui-monorepo`
+**Coverage:** 96.15% statements / 95.12% branch / 93.18% functions / 97.89% lines (79 tests)
+
+### Bugs fixed in this phase
+- **BUG-005** fixed: `donut-center-plugin.ts` — added `if (chart.canvas)` guard in `onload` callback to prevent ctx use after chart destroy
+
+### Infrastructure added
+- `apps/babydegen-ui/jest.config.ts` — project Jest config
+- `apps/babydegen-ui/jest.setup.ts` — sets `REACT_APP_AGENT_NAME=modius`, `IS_MOCK_ENABLED=false`, and `window.matchMedia` mock
 
 ### Utilities & Hooks
 
-| File | Key cases |
-|---|---|
-| `utils/agentMap.ts` | modius/optimus/fallback; use `jest.resetModules()` |
-| `hooks/usePortfolio` | Calls `/portfolio`; refetch 1000 ms → 5000 ms when data arrives |
-| `hooks/useFeatures` | Same as predict-ui useFeatures |
-| `useFunds` | Calls `/withdrawal/amount`; refetch interval logic |
-| `useWithdrawFunds` | `initiateWithdraw` POSTs correctly; sets `withdrawId`; status query enabled only after ID; completed stops polling; error resets `withdrawId` |
+| File | Spec | Key cases |
+|---|---|---|
+| `utils/agentMap.ts` | `agentMap.spec.ts` ✅ | modius/optimus/undefined; `agentName`, `agentChainName`; no throw on any input |
+| `hooks/usePortfolio` | `usePortfolio.spec.ts` ✅ | Calls `/portfolio`; data state |
+| `hooks/useFeatures` | `useFeatures.spec.ts` ✅ | Calls `/features`; `isChatEnabled` returned |
+| `WithdrawAgentsFunds/useFunds` | `useFunds.spec.ts` ✅ | Calls `/withdrawal/amount`; data state |
+| `WithdrawAgentsFunds/useWithdrawFunds` | `useWithdrawFunds.spec.ts` ✅ | `initiateWithdraw` POSTs to `/withdrawal/initiate`; status query enabled after ID set; `isError` on failure |
 
 ### Components
 
-| Component | Key cases |
-|---|---|
-| `ui/CardTitle.tsx` | Renders `text` prop |
-| `ui/Pill.tsx` | Passes children + props to shared `Pill` |
-| `components/ErrorBoundary.tsx` | Same cases as Phase 1 `ErrorBoundary` |
-| `Portfolio/Portfolio.tsx` | Loading/data/error states; balance displayed |
-| `Portfolio/BreakdownModal.tsx` | Opens/closes; data rendered; empty state |
-| `Allocation/Allocation.tsx` | Smoke test — renders all sub-components |
-| `Allocation/AllocationTable.tsx` | Rows rendered with mock data |
-| `Allocation/AllocationPie.tsx` | Renders without crash |
-| `Allocation/AllocationAssets.tsx` | Asset list rendered |
-| `Strategy/Strategy.tsx` | Strategy name + description; loading state |
-| `WithdrawAgentsFunds/WithdrawAgentsFunds.tsx` | Balance shown; input present; submit calls `initiateWithdraw`; loading/error/completed states |
-| `WithdrawAgentsFunds/WithdrawInvestedFunds.tsx` | Renders relevant info |
-| `Chat/SystemChat.tsx` | Same as predict-ui `TradingStrategy` |
-| `Chat/Chat.tsx` | Same cases as predict-ui Chat; agent type `modius`/`optimus` |
-| `App.tsx` | `isChatEnabled` → Chat+Strategy; disabled → UnlockChat; loading → neither |
+| Component | Spec | Key cases |
+|---|---|---|
+| `ui/CardTitle.tsx` | `CardTitle.spec.tsx` ✅ | Renders string and ReactNode `text` prop |
+| `ui/Pill.tsx` | `Pill.spec.tsx` ✅ | Children; type variants; size variants; custom style |
+| `components/ErrorBoundary.tsx` | `ErrorBoundary.spec.tsx` ✅ | Children/default/custom message; `getDerivedStateFromError`; `console.error` called |
+| `Portfolio/Portfolio.tsx` | `Portfolio.spec.tsx` ✅ | Title; loading skeleton; balance; ROI; See breakdown button disabled without data |
+| `Portfolio/BreakdownModal.tsx` | `BreakdownModal.spec.tsx` ✅ | Title when open; no data → "No data available."; table rows with data; closed → no render |
+| `Allocation/Allocation.tsx` | `Allocation.spec.tsx` ✅ | Title rendered; smoke test |
+| `Allocation/AllocationAssets.tsx` | `AllocationAssets.spec.tsx` ✅ | Empty array → null; single/multiple assets; correct badge count |
+| `Allocation/AllocationPie.tsx` | `AllocationPie.spec.tsx` ✅ | Loading skeleton; Doughnut with valid data + correct labels; fallback for null/invalid allocations. Mocks `react-chartjs-2` and `donut-center-plugin` |
+| `Allocation/AllocationTable.tsx` | `AllocationTable.spec.tsx` ✅ | Loading spinner; column headers; row per allocation; APR with % suffix; empty state |
+| `Strategy/Strategy.tsx` | `Strategy.spec.tsx` ✅ | Loading skeleton; N/A without trading_type; Balanced/Risky pills; "No protocols" |
+| `WithdrawAgentsFunds/WithdrawAgentsFunds.tsx` | `WithdrawAgentsFunds.spec.tsx` ✅ | Initial title/button; shows `WithdrawInvestedFunds` + updated title after click |
+| `WithdrawAgentsFunds/WithdrawInvestedFunds.tsx` | `WithdrawInvestedFunds.spec.tsx` ✅ | Default state: funds amount, n/a fallback, loading skeleton, address validation, initiate call; failed/completed/initiated/withdrawing states; transaction link |
+| `Chat/SystemChat.tsx` | `SystemChat.spec.tsx` ✅ | "Trading strategy updated:" label; from/to pills; "Operating protocols updated:"; N/A for empty |
+| `Chat/Chat.tsx` | `Chat.spec.tsx` ✅ | Empty/whitespace input guards; user message added; input cleared; mutateAsync called; onSuccess: reasoning→agent chat, trading type→system chat, protocols→system chat, no-push on empty/null; onError: notification + rollback |
+| `App.tsx` | `App.spec.tsx` ✅ | Smoke test |
 
 ---
 
@@ -215,8 +233,15 @@ export const renderHookWithQueryClient = <T,>(hook: () => T) =>
 
 ### Testing modules that throw at load (BUG-001 pattern)
 ```ts
-beforeEach(() => { jest.resetModules(); process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader'; });
-const { agentType } = require('../utils/agentMap'); // dynamic import after resetModules
+beforeEach(() => {
+  jest.resetModules();
+  process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';
+});
+
+it('loads with correct agentType', () => {
+  const { agentType } = require('../utils/agentMap'); // dynamic — re-evaluates after resetModules
+  expect(agentType).toBe('omenstrat_trader');
+});
 ```
 
 ### Suppress ErrorBoundary noise
