@@ -9,7 +9,7 @@ export const useFunds = () =>
   useQuery<WithdrawalFunds>({
     queryKey: ['withdrawalFunds'],
     queryFn: async () => {
-      const mock = devMock(() => delay(mockFunds, 2000));
+      const mock = devMock(() => delay(mockFunds, 2));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/withdrawal/amount`);

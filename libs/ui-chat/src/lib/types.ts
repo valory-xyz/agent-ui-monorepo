@@ -7,9 +7,8 @@ export type AgentType =
   | 'agentsFun'
   | 'polystrat_trader';
 
-export type EachChat = {
-  text: ReactNode;
-  type: 'user' | 'agent' | 'system';
-};
+export type EachChat =
+  | { type: 'user'; text: string }
+  | { type: 'agent' | 'system'; text: ReactNode };
 
 export type ChatSize = 'small' | 'large';

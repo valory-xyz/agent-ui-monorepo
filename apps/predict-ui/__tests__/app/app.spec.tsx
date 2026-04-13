@@ -17,10 +17,6 @@ describe('App (predict-ui)', () => {
     (useFeatures as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
   });
 
-  it('renders without crashing', () => {
-    expect(() => render(<App />)).not.toThrow();
-  });
-
   it('renders an ErrorBoundary wrapper (renders children)', () => {
     const { container } = render(<App />);
     // App renders inside a div — just verify something is rendered

@@ -40,10 +40,6 @@ describe('App (babydegen-ui)', () => {
     useFeatures.mockReturnValue({ isLoading: false, data: { isChatEnabled: true } });
   });
 
-  it('renders without crashing', () => {
-    expect(() => render(<App />)).not.toThrow();
-  });
-
   it('renders Chat and Strategy when isChatEnabled=true', () => {
     render(<App />);
     expect(screen.getByText('Chat')).toBeInTheDocument();

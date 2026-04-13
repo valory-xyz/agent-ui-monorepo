@@ -10,7 +10,7 @@ export const useFeatures = () => {
   const query = useQuery<Features>({
     queryKey: ['features'],
     queryFn: async () => {
-      const mock = devMock(() => delay(mockFeatures, 2000));
+      const mock = devMock(() => delay(mockFeatures, 2));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/features`);

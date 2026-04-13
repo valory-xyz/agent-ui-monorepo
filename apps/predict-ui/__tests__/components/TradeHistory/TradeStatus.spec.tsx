@@ -57,14 +57,7 @@ describe('TradeStatus', () => {
   });
 
   it('shows n/a when net_profit is null for won status', () => {
-    render(
-      <TradeStatus
-        status="won"
-        bet_amount={0.025}
-        net_profit={null as unknown as number}
-        currency="USD"
-      />,
-    );
+    render(<TradeStatus status="won" bet_amount={0.025} net_profit={null} currency="USD" />);
     // amount is null → value is '' → getStatusText returns NA ('n/a')
     const { NA } = jest.requireActual('@agent-ui-monorepo/util-constants-and-types');
     expect(screen.getByText(NA)).toBeInTheDocument();

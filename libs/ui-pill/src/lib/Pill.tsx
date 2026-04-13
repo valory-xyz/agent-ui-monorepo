@@ -46,8 +46,8 @@ const getSpacing = (size: 'small' | 'large', hasType: boolean) => ({
   marginLeft: hasType ? -28 : 0,
 });
 
-export const Pill = ({ type = 'neutral', size = 'small', style, children }: PillProps) => {
-  const { background, badgeColor, boxShadow } = PILL_STYLES[type];
+export const Pill = ({ type, size = 'small', style, children }: PillProps) => {
+  const { background, badgeColor, boxShadow } = PILL_STYLES[type ?? 'neutral'];
   const spacing = getSpacing(size, !!type);
 
   return (

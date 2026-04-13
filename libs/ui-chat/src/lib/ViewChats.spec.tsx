@@ -32,7 +32,10 @@ describe('ViewChats', () => {
   });
 
   it('renders a ReactNode text directly without wrapping in markdown', () => {
-    const jsxChat: EachChat = { text: <span data-testid="jsx-content">JSX</span>, type: 'agent' };
+    const jsxChat: EachChat = {
+      text: <span data-testid="jsx-content">JSX</span>,
+      type: 'agent',
+    };
     render(<ViewChats chats={[jsxChat]} agentType="modius" size="small" />);
     expect(screen.getByTestId('jsx-content')).toBeTruthy();
   });
@@ -85,5 +88,47 @@ describe('ViewChats', () => {
       expect(screen.getByAltText(`${type} chat logo`)).toBeTruthy();
       unmount();
     });
+  });
+
+  it('renders multiple chats at size="large" (covers marginTop=24 branch for non-first items)', () => {
+    render(<ViewChats chats={[agentChat, userChat]} agentType="modius" size="large" />);
+    expect(screen.getByText('Agent reply')).toBeTruthy();
+    expect(screen.getByText('User message')).toBeTruthy();
+  });
+
+  it('renders system chat at size="large" (covers marginTop=16 branch)', () => {
+    render(<ViewChats chats={[systemChat]} agentType="modius" size="large" />);
+    expect(screen.getByText('System note')).toBeTruthy();
+  });
+
+  it('handles unmount before scrollTimeout fires (chatContainerRef null branch)', async () => {
+    jest.useFakeTimers();
+    try {
+      const { unmount } = render(<ViewChats chats={[agentChat]} agentType="modius" size="small" />);
+      // Unmount before the setTimeout(0) in the scroll effect fires
+      unmount();
+      // Running timers after unmount — ref is null, branch is hit without throwing
+      jest.runAllTimers();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('renders unordered list items via custom ul/li renderers (small)', () => {
+    const listChat: EachChat = { text: '- alpha\n- beta', type: 'agent' };
+    render(<ViewChats chats={[listChat]} agentType="modius" size="small" />);
+    expect(screen.getByText('alpha')).toBeTruthy();
+    expect(screen.getByText('beta')).toBeTruthy();
+    const lis = document.querySelectorAll('li');
+    expect(lis.length).toBeGreaterThan(0);
+  });
+
+  it('renders ordered list items via custom ol/li renderers (large)', () => {
+    const listChat: EachChat = { text: '1. first\n2. second', type: 'agent' };
+    render(<ViewChats chats={[listChat]} agentType="modius" size="large" />);
+    expect(screen.getByText('first')).toBeTruthy();
+    expect(screen.getByText('second')).toBeTruthy();
+    const lis = document.querySelectorAll('li');
+    expect(lis.length).toBeGreaterThan(0);
   });
 });
