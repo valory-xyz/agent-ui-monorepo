@@ -2,7 +2,7 @@ import { getPolymarketProfileUrl } from '../../src/utils/urls';
 
 describe('getPolymarketProfileUrl', () => {
   it('returns a URL containing the address when provided', () => {
-    const address = '0xabc123';
+    const address = '0x1234567890abcdef1234567890abcdef12345678';
     const result = getPolymarketProfileUrl(address);
     expect(result).toBeDefined();
     expect(result).toContain(address);

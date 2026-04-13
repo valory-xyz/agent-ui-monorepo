@@ -65,8 +65,8 @@ export type TradeHistoryItem = {
   /** amount placed on this prediction */
   bet_amount: number;
   status: PredictionStatus;
-  /** gross_reward - bet_amount */
-  net_profit: number;
+  /** gross_reward - bet_amount; null when data is unavailable (e.g. partial API response) */
+  net_profit: number | null;
   /** ISO 8601 timestamp */
   created_at: string;
   /** ISO 8601 timestamp or null while pending */

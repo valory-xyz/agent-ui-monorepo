@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import { Card, CardV2 } from '../../../src/components/ui/Card';
 
@@ -8,16 +8,19 @@ describe('Card', () => {
     expect(getByText('content here')).toBeInTheDocument();
   });
 
-  it('renders without crashing with default props', () => {
-    expect(() => render(<Card />)).not.toThrow();
+  it('renders with default props', () => {
+    const { container } = render(<Card />);
+    expect(container.firstChild).toBeInTheDocument();
   });
 
-  it('accepts $padding prop without crashing', () => {
-    expect(() => render(<Card $padding="16px 32px">test</Card>)).not.toThrow();
+  it('accepts $padding prop and renders children', () => {
+    render(<Card $padding="16px 32px">test</Card>);
+    expect(screen.getByText('test')).toBeInTheDocument();
   });
 
-  it('accepts $gap prop without crashing', () => {
-    expect(() => render(<Card $gap="16px">test</Card>)).not.toThrow();
+  it('accepts $gap prop and renders children', () => {
+    render(<Card $gap="16px">test</Card>);
+    expect(screen.getByText('test')).toBeInTheDocument();
   });
 });
 
@@ -27,7 +30,8 @@ describe('CardV2', () => {
     expect(getByText('content here')).toBeInTheDocument();
   });
 
-  it('renders without crashing', () => {
-    expect(() => render(<CardV2 />)).not.toThrow();
+  it('renders with default props', () => {
+    const { container } = render(<CardV2 />);
+    expect(container.firstChild).toBeInTheDocument();
   });
 });

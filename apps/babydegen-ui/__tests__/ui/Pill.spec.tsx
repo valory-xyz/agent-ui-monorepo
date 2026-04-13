@@ -8,20 +8,19 @@ describe('Pill (babydegen-ui)', () => {
     expect(screen.getByText('Balanced')).toBeInTheDocument();
   });
 
-  it('renders without crashing with type="primary"', () => {
-    expect(() => render(<Pill type="primary">Primary</Pill>)).not.toThrow();
+  it('renders children with type="primary"', () => {
+    render(<Pill type="primary">Primary</Pill>);
+    expect(screen.getByText('Primary')).toBeInTheDocument();
   });
 
-  it('renders without crashing with type="danger"', () => {
-    expect(() => render(<Pill type="danger">Danger</Pill>)).not.toThrow();
+  it('renders children with type="danger"', () => {
+    render(<Pill type="danger">Danger</Pill>);
+    expect(screen.getByText('Danger')).toBeInTheDocument();
   });
 
-  it('renders without crashing without type prop', () => {
-    expect(() => render(<Pill>No type</Pill>)).not.toThrow();
-  });
-
-  it('renders without crashing with size="large"', () => {
-    expect(() => render(<Pill size="large">Large</Pill>)).not.toThrow();
+  it('renders children with size="large"', () => {
+    render(<Pill size="large">Large</Pill>);
+    expect(screen.getByText('Large')).toBeInTheDocument();
   });
 
   it('applies custom style prop', () => {
