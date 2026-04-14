@@ -19,11 +19,6 @@ libs/
   ui-theme/                  # GlobalColors + GlobalStyles (styled-components)
   util-constants-and-types/  # Shared addresses, symbols, time, URL constants, TS types
   util-functions/            # delay(), exponentialBackoffDelay(), generateAgentName()
-
-docs/
-  testing/
-    TEST_PLAN.md  # 5-phase test coverage plan (target: 100%)
-    BUGS.md       # Bugs found during static analysis
 ```
 
 ### Path Aliases (tsconfig.base.json)
@@ -129,8 +124,7 @@ process.env.IS_MOCK_ENABLED = 'false';
 
 ## Testing
 
-Test infrastructure is already configured per project. See [docs/testing/TEST_PLAN.md](docs/testing/TEST_PLAN.md) for the current 6-phase coverage plan.
-Current status: phases 1–6 are complete, with final 100% coverage achieved for `predict-ui`, `babydegen-ui`, and `agentsfun-ui`.
+Test infrastructure is already configured per project. **All 9 projects (3 apps + 6 libs) are at 100% statements/branches/functions/lines** with `collectCoverageFrom` explicitly configured in every `jest.config.ts` so no source file is silently excluded. Intentional exclusions (type-only files, entry points, plain constant objects, canvas-dependent plugin) are commented inline in each jest config.
 
 ### Test file placement
 
@@ -215,12 +209,6 @@ afterEach(() => jest.restoreAllMocks());
 - **Imports:** ESLint enforces `simple-import-sort` — run `yarn lint:fix` before committing
 - **Formatting:** Prettier with single quotes (`.prettierrc`)
 - **TypeScript:** Never use `any` or `as any` — use `unknown`, a proper type, or a typed intermediate variable
-
----
-
-## Known Bugs
-
-No open bugs. See [docs/testing/BUGS.md](docs/testing/BUGS.md) for history.
 
 ---
 
