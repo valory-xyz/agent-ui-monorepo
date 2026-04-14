@@ -1,22 +1,16 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockPortfolio } from '../mocks/mockPortfolio';
 import { PortfolioResponse } from '../types';
 
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
-
 export const usePortfolio = () => {
   const query = useQuery<PortfolioResponse>({
     queryKey: ['portfolio'],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(mockPortfolio);
-          }, 2000);
-        });
-      }
+      const mock = devMock(() => delay(mockPortfolio, 2));
+      if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/portfolio`);
       if (!response.ok) throw new Error('Failed to fetch portfolio');

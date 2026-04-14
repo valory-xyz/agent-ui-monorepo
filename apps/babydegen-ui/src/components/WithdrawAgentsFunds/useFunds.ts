@@ -1,18 +1,16 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockFunds } from '../../mocks/mockFundsWithdrawal';
 import { WithdrawalFunds } from '../../types';
 
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
-
 export const useFunds = () =>
   useQuery<WithdrawalFunds>({
     queryKey: ['withdrawalFunds'],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise((resolve) => setTimeout(() => resolve(mockFunds), 2000));
-      }
+      const mock = devMock(() => delay(mockFunds, 2));
+      if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/withdrawal/amount`);
       if (!response.ok) throw new Error('Failed to fetch withdrawal amount.');

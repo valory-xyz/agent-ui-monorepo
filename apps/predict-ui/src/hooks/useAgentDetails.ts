@@ -1,13 +1,11 @@
 import { API_V1, FIVE_MINUTES } from '@agent-ui-monorepo/util-constants-and-types';
-import { delay, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
+import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockAgentDetails } from '../mocks/mockAgentDetails';
 import { mockPerformance } from '../mocks/mockPerformance';
 import { AgentDetailsResponse, AgentMetricsResponse } from '../types';
-
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useAgentDetails = () => {
   const {
@@ -17,7 +15,8 @@ export const useAgentDetails = () => {
   } = useQuery<AgentDetailsResponse>({
     queryKey: [REACT_QUERY_KEYS.AGENT_DETAILS],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) return delay(mockAgentDetails);
+      const mock = devMock(() => delay(mockAgentDetails));
+      if (mock !== null) return mock;
 
       const response = await fetch(`${API_V1}/agent/details`);
       if (!response.ok) throw new Error('Failed to fetch agent details');
@@ -35,7 +34,8 @@ export const useAgentDetails = () => {
   } = useQuery<AgentMetricsResponse>({
     queryKey: [REACT_QUERY_KEYS.PERFORMANCE],
     queryFn: async () => {
-      if (IS_MOCK_ENABLED) return delay(mockPerformance);
+      const mock = devMock(() => delay(mockPerformance));
+      if (mock !== null) return mock;
 
       const response = await fetch(`${API_V1}/agent/performance`);
       if (!response.ok) throw new Error('Failed to fetch agent performance');

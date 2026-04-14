@@ -14,7 +14,7 @@ import { Card } from '../ui/Card';
 
 export const Chat = () => {
   const queryClient = useQueryClient();
-  const [notificationApi, contextHolder] = notification.useNotification();
+  const [, contextHolder] = notification.useNotification();
 
   const [currentText, setCurrentText] = useState('');
   const [chats, setChats] = useState<EachChat[]>([]);
@@ -52,7 +52,7 @@ export const Chat = () => {
         }
       },
     });
-  }, [chats, currentText, onSendChat, notificationApi, queryClient]);
+  }, [chats, currentText, onSendChat, queryClient]);
 
   return (
     <Card>

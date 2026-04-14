@@ -19,9 +19,15 @@ export const DonutCenterLogoPlugin = {
     if (image.complete) {
       ctx.drawImage(image, centerX, centerY, imageSize, imageSize);
     } else {
-      image.onload = () => {
-        ctx.drawImage(image, centerX, centerY, imageSize, imageSize);
-      };
+      image.addEventListener(
+        'load',
+        () => {
+          if (chart.canvas) {
+            chart.update();
+          }
+        },
+        { once: true },
+      );
     }
 
     ctx.restore();

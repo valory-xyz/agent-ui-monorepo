@@ -1,0 +1,70 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, screen } from '@testing-library/react';
+import { createElement } from 'react';
+
+import { Strategy } from '../../src/components/Strategy';
+import { useTradingDetails } from '../../src/hooks/useTradingDetails';
+
+jest.mock('../../src/hooks/useTradingDetails');
+
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
+
+describe('Strategy', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('shows a loading skeleton when isLoading=true', () => {
+    (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
+    const { container } = render(<Strategy />, { wrapper });
+    expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
+  });
+
+  it('shows strategy name and description when data is available', () => {
+    (useTradingDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: {
+        agent_id: '0xabc',
+        trading_type: 'balanced',
+        trading_type_description: 'Balanced risk and reward.',
+      },
+    });
+    render(<Strategy />, { wrapper });
+    expect(screen.getByText('Balanced')).toBeInTheDocument();
+    expect(screen.getByText('Balanced risk and reward.')).toBeInTheDocument();
+  });
+
+  it('shows n/a when data has no trading_type', () => {
+    (useTradingDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: undefined,
+    });
+    render(<Strategy />, { wrapper });
+    expect(screen.getByText('n/a')).toBeInTheDocument();
+  });
+
+  it('renders the "Strategy" header label', () => {
+    (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: false, data: undefined });
+    render(<Strategy />, { wrapper });
+    expect(screen.getByText('Strategy')).toBeInTheDocument();
+  });
+
+  it('renders risky strategy correctly', () => {
+    (useTradingDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: {
+        agent_id: '0xabc',
+        trading_type: 'risky',
+        trading_type_description: 'High risk approach.',
+      },
+    });
+    render(<Strategy />, { wrapper });
+    expect(screen.getByText('Risky')).toBeInTheDocument();
+    expect(screen.getByText('High risk approach.')).toBeInTheDocument();
+  });
+});

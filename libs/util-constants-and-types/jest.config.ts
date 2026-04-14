@@ -7,4 +7,11 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/libs/util-constants-and-types',
+  collectCoverageFrom: [
+    'src/**/*.ts',
+    '!src/**/*.d.ts',
+    '!src/index.ts',
+    // Type-only files — no runtime logic to cover.
+    '!src/lib/types/**',
+  ],
 };
