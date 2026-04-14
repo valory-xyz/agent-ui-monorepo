@@ -1,5 +1,5 @@
 import { Address, LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
-import { devMock } from '@agent-ui-monorepo/util-functions';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -10,12 +10,7 @@ import {
 import { WithdrawalInitiateResponse, WithdrawalStatus } from '../../types';
 
 const initiateWithdrawal = async (targetAddress: Address): Promise<WithdrawalInitiateResponse> => {
-  const mock = devMock(
-    () =>
-      new Promise<WithdrawalInitiateResponse>((resolve) =>
-        setTimeout(() => resolve(mockWithdrawInitiateResponse), 2000),
-      ),
-  );
+  const mock = devMock(() => delay(mockWithdrawInitiateResponse, 2));
   if (mock !== null) return mock;
 
   const response = await fetch(`${LOCAL}/withdrawal/initiate`, {
@@ -59,12 +54,7 @@ export const useWithdrawFunds = () => {
         throw new Error('Withdrawal ID is required to fetch status.');
       }
 
-      const mock = devMock(
-        () =>
-          new Promise<WithdrawalStatus>((resolve) =>
-            setTimeout(() => resolve(mockWithdrawStatusResponse), 2000),
-          ),
-      );
+      const mock = devMock(() => delay(mockWithdrawStatusResponse, 2));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/withdrawal/status/${withdrawId}`);

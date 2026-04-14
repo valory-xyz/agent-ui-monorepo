@@ -188,10 +188,14 @@ export const PositionDetailsModal = ({ id, onClose }: PositionDetailsModalProps)
                       isLast={isLast}
                     />
                   ),
-                  styles: { body: { paddingTop: 0, paddingBottom: isLast ? 0 : 20 } },
+                  styles: {
+                    body: { paddingTop: 0, paddingBottom: isLast ? 0 : 20 },
+                  },
                   style: isLast
                     ? undefined
-                    : { borderBottom: `1px solid ${COLOR.WHITE_TRANSPARENT_10}` },
+                    : {
+                        borderBottom: `1px solid ${COLOR.WHITE_TRANSPARENT_10}`,
+                      },
                 };
               })}
               ghost

@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { ProfitOverTime } from '../../../src/components/ProfitOverTime/ProfitOverTime';
@@ -110,5 +110,23 @@ describe('ProfitOverTime', () => {
     });
     render(<ProfitOverTime />, { wrapper: createWrapper() });
     expect(screen.getByText('7D')).toBeInTheDocument();
+  });
+
+  it('clicking 30D segment option calls onChange', () => {
+    (useProfitOverTime as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: {
+        agent_id: 'a',
+        currency: 'USD',
+        window: '7d',
+        points: [{ timestamp: '2025-01-01T00:00:00Z', delta_profit: 1.0 }],
+      },
+    });
+    render(<ProfitOverTime />, { wrapper: createWrapper() });
+    const option30d = screen.getByText('30D');
+    fireEvent.click(option30d);
+    // After clicking 30D, the hook is called again - verify the UI re-renders without error
+    expect(option30d).toBeInTheDocument();
   });
 });

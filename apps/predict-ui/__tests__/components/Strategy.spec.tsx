@@ -7,13 +7,12 @@ import { useTradingDetails } from '../../src/hooks/useTradingDetails';
 
 jest.mock('../../src/hooks/useTradingDetails');
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) =>
-    createElement(QueryClientProvider, { client: queryClient }, children);
-};
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
 
 describe('Strategy', () => {
   beforeEach(() => {
@@ -22,7 +21,7 @@ describe('Strategy', () => {
 
   it('shows a loading skeleton when isLoading=true', () => {
     (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
-    const { container } = render(<Strategy />, { wrapper: createWrapper() });
+    const { container } = render(<Strategy />, { wrapper });
     expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
@@ -35,7 +34,7 @@ describe('Strategy', () => {
         trading_type_description: 'Balanced risk and reward.',
       },
     });
-    render(<Strategy />, { wrapper: createWrapper() });
+    render(<Strategy />, { wrapper });
     expect(screen.getByText('Balanced')).toBeInTheDocument();
     expect(screen.getByText('Balanced risk and reward.')).toBeInTheDocument();
   });
@@ -45,13 +44,13 @@ describe('Strategy', () => {
       isLoading: false,
       data: undefined,
     });
-    render(<Strategy />, { wrapper: createWrapper() });
+    render(<Strategy />, { wrapper });
     expect(screen.getByText('n/a')).toBeInTheDocument();
   });
 
   it('renders the "Strategy" header label', () => {
     (useTradingDetails as jest.Mock).mockReturnValue({ isLoading: false, data: undefined });
-    render(<Strategy />, { wrapper: createWrapper() });
+    render(<Strategy />, { wrapper });
     expect(screen.getByText('Strategy')).toBeInTheDocument();
   });
 
@@ -64,7 +63,7 @@ describe('Strategy', () => {
         trading_type_description: 'High risk approach.',
       },
     });
-    render(<Strategy />, { wrapper: createWrapper() });
+    render(<Strategy />, { wrapper });
     expect(screen.getByText('Risky')).toBeInTheDocument();
     expect(screen.getByText('High risk approach.')).toBeInTheDocument();
   });

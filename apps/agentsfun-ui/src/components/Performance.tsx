@@ -4,6 +4,7 @@ import { Col, Flex, Row, Spin, Tooltip, Typography } from 'antd';
 import { usePerformance } from '../hooks/usePerformance';
 import { Chart, Heart } from './svgs';
 import { Card } from './ui/Card';
+import { ErrorState } from './ui/ErrorState';
 
 const { Title, Text } = Typography;
 
@@ -45,10 +46,12 @@ const Loader = () => (
 );
 
 export const Performance = () => {
-  const { isLoading, weeklyImpressions, weeklyLikes, impressionsTooltip, likesTooltip } =
+  const { isLoading, isError, weeklyImpressions, weeklyLikes, impressionsTooltip, likesTooltip } =
     usePerformance();
 
   if (isLoading) return <Loader />;
+  if (isError) return <ErrorState message="Failed to load performance summary." />;
+
   return (
     <Card>
       <Flex vertical gap={24} style={{ width: '100%' }}>

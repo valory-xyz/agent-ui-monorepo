@@ -31,3 +31,4 @@ vitest.config.*.timestamp*
 
 # Tests
 coverage/
+coverage-*/

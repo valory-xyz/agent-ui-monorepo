@@ -1,10 +1,18 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { Portfolio } from '../../../src/components/Portfolio/Portfolio';
 
 jest.mock('../../../src/hooks/usePortfolio');
+jest.mock('../../../src/components/Portfolio/BreakdownModal', () => ({
+  BreakdownModal: ({ open, onCancel }: { open: boolean; onCancel: () => void }) =>
+    open ? (
+      <div data-testid="breakdown-modal">
+        <button onClick={onCancel}>Close breakdown</button>
+      </div>
+    ) : null,
+}));
 
 const { usePortfolio } = jest.requireMock('../../../src/hooks/usePortfolio') as {
   usePortfolio: jest.Mock;
@@ -64,5 +72,37 @@ describe('Portfolio', () => {
     const btn = screen.getByText('See breakdown').closest('button');
     expect(btn).toBeInTheDocument();
     expect((btn as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it('renders RoiTooltip info icon when partial_roi is provided', () => {
+    usePortfolio.mockReturnValue({
+      data: { portfolio_value: 1000, total_roi: 10, partial_roi: 7.5 },
+      isLoading: false,
+    });
+    const { container } = render(<Portfolio />, { wrapper: createWrapper() });
+    expect(container.querySelector('[aria-label="info-circle"]')).toBeInTheDocument();
+  });
+
+  it('opens BreakdownModal when See breakdown button is clicked', () => {
+    usePortfolio.mockReturnValue({
+      data: { portfolio_value: 1000, total_roi: 5, partial_roi: null },
+      isLoading: false,
+    });
+    render(<Portfolio />, { wrapper: createWrapper() });
+    const btn = screen.getByText('See breakdown');
+    fireEvent.click(btn);
+    expect(screen.getByTestId('breakdown-modal')).toBeInTheDocument();
+  });
+
+  it('closes BreakdownModal when onCancel is called', () => {
+    usePortfolio.mockReturnValue({
+      data: { portfolio_value: 1000, total_roi: 5, partial_roi: null },
+      isLoading: false,
+    });
+    render(<Portfolio />, { wrapper: createWrapper() });
+    fireEvent.click(screen.getByText('See breakdown'));
+    expect(screen.getByTestId('breakdown-modal')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Close breakdown'));
+    expect(screen.queryByTestId('breakdown-modal')).not.toBeInTheDocument();
   });
 });

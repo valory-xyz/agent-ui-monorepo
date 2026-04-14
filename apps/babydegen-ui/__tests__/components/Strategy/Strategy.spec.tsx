@@ -57,4 +57,14 @@ describe('Strategy', () => {
     render(<Strategy />, { wrapper: createWrapper() });
     expect(screen.getByText('No protocols')).toBeInTheDocument();
   });
+
+  it('renders protocol avatars when selected_protocols is non-empty', () => {
+    usePortfolio.mockReturnValue({
+      data: { trading_type: 'balanced', selected_protocols: ['balancerPool', 'velodrome'] },
+      isLoading: false,
+    });
+    const { container } = render(<Strategy />, { wrapper: createWrapper() });
+    const avatars = container.querySelectorAll('.ant-avatar');
+    expect(avatars.length).toBeGreaterThan(0);
+  });
 });

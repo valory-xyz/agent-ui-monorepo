@@ -1,6 +1,6 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
 import { FIVE_MINUTES, FIVE_SECONDS } from '@agent-ui-monorepo/util-constants-and-types';
-import { devMock } from '@agent-ui-monorepo/util-functions';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { mockFeatures } from '../mocks/mockFeatures';
@@ -10,9 +10,7 @@ export const useFeatures = () => {
   const query = useQuery<Features>({
     queryKey: ['features'],
     queryFn: async () => {
-      const mock = devMock(
-        () => new Promise<Features>((resolve) => setTimeout(() => resolve(mockFeatures), 2000)),
-      );
+      const mock = devMock(() => delay(mockFeatures, 2));
       if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/features`);

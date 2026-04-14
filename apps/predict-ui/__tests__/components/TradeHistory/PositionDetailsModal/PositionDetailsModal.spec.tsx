@@ -5,16 +5,16 @@ import { createElement } from 'react';
 import { PositionDetailsModal } from '../../../../src/components/TradeHistory/PositionDetailsModal/PositionDetailsModal';
 import { usePositionDetails } from '../../../../src/hooks/useTradeHistory';
 import { PositionDetails } from '../../../../src/types';
+import { baseTrade } from '../../../mocks/tradeHistory';
 
 jest.mock('../../../../src/hooks/useTradeHistory');
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
-  });
-  return ({ children }: { children: React.ReactNode }) =>
-    createElement(QueryClientProvider, { client: queryClient }, children);
-};
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
 
 const mockPositionData: PositionDetails = {
   id: 'pos_123',
@@ -28,15 +28,15 @@ const mockPositionData: PositionDetails = {
   external_url: 'https://example.com/market',
   bets: [
     {
-      id: 'bet_001',
+      ...baseTrade,
       bet: { amount: 1.82, side: 'yes' },
       intelligence: {
+        ...baseTrade.intelligence,
         prediction_tool: null,
         implied_probability: 15,
         confidence_score: 85,
         utility_score: 95,
       },
-      strategy: 'risky',
     },
   ],
 };
@@ -54,7 +54,7 @@ describe('PositionDetailsModal', () => {
       data: undefined,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     // Modal renders in a portal; use document.querySelector
     expect(document.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
@@ -65,7 +65,7 @@ describe('PositionDetailsModal', () => {
       data: undefined,
       error: new Error('Network error'),
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Network error')).toBeInTheDocument();
   });
 
@@ -75,7 +75,7 @@ describe('PositionDetailsModal', () => {
       data: mockPositionData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     // Text includes the EXTERNAL_LINK unicode symbol appended in the component
     expect(screen.getByText(/Will something happen\?/)).toBeInTheDocument();
   });
@@ -87,7 +87,7 @@ describe('PositionDetailsModal', () => {
       data: invalidData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Invalid market')).toBeInTheDocument();
   });
 
@@ -98,7 +98,7 @@ describe('PositionDetailsModal', () => {
       data: invalidData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Payout')).toBeInTheDocument();
   });
 
@@ -109,7 +109,7 @@ describe('PositionDetailsModal', () => {
       data: wonData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Won')).toBeInTheDocument();
   });
 
@@ -119,7 +119,7 @@ describe('PositionDetailsModal', () => {
       data: mockPositionData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('To win')).toBeInTheDocument();
   });
 
@@ -130,7 +130,7 @@ describe('PositionDetailsModal', () => {
       data: emptyBetsData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('No trades found.')).toBeInTheDocument();
   });
 
@@ -140,7 +140,7 @@ describe('PositionDetailsModal', () => {
       data: mockPositionData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Trade')).toBeInTheDocument();
   });
 
@@ -157,8 +157,66 @@ describe('PositionDetailsModal', () => {
       data: multiBetsData,
       error: null,
     });
-    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper: createWrapper() });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
     expect(screen.getByText('Trade 1')).toBeInTheDocument();
     expect(screen.getByText('Trade 2')).toBeInTheDocument();
+  });
+
+  it('renders "No" side label for a bet with side=no', () => {
+    const noSideData: PositionDetails = {
+      ...mockPositionData,
+      bets: [{ ...mockPositionData.bets[0], id: 'bet_no', bet: { amount: 1.0, side: 'no' } }],
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: noSideData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
+    expect(screen.getByText('No')).toBeInTheDocument();
+  });
+
+  it('falls back to "$" for an unknown currency code at runtime', () => {
+    const unknownCurrencyData: PositionDetails = {
+      ...mockPositionData,
+      currency: 'XYZ' as unknown as PositionDetails['currency'],
+      total_bet: 1.5,
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: unknownCurrencyData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
+    // currencySymbol falls back to '$' for unknown currency
+    expect(document.body.textContent).toContain('$1.500');
+  });
+
+  it('shows n/a for total_bet when it is null', () => {
+    const nullBetData: PositionDetails = {
+      ...mockPositionData,
+      total_bet: null as unknown as number,
+    };
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: nullBetData,
+      error: null,
+    });
+    render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper });
+    // formatCurrency(null, ...) returns NA ('n/a')
+    const allText = document.body.textContent ?? '';
+    expect(allText).toContain('n/a');
+  });
+
+  it('renders without crashing when data is absent with no loading and no error', () => {
+    (usePositionDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: undefined,
+      error: null,
+    });
+    // The ternary returns null; the modal shell still mounts in a portal
+    expect(() =>
+      render(<PositionDetailsModal id="pos_1" onClose={onClose} />, { wrapper }),
+    ).not.toThrow();
   });
 });

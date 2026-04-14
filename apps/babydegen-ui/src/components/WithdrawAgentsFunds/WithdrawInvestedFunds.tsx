@@ -106,7 +106,7 @@ const InitiateWithdrawal = ({
   isLoading,
   onInitiateWithdrawal,
   withdrawalAddress,
-  onAddressChange = () => null,
+  onAddressChange,
 }: WithdrawInvestedFundsProps) => (
   <>
     <Flex gap={4} vertical className="w-full">

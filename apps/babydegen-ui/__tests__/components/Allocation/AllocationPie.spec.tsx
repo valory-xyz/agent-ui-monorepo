@@ -22,16 +22,17 @@ jest.mock('../../../src/utils/chartjs/donut-center-plugin', () => ({
   DonutCenterLogoPlugin: {},
 }));
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
-  return ({ children }: { children: React.ReactNode }) =>
-    createElement(QueryClientProvider, { client: queryClient }, children);
-};
+let queryClient: QueryClient;
+beforeEach(() => {
+  queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+});
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(QueryClientProvider, { client: queryClient }, children);
 
 describe('AllocationPie', () => {
   it('renders loading skeleton when isLoading=true', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: true });
-    const { container } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { container } = render(<AllocationPie />, { wrapper });
     expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
   });
 
@@ -51,33 +52,33 @@ describe('AllocationPie', () => {
       },
       isLoading: false,
     });
-    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
     const chart = getByTestId('doughnut-chart');
     expect(chart).toBeInTheDocument();
     const raw = chart.getAttribute('data-labels');
-    if (!raw) throw new Error('data-labels attribute missing');
-    expect(JSON.parse(raw)).toEqual(['balancerPool', 'velodrome']);
+    expect(raw).not.toBeNull();
+    expect(JSON.parse(raw!)).toEqual(['balancerPool', 'velodrome']);
   });
 
   it('renders Doughnut with empty/fallback data when allocations is null', () => {
     usePortfolio.mockReturnValue({ data: { allocations: null }, isLoading: false });
-    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
     // Falls back to emptyChartData — chart still rendered
     const chart1 = getByTestId('doughnut-chart');
     expect(chart1).toBeInTheDocument();
     const labels1 = chart1.getAttribute('data-labels');
-    if (!labels1) throw new Error('data-labels attribute missing');
-    expect(JSON.parse(labels1)).toEqual([]);
+    expect(labels1).not.toBeNull();
+    expect(JSON.parse(labels1!)).toEqual([]);
   });
 
   it('renders Doughnut with fallback data when data is null', () => {
     usePortfolio.mockReturnValue({ data: null, isLoading: false });
-    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
     const chart2 = getByTestId('doughnut-chart');
     expect(chart2).toBeInTheDocument();
     const labels2 = chart2.getAttribute('data-labels');
-    if (!labels2) throw new Error('data-labels attribute missing');
-    expect(JSON.parse(labels2)).toEqual([]);
+    expect(labels2).not.toBeNull();
+    expect(JSON.parse(labels2!)).toEqual([]);
   });
 
   it('renders Doughnut with fallback when allocation ratio is not a number (invalid data)', () => {
@@ -89,12 +90,24 @@ describe('AllocationPie', () => {
       },
       isLoading: false,
     });
-    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
     // hasValidAllocations = false → emptyChartData
     const chart3 = getByTestId('doughnut-chart');
     const labels3 = chart3.getAttribute('data-labels');
-    if (!labels3) throw new Error('data-labels attribute missing');
-    expect(JSON.parse(labels3)).toEqual([]);
+    expect(labels3).not.toBeNull();
+    expect(JSON.parse(labels3!)).toEqual([]);
+  });
+
+  it('renders Doughnut with fallback when allocations is not an array', () => {
+    usePortfolio.mockReturnValue({
+      data: { allocations: 'not-an-array' as unknown as [] },
+      isLoading: false,
+    });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
+    const chart = getByTestId('doughnut-chart');
+    const labels = chart.getAttribute('data-labels');
+    expect(labels).not.toBeNull();
+    expect(JSON.parse(labels!)).toEqual([]);
   });
 
   it('chart labels match allocation types for valid data', () => {
@@ -107,9 +120,9 @@ describe('AllocationPie', () => {
       },
       isLoading: false,
     });
-    const { getByTestId } = render(<AllocationPie />, { wrapper: createWrapper() });
+    const { getByTestId } = render(<AllocationPie />, { wrapper });
     const raw = getByTestId('doughnut-chart').getAttribute('data-labels');
-    if (!raw) throw new Error('data-labels attribute missing');
-    expect(JSON.parse(raw)).toEqual(['balancerPool', 'sturdy']);
+    expect(raw).not.toBeNull();
+    expect(JSON.parse(raw!)).toEqual(['balancerPool', 'sturdy']);
   });
 });

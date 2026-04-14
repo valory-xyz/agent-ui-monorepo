@@ -1,18 +1,12 @@
 import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { delay, devMock } from '@agent-ui-monorepo/util-functions';
 import { useMutation } from '@tanstack/react-query';
-
-const IS_MOCK_ENABLED = process.env.IS_MOCK_ENABLED === 'true';
 
 export const useChats = <T>(mockChat: T) =>
   useMutation<T, Error, string>({
     mutationFn: async (prompt: string) => {
-      if (IS_MOCK_ENABLED) {
-        return new Promise<T>((resolve) => {
-          setTimeout(() => {
-            resolve(mockChat);
-          }, 2000);
-        });
-      }
+      const mock = devMock(() => delay(mockChat, 2));
+      if (mock !== null) return mock;
 
       const response = await fetch(`${LOCAL}/configure_strategies`, {
         method: 'POST',
@@ -33,6 +27,10 @@ export const useChats = <T>(mockChat: T) =>
         throw new Error(errorMessage);
       }
 
-      return response.json();
+      try {
+        return await response.json();
+      } catch {
+        throw new Error('Failed to send chat, please try again.');
+      }
     },
   });

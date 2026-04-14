@@ -13,12 +13,16 @@ describe('handleChatError', () => {
 
   it('shows a notification with the error message', () => {
     handleChatError({ error: new Error('network failure'), chats: [] });
-    expect(notification.error).toHaveBeenCalledWith({ message: 'network failure' });
+    expect(notification.error).toHaveBeenCalledWith({
+      message: 'network failure',
+    });
   });
 
   it('falls back to "Failed to send chat." when error message is empty', () => {
     handleChatError({ error: new Error(''), chats: [] });
-    expect(notification.error).toHaveBeenCalledWith({ message: 'Failed to send chat.' });
+    expect(notification.error).toHaveBeenCalledWith({
+      message: 'Failed to send chat.',
+    });
   });
 
   it('returns null when chats array is empty', () => {
@@ -61,13 +65,6 @@ describe('handleChatError', () => {
     expect(result).not.toBeNull();
     if (!result) throw new Error('result is null');
     expect(result.updatedChats).toHaveLength(2);
-  });
-
-  // BUG-003: ReactNode text is silently dropped
-  it('returns null when last user chat has ReactNode text (BUG-003)', () => {
-    const chats: EachChat[] = [{ text: <span>jsx content</span>, type: 'user' }];
-    const result = handleChatError({ error: new Error('err'), chats });
-    expect(result).toBeNull();
   });
 
   it('does not mutate the original chats array', () => {

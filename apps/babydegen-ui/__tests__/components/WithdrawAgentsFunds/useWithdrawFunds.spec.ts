@@ -93,6 +93,31 @@ describe('useWithdrawFunds', () => {
     );
   });
 
+  it('fetches the status endpoint after initiateWithdraw succeeds with ok=false response', async () => {
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve(mockInitiateResponse),
+      })
+      .mockResolvedValue({
+        ok: false,
+        json: () => Promise.resolve({}),
+      });
+
+    const { result } = renderHook(() => useWithdrawFunds(), { wrapper: createWrapper() });
+
+    await act(async () => {
+      await result.current.initiateWithdraw('0x9876543210987654321098765432109876543210');
+    });
+
+    // With retry: Infinity, the query keeps retrying — verify the status endpoint was hit
+    await waitFor(() =>
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/withdrawal/status/')),
+    );
+    // data stays undefined while retrying
+    expect(result.current.data).toBeUndefined();
+  });
+
   it('returns isError=true when initiate fails', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,

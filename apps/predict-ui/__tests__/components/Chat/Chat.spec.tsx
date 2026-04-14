@@ -9,12 +9,17 @@ let capturedOnSuccess: ((data: unknown) => void) | undefined;
 let capturedOnError: ((err: { message?: string }) => void) | undefined;
 
 // Mock hooks that Chat depends on
+let mockHandleChatError: jest.Mock = jest.fn();
+
 jest.mock('@agent-ui-monorepo/ui-chat', () => {
   const actual = jest.requireActual('@agent-ui-monorepo/ui-chat');
   return {
     ...actual,
     useChats: jest.fn(),
-    // keep the real handleChatError so the rollback path is exercised
+    // handleChatError is replaced per-test via mockHandleChatError
+    get handleChatError() {
+      return mockHandleChatError;
+    },
   };
 });
 
@@ -33,6 +38,8 @@ describe('Chat (predict-ui)', () => {
     jest.clearAllMocks();
     capturedOnSuccess = undefined;
     capturedOnError = undefined;
+    // Default: real handleChatError behaviour (returns rollback object)
+    mockHandleChatError = jest.requireActual('@agent-ui-monorepo/ui-chat').handleChatError;
     mockMutateAsync.mockImplementation(
       (
         _text: string,
@@ -167,6 +174,21 @@ describe('Chat (predict-ui)', () => {
     // Only the user message (not an agent message)
     await waitFor(() => expect(screen.getByText('q')).toBeInTheDocument());
     expect(screen.queryByText(/conditions/)).toBeNull();
+  });
+
+  it('onError: does nothing when handleChatError returns null (no rollback)', async () => {
+    mockHandleChatError = jest.fn().mockReturnValue(null);
+    render(<Chat />, { wrapper: createWrapper() });
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value: 'test input' } });
+    fireEvent.click(screen.getByRole('button'));
+
+    await waitFor(() => expect(capturedOnError).toBeDefined());
+    if (!capturedOnError) throw new Error('capturedOnError not set');
+    capturedOnError({ message: 'Network error' });
+
+    // No rollback: input stays empty (was cleared on send), component does not crash
+    await waitFor(() => expect((screen.getByRole('textbox') as HTMLInputElement).value).toBe(''));
   });
 
   it('onError: restores text input via handleChatError rollback', async () => {

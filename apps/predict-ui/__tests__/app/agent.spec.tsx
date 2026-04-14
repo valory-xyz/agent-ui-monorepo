@@ -8,6 +8,9 @@ import { useFeatures } from '../../src/hooks/useFeatures';
 
 jest.mock('../../src/hooks/useAgentDetails');
 jest.mock('../../src/hooks/useFeatures');
+jest.mock('../../src/components/Chat/Chat', () => ({
+  Chat: () => <div data-testid="chat-mock">Chat</div>,
+}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -98,6 +101,20 @@ describe('Agent', () => {
     });
     render(<Agent />, { wrapper: createWrapper() });
     expect(screen.getByText("Update agent's goal")).toBeInTheDocument();
+  });
+
+  it('renders Chat when isChatEnabled=true', () => {
+    (useAgentDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
+    });
+    (useFeatures as jest.Mock).mockReturnValue({
+      isLoading: false,
+      data: { isChatEnabled: true },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(screen.getByTestId('chat-mock')).toBeInTheDocument();
   });
 
   it('shows nothing for ChatContent when features are loading', () => {

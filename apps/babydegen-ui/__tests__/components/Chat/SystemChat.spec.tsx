@@ -18,6 +18,12 @@ describe('TradingStrategy', () => {
     render(<TradingStrategy from="risky" to="risky" />);
     expect(screen.getAllByText('Risky')).toHaveLength(2);
   });
+
+  it('renders without pill type for an unknown trading type (getType returns undefined)', () => {
+    // Covers the implicit undefined return branch in getType
+    const unknownType = 'unknown' as unknown as import('../../../src/types').TradingType;
+    expect(() => render(<TradingStrategy from={unknownType} to={unknownType} />)).not.toThrow();
+  });
 });
 
 describe('OperatingProtocols', () => {
