@@ -58,6 +58,10 @@ export const COLOR = {
 
   BLUE: '#1677FF',
   LIGHT_GRAY: '#F8F9FA',
+
+  INFO: '#1AA0FF',
+  INFO_BACKGROUND: 'rgba(26, 160, 255, 0.1)',
+  INFO_BORDER: 'rgba(26, 160, 255, 0.2)',
 };
 
 export const THEME_CONFIG: ThemeConfig = {

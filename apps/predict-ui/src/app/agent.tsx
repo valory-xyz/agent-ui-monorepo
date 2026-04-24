@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
+import { MetricsOutdatedBanner } from '../components/MetricsOutdatedBanner';
 import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
@@ -14,6 +15,7 @@ import { Card } from '../components/ui/Card';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
+import { isPolystratAgent } from '../utils/agentMap';
 
 const AgentContent = styled.div`
   display: flex;
@@ -108,6 +110,7 @@ export const Agent = () => {
           createdAt={agentDetails.created_at}
           lastActiveAt={agentDetails.last_active_at}
         />
+        {isPolystratAgent && <MetricsOutdatedBanner />}
         <AgentPerformance performance={performance} />
         <ProfitOverTime />
         <TradeHistory />
