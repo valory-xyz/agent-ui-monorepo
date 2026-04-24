@@ -89,6 +89,18 @@ describe('Agent', () => {
     expect(screen.getByText('Performance')).toBeInTheDocument();
   });
 
+  it('does not render the polystrat metrics banner when agent is omenstrat', () => {
+    (useAgentDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(
+      screen.queryByText(/Performance and activity stats are temporarily not updating/),
+    ).not.toBeInTheDocument();
+  });
+
   it('renders UnlockChat when isChatEnabled=false and features loaded', () => {
     (useAgentDetails as jest.Mock).mockReturnValue({
       isLoading: false,

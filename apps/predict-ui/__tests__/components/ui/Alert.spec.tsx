@@ -21,6 +21,10 @@ describe('Alert', () => {
     expect(() => render(<Alert type="warning" message="Warning" />)).not.toThrow();
   });
 
+  it('renders without crashing for type="info"', () => {
+    expect(() => render(<Alert type="info" message="Info" />)).not.toThrow();
+  });
+
   it('renders with ReactNode message', () => {
     const { getByText } = render(<Alert type="error" message={<span>Custom node</span>} />);
     expect(getByText('Custom node')).toBeInTheDocument();
