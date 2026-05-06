@@ -8,18 +8,19 @@ type MutationConfig = {
 };
 
 type QueryConfig = {
-  enabled: boolean;
   queryFn: () => Promise<unknown>;
-  refetchInterval: (query: { state: { data?: { status?: string } } }) => number | false;
+  refetchInterval: (query: { state: { data?: { mode?: string } } }) => number | false;
   retry: number;
 };
 
 const mockUseMutation = jest.fn();
 const mockUseQuery = jest.fn();
+const mockSetQueryData = jest.fn();
 
 jest.mock('@tanstack/react-query', () => ({
   useMutation: (config: MutationConfig) => mockUseMutation(config),
   useQuery: (config: QueryConfig) => mockUseQuery(config),
+  useQueryClient: () => ({ setQueryData: mockSetQueryData }),
 }));
 
 describe('useWithdrawLockedFunds — query/mutation config', () => {
@@ -45,22 +46,18 @@ describe('useWithdrawLockedFunds — query/mutation config', () => {
     return captured;
   };
 
-  it('disables the status query until withdrawId is set', () => {
+  it('polls every 2s while the agent is armed or selling', () => {
     const cfg = captureQueryConfig();
-    expect(cfg.enabled).toBe(false);
+    expect(cfg.refetchInterval({ state: { data: { mode: 'armed' } } })).toBe(2000);
+    expect(cfg.refetchInterval({ state: { data: { mode: 'selling' } } })).toBe(2000);
   });
 
-  it('polls every 2s for non-terminal statuses', () => {
+  it('stops polling when idle, complete, or errored', () => {
     const cfg = captureQueryConfig();
-    expect(cfg.refetchInterval({ state: { data: { status: 'initiated' } } })).toBe(2000);
-    expect(cfg.refetchInterval({ state: { data: { status: 'withdrawing' } } })).toBe(2000);
-    expect(cfg.refetchInterval({ state: {} })).toBe(2000);
-  });
-
-  it('stops polling on completed and failed statuses', () => {
-    const cfg = captureQueryConfig();
-    expect(cfg.refetchInterval({ state: { data: { status: 'completed' } } })).toBe(false);
-    expect(cfg.refetchInterval({ state: { data: { status: 'failed' } } })).toBe(false);
+    expect(cfg.refetchInterval({ state: { data: { mode: 'idle' } } })).toBe(false);
+    expect(cfg.refetchInterval({ state: { data: { mode: 'complete' } } })).toBe(false);
+    expect(cfg.refetchInterval({ state: { data: { mode: 'errored' } } })).toBe(false);
+    expect(cfg.refetchInterval({ state: {} })).toBe(false);
   });
 
   it('retries the status query indefinitely so transient errors are absorbed', () => {
@@ -68,7 +65,7 @@ describe('useWithdrawLockedFunds — query/mutation config', () => {
     expect(cfg.retry).toBe(Infinity);
   });
 
-  it('logs and clears withdrawId on mutation error', () => {
+  it('logs on mutation error', () => {
     let mutationCfg: MutationConfig | undefined;
     mockUseMutation.mockImplementation((config: MutationConfig) => {
       mutationCfg = config;
@@ -78,8 +75,8 @@ describe('useWithdrawLockedFunds — query/mutation config', () => {
     if (!mutationCfg) throw new Error('Expected mutation config to be captured');
 
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
-    mutationCfg.onError(new Error('initiate failed'));
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Error initiating withdrawal:', expect.any(Error));
+    mutationCfg.onError(new Error('arm failed'));
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Error arming withdrawal:', expect.any(Error));
     consoleErrorSpy.mockRestore();
   });
 });

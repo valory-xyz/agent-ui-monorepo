@@ -134,16 +134,30 @@ export type AgentProfitTimeseriesResponse = {
   points: AgentProfitPoint[];
 };
 
-export type WithdrawalStatusValue = 'initiated' | 'withdrawing' | 'completed' | 'failed';
+export type WithdrawalMode = 'idle' | 'armed' | 'selling' | 'complete' | 'errored';
 
-export type WithdrawalInitiateResponse = {
-  id: string;
-  status: WithdrawalStatusValue;
+export type WithdrawalVenue = 'polymarket' | 'omen';
+
+export type WithdrawalFill = {
+  token_id: string;
+  shares_sold: number;
+  fill_price: number;
+  ts: number;
+};
+
+export type WithdrawalErrorRecord = {
+  token_id: string;
+  shares_remaining: number;
+  reason: string;
+  ts: number;
 };
 
 export type WithdrawalStatus = {
-  status: WithdrawalStatusValue;
-  /** human-readable status text rendered as-is during in-progress states */
-  message: string;
-  transaction_link: string | null;
+  mode: WithdrawalMode;
+  venue: WithdrawalVenue;
+  positions_total: number;
+  positions_sold: number;
+  positions_stuck: number;
+  fills: WithdrawalFill[];
+  errors: WithdrawalErrorRecord[];
 };

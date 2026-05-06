@@ -1,69 +1,63 @@
-import { LOCAL } from '@agent-ui-monorepo/util-constants-and-types';
+import { API_V1 } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
-import { mockWithdrawInitiateResponse, mockWithdrawStatusResponse } from '../mocks/mockWithdrawal';
-import { WithdrawalInitiateResponse, WithdrawalStatus } from '../types';
+import { mockWithdrawalStatus } from '../mocks/mockWithdrawal';
+import { WithdrawalMode, WithdrawalStatus } from '../types';
 
 const POLL_INTERVAL_MS = 2000;
 
-const isTerminalStatus = (status: WithdrawalStatus['status'] | undefined) =>
-  status === 'completed' || status === 'failed';
+const isPollingMode = (mode: WithdrawalMode | undefined) => mode === 'armed' || mode === 'selling';
 
-const initiateWithdrawal = async (): Promise<WithdrawalInitiateResponse> => {
-  const mock = devMock(() => delay(mockWithdrawInitiateResponse));
+const fetchWithdrawalStatus = async (): Promise<WithdrawalStatus> => {
+  const mock = devMock(() => delay(mockWithdrawalStatus));
   if (mock !== null) return mock;
 
-  const response = await fetch(`${LOCAL}/withdrawal/initiate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  });
-  if (!response.ok) throw new Error('Failed to initiate withdrawal.');
-  return response.json();
-};
-
-const fetchWithdrawalStatus = async (id: string): Promise<WithdrawalStatus> => {
-  const mock = devMock(() => delay(mockWithdrawStatusResponse));
-  if (mock !== null) return mock;
-
-  const response = await fetch(`${LOCAL}/withdrawal/status/${id}`);
+  const response = await fetch(`${API_V1}/withdrawal`);
   if (!response.ok) throw new Error('Failed to fetch withdrawal status.');
   return response.json();
 };
 
-export const useWithdrawLockedFunds = () => {
-  const [withdrawId, setWithdrawId] = useState<string | null>(null);
+const armWithdrawal = async (): Promise<WithdrawalStatus> => {
+  const mock = devMock(() => delay(mockWithdrawalStatus));
+  if (mock !== null) return mock;
 
-  const {
-    isPending: isInitiating,
-    isError: isInitiateError,
-    mutateAsync,
-    reset: resetMutation,
-  } = useMutation<WithdrawalInitiateResponse>({
-    mutationKey: [REACT_QUERY_KEYS.WITHDRAW_INITIATE],
-    mutationFn: async () => {
-      const response = await initiateWithdrawal();
-      setWithdrawId(response.id);
-      return response;
-    },
-    onError: (error) => {
-      console.error('Error initiating withdrawal:', error);
-      setWithdrawId(null);
-    },
-  });
+  const response = await fetch(`${API_V1}/withdrawal`, { method: 'POST' });
+  if (!response.ok) throw new Error('Failed to arm withdrawal.');
+  return response.json();
+};
+
+export const useWithdrawLockedFunds = () => {
+  const queryClient = useQueryClient();
 
   const { data, isLoading: isStatusLoading } = useQuery<WithdrawalStatus>({
-    queryKey: [REACT_QUERY_KEYS.WITHDRAW_STATUS, withdrawId],
-    queryFn: () => fetchWithdrawalStatus(withdrawId as string),
-    enabled: !!withdrawId,
-    refetchInterval: ({ state }) =>
-      isTerminalStatus(state.data?.status) ? false : POLL_INTERVAL_MS,
+    queryKey: [REACT_QUERY_KEYS.WITHDRAW_STATUS],
+    queryFn: fetchWithdrawalStatus,
+    refetchInterval: ({ state }) => (isPollingMode(state.data?.mode) ? POLL_INTERVAL_MS : false),
     // Infinite retries keep transient network failures from surfacing as a hard error
     // — the status query has no terminal "errored" state from the UI's perspective.
     retry: Infinity,
     retryDelay: exponentialBackoffDelay,
+  });
+
+  const {
+    isPending: isArming,
+    isError: isArmError,
+    mutateAsync,
+    reset: resetMutation,
+  } = useMutation<WithdrawalStatus>({
+    mutationKey: [REACT_QUERY_KEYS.WITHDRAW_INITIATE],
+    mutationFn: async () => {
+      const response = await armWithdrawal();
+      // POST returns the full status — push it into the query cache so the UI
+      // reflects the new mode immediately without waiting for the next poll tick.
+      queryClient.setQueryData<WithdrawalStatus>([REACT_QUERY_KEYS.WITHDRAW_STATUS], response);
+      return response;
+    },
+    onError: (error) => {
+      console.error('Error arming withdrawal:', error);
+    },
   });
 
   const initiateWithdraw = async () => {
@@ -72,8 +66,8 @@ export const useWithdrawLockedFunds = () => {
   };
 
   return {
-    isLoading: isInitiating || isStatusLoading,
-    isError: isInitiateError,
+    isLoading: isArming || isStatusLoading,
+    isError: isArmError,
     data,
     initiateWithdraw,
   };

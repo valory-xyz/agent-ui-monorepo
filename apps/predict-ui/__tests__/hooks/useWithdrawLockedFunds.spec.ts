@@ -12,11 +12,24 @@ const createWrapper = () => {
     createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
-const mockInitiateResponse = { id: 'wd-1', status: 'initiated' };
-const mockStatusResponse = {
-  status: 'withdrawing',
-  message: 'Selling open positions...',
-  transaction_link: null,
+const mockIdleStatus = {
+  mode: 'idle',
+  venue: 'polymarket',
+  positions_total: 0,
+  positions_sold: 0,
+  positions_stuck: 0,
+  fills: [],
+  errors: [],
+};
+
+const mockSellingStatus = {
+  mode: 'selling',
+  venue: 'polymarket',
+  positions_total: 7,
+  positions_sold: 4,
+  positions_stuck: 0,
+  fills: [],
+  errors: [],
 };
 
 describe('useWithdrawLockedFunds', () => {
@@ -30,17 +43,32 @@ describe('useWithdrawLockedFunds', () => {
     jest.restoreAllMocks();
   });
 
-  it('exposes initiateWithdraw and starts in a non-loading state', () => {
+  it('fetches the current status on mount via GET /api/v1/withdrawal', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockIdleStatus),
+    });
+
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
-    expect(typeof result.current.initiateWithdraw).toBe('function');
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.data).toBeUndefined();
+
+    await waitFor(() => expect(result.current.data?.mode).toBe('idle'));
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/api/v1/withdrawal'));
   });
 
-  it('POSTs to /withdrawal/initiate with no body when initiateWithdraw is called', async () => {
-    (global.fetch as jest.Mock)
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockInitiateResponse) })
-      .mockResolvedValue({ ok: true, json: () => Promise.resolve(mockStatusResponse) });
+  it('exposes initiateWithdraw and starts in a non-loading mutation state', () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockIdleStatus),
+    });
+    const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
+    expect(typeof result.current.initiateWithdraw).toBe('function');
+  });
+
+  it('POSTs to /api/v1/withdrawal with no body when initiateWithdraw is called', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockSellingStatus),
+    });
 
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
     await act(async () => {
@@ -48,48 +76,38 @@ describe('useWithdrawLockedFunds', () => {
     });
 
     expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining('/withdrawal/initiate'),
+      expect.stringContaining('/api/v1/withdrawal'),
       expect.objectContaining({ method: 'POST' }),
     );
-    const initiateCall = (global.fetch as jest.Mock).mock.calls.find(([url]) =>
-      String(url).includes('/withdrawal/initiate'),
+    const postCall = (global.fetch as jest.Mock).mock.calls.find(
+      ([, init]) => init?.method === 'POST',
     );
-    expect(initiateCall?.[1]?.body).toBeUndefined();
+    expect(postCall?.[1]?.body).toBeUndefined();
   });
 
-  it('hits the status endpoint with the id returned from initiate', async () => {
+  it('pushes the POST response into the query cache so the UI updates immediately', async () => {
     (global.fetch as jest.Mock)
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockInitiateResponse) })
-      .mockResolvedValue({ ok: true, json: () => Promise.resolve(mockStatusResponse) });
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockIdleStatus) })
+      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockSellingStatus) });
 
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
+    await waitFor(() => expect(result.current.data?.mode).toBe('idle'));
+
     await act(async () => {
       await result.current.initiateWithdraw();
     });
 
-    await waitFor(() =>
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/withdrawal/status/wd-1')),
-    );
+    await waitFor(() => expect(result.current.data?.mode).toBe('selling'));
+    expect(result.current.data?.positions_total).toBe(7);
   });
 
-  it('keeps data undefined while the status query retries on a non-ok response', async () => {
-    (global.fetch as jest.Mock)
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockInitiateResponse) })
-      .mockResolvedValue({ ok: false, json: () => Promise.resolve({}) });
-
-    const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
-    await act(async () => {
-      await result.current.initiateWithdraw();
+  it('returns isError=true when the POST fails', async () => {
+    (global.fetch as jest.Mock).mockImplementation((_url, init?: { method?: string }) => {
+      if (init?.method === 'POST') {
+        return Promise.resolve({ ok: false, json: () => Promise.resolve({}) });
+      }
+      return Promise.resolve({ ok: true, json: () => Promise.resolve(mockIdleStatus) });
     });
-
-    await waitFor(() =>
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/withdrawal/status/')),
-    );
-    expect(result.current.data).toBeUndefined();
-  });
-
-  it('returns isError=true when the initiate POST fails', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({ ok: false, json: () => Promise.resolve({}) });
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
 
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
@@ -103,5 +121,19 @@ describe('useWithdrawLockedFunds', () => {
 
     await waitFor(() => expect(result.current.isError).toBe(true));
     consoleErrorSpy.mockRestore();
+  });
+
+  it('keeps data undefined while the GET retries on a non-ok response', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      json: () => Promise.resolve({}),
+    });
+
+    const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
+
+    await waitFor(() =>
+      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/api/v1/withdrawal')),
+    );
+    expect(result.current.data).toBeUndefined();
   });
 });

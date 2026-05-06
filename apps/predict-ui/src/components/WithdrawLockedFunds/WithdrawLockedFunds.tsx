@@ -1,6 +1,6 @@
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Alert as AntdAlert, Button, Flex, Spin, Tooltip, Typography } from 'antd';
-import { ExternalLink, Info, TriangleAlert, X } from 'lucide-react';
+import { Info, TriangleAlert, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
@@ -8,7 +8,7 @@ import { COLOR } from '../../constants/theme';
 import { useWithdrawLockedFunds } from '../../hooks/useWithdrawLockedFunds';
 import { Card } from '../ui/Card';
 
-const { Title, Text, Link } = Typography;
+const { Title, Text } = Typography;
 
 const POSITIONS_TOOLTIP =
   'Estimated value of all open positions at current market prices. Final value may differ at withdrawal.';
@@ -93,23 +93,27 @@ const InitiateBody = ({ amount, isLoading, onInitiate }: InitiateProps) => (
   </>
 );
 
-const SellingBody = ({ amount, message }: { amount: number; message: string }) => (
+const SELLING_MESSAGE: Record<'armed' | 'selling', string> = {
+  armed: 'Withdrawal requested. Waiting for the agent to complete its current actions...',
+  selling: 'Withdrawal initiated. Selling open positions...',
+};
+
+type SellingProps = {
+  amount: number;
+  mode: 'armed' | 'selling';
+};
+
+const SellingBody = ({ amount, mode }: SellingProps) => (
   <>
     <OpenPositionsValue amount={amount} />
     <Flex gap={8} align="center">
       <Spin indicator={<LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />} />
-      <Text type="secondary">{message}</Text>
+      <Text type="secondary">{SELLING_MESSAGE[mode]}</Text>
     </Flex>
   </>
 );
 
-type DoneBodyProps = {
-  marketName: string;
-  transactionLink: string | null;
-  onDismiss: () => void;
-};
-
-const DoneBody = ({ marketName, transactionLink, onDismiss }: DoneBodyProps) => (
+const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: () => void }) => (
   <SuccessAlert
     icon={<Info size={16} color={COLOR.GREEN} />}
     showIcon
@@ -118,29 +122,10 @@ const DoneBody = ({ marketName, transactionLink, onDismiss }: DoneBodyProps) => 
     onClose={onDismiss}
     message={<span style={{ fontWeight: 500 }}>Withdrawal complete!</span>}
     description={
-      <Flex vertical gap={8} style={{ maxWidth: 470 }}>
-        <span>
-          {marketName} positions have been sold, and funds are now in your Agent Wallet in Pearl.
-          The agent has stopped trading and will continue when restarted.
-        </span>
-        {transactionLink && (
-          <Link
-            href={transactionLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: COLOR.SECONDARY,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: 14,
-            }}
-          >
-            View transaction details
-            <ExternalLink size={14} />
-          </Link>
-        )}
-      </Flex>
+      <span style={{ display: 'inline-block', maxWidth: 470 }}>
+        {marketName} positions have been sold, and funds are now in your Agent Wallet in Pearl. The
+        agent has stopped trading and will continue when restarted.
+      </span>
     }
   />
 );
@@ -148,12 +133,12 @@ const DoneBody = ({ marketName, transactionLink, onDismiss }: DoneBodyProps) => 
 type ErrorBodyProps = {
   amount: number;
   isLoading: boolean;
-  transactionLink: string | null;
+  positionsStuck: number;
   onRetry: () => void;
   onDismiss: () => void;
 };
 
-const ErrorBody = ({ amount, isLoading, transactionLink, onRetry, onDismiss }: ErrorBodyProps) => (
+const ErrorBody = ({ amount, isLoading, positionsStuck, onRetry, onDismiss }: ErrorBodyProps) => (
   <>
     <ErrorAlert
       icon={<TriangleAlert size={16} color={COLOR.RED} />}
@@ -164,21 +149,10 @@ const ErrorBody = ({ amount, isLoading, transactionLink, onRetry, onDismiss }: E
       message={
         <Flex gap={8} align="center">
           <span style={{ fontWeight: 500 }}>Withdrawal failed</span>
-          {transactionLink && (
-            <Link
-              href={transactionLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                color: COLOR.SECONDARY,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-              }}
-            >
-              <span style={{ fontSize: 14 }}>Last transaction details</span>
-              <ExternalLink size={14} />
-            </Link>
+          {positionsStuck > 0 && (
+            <Text style={{ color: COLOR.SECONDARY, fontSize: 14 }}>
+              {positionsStuck} {positionsStuck === 1 ? 'position' : 'positions'} stuck
+            </Text>
           )}
         </Flex>
       }
@@ -214,33 +188,27 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
     setIsResultDismissed(true);
   }, []);
 
-  const status = data?.status;
-
   const renderBody = () => {
+    const mode = data?.mode;
+
     if (!isResultDismissed) {
-      if (status === 'completed') {
-        return (
-          <DoneBody
-            marketName={marketName}
-            transactionLink={data?.transaction_link ?? null}
-            onDismiss={handleDismiss}
-          />
-        );
+      if (mode === 'complete') {
+        return <DoneBody marketName={marketName} onDismiss={handleDismiss} />;
       }
-      if (status === 'failed' || isError) {
+      if (mode === 'errored' || isError) {
         return (
           <ErrorBody
             amount={lockedAmount}
             isLoading={isLoading}
-            transactionLink={data?.transaction_link ?? null}
+            positionsStuck={data?.positions_stuck ?? 0}
             onRetry={handleInitiate}
             onDismiss={handleDismiss}
           />
         );
       }
     }
-    if (status === 'initiated' || status === 'withdrawing') {
-      return <SellingBody amount={lockedAmount} message={data?.message ?? ''} />;
+    if (mode === 'armed' || mode === 'selling') {
+      return <SellingBody amount={lockedAmount} mode={mode} />;
     }
     return <InitiateBody amount={lockedAmount} isLoading={isLoading} onInitiate={handleInitiate} />;
   };

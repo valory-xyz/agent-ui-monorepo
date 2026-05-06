@@ -2,10 +2,22 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { WithdrawLockedFunds } from '../../../src/components/WithdrawLockedFunds';
 import { useWithdrawLockedFunds } from '../../../src/hooks/useWithdrawLockedFunds';
+import { WithdrawalStatus } from '../../../src/types';
 
 jest.mock('../../../src/hooks/useWithdrawLockedFunds');
 
 const mockedHook = useWithdrawLockedFunds as jest.Mock;
+
+const buildStatus = (overrides: Partial<WithdrawalStatus> = {}): WithdrawalStatus => ({
+  mode: 'idle',
+  venue: 'polymarket',
+  positions_total: 0,
+  positions_sold: 0,
+  positions_stuck: 0,
+  fills: [],
+  errors: [],
+  ...overrides,
+});
 
 const renderCard = (props?: Partial<React.ComponentProps<typeof WithdrawLockedFunds>>) =>
   render(<WithdrawLockedFunds lockedAmount={120.32} marketName="Polymarket" {...(props ?? {})} />);
@@ -20,7 +32,7 @@ describe('WithdrawLockedFunds', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: undefined,
+        data: buildStatus(),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
@@ -32,7 +44,7 @@ describe('WithdrawLockedFunds', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: undefined,
+        data: buildStatus(),
         initiateWithdraw: jest.fn(),
       });
       renderCard({ marketName: 'Omen' });
@@ -40,12 +52,12 @@ describe('WithdrawLockedFunds', () => {
     });
   });
 
-  describe('initial state', () => {
-    it('shows the locked amount and the initiate button', () => {
+  describe('idle / initial state', () => {
+    it('shows the locked amount and the initiate button when mode is idle', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: undefined,
+        data: buildStatus({ mode: 'idle' }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
@@ -54,12 +66,23 @@ describe('WithdrawLockedFunds', () => {
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeEnabled();
     });
 
+    it('falls through to the initiate body when no status data has loaded yet', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: undefined,
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+    });
+
     it('calls initiateWithdraw when the button is clicked', () => {
       const initiateWithdraw = jest.fn().mockResolvedValue(undefined);
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: undefined,
+        data: buildStatus(),
         initiateWithdraw,
       });
       renderCard();
@@ -72,7 +95,7 @@ describe('WithdrawLockedFunds', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: undefined,
+        data: buildStatus(),
         initiateWithdraw,
       });
       renderCard();
@@ -84,77 +107,56 @@ describe('WithdrawLockedFunds', () => {
   });
 
   describe('in-progress state', () => {
-    it('renders the message coming from the backend with a spinner', () => {
+    it('shows the armed-state message when the agent has been armed but not started', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: {
-          status: 'withdrawing',
-          message: 'Withdrawal initiated. Selling open positions...',
-          transaction_link: null,
-        },
+        data: buildStatus({ mode: 'armed' }),
         initiateWithdraw: jest.fn(),
       });
       const { container } = renderCard();
       expect(
-        screen.getByText('Withdrawal initiated. Selling open positions...'),
+        screen.getByText(
+          'Withdrawal requested. Waiting for the agent to complete its current actions...',
+        ),
       ).toBeInTheDocument();
       expect(container.querySelector('.ant-spin')).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /initiate withdrawal/i })).toBeNull();
     });
 
-    it('renders an empty message string without crashing when the backend omits one', () => {
+    it('shows the selling-state message when the sweep is in progress', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: {
-          status: 'initiated',
-          message: undefined,
-          transaction_link: null,
-        },
+        data: buildStatus({ mode: 'selling', positions_sold: 4, positions_total: 7 }),
         initiateWithdraw: jest.fn(),
       });
-      const { container } = renderCard();
-      expect(container.querySelector('.ant-spin')).toBeInTheDocument();
+      renderCard();
+      expect(
+        screen.getByText('Withdrawal initiated. Selling open positions...'),
+      ).toBeInTheDocument();
     });
   });
 
-  describe('done state', () => {
-    it('shows the success alert with transaction link', () => {
+  describe('complete state', () => {
+    it('shows the success alert with the marketName-specific copy', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: {
-          status: 'completed',
-          message: 'done',
-          transaction_link: 'https://example.com/tx',
-        },
+        data: buildStatus({ mode: 'complete' }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
       expect(screen.getByText('Withdrawal complete!')).toBeInTheDocument();
-      const link = screen.getByRole('link', { name: /view transaction details/i });
-      expect(link).toHaveAttribute('href', 'https://example.com/tx');
+      expect(screen.getByText(/Polymarket positions have been sold/)).toBeInTheDocument();
       expect(screen.queryByText('Open positions value')).toBeNull();
     });
 
-    it('omits the transaction link when none is returned', () => {
+    it('returns to the initiate body when the success alert is dismissed', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: { status: 'completed', message: 'done', transaction_link: null },
-        initiateWithdraw: jest.fn(),
-      });
-      renderCard();
-      expect(screen.getByText('Withdrawal complete!')).toBeInTheDocument();
-      expect(screen.queryByRole('link', { name: /view transaction details/i })).toBeNull();
-    });
-
-    it('returns to the initial state when the success alert is dismissed', () => {
-      mockedHook.mockReturnValue({
-        isLoading: false,
-        isError: false,
-        data: { status: 'completed', message: 'done', transaction_link: null },
+        data: buildStatus({ mode: 'complete' }),
         initiateWithdraw: jest.fn(),
       });
       const { container } = renderCard();
@@ -166,25 +168,41 @@ describe('WithdrawLockedFunds', () => {
     });
   });
 
-  describe('error state', () => {
-    it('shows the failure alert above the initial state for retry', () => {
+  describe('errored state', () => {
+    it('shows the failure alert above the initiate body when mode is errored', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: {
-          status: 'failed',
-          message: 'failed',
-          transaction_link: 'https://example.com/tx-fail',
-        },
+        data: buildStatus({ mode: 'errored', positions_stuck: 2 }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
       expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
-      expect(screen.getByRole('link', { name: /last transaction details/i })).toHaveAttribute(
-        'href',
-        'https://example.com/tx-fail',
-      );
+      expect(screen.getByText('2 positions stuck')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+    });
+
+    it('singularizes "1 position stuck"', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', positions_stuck: 1 }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByText('1 position stuck')).toBeInTheDocument();
+    });
+
+    it('omits the stuck-count chip when zero positions are stuck', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', positions_stuck: 0 }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
+      expect(screen.queryByText(/positions? stuck/)).toBeNull();
     });
 
     it('shows the failure alert when isError is true even without status data', () => {
@@ -196,7 +214,6 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
-      expect(screen.queryByRole('link', { name: /last transaction details/i })).toBeNull();
     });
 
     it('retries via the initiate button after a failure', () => {
@@ -212,44 +229,30 @@ describe('WithdrawLockedFunds', () => {
       expect(initiateWithdraw).toHaveBeenCalledTimes(1);
     });
 
-    it('hides the failure alert when dismissed and shows the initial state', () => {
+    it('falls back to the initiate body (not the spinner) after dismissing a failure', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: { status: 'failed', message: 'oops', transaction_link: null },
+        data: buildStatus({ mode: 'errored' }),
         initiateWithdraw: jest.fn(),
       });
       const { container } = renderCard();
       const closeButton = container.querySelector('.ant-alert-close-icon');
       if (!closeButton) throw new Error('Expected alert close button to be present');
       fireEvent.click(closeButton);
+
       expect(screen.queryByText('Withdrawal failed')).toBeNull();
-      expect(screen.getByText('Open positions value')).toBeInTheDocument();
-    });
-
-    it('falls back to the initiate button (not the in-progress spinner) after dismissing a failure', () => {
-      mockedHook.mockReturnValue({
-        isLoading: false,
-        isError: false,
-        data: { status: 'failed', message: 'oops', transaction_link: null },
-        initiateWithdraw: jest.fn(),
-      });
-      const { container } = renderCard();
-      const closeButton = container.querySelector('.ant-alert-close-icon');
-      if (!closeButton) throw new Error('Expected alert close button to be present');
-      fireEvent.click(closeButton);
-
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
       expect(container.querySelector('.ant-spin')).toBeNull();
     });
   });
 
   describe('loading state propagation', () => {
-    it('disables the initiate button while the hook reports loading', () => {
+    it('shows the initiate button in loading state while the hook reports loading', () => {
       mockedHook.mockReturnValue({
         isLoading: true,
         isError: false,
-        data: undefined,
+        data: buildStatus({ mode: 'idle' }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
