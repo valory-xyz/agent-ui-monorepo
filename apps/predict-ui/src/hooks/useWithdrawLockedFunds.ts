@@ -1,7 +1,7 @@
 import { API_V1 } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockWithdrawalStatus } from '../mocks/mockWithdrawal';
@@ -65,10 +65,10 @@ export const useWithdrawLockedFunds = () => {
     },
   });
 
-  const initiateWithdraw = async () => {
+  const initiateWithdraw = useCallback(async () => {
     resetMutation();
     await mutateAsync();
-  };
+  }, [mutateAsync, resetMutation]);
 
   return {
     isLoading: isArming,

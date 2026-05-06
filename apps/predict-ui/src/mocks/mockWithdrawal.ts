@@ -1,7 +1,7 @@
 import { WithdrawalStatus } from '../types';
 
 export const mockWithdrawalStatus: WithdrawalStatus = {
-  mode: 'armed',
+  mode: 'idle',
   venue: 'polymarket',
   positions_total: 0,
   positions_sold: 0,
