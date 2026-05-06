@@ -66,6 +66,17 @@ describe('WithdrawLockedFunds', () => {
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeEnabled();
     });
 
+    it('disables the initiate button when there are no locked funds', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'idle' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ lockedAmount: 0 });
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
+    });
+
     it('falls through to the initiate body when no status data has loaded yet', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
@@ -244,6 +255,17 @@ describe('WithdrawLockedFunds', () => {
       expect(screen.queryByText('Withdrawal failed')).toBeNull();
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
       expect(container.querySelector('.ant-spin')).toBeNull();
+    });
+
+    it('disables the retry button when there are no locked funds', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ lockedAmount: 0 });
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
     });
   });
 

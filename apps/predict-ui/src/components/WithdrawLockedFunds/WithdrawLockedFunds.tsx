@@ -87,7 +87,7 @@ type InitiateProps = {
 const InitiateBody = ({ amount, isLoading, onInitiate }: InitiateProps) => (
   <>
     <OpenPositionsValue amount={amount} />
-    <InitiateButton onClick={onInitiate} loading={isLoading}>
+    <InitiateButton onClick={onInitiate} loading={isLoading} disabled={amount <= 0}>
       Initiate withdrawal
     </InitiateButton>
   </>
@@ -158,7 +158,7 @@ const ErrorBody = ({ amount, isLoading, positionsStuck, onRetry, onDismiss }: Er
       }
     />
     <OpenPositionsValue amount={amount} />
-    <InitiateButton onClick={onRetry} loading={isLoading}>
+    <InitiateButton onClick={onRetry} loading={isLoading} disabled={amount <= 0}>
       Initiate withdrawal
     </InitiateButton>
   </>
