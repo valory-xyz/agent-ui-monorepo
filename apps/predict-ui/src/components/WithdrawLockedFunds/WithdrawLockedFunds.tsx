@@ -1,0 +1,254 @@
+import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Alert as AntdAlert, Button, Flex, Spin, Tooltip, Typography } from 'antd';
+import { ExternalLink, Info, TriangleAlert, X } from 'lucide-react';
+import { useCallback, useState } from 'react';
+import styled from 'styled-components';
+
+import { COLOR } from '../../constants/theme';
+import { useWithdrawLockedFunds } from '../../hooks/useWithdrawLockedFunds';
+import { Card } from '../ui/Card';
+
+const { Title, Text, Link } = Typography;
+
+const POSITIONS_TOOLTIP =
+  'Estimated value of all open positions at current market prices. Final value may differ at withdrawal.';
+
+const InitiateButton = styled(Button)`
+  align-self: flex-start;
+  height: auto;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: ${COLOR.WHITE_TRANSPARENT_10};
+  border-color: transparent;
+  color: ${COLOR.TEXT_PRIMARY};
+
+  &:hover,
+  &:focus {
+    background: ${COLOR.WHITE_TRANSPARENT_20} !important;
+    border-color: transparent !important;
+    color: ${COLOR.TEXT_PRIMARY} !important;
+  }
+`;
+
+const SuccessAlert = styled(AntdAlert)`
+  background: ${COLOR.GREEN_BACKGROUND};
+  border-color: ${COLOR.GREEN_BACKGROUND};
+  align-items: flex-start;
+  padding: 16px;
+  .ant-alert-message,
+  .ant-alert-description {
+    color: ${COLOR.GREEN};
+  }
+`;
+
+const ErrorAlert = styled(AntdAlert)`
+  background: ${COLOR.RED_BACKGROUND};
+  border-color: ${COLOR.RED_BACKGROUND};
+  align-items: center;
+  padding: 12px 16px;
+  .ant-alert-message {
+    color: ${COLOR.RED};
+    margin-bottom: 0;
+  }
+`;
+
+const Header = ({ marketName }: { marketName: string }) => (
+  <Flex vertical gap={6}>
+    <Title level={4} className="m-0 font-normal">
+      Withdraw funds locked in markets
+    </Title>
+    <Text type="secondary">
+      Closes all open positions on {marketName} and returns the funds to your agent wallet. Required
+      to fully withdraw your funds from the agent.
+    </Text>
+  </Flex>
+);
+
+const OpenPositionsValue = ({ amount }: { amount: number }) => (
+  <Flex vertical gap={6}>
+    <Flex align="center" gap={6}>
+      <Text type="secondary">Open positions value</Text>
+      <Tooltip title={POSITIONS_TOOLTIP}>
+        <InfoCircleOutlined style={{ color: COLOR.SECONDARY }} />
+      </Tooltip>
+    </Flex>
+    <Title level={4} className="m-0 font-normal">
+      ~${amount.toFixed(2)}
+    </Title>
+  </Flex>
+);
+
+type InitiateProps = {
+  amount: number;
+  isLoading: boolean;
+  onInitiate: () => void;
+};
+
+const InitiateBody = ({ amount, isLoading, onInitiate }: InitiateProps) => (
+  <>
+    <OpenPositionsValue amount={amount} />
+    <InitiateButton onClick={onInitiate} loading={isLoading}>
+      Initiate withdrawal
+    </InitiateButton>
+  </>
+);
+
+const SellingBody = ({ amount, message }: { amount: number; message: string }) => (
+  <>
+    <OpenPositionsValue amount={amount} />
+    <Flex gap={8} align="center">
+      <Spin indicator={<LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />} />
+      <Text type="secondary">{message}</Text>
+    </Flex>
+  </>
+);
+
+type DoneBodyProps = {
+  marketName: string;
+  transactionLink: string | null;
+  onDismiss: () => void;
+};
+
+const DoneBody = ({ marketName, transactionLink, onDismiss }: DoneBodyProps) => (
+  <SuccessAlert
+    icon={<Info size={16} color={COLOR.GREEN} />}
+    showIcon
+    closable
+    closeIcon={<X size={16} color={COLOR.GREEN} />}
+    onClose={onDismiss}
+    message={<span style={{ fontWeight: 500 }}>Withdrawal complete!</span>}
+    description={
+      <Flex vertical gap={8} style={{ maxWidth: 470 }}>
+        <span>
+          {marketName} positions have been sold, and funds are now in your Agent Wallet in Pearl.
+          The agent has stopped trading and will continue when restarted.
+        </span>
+        {transactionLink && (
+          <Link
+            href={transactionLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: COLOR.SECONDARY,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              fontSize: 14,
+            }}
+          >
+            View transaction details
+            <ExternalLink size={14} />
+          </Link>
+        )}
+      </Flex>
+    }
+  />
+);
+
+type ErrorBodyProps = {
+  amount: number;
+  isLoading: boolean;
+  transactionLink: string | null;
+  onRetry: () => void;
+  onDismiss: () => void;
+};
+
+const ErrorBody = ({ amount, isLoading, transactionLink, onRetry, onDismiss }: ErrorBodyProps) => (
+  <>
+    <ErrorAlert
+      icon={<TriangleAlert size={16} color={COLOR.RED} />}
+      showIcon
+      closable
+      closeIcon={<X size={16} color={COLOR.SECONDARY} />}
+      onClose={onDismiss}
+      message={
+        <Flex gap={8} align="center">
+          <span style={{ fontWeight: 500 }}>Withdrawal failed</span>
+          {transactionLink && (
+            <Link
+              href={transactionLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: COLOR.SECONDARY,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <span style={{ fontSize: 14 }}>Last transaction details</span>
+              <ExternalLink size={14} />
+            </Link>
+          )}
+        </Flex>
+      }
+    />
+    <OpenPositionsValue amount={amount} />
+    <InitiateButton onClick={onRetry} loading={isLoading}>
+      Initiate withdrawal
+    </InitiateButton>
+  </>
+);
+
+type WithdrawLockedFundsProps = {
+  /** Estimated USD value of currently locked positions. */
+  lockedAmount: number;
+  /** Display name of the prediction market the agent trades on (e.g. "Polymarket"). */
+  marketName: string;
+};
+
+export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLockedFundsProps) => {
+  const { isLoading, isError, data, initiateWithdraw } = useWithdrawLockedFunds();
+  const [isResultDismissed, setIsResultDismissed] = useState(false);
+
+  const handleInitiate = useCallback(async () => {
+    setIsResultDismissed(false);
+    try {
+      await initiateWithdraw();
+    } catch {
+      // surfaced via isError; intentionally swallowed to keep the UI in error state
+    }
+  }, [initiateWithdraw]);
+
+  const handleDismiss = useCallback(() => {
+    setIsResultDismissed(true);
+  }, []);
+
+  const status = data?.status;
+
+  const renderBody = () => {
+    if (!isResultDismissed) {
+      if (status === 'completed') {
+        return (
+          <DoneBody
+            marketName={marketName}
+            transactionLink={data?.transaction_link ?? null}
+            onDismiss={handleDismiss}
+          />
+        );
+      }
+      if (status === 'failed' || isError) {
+        return (
+          <ErrorBody
+            amount={lockedAmount}
+            isLoading={isLoading}
+            transactionLink={data?.transaction_link ?? null}
+            onRetry={handleInitiate}
+            onDismiss={handleDismiss}
+          />
+        );
+      }
+    }
+    if (status === 'initiated' || status === 'withdrawing') {
+      return <SellingBody amount={lockedAmount} message={data?.message ?? ''} />;
+    }
+    return <InitiateBody amount={lockedAmount} isLoading={isLoading} onInitiate={handleInitiate} />;
+  };
+
+  return (
+    <Card $gap="24px">
+      <Header marketName={marketName} />
+      {renderBody()}
+    </Card>
+  );
+};

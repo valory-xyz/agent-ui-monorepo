@@ -133,3 +133,17 @@ export type AgentProfitTimeseriesResponse = {
   window: AgentWindow;
   points: AgentProfitPoint[];
 };
+
+export type WithdrawalStatusValue = 'initiated' | 'withdrawing' | 'completed' | 'failed';
+
+export type WithdrawalInitiateResponse = {
+  id: string;
+  status: WithdrawalStatusValue;
+};
+
+export type WithdrawalStatus = {
+  status: WithdrawalStatusValue;
+  /** human-readable status text rendered as-is during in-progress states */
+  message: string;
+  transaction_link: string | null;
+};
