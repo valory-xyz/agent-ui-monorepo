@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { useWithdrawLockedFunds } from '../../src/hooks/useWithdrawLockedFunds';
@@ -25,8 +25,14 @@ describe('useWithdrawLockedFunds — dev mock mode', () => {
   });
   afterEach(() => jest.restoreAllMocks());
 
-  it('returns the mocked status without calling fetch', async () => {
+  it('returns the mocked status after initiateWithdraw, without calling fetch', async () => {
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
+
+    expect(result.current.data).toBeUndefined();
+
+    await act(async () => {
+      await result.current.initiateWithdraw();
+    });
 
     await waitFor(() => expect(result.current.data).toEqual(mockWithdrawalStatus));
     expect(global.fetch).not.toHaveBeenCalled();

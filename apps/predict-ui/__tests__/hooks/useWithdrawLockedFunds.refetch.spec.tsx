@@ -4,10 +4,12 @@ import { useWithdrawLockedFunds } from '../../src/hooks/useWithdrawLockedFunds';
 
 type MutationConfig = {
   mutationFn: () => Promise<unknown>;
+  onSuccess: (data: unknown) => void;
   onError: (error: unknown) => void;
 };
 
 type QueryConfig = {
+  enabled: boolean;
   queryFn: () => Promise<unknown>;
   refetchInterval: (query: { state: { data?: { mode?: string } } }) => number | false;
   retry: number;
@@ -45,6 +47,11 @@ describe('useWithdrawLockedFunds — query/mutation config', () => {
     if (!captured) throw new Error('Expected query config to be captured');
     return captured;
   };
+
+  it('keeps the status query disabled until the user initiates', () => {
+    const cfg = captureQueryConfig();
+    expect(cfg.enabled).toBe(false);
+  });
 
   it('polls every 2s while the agent is armed or selling', () => {
     const cfg = captureQueryConfig();

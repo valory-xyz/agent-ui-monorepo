@@ -1,6 +1,7 @@
 import { API_V1 } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockWithdrawalStatus } from '../mocks/mockWithdrawal';
@@ -30,10 +31,14 @@ const armWithdrawal = async (): Promise<WithdrawalStatus> => {
 
 export const useWithdrawLockedFunds = () => {
   const queryClient = useQueryClient();
+  // Status polling is opt-in — only enabled after the user explicitly clicks
+  // "Initiate withdrawal". Until then, the page does not hit the withdrawal API.
+  const [hasArmed, setHasArmed] = useState(false);
 
   const { data } = useQuery<WithdrawalStatus>({
     queryKey: [REACT_QUERY_KEYS.WITHDRAW_STATUS],
     queryFn: fetchWithdrawalStatus,
+    enabled: hasArmed,
     refetchInterval: ({ state }) => (isPollingMode(state.data?.mode) ? POLL_INTERVAL_MS : false),
     // Infinite retries keep transient network failures from surfacing as a hard error
     // — the status query has no terminal "errored" state from the UI's perspective.
@@ -48,12 +53,12 @@ export const useWithdrawLockedFunds = () => {
     reset: resetMutation,
   } = useMutation<WithdrawalStatus>({
     mutationKey: [REACT_QUERY_KEYS.WITHDRAW_INITIATE],
-    mutationFn: async () => {
-      const response = await armWithdrawal();
+    mutationFn: armWithdrawal,
+    onSuccess: (response) => {
       // POST returns the full status — push it into the query cache so the UI
       // reflects the new mode immediately without waiting for the next poll tick.
       queryClient.setQueryData<WithdrawalStatus>([REACT_QUERY_KEYS.WITHDRAW_STATUS], response);
-      return response;
+      setHasArmed(true);
     },
     onError: (error) => {
       console.error('Error arming withdrawal:', error);
@@ -66,9 +71,6 @@ export const useWithdrawLockedFunds = () => {
   };
 
   return {
-    // POST-mutation only — drives the initiate button's loading state.
-    // The status GET is intentionally not surfaced here so the button doesn't
-    // flash "loading" while the initial status fetch is in flight.
     isLoading: isArming,
     isError: isArmError,
     data,

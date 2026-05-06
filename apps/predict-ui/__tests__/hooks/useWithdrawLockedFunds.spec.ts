@@ -12,16 +12,6 @@ const createWrapper = () => {
     createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
-const mockIdleStatus = {
-  mode: 'idle',
-  venue: 'polymarket',
-  positions_total: 0,
-  positions_sold: 0,
-  positions_stuck: 0,
-  fills: [],
-  errors: [],
-};
-
 const mockSellingStatus = {
   mode: 'selling',
   venue: 'polymarket',
@@ -43,25 +33,25 @@ describe('useWithdrawLockedFunds', () => {
     jest.restoreAllMocks();
   });
 
-  it('fetches the current status on mount via GET /api/v1/withdrawal', async () => {
+  it('does NOT call the withdrawal API on mount — only after the user initiates', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(mockIdleStatus),
+      json: () => Promise.resolve(mockSellingStatus),
     });
 
-    const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
+    renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
 
-    await waitFor(() => expect(result.current.data?.mode).toBe('idle'));
-    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/api/v1/withdrawal'));
+    expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('exposes initiateWithdraw and starts in a non-loading mutation state', () => {
+  it('exposes initiateWithdraw and starts with no data', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(mockIdleStatus),
+      json: () => Promise.resolve(mockSellingStatus),
     });
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
     expect(typeof result.current.initiateWithdraw).toBe('function');
+    expect(result.current.data).toBeUndefined();
   });
 
   it('POSTs to /api/v1/withdrawal with no body when initiateWithdraw is called', async () => {
@@ -86,12 +76,12 @@ describe('useWithdrawLockedFunds', () => {
   });
 
   it('pushes the POST response into the query cache so the UI updates immediately', async () => {
-    (global.fetch as jest.Mock)
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockIdleStatus) })
-      .mockResolvedValueOnce({ ok: true, json: () => Promise.resolve(mockSellingStatus) });
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockSellingStatus),
+    });
 
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
-    await waitFor(() => expect(result.current.data?.mode).toBe('idle'));
 
     await act(async () => {
       await result.current.initiateWithdraw();
@@ -102,12 +92,7 @@ describe('useWithdrawLockedFunds', () => {
   });
 
   it('returns isError=true when the POST fails', async () => {
-    (global.fetch as jest.Mock).mockImplementation((_url, init?: { method?: string }) => {
-      if (init?.method === 'POST') {
-        return Promise.resolve({ ok: false, json: () => Promise.resolve({}) });
-      }
-      return Promise.resolve({ ok: true, json: () => Promise.resolve(mockIdleStatus) });
-    });
+    (global.fetch as jest.Mock).mockResolvedValue({ ok: false, json: () => Promise.resolve({}) });
     const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(jest.fn());
 
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
@@ -121,19 +106,5 @@ describe('useWithdrawLockedFunds', () => {
 
     await waitFor(() => expect(result.current.isError).toBe(true));
     consoleErrorSpy.mockRestore();
-  });
-
-  it('keeps data undefined while the GET retries on a non-ok response', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: false,
-      json: () => Promise.resolve({}),
-    });
-
-    const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
-
-    await waitFor(() =>
-      expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/api/v1/withdrawal')),
-    );
-    expect(result.current.data).toBeUndefined();
   });
 });
