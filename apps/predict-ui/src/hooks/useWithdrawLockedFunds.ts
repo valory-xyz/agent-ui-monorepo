@@ -31,7 +31,7 @@ const armWithdrawal = async (): Promise<WithdrawalStatus> => {
 export const useWithdrawLockedFunds = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading: isStatusLoading } = useQuery<WithdrawalStatus>({
+  const { data } = useQuery<WithdrawalStatus>({
     queryKey: [REACT_QUERY_KEYS.WITHDRAW_STATUS],
     queryFn: fetchWithdrawalStatus,
     refetchInterval: ({ state }) => (isPollingMode(state.data?.mode) ? POLL_INTERVAL_MS : false),
@@ -66,7 +66,10 @@ export const useWithdrawLockedFunds = () => {
   };
 
   return {
-    isLoading: isArming || isStatusLoading,
+    // POST-mutation only — drives the initiate button's loading state.
+    // The status GET is intentionally not surfaced here so the button doesn't
+    // flash "loading" while the initial status fetch is in flight.
+    isLoading: isArming,
     isError: isArmError,
     data,
     initiateWithdraw,
