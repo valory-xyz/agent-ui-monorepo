@@ -52,6 +52,17 @@ const ErrorAlert = styled(AntdAlert)`
   }
 `;
 
+const WarningAlert = styled(AntdAlert)`
+  background: ${COLOR.YELLOW_BACKGROUND};
+  border-color: ${COLOR.YELLOW_BACKGROUND};
+  align-items: flex-start;
+  padding: 16px;
+  .ant-alert-message,
+  .ant-alert-description {
+    color: ${COLOR.YELLOW};
+  }
+`;
+
 const Header = ({ marketName }: { marketName: string }) => (
   <Flex vertical gap={6}>
     <Title level={4} className="m-0 font-normal">
@@ -130,6 +141,35 @@ const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: ()
   />
 );
 
+type PartialBodyProps = {
+  amount: number;
+  isLoading: boolean;
+  onRetry: () => void;
+  onDismiss: () => void;
+};
+
+const PartialBody = ({ amount, isLoading, onRetry, onDismiss }: PartialBodyProps) => (
+  <>
+    <WarningAlert
+      icon={<TriangleAlert size={16} color={COLOR.YELLOW} />}
+      showIcon
+      closable
+      closeIcon={<X size={16} color={COLOR.YELLOW} />}
+      onClose={onDismiss}
+      message={<span style={{ fontWeight: 500 }}>Partial withdrawal completed</span>}
+      description={
+        <span style={{ display: 'inline-block', maxWidth: 470 }}>
+          Some positions couldn&apos;t be sold. Please try again to withdraw the remaining funds.
+        </span>
+      }
+    />
+    <OpenPositionsValue amount={amount} />
+    <InitiateButton onClick={onRetry} loading={isLoading} disabled={amount <= 0}>
+      Initiate withdrawal
+    </InitiateButton>
+  </>
+);
+
 type ErrorBodyProps = {
   amount: number;
   isLoading: boolean;
@@ -190,10 +230,23 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
 
   const renderBody = () => {
     const mode = data?.mode;
+    // A partial sweep ends in mode=errored but with at least one filled position.
+    // The UX is reframed as "completed with caveats" rather than a hard failure.
+    const isPartial = mode === 'errored' && (data?.fills.length ?? 0) > 0;
 
     if (!isResultDismissed) {
       if (mode === 'complete') {
         return <DoneBody marketName={marketName} onDismiss={handleDismiss} />;
+      }
+      if (isPartial) {
+        return (
+          <PartialBody
+            amount={lockedAmount}
+            isLoading={isLoading}
+            onRetry={handleInitiate}
+            onDismiss={handleDismiss}
+          />
+        );
       }
       if (mode === 'errored' || isError) {
         return (

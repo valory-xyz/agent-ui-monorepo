@@ -18,11 +18,15 @@ type QueryConfig = {
 const mockUseMutation = jest.fn();
 const mockUseQuery = jest.fn();
 const mockSetQueryData = jest.fn();
+const mockRefetchQueries = jest.fn();
 
 jest.mock('@tanstack/react-query', () => ({
   useMutation: (config: MutationConfig) => mockUseMutation(config),
   useQuery: (config: QueryConfig) => mockUseQuery(config),
-  useQueryClient: () => ({ setQueryData: mockSetQueryData }),
+  useQueryClient: () => ({
+    setQueryData: mockSetQueryData,
+    refetchQueries: mockRefetchQueries,
+  }),
 }));
 
 describe('useWithdrawLockedFunds — query/mutation config', () => {
@@ -70,6 +74,39 @@ describe('useWithdrawLockedFunds — query/mutation config', () => {
   it('retries the status query indefinitely so transient errors are absorbed', () => {
     const cfg = captureQueryConfig();
     expect(cfg.retry).toBe(Infinity);
+  });
+
+  it('refetches the agent performance query when the sweep reaches complete', () => {
+    mockUseQuery.mockReturnValue({
+      data: { mode: 'complete' },
+      isLoading: false,
+      isError: false,
+    });
+    renderHook(() => useWithdrawLockedFunds());
+
+    expect(mockRefetchQueries).toHaveBeenCalledWith({ queryKey: ['agentPerformance'] });
+  });
+
+  it('refetches the agent performance query when the sweep reaches errored', () => {
+    mockUseQuery.mockReturnValue({
+      data: { mode: 'errored' },
+      isLoading: false,
+      isError: false,
+    });
+    renderHook(() => useWithdrawLockedFunds());
+
+    expect(mockRefetchQueries).toHaveBeenCalledWith({ queryKey: ['agentPerformance'] });
+  });
+
+  it('does NOT refetch the agent performance query for non-terminal modes', () => {
+    mockUseQuery.mockReturnValue({
+      data: { mode: 'selling' },
+      isLoading: false,
+      isError: false,
+    });
+    renderHook(() => useWithdrawLockedFunds());
+
+    expect(mockRefetchQueries).not.toHaveBeenCalled();
   });
 
   it('logs on mutation error', () => {

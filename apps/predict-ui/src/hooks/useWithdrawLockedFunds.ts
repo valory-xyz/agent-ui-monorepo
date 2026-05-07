@@ -1,7 +1,7 @@
 import { API_V1 } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
 import { mockWithdrawalStatus } from '../mocks/mockWithdrawal';
@@ -69,6 +69,16 @@ export const useWithdrawLockedFunds = () => {
     resetMutation();
     await mutateAsync();
   }, [mutateAsync, resetMutation]);
+
+  // Once the sweep reaches a terminal mode, the agent's funds_locked_in_markets
+  // metric has changed — refetch the performance query so the "Open positions
+  // value" displayed by the card (and elsewhere) reflects the post-sweep balance.
+  const mode = data?.mode;
+  useEffect(() => {
+    if (mode === 'complete' || mode === 'errored') {
+      queryClient.refetchQueries({ queryKey: [REACT_QUERY_KEYS.PERFORMANCE] });
+    }
+  }, [mode, queryClient]);
 
   return {
     isLoading: isArming,

@@ -2,7 +2,14 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import { WithdrawLockedFunds } from '../../../src/components/WithdrawLockedFunds';
 import { useWithdrawLockedFunds } from '../../../src/hooks/useWithdrawLockedFunds';
-import { WithdrawalStatus } from '../../../src/types';
+import { WithdrawalFill, WithdrawalStatus } from '../../../src/types';
+
+const fakeFill: WithdrawalFill = {
+  token_id: '0xabc',
+  shares_sold: 1,
+  fill_price: 0.5,
+  ts: 1715021978,
+};
 
 jest.mock('../../../src/hooks/useWithdrawLockedFunds');
 
@@ -180,11 +187,11 @@ describe('WithdrawLockedFunds', () => {
   });
 
   describe('errored state', () => {
-    it('shows the failure alert above the initiate body when mode is errored', () => {
+    it('shows the failure alert above the initiate body when mode is errored with no fills', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: buildStatus({ mode: 'errored', positions_stuck: 2 }),
+        data: buildStatus({ mode: 'errored', positions_stuck: 2, fills: [] }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
@@ -262,6 +269,83 @@ describe('WithdrawLockedFunds', () => {
         isLoading: false,
         isError: false,
         data: buildStatus({ mode: 'errored' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ lockedAmount: 0 });
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
+    });
+  });
+
+  describe('partial withdrawal state', () => {
+    it('shows the partial-withdrawal alert when mode=errored and at least one fill landed', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({
+          mode: 'errored',
+          positions_total: 3,
+          positions_sold: 2,
+          positions_stuck: 1,
+          fills: [fakeFill, fakeFill],
+        }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByText('Partial withdrawal completed')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /Some positions couldn't be sold\. Please try again to withdraw the remaining funds\./,
+        ),
+      ).toBeInTheDocument();
+      expect(screen.queryByText('Withdrawal failed')).toBeNull();
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+    });
+
+    it('keeps showing the full-failure alert when mode=errored has no fills', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', positions_stuck: 3, fills: [] }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
+      expect(screen.queryByText('Partial withdrawal completed')).toBeNull();
+    });
+
+    it('falls back to the initiate body after dismissing the partial alert', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', fills: [fakeFill] }),
+        initiateWithdraw: jest.fn(),
+      });
+      const { container } = renderCard();
+      const closeButton = container.querySelector('.ant-alert-close-icon');
+      if (!closeButton) throw new Error('Expected alert close button to be present');
+      fireEvent.click(closeButton);
+      expect(screen.queryByText('Partial withdrawal completed')).toBeNull();
+      expect(screen.getByText('Open positions value')).toBeInTheDocument();
+    });
+
+    it('retries via the initiate button from the partial state', () => {
+      const initiateWithdraw = jest.fn().mockResolvedValue(undefined);
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', fills: [fakeFill] }),
+        initiateWithdraw,
+      });
+      renderCard();
+      fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
+      expect(initiateWithdraw).toHaveBeenCalledTimes(1);
+    });
+
+    it('disables the retry button on the partial state when there are no locked funds', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', fills: [fakeFill] }),
         initiateWithdraw: jest.fn(),
       });
       renderCard({ lockedAmount: 0 });
