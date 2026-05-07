@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { WithdrawLockedFunds } from '../../../src/components/WithdrawLockedFunds';
 import { useWithdrawLockedFunds } from '../../../src/hooks/useWithdrawLockedFunds';
@@ -118,9 +118,7 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
-      await Promise.resolve();
-      await Promise.resolve();
-      expect(initiateWithdraw).toHaveBeenCalled();
+      await waitFor(() => expect(initiateWithdraw).toHaveBeenCalled());
     });
   });
 
