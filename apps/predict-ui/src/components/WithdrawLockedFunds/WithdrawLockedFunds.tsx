@@ -173,12 +173,11 @@ const PartialBody = ({ amount, isLoading, onRetry, onDismiss }: PartialBodyProps
 type ErrorBodyProps = {
   amount: number;
   isLoading: boolean;
-  positionsStuck: number;
   onRetry: () => void;
   onDismiss: () => void;
 };
 
-const ErrorBody = ({ amount, isLoading, positionsStuck, onRetry, onDismiss }: ErrorBodyProps) => (
+const ErrorBody = ({ amount, isLoading, onRetry, onDismiss }: ErrorBodyProps) => (
   <>
     <ErrorAlert
       icon={<TriangleAlert size={16} color={COLOR.RED} />}
@@ -186,16 +185,7 @@ const ErrorBody = ({ amount, isLoading, positionsStuck, onRetry, onDismiss }: Er
       closable
       closeIcon={<X size={16} color={COLOR.SECONDARY} />}
       onClose={onDismiss}
-      message={
-        <Flex gap={8} align="center">
-          <span style={{ fontWeight: 500 }}>Withdrawal failed</span>
-          {positionsStuck > 0 && (
-            <Text style={{ color: COLOR.SECONDARY, fontSize: 14 }}>
-              {positionsStuck} {positionsStuck === 1 ? 'position' : 'positions'} stuck
-            </Text>
-          )}
-        </Flex>
-      }
+      message={<span style={{ fontWeight: 500 }}>Withdrawal failed</span>}
     />
     <OpenPositionsValue amount={amount} />
     <InitiateButton onClick={onRetry} loading={isLoading} disabled={amount <= 0}>
@@ -253,7 +243,6 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
           <ErrorBody
             amount={lockedAmount}
             isLoading={isLoading}
-            positionsStuck={data?.positions_stuck ?? 0}
             onRetry={handleInitiate}
             onDismiss={handleDismiss}
           />

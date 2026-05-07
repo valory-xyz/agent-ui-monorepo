@@ -196,31 +196,7 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
-      expect(screen.getByText('2 positions stuck')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
-    });
-
-    it('singularizes "1 position stuck"', () => {
-      mockedHook.mockReturnValue({
-        isLoading: false,
-        isError: false,
-        data: buildStatus({ mode: 'errored', positions_stuck: 1 }),
-        initiateWithdraw: jest.fn(),
-      });
-      renderCard();
-      expect(screen.getByText('1 position stuck')).toBeInTheDocument();
-    });
-
-    it('omits the stuck-count chip when zero positions are stuck', () => {
-      mockedHook.mockReturnValue({
-        isLoading: false,
-        isError: false,
-        data: buildStatus({ mode: 'errored', positions_stuck: 0 }),
-        initiateWithdraw: jest.fn(),
-      });
-      renderCard();
-      expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
-      expect(screen.queryByText(/positions? stuck/)).toBeNull();
     });
 
     it('shows the failure alert when isError is true even without status data', () => {
