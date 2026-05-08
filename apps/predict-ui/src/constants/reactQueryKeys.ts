@@ -5,4 +5,6 @@ export const REACT_QUERY_KEYS = {
   PROFIT_OVER_TIME: 'profitOverTime' as const,
   PREDICTION_HISTORY: 'predictionHistory' as const,
   PREDICTION_DETAILS: 'predictionDetails' as const,
+  WITHDRAW_INITIATE: 'withdrawInitiate' as const,
+  WITHDRAW_STATUS: 'withdrawStatus' as const,
 } as const;

@@ -11,9 +11,11 @@ import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { TradeHistory } from '../components/TradeHistory/TradeHistory';
 import { Card } from '../components/ui/Card';
+import { WithdrawLockedFunds } from '../components/WithdrawLockedFunds';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
+import { isPolystratAgent } from '../utils/agentMap';
 
 const AgentContent = styled.div`
   display: flex;
@@ -113,6 +115,12 @@ export const Agent = () => {
         <TradeHistory />
         <Strategy />
         <ChatContent />
+        {isPolystratAgent && (
+          <WithdrawLockedFunds
+            lockedAmount={performance.metrics.funds_locked_in_markets}
+            marketName="Polymarket"
+          />
+        )}
       </AgentContent>
     </Flex>
   );

@@ -133,3 +133,31 @@ export type AgentProfitTimeseriesResponse = {
   window: AgentWindow;
   points: AgentProfitPoint[];
 };
+
+export type WithdrawalMode = 'idle' | 'armed' | 'selling' | 'complete' | 'errored';
+
+export type WithdrawalVenue = 'polymarket' | 'omen';
+
+export type WithdrawalFill = {
+  token_id: string;
+  shares_sold: number;
+  fill_price: number;
+  ts: number;
+};
+
+export type WithdrawalErrorRecord = {
+  token_id: string;
+  shares_remaining: number;
+  reason: string;
+  ts: number;
+};
+
+export type WithdrawalStatus = {
+  mode: WithdrawalMode;
+  venue: WithdrawalVenue;
+  positions_total: number;
+  positions_sold: number;
+  positions_stuck: number;
+  fills: WithdrawalFill[];
+  errors: WithdrawalErrorRecord[];
+};
