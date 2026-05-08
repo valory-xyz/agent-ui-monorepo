@@ -23,7 +23,11 @@ describe('useWithdrawLockedFunds — dev mock mode', () => {
   beforeEach(() => {
     global.fetch = jest.fn();
   });
-  afterEach(() => jest.restoreAllMocks());
+  afterEach(() => {
+    const g = global as unknown as Record<string, unknown>;
+    delete g['fetch'];
+    jest.restoreAllMocks();
+  });
 
   it('returns the mocked status after initiateWithdraw, without calling fetch', async () => {
     const { result } = renderHook(() => useWithdrawLockedFunds(), { wrapper: createWrapper() });
