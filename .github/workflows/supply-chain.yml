@@ -38,12 +38,10 @@ jobs:
       # NO `yarn install` — `yarn audit` reads `yarn.lock` directly via the
       # npm advisory database. Skipping install means a compromised
       # postinstall cannot run inside the gate that exists to detect
-      # compromised postinstalls.
+      # compromised postinstalls. `npm audit signatures` (which needs an
+      # installed tree) runs in the `install-hooks` job instead.
       - name: yarn audit:prod (high/critical in production tree, with allowlist)
         run: yarn audit:prod
-
-      - name: npm audit signatures (registry-signed packages)
-        run: npm audit signatures
 
   install-hooks:
     name: Install-hook audit
@@ -72,6 +70,13 @@ jobs:
 
       - name: Audit install hooks against allowlist
         run: yarn audit:install-hooks
+
+      # `npm audit signatures` lives here, not in the `audit` job, because it
+      # needs a populated node_modules to enumerate installed packages. The
+      # --ignore-scripts install above gives us the tree without running any
+      # hook code, which preserves the same security property as the audit job.
+      - name: npm audit signatures (registry-signed packages)
+        run: npm audit signatures
 
   lockfile-lint:
     name: Lockfile validation
