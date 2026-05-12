@@ -92,7 +92,7 @@ yarn nx lint predict-ui   # single project
 | Unit testing    | Jest 29 + React Testing Library 16                                    |
 | Node utilities  | ts-jest (node env); React components: babel-jest with @nx/react/babel |
 | Package manager | Yarn (frozen lockfile in CI)                                          |
-| Node version    | 22 (`.nvmrc` pins `v22.18.0`; CI uses `22.x`)                         |
+| Node version    | 24 (`.nvmrc` pins `v24.15.0`; CI uses `24.x`)                         |
 
 ---
 
