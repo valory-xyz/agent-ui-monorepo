@@ -20,9 +20,18 @@ jobs:
           fetch-depth: 0  # Required to scan full git history
 
       - name: Install Gitleaks
+        # Version + SHA256 pinned against the official release page:
+        #   https://github.com/zricethezav/gitleaks/releases/tag/v8.30.1
+        # The download is checksum-verified before extraction — without
+        # this, an unverified `wget` in the gate that's checking for
+        # compromise is a hole.
         run: |
-          wget https://github.com/zricethezav/gitleaks/releases/download/v8.10.1/gitleaks_8.10.1_linux_x64.tar.gz
-          tar -xzf gitleaks_8.10.1_linux_x64.tar.gz
+          GITLEAKS_VERSION=8.30.1
+          GITLEAKS_SHA256=551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+          ARCHIVE="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          wget -q "https://github.com/zricethezav/gitleaks/releases/download/v${GITLEAKS_VERSION}/${ARCHIVE}"
+          echo "${GITLEAKS_SHA256}  ${ARCHIVE}" | sha256sum -c -
+          tar -xzf "${ARCHIVE}"
           sudo install gitleaks /usr/local/bin/gitleaks
 
       - name: Run Gitleaks scan
