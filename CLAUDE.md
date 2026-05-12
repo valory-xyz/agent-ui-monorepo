@@ -8,18 +8,20 @@ NX monorepo by Valory AG. Contains three React apps and six shared libraries for
 
 ```
 apps/
-  agentsfun-ui/   # Agents.fun social/memecoin UI (port 4300)
-  babydegen-ui/   # Portfolio & withdrawal UI for Modius/Optimus agents
-  predict-ui/     # Prediction-market trading UI for Omenstrat/Polystrat agents
+  agentsfun-ui/   # Agents.fun social/memecoin UI            (dev 4300, preview 4400)
+  babydegen-ui/  # Portfolio + withdrawal UI for Modius/Optimus  (dev 4300, preview 4400)
+  predict-ui/    # Prediction-market UI for Omenstrat/Polystrat (dev 4200, preview 4300)
 
 libs/
-  ui-chat/                   # Chat component (Chat, ViewChats, UnlockChat, useChats)
-  ui-error-boundary/         # React class ErrorBoundary wrapper
-  ui-pill/                   # Pill badge + HaloDot animation component
-  ui-theme/                  # GlobalColors + GlobalStyles (styled-components)
-  util-constants-and-types/  # Shared addresses, symbols, time, URL constants, TS types
-  util-functions/            # delay(), exponentialBackoffDelay(), generateAgentName()
+  ui-chat/                   # Chat (Chat, ViewChats, UnlockChat, useChats, handleChatError)
+  ui-error-boundary/         # React class ErrorBoundary wrapper (renders Ant Alert fallback)
+  ui-pill/                   # Pill badge + HaloDot animated halo dot
+  ui-theme/                  # GlobalColors + GlobalStyles (styled-components, utility classes)
+  util-constants-and-types/  # LOCAL, API_V1, AgentType, OLAS_ADDRESS, time, urls, Address type
+  util-functions/            # delay, exponentialBackoffDelay, devMock, generateAgentName
 ```
+
+> **Port collision:** agentsfun-ui and babydegen-ui both default to dev port 4300. They cannot run simultaneously without overriding one (`yarn nx dev <app> --port=<other>`).
 
 ### Path Aliases (tsconfig.base.json)
 
@@ -78,25 +80,44 @@ yarn nx lint predict-ui   # single project
 
 | Concern         | Tool                                                                  |
 | --------------- | --------------------------------------------------------------------- |
-| Monorepo        | NX 21                                                                 |
+| Monorepo        | NX 21 (targets are Nx-plugin-inferred — apps/libs `project.json` files have empty `targets: {}`) |
 | Framework       | React 19 + TypeScript 5.7                                             |
-| Routing         | React Router DOM 6                                                    |
+| Routing         | React Router DOM 6 is in deps but **no app defines actual routes** — all three apps are single-page; agentsfun-ui wraps in `BrowserRouter` only |
 | Build           | Vite 6                                                                |
 | Styling         | styled-components 5 + Ant Design 5                                    |
-| Data fetching   | TanStack React Query 5                                                |
-| API (agentsfun) | GraphQL via graphql-request                                           |
-| Web3            | viem 2                                                                |
-| Charts          | Recharts 3 (predict-ui), Chart.js 4 (babydegen-ui)                    |
+| Data fetching   | TanStack React Query 5 (no GraphQL — every app calls REST via `fetch`; `graphql`/`graphql-request` are in root deps but unused) |
+| Web3            | viem 2 — used in babydegen-ui only (`isAddress` for withdrawal validation). predict-ui and agentsfun-ui do not import it |
+| Charts          | Recharts 3 (predict-ui ProfitOverTime), Chart.js 4 + react-chartjs-2 (babydegen-ui AllocationPie with custom donut-center plugin) |
+| Markdown        | react-markdown + remark-gfm + rehype-raw (used by ui-chat for system messages) |
 | Unit testing    | Jest 29 + React Testing Library 16                                    |
 | Node utilities  | ts-jest (node env); React components: babel-jest with @nx/react/babel |
 | Package manager | Yarn (frozen lockfile in CI)                                          |
-| Node version    | 22 (see `.nvmrc`)                                                     |
+| Node version    | 22 (`.nvmrc` pins `v22.18.0`; CI uses `22.x`)                         |
+
+---
+
+## Backend API
+
+All three apps hit the **same locally-running agent process** — there is no remote API. Endpoints are built from constants in `libs/util-constants-and-types/src/lib/constants/local.ts`:
+
+```ts
+export const LOCAL  = 'http://127.0.0.1:8716';
+export const API_V1 = `${LOCAL}/api/v1`;
+```
+
+| App           | Endpoints used                                                                                                                                                                |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| agentsfun-ui  | `LOCAL/{agent-info, features, x-activity, memecoin-activity, performance-summary, media}`                                                                                     |
+| babydegen-ui  | `LOCAL/{features, portfolio, withdrawal/amount}`; `POST LOCAL/withdrawal/initiate`; `GET LOCAL/withdrawal/status/:id`                                                         |
+| predict-ui    | `LOCAL/features`; `API_V1/{agent/details, agent/performance, agent/profit-over-time?window=…, agent/prediction-history?page=…, agent/position-details/:id, agent/trading-details, withdrawal}` |
+
+`AgentType` (union: `predict | modius | optimus | agentsFun | polystrat_trader | omenstrat_trader`) is exported from `libs/util-constants-and-types/src/lib/constants/agents.ts` and consumed by `ui-chat` to switch chat presentation.
 
 ---
 
 ## Environment Variables
 
-Each app reads env vars at build time via Vite. Copy `.env.example` → `.env` before running locally.
+Each app reads env vars at build time via Vite (`define` block injects them into `process.env.*`). Copy `.env.example` → `.env` before running locally.
 
 ### `predict-ui` — required
 
@@ -120,6 +141,24 @@ process.env.REACT_APP_AGENT_NAME = 'omenstrat_trader';
 process.env.IS_MOCK_ENABLED = 'false';
 ```
 
+### How mocks are gated
+
+Every hook follows the same pattern (see `libs/util-functions/src/lib/devMock.ts`):
+
+```ts
+const queryFn = async () => {
+  const mock = devMock(() => delay(mockData));
+  if (mock !== null) return mock; // IS_MOCK_ENABLED=true → returns mock with 2s delay
+  return fetch(`${LOCAL}/endpoint`).then((r) => r.json());
+};
+```
+
+`devMock.ts` is `istanbul ignore file` — Jest setup forces `IS_MOCK_ENABLED=false` so the mock branch never executes in tests. To exercise mock-mode code paths in tests, use `.mock.spec.ts` files (the established convention: `useFeatures.mock.spec.ts`, `usePortfolio.mock.spec.ts`, etc.) that set `IS_MOCK_ENABLED=true` before `require()`-ing the hook.
+
+### React Query retry — single shared helper
+
+All `useQuery`/`useMutation` calls use `exponentialBackoffDelay` from `@agent-ui-monorepo/util-functions` (`1000 * 2^failureCount`, capped at **30 seconds**). Do not roll your own.
+
 ---
 
 ## Testing
@@ -128,11 +167,13 @@ Test infrastructure is already configured per project. **All 9 projects (3 apps 
 
 ### Test file placement
 
-Place spec files in the app's `__tests__/` directory, mirroring the `src/` structure:
+**Apps use `__tests__/`; libs co-locate.** This is intentional and consistent across the monorepo — match the pattern when adding new tests.
+
+**Apps** — mirror `src/` under `__tests__/`:
 
 ```
-src/hooks/useFeatures.ts
-__tests__/hooks/useFeatures.spec.ts   ✓
+apps/predict-ui/src/hooks/useFeatures.ts
+apps/predict-ui/__tests__/hooks/useFeatures.spec.ts   ✓
 ```
 
 Import paths from `__tests__/[subpath]/file.spec.ts` back into `src/`:
@@ -141,7 +182,14 @@ Import paths from `__tests__/[subpath]/file.spec.ts` back into `src/`:
 - depth 2 (`__tests__/components/Chat/`) → `../../../src/components/Chat/foo`
 - depth 3 (`__tests__/components/TradeHistory/PositionDetailsModal/`) → `../../../../src/...`
 
-Use `.spec.tsx` extension whenever the file contains JSX, even if the source under test is a `.ts` file.
+**Libs** — spec files sit next to source in `src/lib/`:
+
+```
+libs/ui-chat/src/lib/Chat.tsx
+libs/ui-chat/src/lib/Chat.spec.tsx   ✓
+```
+
+Use `.spec.tsx` whenever the file contains JSX, even if the source under test is a `.ts` file.
 
 ### Test environments
 
@@ -212,19 +260,41 @@ afterEach(() => jest.restoreAllMocks());
 
 ---
 
+## Per-app notes
+
+### `agentsfun-ui`
+- Single-page dashboard: Persona → Performance → XActivity → MemecoinActivity → ChatContent (gated by `useFeatures().isChatEnabled`) → AiGeneratedMedia.
+- Background: pastel radial + conic gradients in `src/app/app.tsx`. Custom Ant Design theme in `src/constants/theme.ts` (primary `#2F54EB`).
+- IPFS media is served from `gateway.autonolas.tech/ipfs/`; external links go to X (`X_URL`, `X_POST_URL`) and Agents.fun (`AGENTS_FUN_URL`).
+
+### `babydegen-ui`
+- Sections: Portfolio (with breakdown modal) → Allocation (Chart.js donut + Ant Table) → StrategyAndChat (gated) → WithdrawAgentsFunds.
+- `src/utils/agentMap.ts` keys off `REACT_APP_AGENT_NAME`: `modius` → display "Modius" on **Mode** chain; anything else → "Optimus" on **Optimism**. Each agent has its own primary color, network logo (`mode-network.png`/`optimism-network.png`), and pie-chart palette (`src/utils/chartjs/palette.ts`).
+- **AllocationPie uses a custom Chart.js plugin** (`src/utils/chartjs/donut-center-plugin.ts`) that loads the chain logo image and calls `chart.update()` once it resolves. This file is excluded from coverage (requires `jest-canvas-mock` or E2E).
+- **Withdrawal state machine** in `useWithdrawFunds.ts`: POST `/withdrawal/initiate` captures `withdrawId` → query `/withdrawal/status/:id` is gated by `enabled: !!withdrawId` and polls every 2s until `status === 'completed'`. Address validated client-side with `viem`'s `isAddress`.
+
+### `predict-ui`
+- Layout (no router): AgentDetails → Performance → ProfitOverTime (Recharts) → TradeHistory (paginated with PositionDetailsModal) → Strategy → ChatContent (gated) → WithdrawLockedFunds.
+- `REACT_APP_AGENT_NAME` ∈ {`omenstrat_trader`, `polystrat_trader`}; falls back to `omenstrat_trader` with a console warning if missing/invalid. Theme + background image + market label (`"Omen"` vs `"Polymarket"`) switch on the value.
+- `src/env.d.ts` augments `ImportMetaEnv`. `src/hooks/useTradeHistory.ts` adds an artificial 1s delay for pagination UX.
+- **Withdrawal state machine** in `useWithdrawLockedFunds.ts`: states `idle → armed → selling → complete/errored`. POST `/withdrawal` arms the flow; the GET query polls every 2s while `armed` or `selling`; on terminal state, the hook invalidates the performance query so `funds_locked_in_markets` refreshes.
+- External: `POLYMARKET_PROFILE_BASE_URL`, `OMEN_SUBGRAPH_URL`, `OLAS_AGENTS_SUBGRAPH_URL`, OLAS-on-xDAI price via CoinGecko.
+
+---
+
 ## CI/CD
 
-Workflows in `.github/workflows/`:
+Workflows in `.github/workflows/` — all use Node `22.x` with a yarn cache keyed on `yarn.lock`:
 
-| Workflow                 | Trigger            | What it does                                        |
-| ------------------------ | ------------------ | --------------------------------------------------- |
-| `check-pull-request.yml` | All PRs            | Lint + test all projects (with `--passWithNoTests`) |
-| `agentsfun-ui-build.yml` | Tag `v*-agentsfun` | Build + create GitHub release with zip artifact     |
-| `babydegen-ui-build.yml` | Tag `v*-babydegen` | Build + release                                     |
-| `predict-ui-build.yml`   | Tag `v*-predict`   | Build + release                                     |
-| `gitleaks.yml`           | All pushes         | Secret scanning                                     |
+| Workflow                 | Trigger                                            | What it does                                                   |
+| ------------------------ | -------------------------------------------------- | -------------------------------------------------------------- |
+| `check-pull-request.yml` | PRs to any branch                                  | `nx run-many --target=lint` + `nx run-many --target=test --passWithNoTests`. **No build, no typecheck.** |
+| `agentsfun-ui-build.yml` | Tag `v*-agentsfun`                                 | Builds and releases `agentsfun-ui-build.zip`                   |
+| `babydegen-ui-build.yml` | Tag `v*-modius` **or** `v*-optimus`                | Sets `REACT_APP_AGENT_NAME` from the tag suffix, builds, and releases `babydegen-ui-build.zip` |
+| `predict-ui-build.yml`   | Tag `v*-omenstrat-trader` **or** `v*-polystrat-trader` | Sets `REACT_APP_AGENT_NAME` (`omenstrat_trader`/`polystrat_trader`), builds, and releases `predict-ui-build.zip` |
+| `gitleaks.yml`           | PRs to any branch                                  | Downloads gitleaks `v8.10.1` and scans full history against `.gitleaks.toml` |
 
-To release an app, push a tag in the format `v{version}-{app}`, e.g. `v1.2.0-predict`.
+Releases are created with `softprops/action-gh-release@v1` + `generate_release_notes: true`. The same tag may be matched by `babydegen` and `predict` workflows — **the agent identity comes from the tag suffix, not from a separate `babydegen`/`predict` namespace**.
 
 ## Plans
 
