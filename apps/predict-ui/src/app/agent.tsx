@@ -115,12 +115,10 @@ export const Agent = () => {
         <TradeHistory />
         <Strategy />
         <ChatContent />
-        {isPolystratAgent && (
-          <WithdrawLockedFunds
-            lockedAmount={performance.metrics.funds_locked_in_markets}
-            marketName="Polymarket"
-          />
-        )}
+        <WithdrawLockedFunds
+          lockedAmount={performance.metrics.funds_locked_in_markets}
+          marketName={isPolystratAgent ? 'Polymarket' : 'Omen'}
+        />
       </AgentContent>
     </Flex>
   );
