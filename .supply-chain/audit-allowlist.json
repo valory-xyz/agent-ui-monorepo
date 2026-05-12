@@ -1,0 +1,41 @@
+{
+  "_doc": "Allowlist for yarn audit high/critical advisories that cannot be fixed in the current branch. Every entry needs a reason and a review date. See SUPPLY-CHAIN-SECURITY.md.",
+  "_fields": {
+    "id": "npm advisory numeric ID (from `yarn audit --json` advisory.id) — REQUIRED, used for matching",
+    "ghsa": "GitHub Security Advisory ID (e.g., GHSA-xxxx-xxxx-xxxx) — for humans, not used for matching",
+    "package": "package name — for humans",
+    "severity": "advisory severity (high|critical) — for humans",
+    "reason": "why the advisory is allowlisted — upstream has no fix, major-version bump deferred, not on a reachable code path, etc.",
+    "added": "YYYY-MM-DD when the entry was added — REQUIRED",
+    "review": "YYYY-MM-DD by which the entry must be re-evaluated — REQUIRED. An expired entry prints a CI warning but does not fail the job."
+  },
+  "entries": [
+    {
+      "id": 1112052,
+      "ghsa": "GHSA-2w69-qvjg-hvjx",
+      "package": "@remix-run/router",
+      "severity": "high",
+      "reason": "Reaches via react-router-dom 6.29.0 > @remix-run/router. The XSS-via-open-redirect path requires React Router's Framework / Data / RSC modes; every app in this monorepo uses Declarative Mode (BrowserRouter) only and defines no routes, so the loader/action/redirect surface is not present. Cleared by a routine react-router-dom 6.29.0 → 6.30.2+ patch bump.",
+      "added": "2026-05-12",
+      "review": "2026-08-10"
+    },
+    {
+      "id": 1115806,
+      "ghsa": "GHSA-r5fr-rjxr-66jc",
+      "package": "lodash",
+      "severity": "high",
+      "reason": "Reaches via styled-components 5.3.6 > babel-plugin-styled-components > lodash 4.17.21. Build-time-only dep used by the styled-components babel plugin. The vulnerable sink is `_.template` with attacker-controlled `options.imports` key names — the plugin does not invoke `_.template` and does not accept untrusted input. Cleared by an upstream babel-plugin-styled-components release or a styled-components 6.x migration.",
+      "added": "2026-05-12",
+      "review": "2026-08-10"
+    },
+    {
+      "id": 1115552,
+      "ghsa": "GHSA-c2c7-rcm5-vvqj",
+      "package": "picomatch",
+      "severity": "high",
+      "reason": "Reaches via styled-components 5.3.6 > babel-plugin-styled-components > picomatch 2.3.1. Build-time-only dep used for glob-matching component-name patterns at compile time. The ReDoS path requires untrusted glob input; the plugin matches only developer-authored, static patterns. Cleared by an upstream babel-plugin-styled-components release or a styled-components 6.x migration.",
+      "added": "2026-05-12",
+      "review": "2026-08-10"
+    }
+  ]
+}
