@@ -1,0 +1,145 @@
+name: Bundle Size
+
+# Measures the built dist/apps/<app>/ size per app and compares against
+# the latest successful main-branch run. A sudden >10% jump in any app's
+# bundle is a malware canary (malicious dep payloads tend to be heavy)
+# and surfaces as a sticky PR comment with a ⚠️ marker.
+#
+# Currently warn-only (non-blocking). Plan §3.2: promote to fail after
+# 4-6 weeks of baseline data has accumulated.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bundle-size-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  measure:
+    name: Measure and report
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write  # for sticky comment on PRs
+      actions: read         # for dawidd6/action-download-artifact
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Activate pinned Yarn via Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          [ "$(yarn --version)" = "1.22.22" ] || { echo "::error::corepack activation failed"; exit 1; }
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build all apps
+        run: yarn nx run-many --target=build --all --skip-nx-cache
+
+      - name: Measure current bundle sizes
+        run: node scripts/bundle-size.mjs bundle-size.json
+
+      # ─── push:main path ──────────────────────────────────────────
+      # Upload this measurement so future PRs can fetch it as the
+      # baseline for delta comparison. 90-day retention is plenty —
+      # any baseline older than that means main has been quiet for
+      # 90 days and a fresh baseline can be reconstructed on the next
+      # push trivially.
+      - name: Upload baseline (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: bundle-size-baseline
+          path: bundle-size.json
+          retention-days: 90
+
+      # ─── pull_request path ───────────────────────────────────────
+      # Best-effort: fetch the latest successful main run's artifact.
+      # If none exists yet (first run of this workflow), the comment
+      # falls back to "current sizes only, no delta".
+      - name: Download main baseline (best effort)
+        if: github.event_name == 'pull_request'
+        uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11 # v6
+        with:
+          workflow: bundle-size.yml
+          branch: main
+          name: bundle-size-baseline
+          path: baseline
+          if_no_artifact_found: warn
+          search_artifacts: true
+
+      - name: Post / update sticky PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            const fs = require('fs');
+            const current = JSON.parse(fs.readFileSync('bundle-size.json', 'utf8'));
+            let baseline = null;
+            try { baseline = JSON.parse(fs.readFileSync('baseline/bundle-size.json', 'utf8')); } catch {}
+
+            const kb = (n) => (n / 1024).toFixed(1) + ' KB';
+            const deltaCell = (cur, base) => {
+              if (base == null) return kb(cur);
+              const d = cur - base;
+              const pct = base === 0 ? 0 : (d / base) * 100;
+              const sign = d >= 0 ? '+' : '';
+              const flag = Math.abs(pct) >= 10 ? ' ⚠️' : '';
+              return `${kb(cur)} (${sign}${kb(d)}, ${sign}${pct.toFixed(1)}%${flag})`;
+            };
+
+            let body = '## 📦 Bundle sizes\n\n';
+            body += '| App | Total | js | css | png |\n';
+            body += '|---|---|---|---|---|\n';
+            for (const app of Object.keys(current).sort()) {
+              const c = current[app];
+              const b = baseline ? baseline[app] : null;
+              body += `| \`${app}\` `
+                + `| ${deltaCell(c.total, b ? b.total : null)} `
+                + `| ${kb(c.by_ext.js || 0)} `
+                + `| ${kb(c.by_ext.css || 0)} `
+                + `| ${kb(c.by_ext.png || 0)} |\n`;
+            }
+            if (!baseline) {
+              body += '\n_(No baseline from `main` yet — delta will appear on the next PR once this workflow has run on `main`.)_\n';
+            } else {
+              body += '\n_Compared against the latest successful `main` run, not this PR\'s merge-base — deltas may conflate this PR\'s change with intervening `main` commits. Warns at ±10% per-app delta; non-blocking. Sudden bundle growth is a malware canary._\n';
+            }
+
+            const MARKER = '<!-- bundle-size-report -->';
+            const fullBody = `${MARKER}\n${body}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const existing = comments.find((c) => c.body && c.body.includes(MARKER));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: fullBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: fullBody,
+              });
+            }

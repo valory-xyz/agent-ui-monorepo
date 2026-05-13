@@ -65,7 +65,7 @@ Five jobs gate every PR:
 
 - **`Gitleaks / scan`** ([`gitleaks.yml`](./.github/workflows/gitleaks.yml)) — full-history secret scan against [`.gitleaks.toml`](./.gitleaks.toml). The CLI is downloaded directly from the official GitHub release; version + SHA256 are pinned in the workflow, and the download is `sha256sum -c`-verified before extraction. Currently pinned at `8.30.1`.
 
-A sixth job, **`Supply Chain / all-checks-passed`**, aggregates `audit` + `install-hooks` + `lockfile-lint` via `needs:` + `if: always()`. Branch protection (Phase 3 of the supply-chain plan) should require this context plus `Gitleaks / scan` plus `Check Pull Request / lint` — cross-workflow `needs:` is not supported, so the three workflows are separate required-check contexts.
+A sixth job, **`Supply chain checks passed`** (the Supply Chain workflow's aggregator), depends on `audit` + `install-hooks` + `lockfile-lint` via `needs:` + `if: always()`. Branch protection (Phase 3 of the supply-chain plan) should require this context plus `All checks passed` (the Check Pull Request workflow's own aggregator over lint + test) plus `Run Gitleaks` — cross-workflow `needs:` is not supported, so the three workflows are separate required-check contexts. The two aggregator job names are deliberately distinct so each context resolves to exactly one job.
 
 **Why a wrapper and not stock `yarn audit`.** Yarn 1.x `yarn audit` exits with a severity bitmask (`1`=info, `2`=low, `4`=moderate, `8`=high, `16`=critical) rather than a threshold comparison — `--level high` filters the *printed* output but does not affect the exit code. On top of that, there is no native way to suppress a specific advisory that cannot be fixed. [`scripts/audit.mjs`](./scripts/audit.mjs) handles both: it parses the JSON output, applies the high/critical gate explicitly, and consults the allowlist. Revisit on a future Yarn Berry migration.
 
@@ -223,6 +223,49 @@ GitHub's Dependabot **alerts** scan the entire `yarn.lock` and surface advisorie
 
 **Dependabot security updates and version updates are disabled.** No `.github/dependabot.yml` exists, and the Settings → Code security toggle for "Dependabot security updates" is OFF. The org-wide policy is **alerts-only**. Re-enabling auto-PRs is a team decision, not a "left off by mistake" — historical context: auto-PRs created review-queue noise faster than they were merged, often duplicating bumps the team had already evaluated.
 
+### Verify the alerts-only state in 5 seconds
+
+A future maintainer (or this one, on a different machine) can confirm the policy is still in place without admin UI access. All four commands need only a `gh` CLI auth with `repo` scope:
+
+```bash
+# 1. No .github/dependabot.yml on the remote main (no version-update auto-PRs).
+gh api repos/valory-xyz/agent-ui-monorepo/contents/.github/dependabot.yml \
+  >/dev/null 2>&1 && echo '⚠️  dependabot.yml exists — review per policy' \
+                   || echo '✅ no dependabot.yml on remote'
+
+# 2. No open Dependabot PRs.
+test "$(gh pr list --repo valory-xyz/agent-ui-monorepo --author 'app/dependabot' \
+                   --state open --json number --jq 'length')" = "0" \
+  && echo '✅ no open dependabot PRs' \
+  || echo '⚠️  open dependabot PRs found — investigate'
+
+# 3. Dependabot ALERTS are on (this endpoint returns alert data when enabled).
+gh api repos/valory-xyz/agent-ui-monorepo/dependabot/alerts --paginate \
+   --jq 'length' >/dev/null 2>&1 \
+  && echo '✅ dependabot alerts endpoint returns data — alerts on' \
+  || echo '⚠️  dependabot alerts endpoint failed — alerts may be off'
+
+# 4. Dependabot SECURITY UPDATES (the auto-PR toggle) are off.
+# `status` is a read-only special variable in zsh — use a different name.
+http_code="$(gh api -i repos/valory-xyz/agent-ui-monorepo/automated-security-fixes \
+             2>&1 | head -1 | awk '{print $2}')"
+case "$http_code" in
+  204) echo '⚠️  automated-security-fixes ENABLED — toggle off in Settings → Code security' ;;
+  404) echo '✅ automated-security-fixes disabled (auto-PR toggle off)' ;;
+    *) echo "?  unexpected HTTP $http_code — check Settings → Code security manually" ;;
+esac
+```
+
+Expected output (current state):
+```
+✅ no dependabot.yml on remote
+✅ no open dependabot PRs
+✅ dependabot alerts endpoint returns data — alerts on
+✅ automated-security-fixes disabled (auto-PR toggle off)
+```
+
+If anything other than ✅ appears on lines 1 or 4, the policy has drifted and a code owner (CODEOWNERS already covers `/.github/` and the policy doc) should be looped in.
+
 ## Current gaps / TODO
 
 This file lands as part of Phase 2 of the supply-chain hardening plan. Items here track what's still outstanding.
@@ -239,7 +282,7 @@ This file lands as part of Phase 2 of the supply-chain hardening plan. Items her
 - [x] All workflows declare explicit `permissions:` blocks (top-level `contents: read`; per-job `contents: write` only on the release workflows for `softprops/action-gh-release`).
 - [x] All GitHub Actions are SHA-pinned, not tag-pinned.
 - [ ] **Disable Dependabot security updates** + close stale `dependabot/npm_and_yarn/*` PRs. Manual GitHub-side action; tracked under the supply-chain plan's Phase 1.7.
-- [ ] **Re-enable branch protection on `main`** once `Supply Chain / all-checks-passed` has run green for a week. Required checks: `Supply Chain / all-checks-passed` + `Gitleaks / scan` + `Check Pull Request / lint`. **Require review from Code Owners** — without this, [`.github/CODEOWNERS`](./.github/CODEOWNERS) is decorative. Tracked under the supply-chain plan's Phase 3.6.
+- [ ] **Re-enable branch protection on `main`** once `Supply chain checks passed` has run green for a week. Required checks: `Supply chain checks passed` + `All checks passed` + `Run Gitleaks`. **Require review from Code Owners** — without this, [`.github/CODEOWNERS`](./.github/CODEOWNERS) is decorative. Tracked under the supply-chain plan's Phase 3.6.
 - [ ] **Weekly cron audit** with Slack/Issue failure notification. Tracked under the supply-chain plan's Phase 3.4.
 - [ ] **Snyk parity** with other Valory repos. Tracked under the supply-chain plan's Phase 3.5.
 - [ ] **Strip tildes (`~`)** on the remaining `@swc-node/register`, `@swc/cli`, `@swc/core`, `@swc/helpers`, `jsdom`, `typescript` entries. Plan 1.2 was scoped to carets only; tildes carry the same patch-bump-on-clean-install risk.

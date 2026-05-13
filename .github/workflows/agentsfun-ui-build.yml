@@ -11,57 +11,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/_build-app.yml
     permissions:
-      contents: write  # needed by softprops/action-gh-release to create the GitHub Release
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
-        with:
-          node-version: '24.x'
-          cache: 'yarn'
-
-      - name: Activate pinned Yarn via Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-          [ "$(yarn --version)" = "1.22.22" ] || { echo "::error::corepack activation failed"; exit 1; }
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@6f8efc29b200d32929f49075959781ed54ec270c # v3
-        with:
-          path: |
-            ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            **/node_modules
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build agentsfun-ui app
-        run: yarn nx build agentsfun-ui
-
-      - name: Zip agentsfun-ui build
-        run: |
-          cd dist/apps/agentsfun-ui
-          zip -r ../../../agentsfun-ui-build.zip .
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
-        with:
-          files: agentsfun-ui-build.zip
-          name: Release ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      contents: write
+    with:
+      app-name: agentsfun-ui
