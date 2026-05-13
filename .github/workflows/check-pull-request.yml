@@ -42,4 +42,15 @@ jobs:
       - name: Test
         run: yarn nx run-many --target=test --all --skip-nx-cache --passWithNoTests
 
-
+  all-checks-passed:
+    name: All checks passed
+    if: always()
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all required jobs succeeded
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}" == "true" ]]; then
+            echo "One or more required jobs did not succeed."
+            exit 1
+          fi
