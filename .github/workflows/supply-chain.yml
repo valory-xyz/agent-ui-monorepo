@@ -1,0 +1,115 @@
+name: Supply Chain
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supply-chain-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Dependency audit (production tree)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Activate pinned Yarn via Corepack
+        # Without corepack activation, the `packageManager` pin in
+        # package.json is silently ignored — yarn falls back to whatever
+        # version ships with the runner image.
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          actual="$(yarn --version)"
+          [ "$actual" = "1.22.22" ] || { echo "::error::corepack activation failed (got $actual)"; exit 1; }
+
+      # NO `yarn install` — `yarn audit` reads `yarn.lock` directly via the
+      # npm advisory database. Skipping install means a compromised
+      # postinstall cannot run inside the gate that exists to detect
+      # compromised postinstalls. `npm audit signatures` (which needs an
+      # installed tree) runs in the `install-hooks` job instead.
+      - name: yarn audit:prod (high/critical in production tree, with allowlist)
+        run: yarn audit:prod
+
+  install-hooks:
+    name: Install-hook audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: Activate pinned Yarn via Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          [ "$(yarn --version)" = "1.22.22" ] || { echo "::error::corepack activation failed"; exit 1; }
+
+      # `--ignore-scripts` keeps any postinstall from firing on the runner
+      # before the audit gate has classified it. The script walks
+      # node_modules to find install-hook declarations, which is
+      # independent of whether the hooks ran.
+      - name: Install dependencies (no scripts)
+        run: yarn install --frozen-lockfile --ignore-scripts
+
+      - name: Audit install hooks against allowlist
+        run: yarn audit:install-hooks
+
+      # `npm audit signatures` lives here, not in the `audit` job, because it
+      # needs a populated node_modules to enumerate installed packages. The
+      # --ignore-scripts install above gives us the tree without running any
+      # hook code, which preserves the same security property as the audit job.
+      - name: npm audit signatures (registry-signed packages)
+        run: npm audit signatures
+
+  lockfile-lint:
+    name: Lockfile validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version-file: .nvmrc
+
+      - name: lockfile-lint (HTTPS-only registry hosts, integrity hashes)
+        run: |
+          npx --yes lockfile-lint \
+            --path yarn.lock \
+            --type yarn \
+            --validate-https \
+            --allowed-hosts yarn npm \
+            --empty-hostname false
+
+  all-checks-passed:
+    name: All checks passed
+    needs: [audit, install-hooks, lockfile-lint]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all required jobs succeeded
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" ]] || \
+             [[ "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]] || \
+             [[ "${{ contains(needs.*.result, 'skipped') }}" == "true" ]]; then
+            echo "::error::One or more required jobs did not succeed"
+            exit 1
+          fi

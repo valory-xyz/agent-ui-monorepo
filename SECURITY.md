@@ -2,6 +2,8 @@
 
 This document outlines security procedures and general policies for the `agent-ui-monorepo` project.
 
+> For supply-chain-specific concerns — dependency hardening, npm-publish compromise response, install-hook auditing, the CI gates that enforce all of this — see [`SUPPLY-CHAIN-SECURITY.md`](./SUPPLY-CHAIN-SECURITY.md).
+
 ## Supported Versions
 
 This repository ships three independently-versioned applications. Only the latest released version of each app receives security updates.

@@ -89,6 +89,9 @@
   },
   "scripts": {
     "lint": "nx run-many --target=lint --all",
-    "lint:fix": "nx run-many --target=lint --all --fix"
+    "lint:fix": "nx run-many --target=lint --all --fix",
+    "audit:prod": "node scripts/audit.mjs",
+    "audit:install-hooks": "node scripts/audit-install-hooks.mjs",
+    "audit:install-hooks:update": "node scripts/audit-install-hooks.mjs --update"
   }
 }

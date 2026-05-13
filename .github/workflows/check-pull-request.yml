@@ -22,6 +22,14 @@ jobs:
           node-version: '24.x'
           cache: 'yarn'
 
+      - name: Activate pinned Yarn via Corepack
+        # Without this, the `packageManager` pin in package.json is silently
+        # ignored and CI falls back to whichever yarn ships with the runner.
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          [ "$(yarn --version)" = "1.22.22" ] || { echo "::error::corepack activation failed"; exit 1; }
+
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
