@@ -4,6 +4,12 @@ on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    # Weekly Monday 07:17 UTC. Catches newly-disclosed advisories against
+    # the existing lockfile without waiting for the next PR. The unusual
+    # minute (17) is to avoid the on-the-hour cron-storm on GitHub Actions
+    # runners.
+    - cron: '17 7 * * 1'
 
 permissions:
   contents: read
@@ -113,3 +119,78 @@ jobs:
             echo "::error::One or more required jobs did not succeed"
             exit 1
           fi
+
+  # Weekly-cron-only alert. Opens (or appends to) a GitHub Issue when any
+  # required gate fails on a scheduled run, so a silent regression on main
+  # doesn't go unnoticed between PRs. Deliberately scoped to schedule
+  # events — failures on PRs are already surfaced by the PR check status.
+  alert-on-cron-failure:
+    name: Alert on weekly audit failure
+    needs: [audit, install-hooks, lockfile-lint]
+    if: |
+      github.event_name == 'schedule' &&
+      (needs.audit.result == 'failure' ||
+       needs.install-hooks.result == 'failure' ||
+       needs.lockfile-lint.result == 'failure')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Open or update tracking issue
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        with:
+          script: |
+            const failures = [];
+            if ('${{ needs.audit.result }}' === 'failure') failures.push('`Dependency audit (production tree)`');
+            if ('${{ needs.install-hooks.result }}' === 'failure') failures.push('`Install-hook audit`');
+            if ('${{ needs.lockfile-lint.result }}' === 'failure') failures.push('`Lockfile validation`');
+
+            const titlePrefix = '[supply-chain] Weekly audit failed';
+            const date = new Date().toISOString().slice(0, 10);
+            const title = `${titlePrefix} (${date})`;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const body = [
+              `The weekly supply-chain cron audit failed on \`main\`.`,
+              ``,
+              `**Failed jobs:**`,
+              ...failures.map((f) => `- ${f}`),
+              ``,
+              `**Run:** ${runUrl}`,
+              ``,
+              `**Likely causes:**`,
+              `- A new high/critical advisory was disclosed against an existing dep → see Dependency audit logs; either bump the dep or add a documented entry to \`.supply-chain/audit-allowlist.json\`.`,
+              `- An install hook in a transitive dep changed → run \`yarn audit:install-hooks:update\` after diagnosing whether the hook is legitimate.`,
+              `- A non-HTTPS \`resolved\` URL appeared in \`yarn.lock\` → inspect the offending entry; rare in practice.`,
+              ``,
+              `Follow the response playbook in [SUPPLY-CHAIN-SECURITY.md](../blob/main/SUPPLY-CHAIN-SECURITY.md) once the root cause is identified.`,
+            ].join('\n');
+
+            // Idempotence: only one open tracking issue at a time. If one
+            // exists, append a comment with the new run link rather than
+            // opening a fresh issue every Monday.
+            const { data: openIssues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const existing = openIssues.find((i) => i.title.startsWith(titlePrefix) && !i.pull_request);
+
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body: `Weekly audit failed again on ${date}.\n\n${body}`,
+              });
+              core.notice(`Appended failure note to existing issue #${existing.number}`);
+            } else {
+              const { data: created } = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+              core.notice(`Opened tracking issue #${created.number}`);
+            }
