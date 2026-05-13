@@ -1,0 +1,69 @@
+name: Build App (reusable)
+
+# Reusable workflow invoked by each per-app release workflow
+# (agentsfun-ui-build.yml, babydegen-ui-build.yml, predict-ui-build.yml).
+# Centralises the install/build/zip/release dance so Phase-2-style
+# changes (corepack, action SHA bumps) become a one-place edit.
+
+on:
+  workflow_call:
+    inputs:
+      app-name:
+        description: 'NX project name (agentsfun-ui | babydegen-ui | predict-ui)'
+        required: true
+        type: string
+      agent-env:
+        description: 'REACT_APP_AGENT_NAME value to inject at build time. Leave empty for apps that do not branch on agent type (agentsfun-ui).'
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed by softprops/action-gh-release to create the GitHub Release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
+        with:
+          node-version-file: .nvmrc
+          cache: 'yarn'
+
+      - name: Activate pinned Yarn via Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          [ "$(yarn --version)" = "1.22.22" ] || { echo "::error::corepack activation failed"; exit 1; }
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Export agent env var
+        if: inputs.agent-env != ''
+        run: echo "REACT_APP_AGENT_NAME=${{ inputs.agent-env }}" >> $GITHUB_ENV
+
+      - name: Build app
+        run: yarn nx build ${{ inputs.app-name }}
+
+      - name: Zip build artifact
+        run: |
+          cd dist/apps/${{ inputs.app-name }}
+          zip -r ../../../${{ inputs.app-name }}-build.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v1
+        with:
+          files: ${{ inputs.app-name }}-build.zip
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
