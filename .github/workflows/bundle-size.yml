@@ -116,7 +116,7 @@ jobs:
             if (!baseline) {
               body += '\n_(No baseline from `main` yet — delta will appear on the next PR once this workflow has run on `main`.)_\n';
             } else {
-              body += '\n_Warns at ±10% per-app delta; non-blocking. Sudden bundle growth is a malware canary._\n';
+              body += '\n_Compared against the latest successful `main` run, not this PR\'s merge-base — deltas may conflate this PR\'s change with intervening `main` commits. Warns at ±10% per-app delta; non-blocking. Sudden bundle growth is a malware canary._\n';
             }
 
             const MARKER = '<!-- bundle-size-report -->';

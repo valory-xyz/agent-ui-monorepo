@@ -15,13 +15,15 @@
 #   ./scripts/branch-protection-apply.sh --remove           # remove protection (admin only)
 #
 # Required status check contexts (must match the job *names* in workflow YAML):
-#   - "lint"                           (Check Pull Request workflow)
+#   - "All checks passed"              (Check Pull Request workflow aggregator — lint + test)
+#   - "Supply chain checks passed"     (Supply Chain workflow aggregator — audit + install-hooks + lockfile-lint)
 #   - "Run Gitleaks"                   (Gitleaks workflow)
-#   - "All checks passed"              (Supply Chain workflow aggregator)
 #
 # Cross-workflow `needs:` is not supported, so the three contexts must all
 # be declared individually here — that's the load-bearing reason the
-# aggregator pattern exists in supply-chain.yml.
+# two aggregator patterns exist in `check-pull-request.yml` and
+# `supply-chain.yml`. The names are deliberately distinct so each context
+# resolves to exactly one job at branch-protection time.
 
 set -euo pipefail
 
@@ -29,9 +31,9 @@ REPO="${REPO:-valory-xyz/agent-ui-monorepo}"
 BRANCH="main"
 
 CONTEXTS=(
-  "lint"
-  "Run Gitleaks"
   "All checks passed"
+  "Supply chain checks passed"
+  "Run Gitleaks"
 )
 
 build_payload() {

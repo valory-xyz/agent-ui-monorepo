@@ -106,7 +106,10 @@ jobs:
             --empty-hostname false
 
   all-checks-passed:
-    name: All checks passed
+    # Distinct from `check-pull-request.yml`'s "All checks passed" so branch
+    # protection can require both as separate, unambiguous required-check
+    # contexts.
+    name: Supply chain checks passed
     needs: [audit, install-hooks, lockfile-lint]
     if: always()
     runs-on: ubuntu-latest
@@ -127,11 +130,15 @@ jobs:
   alert-on-cron-failure:
     name: Alert on weekly audit failure
     needs: [audit, install-hooks, lockfile-lint]
+    # Fire on any non-success terminal state, not just 'failure'. A cancelled
+    # or skipped required job (runner outage, infra issue) is exactly the
+    # silent-regression mode this alert is meant to catch — narrowing to
+    # 'failure' only would let those slip through.
     if: |
       github.event_name == 'schedule' &&
-      (needs.audit.result == 'failure' ||
-       needs.install-hooks.result == 'failure' ||
-       needs.lockfile-lint.result == 'failure')
+      (needs.audit.result != 'success' ||
+       needs.install-hooks.result != 'success' ||
+       needs.lockfile-lint.result != 'success')
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -141,19 +148,23 @@ jobs:
         with:
           script: |
             const failures = [];
-            if ('${{ needs.audit.result }}' === 'failure') failures.push('`Dependency audit (production tree)`');
-            if ('${{ needs.install-hooks.result }}' === 'failure') failures.push('`Install-hook audit`');
-            if ('${{ needs.lockfile-lint.result }}' === 'failure') failures.push('`Lockfile validation`');
+            const flag = (name, result) => {
+              if (result !== 'success') failures.push(`\`${name}\` (${result})`);
+            };
+            flag('Dependency audit (production tree)', '${{ needs.audit.result }}');
+            flag('Install-hook audit',                  '${{ needs.install-hooks.result }}');
+            flag('Lockfile validation',                 '${{ needs.lockfile-lint.result }}');
 
             const titlePrefix = '[supply-chain] Weekly audit failed';
             const date = new Date().toISOString().slice(0, 10);
             const title = `${titlePrefix} (${date})`;
             const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const policyUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/blob/main/SUPPLY-CHAIN-SECURITY.md`;
 
             const body = [
-              `The weekly supply-chain cron audit failed on \`main\`.`,
+              `The weekly supply-chain cron audit did not pass cleanly on \`main\`.`,
               ``,
-              `**Failed jobs:**`,
+              `**Required jobs that did not succeed:**`,
               ...failures.map((f) => `- ${f}`),
               ``,
               `**Run:** ${runUrl}`,
@@ -162,8 +173,9 @@ jobs:
               `- A new high/critical advisory was disclosed against an existing dep → see Dependency audit logs; either bump the dep or add a documented entry to \`.supply-chain/audit-allowlist.json\`.`,
               `- An install hook in a transitive dep changed → run \`yarn audit:install-hooks:update\` after diagnosing whether the hook is legitimate.`,
               `- A non-HTTPS \`resolved\` URL appeared in \`yarn.lock\` → inspect the offending entry; rare in practice.`,
+              `- The required job was cancelled or skipped (e.g., runner outage, transient infra issue) — re-run the workflow from the linked run page to confirm.`,
               ``,
-              `Follow the response playbook in [SUPPLY-CHAIN-SECURITY.md](../blob/main/SUPPLY-CHAIN-SECURITY.md) once the root cause is identified.`,
+              `Follow the response playbook in [SUPPLY-CHAIN-SECURITY.md](${policyUrl}) once the root cause is identified.`,
             ].join('\n');
 
             // Idempotence: only one open tracking issue at a time. If one

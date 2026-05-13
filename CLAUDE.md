@@ -284,7 +284,7 @@ afterEach(() => jest.restoreAllMocks());
 
 ## CI/CD
 
-Workflows in `.github/workflows/` — all use Node `22.x` with a yarn cache keyed on `yarn.lock`:
+Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node from `.nvmrc` (currently `v24.15.0`) and activates Corepack-pinned `yarn@1.22.22` before installing. The `packageManager` pin in `package.json` is silently ignored without that activation.
 
 | Workflow                 | Trigger                                            | What it does                                                   |
 | ------------------------ | -------------------------------------------------- | -------------------------------------------------------------- |
@@ -305,7 +305,7 @@ Policy lives in [`SUPPLY-CHAIN-SECURITY.md`](SUPPLY-CHAIN-SECURITY.md). Quick ma
 - **CI gates wired in `.github/workflows/`:** `supply-chain.yml` (audit + install-hooks + lockfile-lint + all-checks-passed aggregator + weekly Mon 07:17 UTC cron with Issue-based failure alert), `gitleaks.yml` (v8.30.1, SHA256-verified download), `bundle-size.yml` (warn-only PR comment on ±10% delta), `snyk-security.yml` (dormant until `SNYK_TOKEN` is set + Snyk org adds the repo), `check-pull-request.yml` (lint + test). Three release workflows delegate to `_build-app.yml` reusable workflow.
 - **Naming gotcha:** the audit script is `audit:prod`, **never `audit`**. Yarn 1.x's built-in `yarn audit` subcommand shadows same-named entries in `package.json` scripts.
 - **Dependabot:** alerts-only policy. No `.github/dependabot.yml`, "Dependabot security updates" disabled in Settings. Don't re-enable auto-PRs without team agreement — the policy and history are documented in `SUPPLY-CHAIN-SECURITY.md`.
-- **Branch protection** ([`scripts/branch-protection-apply.sh`](scripts/branch-protection-apply.sh)). Required contexts: `lint`, `Run Gitleaks`, `All checks passed`. Cross-workflow `needs:` is unsupported, hence three separate contexts.
+- **Branch protection** ([`scripts/branch-protection-apply.sh`](scripts/branch-protection-apply.sh)). Required contexts: `All checks passed` (Check Pull Request aggregator), `Supply chain checks passed` (Supply Chain aggregator), `Run Gitleaks`. Cross-workflow `needs:` is unsupported, hence three separate contexts with deliberately distinct names.
 - **Tools that look like dependencies but aren't:** `lockfile-lint` is invoked via `npx --yes` in `supply-chain.yml` to avoid committing it to `package.json`. `gitleaks` is downloaded + SHA256-verified per-run.
 
 If `yarn audit:prod` starts failing locally, the first thing to check is whether the `.supply-chain/audit-allowlist.json` entry's `review` date has passed (warning) or a new advisory was published (blocking).
