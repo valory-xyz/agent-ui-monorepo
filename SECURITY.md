@@ -4,11 +4,13 @@ This document outlines security procedures and general policies for the `agent-u
 
 ## Supported Versions
 
-The following table shows which versions of `agent-ui-monorepo` are currently being supported with security updates.
+This repository ships three independently-versioned applications. Only the latest released version of each app receives security updates.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| `N/A`   | :x:                |
+| App            | Release tag pattern                          | Supported version       |
+| -------------- | -------------------------------------------- | ----------------------- |
+| `agentsfun-ui` | `v*-agentsfun`                               | Latest released version |
+| `babydegen-ui` | `v*-modius`, `v*-optimus`                    | Latest released version |
+| `predict-ui`   | `v*-omenstrat-trader`, `v*-polystrat-trader` | Latest released version |
 
 ## Reporting a Vulnerability
 
@@ -26,7 +28,7 @@ When the security team receives a security bug report, they will assign it to a 
 
 - Confirm the problem and determine the affected versions.
 - Audit code to find any potential similar problems.
-- Prepare fixes for all releases still under maintenance. These fixes will be released as fast as possible to PyPI.
+- Prepare fixes for all releases still under maintenance. These fixes will be released as fast as possible as a new GitHub Release (each app ships as a build artifact ZIP attached to a tag-triggered release).
 
 ## Comments on this Policy
 

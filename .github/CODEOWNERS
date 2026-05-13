@@ -1,0 +1,27 @@
+# CODEOWNERS — supply-chain-relevant paths
+#
+# Owners listed here are auto-requested as reviewers on matching paths.
+# Enforcement requires "Require review from Code Owners" in branch protection
+# (Settings → Branches → main); without that toggle this file is decorative.
+#
+# See SECURITY.md and SUPPLY-CHAIN-SECURITY.md (added in Phase 2) for the policy
+# these owners gate.
+
+# Default owner for the whole repo
+*                            @mohandast52 @Tanya-atatakai @rajat2502
+
+# CI / supply-chain infrastructure
+/.github/                    @mohandast52 @Tanya-atatakai @rajat2502
+/.supply-chain/              @mohandast52 @Tanya-atatakai @rajat2502
+/scripts/                    @mohandast52 @Tanya-atatakai @rajat2502
+
+# Dependency and toolchain pins
+/package.json                @mohandast52 @Tanya-atatakai @rajat2502
+/yarn.lock                   @mohandast52 @Tanya-atatakai @rajat2502
+/.npmrc                      @mohandast52 @Tanya-atatakai @rajat2502
+/.nvmrc                      @mohandast52 @Tanya-atatakai @rajat2502
+
+# Security policy and ownership
+/SECURITY.md                 @mohandast52 @Tanya-atatakai @rajat2502
+/SUPPLY-CHAIN-SECURITY.md    @mohandast52 @Tanya-atatakai @rajat2502
+/.github/CODEOWNERS          @mohandast52 @Tanya-atatakai @rajat2502
