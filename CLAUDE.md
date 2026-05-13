@@ -296,6 +296,20 @@ Workflows in `.github/workflows/` — all use Node `22.x` with a yarn cache keye
 
 Releases are created with `softprops/action-gh-release@v1` + `generate_release_notes: true`. The same tag may be matched by `babydegen` and `predict` workflows — **the agent identity comes from the tag suffix, not from a separate `babydegen`/`predict` namespace**.
 
+## Supply chain & security
+
+Policy lives in [`SUPPLY-CHAIN-SECURITY.md`](SUPPLY-CHAIN-SECURITY.md). Quick map of the moving parts so future sessions don't re-derive them:
+
+- **Audit gate (`yarn audit:prod`).** Wraps `yarn audit --groups dependencies --json` because Yarn 1.x's `--level high` filters output, not exit code. Lives at [`scripts/audit.mjs`](scripts/audit.mjs); allowlist at [`.supply-chain/audit-allowlist.json`](.supply-chain/audit-allowlist.json) — every entry needs `reason` + `review` (YYYY-MM-DD).
+- **Install-hook gate (`yarn audit:install-hooks`).** Walks `node_modules` for non-trivial `pre/install/postinstall` scripts and diffs against [`.supply-chain/install-hooks.allowlist`](.supply-chain/install-hooks.allowlist). Regenerate with `yarn audit:install-hooks:update` after any dep change.
+- **CI gates wired in `.github/workflows/`:** `supply-chain.yml` (audit + install-hooks + lockfile-lint + all-checks-passed aggregator + weekly Mon 07:17 UTC cron with Issue-based failure alert), `gitleaks.yml` (v8.30.1, SHA256-verified download), `bundle-size.yml` (warn-only PR comment on ±10% delta), `snyk-security.yml` (dormant until `SNYK_TOKEN` is set + Snyk org adds the repo), `check-pull-request.yml` (lint + test). Three release workflows delegate to `_build-app.yml` reusable workflow.
+- **Naming gotcha:** the audit script is `audit:prod`, **never `audit`**. Yarn 1.x's built-in `yarn audit` subcommand shadows same-named entries in `package.json` scripts.
+- **Dependabot:** alerts-only policy. No `.github/dependabot.yml`, "Dependabot security updates" disabled in Settings. Don't re-enable auto-PRs without team agreement — the policy and history are documented in `SUPPLY-CHAIN-SECURITY.md`.
+- **Branch protection** ([`scripts/branch-protection-apply.sh`](scripts/branch-protection-apply.sh)). Required contexts: `lint`, `Run Gitleaks`, `All checks passed`. Cross-workflow `needs:` is unsupported, hence three separate contexts.
+- **Tools that look like dependencies but aren't:** `lockfile-lint` is invoked via `npx --yes` in `supply-chain.yml` to avoid committing it to `package.json`. `gitleaks` is downloaded + SHA256-verified per-run.
+
+If `yarn audit:prod` starts failing locally, the first thing to check is whether the `.supply-chain/audit-allowlist.json` entry's `review` date has passed (warning) or a new advisory was published (blocking).
+
 ## Plans
 
 - Make the plan extremely concise. Sacrifice grammar for the sake of concision.
