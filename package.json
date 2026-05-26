@@ -58,7 +58,7 @@
     "tslib": "2.8.1",
     "typescript": "~5.7.2",
     "typescript-eslint": "8.52.0",
-    "vite": "6.4.1",
+    "vite": "6.4.2",
     "vite-plugin-dts": "4.5.4",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "3.2.4"
@@ -80,7 +80,7 @@
     "react-is": "19.0.0",
     "react-jazzicon": "1.0.4",
     "react-markdown": "10.1.0",
-    "react-router-dom": "6.29.0",
+    "react-router-dom": "6.30.3",
     "recharts": "3.6.0",
     "rehype-raw": "7.0.0",
     "remark-gfm": "4.0.1",
@@ -93,5 +93,27 @@
     "audit:prod": "node scripts/audit.mjs",
     "audit:install-hooks": "node scripts/audit-install-hooks.mjs",
     "audit:install-hooks:update": "node scripts/audit-install-hooks.mjs --update"
+  },
+  "resolutions": {
+    "lodash": "4.18.1",
+    "picomatch": "4.0.4",
+    "**/babel-plugin-styled-components/picomatch": "2.3.2",
+    "handlebars": "4.7.9",
+    "serialize-javascript": "7.0.5",
+    "fast-uri": "3.1.2",
+    "svgo": "3.3.3",
+    "flatted": "3.4.2",
+    "postcss": "8.5.15",
+    "follow-redirects": "1.16.0",
+    "yauzl": "3.3.1",
+    "@babel/plugin-transform-modules-systemjs": "7.29.7",
+    "rollup": "4.60.4",
+    "qs": "6.15.2",
+    "ws": "8.20.1",
+    "koa": "2.16.4",
+    "**/nx/minimatch": "9.0.9",
+    "**/@nx/devkit/minimatch": "9.0.9",
+    "**/@nx/jest/minimatch": "9.0.9",
+    "**/@nx/react/minimatch": "9.0.9"
   }
 }
