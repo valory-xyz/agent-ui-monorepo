@@ -292,7 +292,7 @@ Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node
 | `agentsfun-ui-build.yml` | Tag `v*-agentsfun`                                 | Builds and releases `agentsfun-ui-build.zip`                   |
 | `babydegen-ui-build.yml` | Tag `v*-modius` **or** `v*-optimus`                | Sets `REACT_APP_AGENT_NAME` from the tag suffix, builds, and releases `babydegen-ui-build.zip` |
 | `predict-ui-build.yml`   | Tag `v*-omenstrat-trader` **or** `v*-polystrat-trader` | Sets `REACT_APP_AGENT_NAME` (`omenstrat_trader`/`polystrat_trader`), builds, and releases `predict-ui-build.zip` |
-| `gitleaks.yml`           | PRs to any branch                                  | Downloads gitleaks `v8.10.1` and scans full history against `.gitleaks.toml` |
+| `gitleaks.yml`           | PRs to any branch                                  | Downloads gitleaks `v8.30.1` (SHA256-verified) and scans full history against `.gitleaks.toml` |
 
 Releases are created with `softprops/action-gh-release@v1` + `generate_release_notes: true`. The same tag may be matched by `babydegen` and `predict` workflows — **the agent identity comes from the tag suffix, not from a separate `babydegen`/`predict` namespace**.
 
