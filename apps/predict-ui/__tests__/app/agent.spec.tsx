@@ -89,6 +89,16 @@ describe('Agent', () => {
     expect(screen.getByText('Performance')).toBeInTheDocument();
   });
 
+  it('does not render the incomplete-data alert for omenstrat agent', () => {
+    (useAgentDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(screen.queryByText('Some performance data may be incomplete')).toBeNull();
+  });
+
   it('renders UnlockChat when isChatEnabled=false and features loaded', () => {
     (useAgentDetails as jest.Mock).mockReturnValue({
       isLoading: false,

@@ -10,6 +10,7 @@ import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
 import { TradeHistory } from '../components/TradeHistory/TradeHistory';
+import { Alert } from '../components/ui/Alert';
 import { Card } from '../components/ui/Card';
 import { WithdrawLockedFunds } from '../components/WithdrawLockedFunds';
 import { COLOR } from '../constants/theme';
@@ -78,6 +79,14 @@ const AgentNotFound = () => (
   </Flex>
 );
 
+const IncompleteDataAlert = () => (
+  <Alert
+    type="warning"
+    message="Some performance data may be incomplete"
+    description="After a recent Polymarket protocol upgrade, some winning payouts after Apr 28 may not be reflected in performance metrics or Trade history yet. Your agent is still running normally, and missing data will appear once indexing catches up."
+  />
+);
+
 const ChatContent = () => {
   const { isLoading, data } = useFeatures();
 
@@ -110,6 +119,7 @@ export const Agent = () => {
           createdAt={agentDetails.created_at}
           lastActiveAt={agentDetails.last_active_at}
         />
+        {isPolystratAgent && <IncompleteDataAlert />}
         <AgentPerformance performance={performance} />
         <ProfitOverTime />
         <TradeHistory />
