@@ -25,11 +25,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # needed by softprops/action-gh-release to create the GitHub Release
+      contents: write # needed by softprops/action-gh-release to create the GitHub Release
 
     steps:
       - name: Checkout code
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+        with:
+          # Full history + tags are required to diff this tag against the
+          # previous same-line tag when generating scoped release notes.
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
@@ -50,6 +54,30 @@ jobs:
         if: inputs.agent-env != ''
         run: echo "REACT_APP_AGENT_NAME=${{ inputs.agent-env }}" >> $GITHUB_ENV
 
+      - name: Generate scoped release notes
+        # Build notes containing only this app's (and its shared libs') commits,
+        # scoped via the Nx project graph — see scripts/release-notes.mjs. Falls
+        # back to a placeholder for non-tag (workflow_dispatch) runs.
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+            echo "_Manual build of \`${{ inputs.app-name }}\` (${GITHUB_REF_NAME})._" > RELEASE_NOTES.md
+          else
+            TAG="${GITHUB_REF_NAME}"
+            SUFFIX="$(printf '%s' "$TAG" | sed -E 's/^v[0-9]+\.[0-9]+\.[0-9]+//; s/^-//')"
+            if [ -n "$SUFFIX" ]; then
+              PREV="$(git tag --sort=-creatordate -l "v*-$SUFFIX" | grep -vxF "$TAG" | head -n1 || true)"
+            else
+              PREV="$(git describe --tags --abbrev=0 "$TAG^" 2>/dev/null || true)"
+            fi
+            echo "Scoping ${{ inputs.app-name }} notes: ${PREV:-<first release>}..$TAG"
+            FROM_ARG=""
+            [ -n "$PREV" ] && FROM_ARG="--from $PREV"
+            node scripts/release-notes.mjs --project "${{ inputs.app-name }}" $FROM_ARG --to "$TAG" > RELEASE_NOTES.md
+          fi
+          echo "----- RELEASE_NOTES.md -----"
+          cat RELEASE_NOTES.md
+
       - name: Build app
         run: yarn nx build ${{ inputs.app-name }}
 
@@ -64,6 +92,8 @@ jobs:
           files: ${{ inputs.app-name }}-build.zip
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
+          # Scoped notes generated above (replaces generate_release_notes, which
+          # listed every commit in the range regardless of which app it touched).
+          body_path: RELEASE_NOTES.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
