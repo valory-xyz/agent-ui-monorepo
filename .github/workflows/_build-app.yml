@@ -64,16 +64,17 @@ jobs:
             echo "_Manual build of \`${{ inputs.app-name }}\` (${GITHUB_REF_NAME})._" > RELEASE_NOTES.md
           else
             TAG="${GITHUB_REF_NAME}"
+            # The release line is the tag's market suffix (e.g. omenstrat-trader).
             SUFFIX="$(printf '%s' "$TAG" | sed -E 's/^v[0-9]+\.[0-9]+\.[0-9]+//; s/^-//')"
-            if [ -n "$SUFFIX" ]; then
-              PREV="$(git tag --sort=-creatordate -l "v*-$SUFFIX" | grep -vxF "$TAG" | head -n1 || true)"
-            else
-              PREV="$(git describe --tags --abbrev=0 "$TAG^" 2>/dev/null || true)"
-            fi
-            echo "Scoping ${{ inputs.app-name }} notes: ${PREV:-<first release>}..$TAG"
-            FROM_ARG=""
-            [ -n "$PREV" ] && FROM_ARG="--from $PREV"
-            node scripts/release-notes.mjs --project "${{ inputs.app-name }}" $FROM_ARG --to "$TAG" > RELEASE_NOTES.md
+            if [ -n "$SUFFIX" ]; then PATTERN="v*-$SUFFIX"; else PATTERN="$TAG"; fi
+            # Exclude EVERY prior tag on this line, not just the "previous" one:
+            # these are lightweight tags whose version order is not monotonic
+            # with commit date, so no single-predecessor sort is reliable. The
+            # notes then list only commits not already shipped in any release.
+            PRIORS="$(git tag -l "$PATTERN" | grep -vxF "$TAG" || true)"
+            echo "Scoping ${{ inputs.app-name }} notes for $TAG; excluding prior $PATTERN releases:"
+            printf '%s\n' "$PRIORS" | sed 's/^/  - /'
+            node scripts/release-notes.mjs --project "${{ inputs.app-name }}" --to "$TAG" --not "$PRIORS" > RELEASE_NOTES.md
           fi
           echo "----- RELEASE_NOTES.md -----"
           cat RELEASE_NOTES.md

@@ -13,12 +13,18 @@
  * Usage:
  *   node scripts/release-notes.mjs \
  *     --project predict-ui \
- *     --from v0.1.14-omenstrat-trader \
  *     --to   v0.1.20-omenstrat-trader \
+ *     --not  "v0.1.19-omenstrat-trader v0.1.18-omenstrat-trader ..." \
  *     [--repo valory-xyz/agent-ui-monorepo]
  *
- * Prints Markdown to stdout. `--from` may be omitted for the first release
- * (history is then walked from the repo root up to `--to`).
+ * `--not` is a whitespace-separated list of every prior tag on the release
+ * line; the notes then contain only commits reachable from `--to` but from
+ * none of those tags — i.e. not already shipped. This is robust to tags whose
+ * version order does not match commit order (these are lightweight tags and
+ * are not monotonic). `--from <ref>` is also accepted for ad-hoc `from..to`
+ * ranges. With neither, history is walked from the repo root (first release).
+ *
+ * Prints Markdown to stdout.
  */
 import { execFileSync } from 'node:child_process';
 
@@ -34,7 +40,8 @@ const parseArgs = (argv) => {
   return out;
 };
 
-const git = (args) => execFileSync('git', args, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 });
+const git = (args) =>
+  execFileSync('git', args, { encoding: 'utf8', maxBuffer: 1024 * 1024 * 64 });
 
 const resolveRepoSlug = (explicit) => {
   if (explicit) return explicit;
@@ -76,7 +83,13 @@ const classify = (subject) => {
 };
 
 const main = async () => {
-  const { project, from, to = 'HEAD', repo } = parseArgs(process.argv.slice(2));
+  const {
+    project,
+    from,
+    to = 'HEAD',
+    repo,
+    not,
+  } = parseArgs(process.argv.slice(2));
   if (!project) throw new Error('Missing required --project');
 
   const slug = resolveRepoSlug(repo);
@@ -84,8 +97,22 @@ const main = async () => {
   if (!graph.nodes[project]) throw new Error(`Unknown Nx project: ${project}`);
 
   const paths = collectProjectPaths(graph, project);
-  const range = from ? `${from}..${to}` : to;
-  const raw = git(['log', range, '--no-merges', '--pretty=format:%H%x1f%s', '--', ...paths]).trim();
+  const excludes = (not ?? '').split(/\s+/).filter(Boolean);
+  // Prefer excluding every prior tag (`--not`); fall back to an explicit
+  // `from..to` range, then to full history for a first release.
+  const revArgs = from
+    ? [`${from}..${to}`]
+    : excludes.length
+      ? [to, '--not', ...excludes]
+      : [to];
+  const raw = git([
+    'log',
+    '--no-merges',
+    '--pretty=format:%H%x1f%s',
+    ...revArgs,
+    '--',
+    ...paths,
+  ]).trim();
 
   /** @type {Record<string, string[]>} */
   const buckets = Object.fromEntries(SECTIONS.map((s) => [s.key, []]));
@@ -94,7 +121,9 @@ const main = async () => {
       const [hash, subject] = line.split('\x1f');
       const { type, text } = classify(subject);
       const short = hash.slice(0, 7);
-      buckets[type].push(`- ${text} ([${short}](https://github.com/${slug}/commit/${hash}))`);
+      buckets[type].push(
+        `- ${text} ([${short}](https://github.com/${slug}/commit/${hash}))`,
+      );
     }
   }
 
@@ -102,7 +131,9 @@ const main = async () => {
     .map((s) => `### ${s.title}\n\n${buckets[s.key].join('\n')}`)
     .join('\n\n');
 
-  process.stdout.write(body || `_No changes scoped to \`${project}\` in this release._\n`);
+  process.stdout.write(
+    body || `_No changes scoped to \`${project}\` in this release._\n`,
+  );
 };
 
 main().catch((error) => {
