@@ -1,4 +1,5 @@
-// Mock agentMap to simulate polystrat environment (isPolystratAgent=true)
+// Polystrat agent with metrics restored (ARE_POLYSTRAT_METRICS_AVAILABLE=true).
+// Verifies the flag cleanly reverts to the full metrics UI.
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { createElement } from 'react';
@@ -11,6 +12,10 @@ jest.mock('../../src/utils/agentMap', () => ({
   agentType: 'polystrat_trader',
   isOmenstratAgent: false,
   isPolystratAgent: true,
+}));
+
+jest.mock('../../src/constants/featureFlags', () => ({
+  ARE_POLYSTRAT_METRICS_AVAILABLE: true,
 }));
 
 jest.mock('../../src/hooks/useAgentDetails');
@@ -31,7 +36,6 @@ const mockAgentDetails = {
   id: '0xabc',
   created_at: '2024-01-01T00:00:00Z',
   last_active_at: '2024-06-01T00:00:00Z',
-  previous_safe_address: '0xprev',
 };
 
 const mockPerformance = {
@@ -48,8 +52,7 @@ const mockPerformance = {
   stats: { predictions_made: 100, prediction_accuracy: 0.5 },
 };
 
-// Metrics are unavailable by default (ARE_POLYSTRAT_METRICS_AVAILABLE=false).
-describe('Agent – polystrat agent, metrics unavailable', () => {
+describe('Agent – polystrat agent, metrics available', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (useFeatures as jest.Mock).mockReturnValue({
@@ -63,28 +66,18 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
     });
   });
 
-  it('renders the metrics-unavailable card instead of the metric sections', () => {
+  it('renders the metric sections and the incomplete-data alert', () => {
     render(<Agent />, { wrapper: createWrapper() });
+    expect(screen.getByText('Performance')).toBeInTheDocument();
     expect(
-      screen.getByText('Activity data unavailable in this app version'),
+      screen.getByText('Some performance data may be incomplete'),
     ).toBeInTheDocument();
-    expect(screen.getByText('View agent activity')).toBeInTheDocument();
   });
 
-  it('does not render the metric sections or the incomplete-data alert', () => {
+  it('does not render the metrics-unavailable card', () => {
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.queryByText('Performance')).toBeNull();
-    expect(screen.queryByText('Profit Over Time')).toBeNull();
-    expect(screen.queryByText('Trade History')).toBeNull();
     expect(
-      screen.queryByText('Some performance data may be incomplete'),
+      screen.queryByText('Activity data unavailable in this app version'),
     ).toBeNull();
-  });
-
-  it('still renders the non-metric sections (strategy, withdraw)', () => {
-    render(<Agent />, { wrapper: createWrapper() });
-    expect(
-      screen.getByText('Withdraw funds locked in markets'),
-    ).toBeInTheDocument();
   });
 });

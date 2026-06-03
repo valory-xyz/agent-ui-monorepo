@@ -19,6 +19,12 @@ export type AgentDetailsResponse = {
   id: string;
   created_at: string;
   last_active_at: string;
+  /**
+   * Safe address of the agent's previous Polymarket profile, used before the
+   * new Safe structure cutover. Present only for migrated Polystrat agents;
+   * lets users view their pre-cutover activity on Polymarket.
+   */
+  previous_safe_address?: string;
 };
 
 export type TradingDetailsResponse = {
@@ -134,7 +140,12 @@ export type AgentProfitTimeseriesResponse = {
   points: AgentProfitPoint[];
 };
 
-export type WithdrawalMode = 'idle' | 'armed' | 'selling' | 'complete' | 'errored';
+export type WithdrawalMode =
+  | 'idle'
+  | 'armed'
+  | 'selling'
+  | 'complete'
+  | 'errored';
 
 export type WithdrawalVenue = 'polymarket' | 'omen';
 

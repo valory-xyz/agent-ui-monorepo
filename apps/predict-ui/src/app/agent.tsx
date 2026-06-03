@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
+import { MetricsUnavailable } from '../components/MetricsUnavailable';
 import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
 import { Strategy } from '../components/Strategy';
@@ -13,6 +14,7 @@ import { TradeHistory } from '../components/TradeHistory/TradeHistory';
 import { Alert } from '../components/ui/Alert';
 import { Card } from '../components/ui/Card';
 import { WithdrawLockedFunds } from '../components/WithdrawLockedFunds';
+import { ARE_POLYSTRAT_METRICS_AVAILABLE } from '../constants/featureFlags';
 import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
 import { useFeatures } from '../hooks/useFeatures';
@@ -43,7 +45,12 @@ const AgentLoader = () => (
 
       <Card>
         <Skeleton.Input active />
-        <Row gutter={[24, 24]} align="middle" justify="space-between" className="m-0">
+        <Row
+          gutter={[24, 24]}
+          align="middle"
+          justify="space-between"
+          className="m-0"
+        >
           {[0, 1, 2, 3, 4, 5].map((index) => (
             <Col key={index} lg={8} sm={12} xs={24} className="p-0">
               <Skeleton.Input active style={{ width: 196 }} />
@@ -112,6 +119,12 @@ export const Agent = () => {
 
   const { agentDetails, performance } = data;
 
+  // Polystrat metrics are sourced from a subgraph that is not yet indexed with
+  // the new Safe structure. Until then, hide the metric sections
+  // and point users to Polymarket. Flip the flag to restore the full UI.
+  const isPolystratMetricsUnavailable =
+    isPolystratAgent && !ARE_POLYSTRAT_METRICS_AVAILABLE;
+
   return (
     <Flex vertical gap={24}>
       <AgentContent>
@@ -119,15 +132,25 @@ export const Agent = () => {
           createdAt={agentDetails.created_at}
           lastActiveAt={agentDetails.last_active_at}
         />
-        {isPolystratAgent && <IncompleteDataAlert />}
-        <AgentPerformance performance={performance} />
-        <ProfitOverTime />
-        <TradeHistory />
+        {isPolystratMetricsUnavailable ? (
+          <MetricsUnavailable
+            agentSafeAddress={agentDetails.id}
+            previousSafeAddress={agentDetails.previous_safe_address}
+          />
+        ) : (
+          <>
+            {isPolystratAgent && <IncompleteDataAlert />}
+            <AgentPerformance performance={performance} />
+            <ProfitOverTime />
+            <TradeHistory />
+          </>
+        )}
         <Strategy />
         <ChatContent />
         <WithdrawLockedFunds
           lockedAmount={performance.metrics.funds_locked_in_markets}
           marketName={isPolystratAgent ? 'Polymarket' : 'Omen'}
+          metricsAvailable={!isPolystratMetricsUnavailable}
         />
       </AgentContent>
     </Flex>

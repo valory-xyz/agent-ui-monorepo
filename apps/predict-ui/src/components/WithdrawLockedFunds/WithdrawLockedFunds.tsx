@@ -1,5 +1,12 @@
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { Alert as AntdAlert, Button, Flex, Spin, Tooltip, Typography } from 'antd';
+import {
+  Alert as AntdAlert,
+  Button,
+  Flex,
+  Spin,
+  Tooltip,
+  Typography,
+} from 'antd';
 import { Info, TriangleAlert, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -12,6 +19,16 @@ const { Title, Text } = Typography;
 
 const POSITIONS_TOOLTIP =
   'Estimated value of all open positions at current market prices. Final value may differ at withdrawal.';
+
+const getDescription = (marketName: string, metricsAvailable: boolean) =>
+  metricsAvailable
+    ? `Closes all open positions on ${marketName} and returns the funds to your agent wallet. Required to fully withdraw your funds from the agent.`
+    : `Sell all existing positions on ${marketName} and transfer back to your agent wallet. This action is recommended before initiating the withdrawal process on Pearl.`;
+
+// When position metrics are unavailable we cannot show or gate on the locked
+// amount, so the initiate button is always enabled.
+const isInitiateDisabled = (amount: number, metricsAvailable: boolean) =>
+  metricsAvailable && amount <= 0;
 
 const InitiateButton = styled(Button)`
   align-self: flex-start;
@@ -63,15 +80,18 @@ const WarningAlert = styled(AntdAlert)`
   }
 `;
 
-const Header = ({ marketName }: { marketName: string }) => (
+const Header = ({
+  marketName,
+  metricsAvailable,
+}: {
+  marketName: string;
+  metricsAvailable: boolean;
+}) => (
   <Flex vertical gap={6}>
     <Title level={4} className="m-0 font-normal">
       Withdraw funds locked in markets
     </Title>
-    <Text type="secondary">
-      Closes all open positions on {marketName} and returns the funds to your agent wallet. Required
-      to fully withdraw your funds from the agent.
-    </Text>
+    <Text type="secondary">{getDescription(marketName, metricsAvailable)}</Text>
   </Flex>
 );
 
@@ -92,39 +112,61 @@ const OpenPositionsValue = ({ amount }: { amount: number }) => (
 type InitiateProps = {
   amount: number;
   isLoading: boolean;
+  metricsAvailable: boolean;
   onInitiate: () => void;
 };
 
-const InitiateBody = ({ amount, isLoading, onInitiate }: InitiateProps) => (
+const InitiateBody = ({
+  amount,
+  isLoading,
+  metricsAvailable,
+  onInitiate,
+}: InitiateProps) => (
   <>
-    <OpenPositionsValue amount={amount} />
-    <InitiateButton onClick={onInitiate} loading={isLoading} disabled={amount <= 0}>
+    {metricsAvailable && <OpenPositionsValue amount={amount} />}
+    <InitiateButton
+      onClick={onInitiate}
+      loading={isLoading}
+      disabled={isInitiateDisabled(amount, metricsAvailable)}
+    >
       Initiate withdrawal
     </InitiateButton>
   </>
 );
 
 const SELLING_MESSAGE: Record<'armed' | 'selling', string> = {
-  armed: 'Withdrawal requested. Waiting for the agent to complete its current actions...',
+  armed:
+    'Withdrawal requested. Waiting for the agent to complete its current actions...',
   selling: 'Withdrawal initiated. Selling open positions...',
 };
 
 type SellingProps = {
   amount: number;
   mode: 'armed' | 'selling';
+  metricsAvailable: boolean;
 };
 
-const SellingBody = ({ amount, mode }: SellingProps) => (
+const SellingBody = ({ amount, mode, metricsAvailable }: SellingProps) => (
   <>
-    <OpenPositionsValue amount={amount} />
+    {metricsAvailable && <OpenPositionsValue amount={amount} />}
     <Flex gap={8} align="center">
-      <Spin indicator={<LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />} />
+      <Spin
+        indicator={
+          <LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />
+        }
+      />
       <Text type="secondary">{SELLING_MESSAGE[mode]}</Text>
     </Flex>
   </>
 );
 
-const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: () => void }) => (
+const DoneBody = ({
+  marketName,
+  onDismiss,
+}: {
+  marketName: string;
+  onDismiss: () => void;
+}) => (
   <SuccessAlert
     icon={<Info size={16} color={COLOR.GREEN} />}
     showIcon
@@ -134,8 +176,9 @@ const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: ()
     message={<span style={{ fontWeight: 500 }}>Withdrawal complete!</span>}
     description={
       <span style={{ display: 'inline-block', maxWidth: 470 }}>
-        {marketName} positions have been sold, and funds are now in your Agent Wallet in Pearl. The
-        agent has stopped trading and will continue when restarted.
+        {marketName} positions have been sold, and funds are now in your Agent
+        Wallet in Pearl. The agent has stopped trading and will continue when
+        restarted.
       </span>
     }
   />
@@ -144,11 +187,18 @@ const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: ()
 type PartialBodyProps = {
   amount: number;
   isLoading: boolean;
+  metricsAvailable: boolean;
   onRetry: () => void;
   onDismiss: () => void;
 };
 
-const PartialBody = ({ amount, isLoading, onRetry, onDismiss }: PartialBodyProps) => (
+const PartialBody = ({
+  amount,
+  isLoading,
+  metricsAvailable,
+  onRetry,
+  onDismiss,
+}: PartialBodyProps) => (
   <>
     <WarningAlert
       icon={<TriangleAlert size={16} color={COLOR.YELLOW} />}
@@ -156,15 +206,22 @@ const PartialBody = ({ amount, isLoading, onRetry, onDismiss }: PartialBodyProps
       closable
       closeIcon={<X size={16} color={COLOR.YELLOW} />}
       onClose={onDismiss}
-      message={<span style={{ fontWeight: 500 }}>Partial withdrawal completed</span>}
+      message={
+        <span style={{ fontWeight: 500 }}>Partial withdrawal completed</span>
+      }
       description={
         <span style={{ display: 'inline-block', maxWidth: 470 }}>
-          Some positions couldn&apos;t be sold. Please try again to withdraw the remaining funds.
+          Some positions couldn&apos;t be sold. Please try again to withdraw the
+          remaining funds.
         </span>
       }
     />
-    <OpenPositionsValue amount={amount} />
-    <InitiateButton onClick={onRetry} loading={isLoading} disabled={amount <= 0}>
+    {metricsAvailable && <OpenPositionsValue amount={amount} />}
+    <InitiateButton
+      onClick={onRetry}
+      loading={isLoading}
+      disabled={isInitiateDisabled(amount, metricsAvailable)}
+    >
       Initiate withdrawal
     </InitiateButton>
   </>
@@ -173,11 +230,18 @@ const PartialBody = ({ amount, isLoading, onRetry, onDismiss }: PartialBodyProps
 type ErrorBodyProps = {
   amount: number;
   isLoading: boolean;
+  metricsAvailable: boolean;
   onRetry: () => void;
   onDismiss: () => void;
 };
 
-const ErrorBody = ({ amount, isLoading, onRetry, onDismiss }: ErrorBodyProps) => (
+const ErrorBody = ({
+  amount,
+  isLoading,
+  metricsAvailable,
+  onRetry,
+  onDismiss,
+}: ErrorBodyProps) => (
   <>
     <ErrorAlert
       icon={<TriangleAlert size={16} color={COLOR.RED} />}
@@ -187,8 +251,12 @@ const ErrorBody = ({ amount, isLoading, onRetry, onDismiss }: ErrorBodyProps) =>
       onClose={onDismiss}
       message={<span style={{ fontWeight: 500 }}>Withdrawal failed</span>}
     />
-    <OpenPositionsValue amount={amount} />
-    <InitiateButton onClick={onRetry} loading={isLoading} disabled={amount <= 0}>
+    {metricsAvailable && <OpenPositionsValue amount={amount} />}
+    <InitiateButton
+      onClick={onRetry}
+      loading={isLoading}
+      disabled={isInitiateDisabled(amount, metricsAvailable)}
+    >
       Initiate withdrawal
     </InitiateButton>
   </>
@@ -199,10 +267,21 @@ type WithdrawLockedFundsProps = {
   lockedAmount: number;
   /** Display name of the prediction market the agent trades on (e.g. "Polymarket"). */
   marketName: string;
+  /**
+   * Whether position metrics are available. When false (e.g. Polystrat while the
+   * subgraph is not indexed), the open-positions value is hidden, the copy is
+   * adjusted, and the initiate button is not gated on the locked amount.
+   */
+  metricsAvailable?: boolean;
 };
 
-export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLockedFundsProps) => {
-  const { isLoading, isError, data, initiateWithdraw } = useWithdrawLockedFunds();
+export const WithdrawLockedFunds = ({
+  lockedAmount,
+  marketName,
+  metricsAvailable = true,
+}: WithdrawLockedFundsProps) => {
+  const { isLoading, isError, data, initiateWithdraw } =
+    useWithdrawLockedFunds();
   const [isResultDismissed, setIsResultDismissed] = useState(false);
 
   const handleInitiate = useCallback(async () => {
@@ -233,6 +312,7 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
           <PartialBody
             amount={lockedAmount}
             isLoading={isLoading}
+            metricsAvailable={metricsAvailable}
             onRetry={handleInitiate}
             onDismiss={handleDismiss}
           />
@@ -243,6 +323,7 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
           <ErrorBody
             amount={lockedAmount}
             isLoading={isLoading}
+            metricsAvailable={metricsAvailable}
             onRetry={handleInitiate}
             onDismiss={handleDismiss}
           />
@@ -250,14 +331,27 @@ export const WithdrawLockedFunds = ({ lockedAmount, marketName }: WithdrawLocked
       }
     }
     if (mode === 'armed' || mode === 'selling') {
-      return <SellingBody amount={lockedAmount} mode={mode} />;
+      return (
+        <SellingBody
+          amount={lockedAmount}
+          mode={mode}
+          metricsAvailable={metricsAvailable}
+        />
+      );
     }
-    return <InitiateBody amount={lockedAmount} isLoading={isLoading} onInitiate={handleInitiate} />;
+    return (
+      <InitiateBody
+        amount={lockedAmount}
+        isLoading={isLoading}
+        metricsAvailable={metricsAvailable}
+        onInitiate={handleInitiate}
+      />
+    );
   };
 
   return (
     <Card $gap="24px">
-      <Header marketName={marketName} />
+      <Header marketName={marketName} metricsAvailable={metricsAvailable} />
       {renderBody()}
     </Card>
   );
