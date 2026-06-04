@@ -1,5 +1,12 @@
-import { API_V1, FIVE_MINUTES } from '@agent-ui-monorepo/util-constants-and-types';
-import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
+import {
+  API_V1,
+  FIVE_MINUTES,
+} from '@agent-ui-monorepo/util-constants-and-types';
+import {
+  delay,
+  devMock,
+  exponentialBackoffDelay,
+} from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
 import { REACT_QUERY_KEYS } from '../constants/reactQueryKeys';
@@ -51,5 +58,10 @@ export const useAgentDetails = () => {
     data: { agentDetails, performance },
     isLoading: isAgentDetailsLoading || isPerformanceLoading,
     isError: isAgentDetailsError || isPerformanceError,
+    // Details-only state, so consumers can render without waiting on (or
+    // failing with) the performance query — used by the Polystrat
+    // metrics-unavailable state, whose subgraph-backed performance may error.
+    isAgentDetailsLoading,
+    isAgentDetailsError,
   };
 };

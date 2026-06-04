@@ -47,6 +47,16 @@ const mockPerformance = {
   stats: { predictions_made: 100, prediction_accuracy: 0.5 },
 };
 
+const mockUseAgentDetails = (overrides: Record<string, unknown> = {}) =>
+  (useAgentDetails as jest.Mock).mockReturnValue({
+    isLoading: false,
+    isError: false,
+    isAgentDetailsLoading: false,
+    isAgentDetailsError: false,
+    data: { agentDetails: mockAgentDetails, performance: mockPerformance },
+    ...overrides,
+  });
+
 // Metrics are unavailable by default (ARE_POLYSTRAT_METRICS_AVAILABLE=false).
 describe('Agent – polystrat agent, metrics unavailable', () => {
   beforeEach(() => {
@@ -55,11 +65,7 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
       isLoading: false,
       data: { isChatEnabled: false },
     });
-    (useAgentDetails as jest.Mock).mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
-    });
+    mockUseAgentDetails();
   });
 
   it('renders the metrics-unavailable card instead of the metric sections', () => {
@@ -85,5 +91,48 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
     expect(
       screen.getByText('Withdraw funds locked in markets'),
     ).toBeInTheDocument();
+  });
+
+  // The card is gated on the agent-details query alone, so it must render even
+  // when /agent/performance errors or is missing (subgraph not yet indexed).
+  it('renders the card when performance is missing (performance query failed)', () => {
+    mockUseAgentDetails({
+      isError: true, // combined error driven by the performance query
+      data: { agentDetails: mockAgentDetails, performance: undefined },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(
+      screen.getByText('Activity data unavailable in this app version'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Withdraw funds locked in markets'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Error loading data')).toBeNull();
+  });
+
+  it('shows the loader while only the agent-details query is loading', () => {
+    mockUseAgentDetails({
+      isAgentDetailsLoading: true,
+      data: { agentDetails: undefined, performance: undefined },
+    });
+    const { container } = render(<Agent />, { wrapper: createWrapper() });
+    expect(container.querySelector('.ant-skeleton')).toBeInTheDocument();
+  });
+
+  it('shows the error state when the agent-details query errors', () => {
+    mockUseAgentDetails({
+      isAgentDetailsError: true,
+      data: { agentDetails: undefined, performance: undefined },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(screen.getByText('Error loading data')).toBeInTheDocument();
+  });
+
+  it('shows not-found when agent details are missing', () => {
+    mockUseAgentDetails({
+      data: { agentDetails: undefined, performance: undefined },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    expect(screen.getByText('404 | Agent not found')).toBeInTheDocument();
   });
 });
