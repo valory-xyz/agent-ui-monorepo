@@ -133,10 +133,7 @@ export const Agent = () => {
           lastActiveAt={agentDetails.last_active_at}
         />
         {isPolystratMetricsUnavailable ? (
-          <MetricsUnavailable
-            agentSafeAddress={agentDetails.id}
-            previousSafeAddress={agentDetails.previous_safe_address}
-          />
+          <MetricsUnavailable agentSafeAddress={agentDetails.id} />
         ) : (
           <>
             {isPolystratAgent && <IncompleteDataAlert />}

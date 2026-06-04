@@ -9,22 +9,6 @@ import { Card } from './ui/Card';
 
 const { Title, Text } = Typography;
 
-/**
- * Cutover to the new Safe structure. Activity before this date lives on the
- * agent's previous Polymarket profile.
- */
-const PREVIOUS_PROFILE_CUTOVER_LABEL = 'Jun 8, 2026';
-
-const ProfileLink = styled.a`
-  color: ${COLOR.WHITE_TRANSPARENT_50};
-  text-decoration: underline;
-  white-space: nowrap;
-
-  &:hover {
-    color: ${COLOR.WHITE_TRANSPARENT_75};
-  }
-`;
-
 const ViewActivityButton = styled(Button)`
   padding: 8px 16px;
   border-radius: 8px;
@@ -39,18 +23,14 @@ const ViewActivityButton = styled(Button)`
 `;
 
 type MetricsUnavailableProps = {
-  /** Agent Safe address used to build the current Polymarket profile link. */
+  /** Agent Safe address used to build the Polymarket profile link. */
   agentSafeAddress?: string;
-  /** Safe address of the agent's previous (pre-cutover) Polymarket profile. */
-  previousSafeAddress?: string;
 };
 
 export const MetricsUnavailable = ({
   agentSafeAddress,
-  previousSafeAddress,
 }: MetricsUnavailableProps) => {
   const profileUrl = getPolymarketProfileUrl(agentSafeAddress);
-  const previousProfileUrl = getPolymarketProfileUrl(previousSafeAddress);
 
   return (
     <Card $gap="24px">
@@ -67,20 +47,6 @@ export const MetricsUnavailable = ({
           </Title>
           <Text type="secondary" className="text-sm">
             You can review agent activity on Polymarket.
-            {previousProfileUrl && (
-              <>
-                {` For the agent activity before ${PREVIOUS_PROFILE_CUTOVER_LABEL} visit this `}
-                <ProfileLink
-                  href={previousProfileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Polymarket profile{' '}
-                  <ArrowUpRight size={14} style={{ verticalAlign: 'middle' }} />
-                </ProfileLink>
-                .
-              </>
-            )}
           </Text>
         </Flex>
 

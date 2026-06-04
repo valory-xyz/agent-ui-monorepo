@@ -31,7 +31,6 @@ const mockAgentDetails = {
   id: '0xabc',
   created_at: '2024-01-01T00:00:00Z',
   last_active_at: '2024-06-01T00:00:00Z',
-  previous_safe_address: '0xprev',
 };
 
 const mockPerformance = {
