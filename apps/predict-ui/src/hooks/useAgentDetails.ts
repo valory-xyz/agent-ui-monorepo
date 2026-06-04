@@ -51,5 +51,10 @@ export const useAgentDetails = () => {
     data: { agentDetails, performance },
     isLoading: isAgentDetailsLoading || isPerformanceLoading,
     isError: isAgentDetailsError || isPerformanceError,
+    // Details-only state, so consumers can render without waiting on (or
+    // failing with) the performance query — used by the Polystrat
+    // metrics-unavailable state, whose subgraph-backed performance may error.
+    isAgentDetailsLoading,
+    isAgentDetailsError,
   };
 };
