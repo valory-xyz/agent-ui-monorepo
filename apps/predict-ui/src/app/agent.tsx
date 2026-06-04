@@ -47,12 +47,7 @@ const AgentLoader = () => (
 
       <Card>
         <Skeleton.Input active />
-        <Row
-          gutter={[24, 24]}
-          align="middle"
-          justify="space-between"
-          className="m-0"
-        >
+        <Row gutter={[24, 24]} align="middle" justify="space-between" className="m-0">
           {[0, 1, 2, 3, 4, 5].map((index) => (
             <Col key={index} lg={8} sm={12} xs={24} className="p-0">
               <Skeleton.Input active style={{ width: 196 }} />
@@ -147,17 +142,11 @@ const AgentLayout = ({
 // Polystrat metrics are sourced from a subgraph that is not yet indexed with
 // the new Safe structure. Until then, hide the metric sections and point users
 // to Polymarket. Flip the flag to restore the full UI.
-const isPolystratMetricsUnavailable =
-  isPolystratAgent && !ARE_POLYSTRAT_METRICS_AVAILABLE;
+const isPolystratMetricsUnavailable = isPolystratAgent && !ARE_POLYSTRAT_METRICS_AVAILABLE;
 
 export const Agent = () => {
-  const {
-    data,
-    isLoading,
-    isError,
-    isAgentDetailsLoading,
-    isAgentDetailsError,
-  } = useAgentDetails();
+  const { data, isLoading, isError, isAgentDetailsLoading, isAgentDetailsError } =
+    useAgentDetails();
 
   // In the metrics-unavailable state the page must not depend on
   // /agent/performance (its subgraph isn't indexed yet and may error), so gate

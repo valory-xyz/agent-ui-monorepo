@@ -27,9 +27,7 @@ type MetricsUnavailableProps = {
   agentSafeAddress?: string;
 };
 
-export const MetricsUnavailable = ({
-  agentSafeAddress,
-}: MetricsUnavailableProps) => {
+export const MetricsUnavailable = ({ agentSafeAddress }: MetricsUnavailableProps) => {
   const profileUrl = getPolymarketProfileUrl(agentSafeAddress);
 
   return (
@@ -51,11 +49,7 @@ export const MetricsUnavailable = ({
         </Flex>
 
         {profileUrl && (
-          <ViewActivityButton
-            href={profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <ViewActivityButton href={profileUrl} target="_blank" rel="noopener noreferrer">
             <Flex align="center" gap={6}>
               <PolymarketIcon />
               View agent activity

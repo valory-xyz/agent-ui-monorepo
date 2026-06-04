@@ -70,9 +70,7 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
 
   it('renders the metrics-unavailable card instead of the metric sections', () => {
     render(<Agent />, { wrapper: createWrapper() });
-    expect(
-      screen.getByText('Activity data unavailable in this app version'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Activity data unavailable in this app version')).toBeInTheDocument();
     expect(screen.getByText('View agent activity')).toBeInTheDocument();
   });
 
@@ -81,16 +79,12 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
     expect(screen.queryByText('Performance')).toBeNull();
     expect(screen.queryByText('Profit Over Time')).toBeNull();
     expect(screen.queryByText('Trade History')).toBeNull();
-    expect(
-      screen.queryByText('Some performance data may be incomplete'),
-    ).toBeNull();
+    expect(screen.queryByText('Some performance data may be incomplete')).toBeNull();
   });
 
   it('still renders the non-metric sections (strategy, withdraw)', () => {
     render(<Agent />, { wrapper: createWrapper() });
-    expect(
-      screen.getByText('Withdraw funds locked in markets'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Withdraw funds locked in markets')).toBeInTheDocument();
   });
 
   // The card is gated on the agent-details query alone, so it must render even
@@ -101,12 +95,8 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
       data: { agentDetails: mockAgentDetails, performance: undefined },
     });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(
-      screen.getByText('Activity data unavailable in this app version'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Withdraw funds locked in markets'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Activity data unavailable in this app version')).toBeInTheDocument();
+    expect(screen.getByText('Withdraw funds locked in markets')).toBeInTheDocument();
     expect(screen.queryByText('Error loading data')).toBeNull();
   });
 

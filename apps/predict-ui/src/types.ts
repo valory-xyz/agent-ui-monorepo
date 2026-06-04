@@ -134,12 +134,7 @@ export type AgentProfitTimeseriesResponse = {
   points: AgentProfitPoint[];
 };
 
-export type WithdrawalMode =
-  | 'idle'
-  | 'armed'
-  | 'selling'
-  | 'complete'
-  | 'errored';
+export type WithdrawalMode = 'idle' | 'armed' | 'selling' | 'complete' | 'errored';
 
 export type WithdrawalVenue = 'polymarket' | 'omen';
 

@@ -1,12 +1,5 @@
 import { InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import {
-  Alert as AntdAlert,
-  Button,
-  Flex,
-  Spin,
-  Tooltip,
-  Typography,
-} from 'antd';
+import { Alert as AntdAlert, Button, Flex, Spin, Tooltip, Typography } from 'antd';
 import { Info, TriangleAlert, X } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -116,12 +109,7 @@ type InitiateProps = {
   onInitiate: () => void;
 };
 
-const InitiateBody = ({
-  amount,
-  isLoading,
-  metricsAvailable,
-  onInitiate,
-}: InitiateProps) => (
+const InitiateBody = ({ amount, isLoading, metricsAvailable, onInitiate }: InitiateProps) => (
   <>
     {metricsAvailable && <OpenPositionsValue amount={amount} />}
     <InitiateButton
@@ -135,8 +123,7 @@ const InitiateBody = ({
 );
 
 const SELLING_MESSAGE: Record<'armed' | 'selling', string> = {
-  armed:
-    'Withdrawal requested. Waiting for the agent to complete its current actions...',
+  armed: 'Withdrawal requested. Waiting for the agent to complete its current actions...',
   selling: 'Withdrawal initiated. Selling open positions...',
 };
 
@@ -150,23 +137,13 @@ const SellingBody = ({ amount, mode, metricsAvailable }: SellingProps) => (
   <>
     {metricsAvailable && <OpenPositionsValue amount={amount} />}
     <Flex gap={8} align="center">
-      <Spin
-        indicator={
-          <LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />
-        }
-      />
+      <Spin indicator={<LoadingOutlined spin style={{ color: COLOR.TEXT_PRIMARY }} />} />
       <Text type="secondary">{SELLING_MESSAGE[mode]}</Text>
     </Flex>
   </>
 );
 
-const DoneBody = ({
-  marketName,
-  onDismiss,
-}: {
-  marketName: string;
-  onDismiss: () => void;
-}) => (
+const DoneBody = ({ marketName, onDismiss }: { marketName: string; onDismiss: () => void }) => (
   <SuccessAlert
     icon={<Info size={16} color={COLOR.GREEN} />}
     showIcon
@@ -176,9 +153,8 @@ const DoneBody = ({
     message={<span style={{ fontWeight: 500 }}>Withdrawal complete!</span>}
     description={
       <span style={{ display: 'inline-block', maxWidth: 470 }}>
-        {marketName} positions have been sold, and funds are now in your Agent
-        Wallet in Pearl. The agent has stopped trading and will continue when
-        restarted.
+        {marketName} positions have been sold, and funds are now in your Agent Wallet in Pearl. The
+        agent has stopped trading and will continue when restarted.
       </span>
     }
   />
@@ -206,13 +182,10 @@ const PartialBody = ({
       closable
       closeIcon={<X size={16} color={COLOR.YELLOW} />}
       onClose={onDismiss}
-      message={
-        <span style={{ fontWeight: 500 }}>Partial withdrawal completed</span>
-      }
+      message={<span style={{ fontWeight: 500 }}>Partial withdrawal completed</span>}
       description={
         <span style={{ display: 'inline-block', maxWidth: 470 }}>
-          Some positions couldn&apos;t be sold. Please try again to withdraw the
-          remaining funds.
+          Some positions couldn&apos;t be sold. Please try again to withdraw the remaining funds.
         </span>
       }
     />
@@ -235,13 +208,7 @@ type ErrorBodyProps = {
   onDismiss: () => void;
 };
 
-const ErrorBody = ({
-  amount,
-  isLoading,
-  metricsAvailable,
-  onRetry,
-  onDismiss,
-}: ErrorBodyProps) => (
+const ErrorBody = ({ amount, isLoading, metricsAvailable, onRetry, onDismiss }: ErrorBodyProps) => (
   <>
     <ErrorAlert
       icon={<TriangleAlert size={16} color={COLOR.RED} />}
@@ -280,8 +247,7 @@ export const WithdrawLockedFunds = ({
   marketName,
   metricsAvailable = true,
 }: WithdrawLockedFundsProps) => {
-  const { isLoading, isError, data, initiateWithdraw } =
-    useWithdrawLockedFunds();
+  const { isLoading, isError, data, initiateWithdraw } = useWithdrawLockedFunds();
   const [isResultDismissed, setIsResultDismissed] = useState(false);
 
   const handleInitiate = useCallback(async () => {
@@ -331,13 +297,7 @@ export const WithdrawLockedFunds = ({
       }
     }
     if (mode === 'armed' || mode === 'selling') {
-      return (
-        <SellingBody
-          amount={lockedAmount}
-          mode={mode}
-          metricsAvailable={metricsAvailable}
-        />
-      );
+      return <SellingBody amount={lockedAmount} mode={mode} metricsAvailable={metricsAvailable} />;
     }
     return (
       <InitiateBody
