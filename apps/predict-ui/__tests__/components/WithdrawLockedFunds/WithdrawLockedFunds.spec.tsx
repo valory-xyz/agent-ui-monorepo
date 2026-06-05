@@ -144,7 +144,11 @@ describe('WithdrawLockedFunds', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
         isError: false,
-        data: buildStatus({ mode: 'selling', positions_sold: 4, positions_total: 7 }),
+        data: buildStatus({
+          mode: 'selling',
+          positions_sold: 4,
+          positions_total: 7,
+        }),
         initiateWithdraw: jest.fn(),
       });
       renderCard();
@@ -327,6 +331,70 @@ describe('WithdrawLockedFunds', () => {
     });
   });
 
+  describe('metrics unavailable (Polystrat no-metrics state)', () => {
+    it('uses the alternate description and hides the open-positions value', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'idle' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ metricsAvailable: false });
+      expect(screen.getByText(/Sell all existing positions on Polymarket/)).toBeInTheDocument();
+      expect(screen.queryByText(/Closes all open positions/)).toBeNull();
+      expect(screen.queryByText('Open positions value')).toBeNull();
+    });
+
+    it('keeps the initiate button enabled even when the locked amount is zero', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'idle' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ metricsAvailable: false, lockedAmount: 0 });
+      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeEnabled();
+    });
+
+    it('hides the open-positions value while selling', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'selling' }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ metricsAvailable: false });
+      expect(
+        screen.getByText('Withdrawal initiated. Selling open positions...'),
+      ).toBeInTheDocument();
+      expect(screen.queryByText('Open positions value')).toBeNull();
+    });
+
+    it('hides the open-positions value in the partial-withdrawal state', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', fills: [fakeFill] }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ metricsAvailable: false });
+      expect(screen.getByText('Partial withdrawal completed')).toBeInTheDocument();
+      expect(screen.queryByText('Open positions value')).toBeNull();
+    });
+
+    it('hides the open-positions value in the errored state', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus({ mode: 'errored', fills: [] }),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard({ metricsAvailable: false });
+      expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
+      expect(screen.queryByText('Open positions value')).toBeNull();
+    });
+  });
+
   describe('loading state propagation', () => {
     it('shows the initiate button in loading state while the hook reports loading', () => {
       mockedHook.mockReturnValue({
@@ -336,7 +404,9 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard();
-      const button = screen.getByRole('button', { name: /initiate withdrawal/i });
+      const button = screen.getByRole('button', {
+        name: /initiate withdrawal/i,
+      });
       expect(button).toHaveClass('ant-btn-loading');
     });
   });
