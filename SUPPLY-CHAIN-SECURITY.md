@@ -137,6 +137,17 @@ Before adding a new direct dependency:
 - For wallet / signing / crypto libraries (anything that interacts with `viem`), additionally confirm the audit status on the project's site and check Socket.dev / Snyk advisories.
 - Does it have install hooks? If yes, those have to be added to [`install-hooks.allowlist`](./.supply-chain/install-hooks.allowlist) with reviewer sign-off.
 
+### 9. License allowlist gate
+
+Every installed dependency's license must resolve against a checked-in allowlist, mirroring the backend [`valory-xyz/tomte`](https://github.com/valory-xyz/tomte) `liccheck` `[Licenses]` posture: permissive + weak-copyleft authorized; strong copyleft (`GPL`/`AGPL`/`LGPL-3.0`) and `MPL-1.1` unauthorized; **PARANOID** — an unknown or unresolved license **fails**, it is never silently skipped.
+
+- **Script:** [`scripts/license-check.mjs`](./scripts/license-check.mjs) (`yarn license-check`). Uses `license-checker-rseidelsohn` (a maintained `license-checker` fork that reads real `LICENSE` files, reducing spurious `UNKNOWN`s) via its programmatic API, then evaluates each package's SPDX expression against the allowlist. SPDX `OR` passes if any disjunct is allowed; `AND` requires all conjuncts; a trailing `*` (the fork's "guessed from a LICENSE file" marker) is stripped; matching is case-insensitive. The recursive-descent evaluator is unit-tested in [`scripts/license-check.test.mjs`](./scripts/license-check.test.mjs) (`yarn license-check:test`, Node's built-in runner — no added dependency).
+- **Fail-closed:** any expression we cannot confidently resolve — an `UNKNOWN`, an unrecognized id, a `WITH` exception, or a malformed string — counts as a violation. An explicit `unauthorizedSpdx` entry also wins over `allowedSpdx`, so a copyleft id can never pass even if mistakenly also listed as allowed.
+- **Config:** [`license-allowlist.json`](./.supply-chain/license-allowlist.json), same reason+review discipline as the audit allowlist. `licenseOverrides` correct a mis-detected/`UNKNOWN` package's license; `exemptions` skip a genuinely-disallowed one with justification. Both are **empty today — the tree is 0 violations**, so the gate is a *ratchet*: it locks in the current clean state and trips when a future PR introduces a copyleft/unknown dependency.
+- **Resolve a violation** (do not silence): permissive-but-missing → add the SPDX id to `allowedSpdx` (reconcile against the backend `liccheck` list); mis-detected/`UNKNOWN` → add a `licenseOverrides` entry; genuinely copyleft/proprietary → replace the dependency, or add a documented `exemptions` entry.
+- **CI:** the `license-check` job in [`supply-chain.yml`](./.github/workflows/supply-chain.yml) installs with `--ignore-scripts` (the gate only reads files) and is wired into the `Supply chain checks passed` aggregator, so it is a required check via the existing branch-protection context — no separate context needed.
+- **Dev-only — cannot affect any app.** `license-checker-rseidelsohn` is a `devDependency`, never bundled into a build. The gate changes no `dependencies`/`resolutions`; worst case is a failed CI job.
+
 ## Response playbook — "a dependency we use was just disclosed as compromised"
 
 When a malicious npm publish (Shai-Hulud-style worm, `ua-parser-js`-style, etc.) hits a package in our dep tree, follow this. **Time-to-mitigate is the metric** — not thoroughness of investigation. Get the bad version out of the build first, then dig in.
@@ -275,6 +286,7 @@ This file lands as part of Phase 2 of the supply-chain hardening plan. Items her
 - [x] Add [`.npmrc`](./.npmrc) with `ignore-scripts=true`, `save-exact=true`, `engine-strict=true`.
 - [x] Add [`scripts/audit.mjs`](./scripts/audit.mjs) + [`.supply-chain/audit-allowlist.json`](./.supply-chain/audit-allowlist.json) and the `audit:prod` script. Wire as the supply-chain CI audit job.
 - [x] Add [`scripts/audit-install-hooks.mjs`](./scripts/audit-install-hooks.mjs) + [`.supply-chain/install-hooks.allowlist`](./.supply-chain/install-hooks.allowlist) + the `install-hooks` job. Allowlist seeded with the four legitimate install-hook packages currently in the tree.
+- [x] Add [`scripts/license-check.mjs`](./scripts/license-check.mjs) + [`.supply-chain/license-allowlist.json`](./.supply-chain/license-allowlist.json) + the `license-check` job (backend `liccheck` parity, PARANOID, fail-closed). Tree is 0 violations; wired into the `Supply chain checks passed` aggregator as a required check. See [§9](#9-license-allowlist-gate).
 - [x] Add `lockfile-lint` to CI to enforce HTTPS-only registry hosts and integrity hashes in `yarn.lock`.
 - [x] Harden the Gitleaks workflow: pinned to `v8.30.1` with `sha256sum -c` verification of the downloaded binary; full-history scan.
 - [x] Add `all-checks-passed` aggregator job to keep branch-protection wiring simple when re-enabled.
