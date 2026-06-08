@@ -21,6 +21,15 @@ describe('agentMap (babydegen-ui)', () => {
     expect(agentChainName).toBe('mode');
   });
 
+  it('sets agentType to "basius" when env var is "basius"', () => {
+    process.env.REACT_APP_AGENT_NAME = 'basius';
+
+    const { agentType, agentName, agentChainName } = require('../../src/utils/agentMap');
+    expect(agentType).toBe('basius');
+    expect(agentName).toBe('Basius');
+    expect(agentChainName).toBe('base');
+  });
+
   it('defaults to "optimus" for any other value', () => {
     process.env.REACT_APP_AGENT_NAME = 'optimus';
 

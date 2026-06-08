@@ -9,7 +9,8 @@ Served by the Modius and Optimus agent, designed to be consumed by the agent and
 2. Run via `npx nx serve babydegen-ui`
     - The app will be available at `http://localhost:4200`
     - For modius, update the REACT_APP_AGENT_NAME value in .env file to `modius`
-    - For optimus, update the REACT_APP_AGENT_NAME value in .env file to `optimus` 
+    - For optimus, update the REACT_APP_AGENT_NAME value in .env file to `optimus`
+    - For basius, update the REACT_APP_AGENT_NAME value in .env file to `basius`
 3. Build for production via `npx nx build babydegen-ui`
     - The build will be available in the `dist/apps/babydegen-ui` directory
     - `/build` is the output directory, and can be served statically
@@ -23,6 +24,7 @@ To mock, update the `IS_MOCK_ENABLED` in `config.ts` to `true` and the app will 
 2. Push a new tag to the repository
     - For modius, use suffix `-modius` (e.g., `v1.0.0-modius`)
     - For optimus, use suffix `-optimus` (e.g., `v1.0.0-optimus`)
+    - For basius, use suffix `-basius` (e.g., `v1.0.0-basius`)
 3. The CI will build and release the contents of the `dist/apps/babydegen-ui` directory to a zip file.
 
 ## 🔐 Deployment expectations

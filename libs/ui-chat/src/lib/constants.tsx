@@ -8,6 +8,8 @@ import { AgentType } from './types';
 export const LOGO_MAP: Record<AgentType, string> = {
   modius: modiusLogo,
   optimus: optimusLogo,
+  // Basius reuses the Optimus chat logo until design provides Basius branding.
+  basius: optimusLogo,
   omenstrat_trader: traderLogo,
   polystrat_trader: polystratTraderLogo,
   agentsFun: agentsFunLogo,
