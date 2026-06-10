@@ -29,7 +29,7 @@ export const WithdrawAgentsFunds = () => {
           <Button
             onClick={() => setCanInitiateWithdrawal(true)}
             type="primary"
-            style={{ color: COLOR.black }}
+            style={{ color: COLOR.buttonText }}
           >
             Withdraw
           </Button>

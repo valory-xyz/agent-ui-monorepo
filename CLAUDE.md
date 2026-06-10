@@ -9,7 +9,7 @@ NX monorepo by Valory AG. Contains three React apps and six shared libraries for
 ```
 apps/
   agentsfun-ui/   # Agents.fun social/memecoin UI            (dev 4300, preview 4400)
-  babydegen-ui/  # Portfolio + withdrawal UI for Modius/Optimus  (dev 4300, preview 4400)
+  babydegen-ui/  # Portfolio + withdrawal UI for Modius/Optimus/Basius (dev 4300, preview 4400)
   predict-ui/    # Prediction-market UI for Omenstrat/Polystrat (dev 4200, preview 4300)
 
 libs/
@@ -111,7 +111,7 @@ export const API_V1 = `${LOCAL}/api/v1`;
 | babydegen-ui  | `LOCAL/{features, portfolio, withdrawal/amount}`; `POST LOCAL/withdrawal/initiate`; `GET LOCAL/withdrawal/status/:id`                                                         |
 | predict-ui    | `LOCAL/features`; `API_V1/{agent/details, agent/performance, agent/profit-over-time?window=…, agent/prediction-history?page=…, agent/position-details/:id, agent/trading-details, withdrawal}` |
 
-`AgentType` (union: `predict | modius | optimus | basius | agentsFun | polystrat_trader | omenstrat_trader`) is exported from `libs/util-constants-and-types/src/lib/constants/agents.ts` and consumed by `ui-chat` to switch chat presentation.
+`AgentType` (union: `predict | modius | optimus | basius | agentsFun | polystrat_trader | omenstrat_trader`) lives in `libs/util-constants-and-types/src/lib/constants/agents.ts`, but **`ui-chat` keeps its own copy** in `libs/ui-chat/src/lib/types.ts` — that local one is the live type (it types the `<Chat>` `agentType` prop and `LOGO_MAP`). Add a new agent to **both**, plus a `LOGO_MAP` entry.
 
 ---
 
@@ -269,7 +269,7 @@ afterEach(() => jest.restoreAllMocks());
 
 ### `babydegen-ui`
 - Sections: Portfolio (with breakdown modal) → Allocation (Chart.js donut + Ant Table) → StrategyAndChat (gated) → WithdrawAgentsFunds.
-- `src/utils/agentMap.ts` keys off `REACT_APP_AGENT_NAME`: `modius` → display "Modius" on **Mode** chain; anything else → "Optimus" on **Optimism**. Each agent has its own primary color, network logo (`mode-network.png`/`optimism-network.png`), and pie-chart palette (`src/utils/chartjs/palette.ts`).
+- `src/utils/agentMap.ts` keys off `REACT_APP_AGENT_NAME`: `modius` → "Modius" on **Mode**; `basius` → "Basius" on **Base**; anything else → "Optimus" on **Optimism**. Each agent has its own primary colour/theme (`src/constants/{colors,theme}.ts`), network logo (`mode-network.png`/`optimism-network.png`/`base-network.png`), and pie-chart palette (`src/utils/chartjs/palette.ts`). Pool protocols (`SelectedProtocol`/`PROTOCOLS_MAP` in `src/constants/textMaps.ts`) include `aerodrome` (Base DEX) alongside balancerPool/sturdy/velodrome/uniswapV3.
 - **AllocationPie uses a custom Chart.js plugin** (`src/utils/chartjs/donut-center-plugin.ts`) that loads the chain logo image and calls `chart.update()` once it resolves. This file is excluded from coverage (requires `jest-canvas-mock` or E2E).
 - **Withdrawal state machine** in `useWithdrawFunds.ts`: POST `/withdrawal/initiate` captures `withdrawId` → query `/withdrawal/status/:id` is gated by `enabled: !!withdrawId` and polls every 2s until `status === 'completed'`. Address validated client-side with `viem`'s `isAddress`.
 

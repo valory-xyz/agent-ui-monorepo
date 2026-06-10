@@ -10,6 +10,7 @@ export const PROTOCOL_IMAGE_MAP: Record<SelectedProtocol, string> = {
   sturdy: '/logos/protocols/sturdy.png',
   velodrome: '/logos/protocols/velodrome.png',
   uniswapV3: '/logos/protocols/uniswapV3.png',
+  aerodrome: '/logos/protocols/aerodrome.png',
 } as const;
 
 export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<'name' | 'logo', string>> = {
@@ -28,5 +29,9 @@ export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<'name' | 'logo', str
   uniswapV3: {
     name: 'Uniswap V3',
     logo: '/logos/protocols/uniswapV3.png',
+  },
+  aerodrome: {
+    name: 'Aerodrome',
+    logo: '/logos/protocols/aerodrome.png',
   },
 } as const;

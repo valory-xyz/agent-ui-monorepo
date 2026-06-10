@@ -1,13 +1,13 @@
 # BabyDegen UI
 
 React application for BabyDegen UI.
-Served by the Modius and Optimus agent, designed to be consumed by the agent and available in [Pearl](https://github.com/valory-xyz/olas-operate-app).
+Served by the Modius, Optimus and Basius agents, designed to be consumed by the agent and available in [Pearl](https://github.com/valory-xyz/olas-operate-app).
 
 ## 🚀 Development
 
 1. Install via `yarn install`
 2. Run via `npx nx serve babydegen-ui`
-    - The app will be available at `http://localhost:4200`
+    - The app will be available at `http://localhost:4300`
     - For modius, update the REACT_APP_AGENT_NAME value in .env file to `modius`
     - For optimus, update the REACT_APP_AGENT_NAME value in .env file to `optimus`
     - For basius, update the REACT_APP_AGENT_NAME value in .env file to `basius`
@@ -16,7 +16,7 @@ Served by the Modius and Optimus agent, designed to be consumed by the agent and
     - `/build` is the output directory, and can be served statically
 
 ## 🧪 Mock Data
-To mock, update the `IS_MOCK_ENABLED` in `config.ts` to `true` and the app will use the mock data instead of the API. To enable the chat mock, set `isChatEnabled` in `mockFeatures.ts` to `true` as well.
+To mock, set `IS_MOCK_ENABLED=true` in `.env` and the app will use mock data instead of the API. The chat mock is gated by `isChatEnabled` in `mockFeatures.ts`.
 
 ## 📦 Release process
 

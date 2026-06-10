@@ -2,7 +2,7 @@ type Address = `0x${string}`;
 
 type Allocation = {
   id: string;
-  chain: 'ethereum' | 'mode' | 'optimism';
+  chain: 'ethereum' | 'mode' | 'optimism' | 'base';
   address?: Address;
   type: SelectedProtocol;
   assets: string[];
@@ -22,7 +22,7 @@ type PortfolioAsset = {
 
 export type TradingType = 'risky' | 'balanced';
 
-export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswapV3';
+export type SelectedProtocol = 'balancerPool' | 'sturdy' | 'velodrome' | 'uniswapV3' | 'aerodrome';
 
 /**
  * Portfolio response from the agent.
@@ -73,14 +73,14 @@ export type WithdrawalInitiateResponse = {
   status: FundsWithdrawalStatus;
   target_address: Address;
   estimated_value_usd: number;
-  chain: 'mode' | 'optimism';
+  chain: 'mode' | 'optimism' | 'base';
 };
 
 export type WithdrawalStatus = {
   status: FundsWithdrawalStatus;
   message: string;
   target_address: Address;
-  chain: 'mode' | 'optimism';
+  chain: 'mode' | 'optimism' | 'base';
   safe_address: Address;
   requested_at: string;
   estimated_value_usd: number;

@@ -1,7 +1,18 @@
 import { PortfolioResponse } from '../types';
 import { agentChainName, agentType } from '../utils/agentMap';
 
-export const mockAgentAsset = agentType === 'modius' ? 'MODE' : 'OP';
+export const mockAgentAsset = (() => {
+  if (agentType === 'modius') return 'MODE';
+  if (agentType === 'basius') return 'AERO';
+  return 'OP';
+})();
+
+// Basius (Base) runs on Aerodrome; Modius/Optimus on Velodrome. Mock-only.
+const isBasius = agentType === 'basius';
+const mockPoolProtocol = isBasius ? 'aerodrome' : 'velodrome';
+const mockPoolChain = isBasius ? 'base' : 'optimism';
+const mockPoolAssets = isBasius ? ['WETH', 'USDC'] : ['USDC', 'VELO'];
+const mockPoolDetails = isBasius ? 'Aerodrome CL Pool' : 'Velodrome CL Pool';
 
 export const mockPortfolio: PortfolioResponse = {
   address: '0x000000000000000000000000000000000000dEaD',
@@ -30,12 +41,12 @@ export const mockPortfolio: PortfolioResponse = {
       address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
     },
     {
-      chain: 'optimism',
-      type: 'velodrome',
+      chain: mockPoolChain,
+      type: mockPoolProtocol,
       id: '0x1737275d53A5Ca5dAc582a493AA32C85ba2cFaD3',
-      assets: ['USDC', 'VELO'],
+      assets: mockPoolAssets,
       apr: 17.19,
-      details: 'Velodrome CL Pool',
+      details: mockPoolDetails,
       ratio: 100.0,
       address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
     },
@@ -66,6 +77,6 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 0.0,
     },
   ],
-  selected_protocols: ['balancerPool', 'sturdy', 'velodrome'],
+  selected_protocols: ['balancerPool', 'sturdy', mockPoolProtocol],
   trading_type: 'balanced',
 } as const;
