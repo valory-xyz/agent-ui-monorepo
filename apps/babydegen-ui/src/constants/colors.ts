@@ -21,7 +21,6 @@ const optimusColors = {
   buttonText: '#FFFFFF', // white text — Optimus primary button is red (#FF0421)
 };
 
-// Basius (Base) palette — from design.
 const basiusColors = {
   blue: '#0052FF',
   danger: '#FF1100',
