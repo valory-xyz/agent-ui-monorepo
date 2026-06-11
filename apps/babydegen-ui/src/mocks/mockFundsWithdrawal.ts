@@ -1,4 +1,5 @@
 import { WithdrawalFunds, WithdrawalInitiateResponse, WithdrawalStatus } from '../types';
+import { agentChainName } from '../utils/agentMap';
 
 export const mockFunds: WithdrawalFunds = {
   amount: 1000000000,
@@ -27,14 +28,14 @@ export const mockWithdrawInitiateResponse: WithdrawalInitiateResponse = {
   status: 'initiated',
   target_address: '0x9876543210987654321098765432109876543210',
   estimated_value_usd: 1500.0,
-  chain: 'mode',
+  chain: agentChainName,
 } as const;
 
 export const mockWithdrawStatusResponse: WithdrawalStatus = {
   status: 'withdrawing',
   message: 'Withdrawal request received and validated',
   target_address: '0x9876543210987654321098765432109876543210',
-  chain: 'optimism',
+  chain: agentChainName,
   safe_address: '0x1234567890123456789012345678901234567890',
   requested_at: '1703123456',
   estimated_value_usd: 1500.0,
