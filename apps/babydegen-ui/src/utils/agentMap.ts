@@ -1,10 +1,25 @@
 /**
  * Supported agents map.
- * - modius: Modius agent
- * - optimus: Optimus agent
+ * - modius: Modius agent (Mode chain)
+ * - optimus: Optimus agent (Optimism chain)
+ * - basius: Basius agent (Base chain)
  */
-export const agentType = process.env.REACT_APP_AGENT_NAME === 'modius' ? 'modius' : 'optimus';
+const env = process.env.REACT_APP_AGENT_NAME;
 
-export const agentName = agentType === 'modius' ? 'Modius' : 'Optimus';
+export const agentType = ((): 'modius' | 'basius' | 'optimus' => {
+  if (env === 'modius') return 'modius';
+  if (env === 'basius') return 'basius';
+  return 'optimus';
+})();
 
-export const agentChainName = agentType === 'modius' ? 'mode' : 'optimism';
+export const agentName = ((): 'Modius' | 'Basius' | 'Optimus' => {
+  if (agentType === 'modius') return 'Modius';
+  if (agentType === 'basius') return 'Basius';
+  return 'Optimus';
+})();
+
+export const agentChainName = ((): 'mode' | 'base' | 'optimism' => {
+  if (agentType === 'modius') return 'mode';
+  if (agentType === 'basius') return 'base';
+  return 'optimism';
+})();

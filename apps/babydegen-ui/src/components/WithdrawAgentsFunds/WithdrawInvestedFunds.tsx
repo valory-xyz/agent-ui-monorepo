@@ -60,7 +60,7 @@ const WithdrawFailed = ({ isLoading, href, onRetry }: WithdrawalFailedProps) => 
           loading={isLoading}
           onClick={onRetry}
           type="primary"
-          style={{ color: COLOR.black, marginLeft: 32 }}
+          style={{ color: COLOR.buttonText, marginLeft: 32 }}
         >
           Retry
         </Button>
@@ -127,7 +127,7 @@ const InitiateWithdrawal = ({
       loading={isLoading}
       onClick={() => onInitiateWithdrawal()}
       type="primary"
-      style={{ color: withdrawalAddress ? COLOR.black : undefined }}
+      style={{ color: withdrawalAddress ? COLOR.buttonText : undefined }}
     >
       Initiate withdrawal
     </Button>

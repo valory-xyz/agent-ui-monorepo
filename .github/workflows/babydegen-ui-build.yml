@@ -5,6 +5,7 @@ on:
     tags:
       - 'v*-modius'
       - 'v*-optimus'
+      - 'v*-basius'
   workflow_dispatch:
 
 permissions:
@@ -18,5 +19,6 @@ jobs:
     with:
       app-name: babydegen-ui
       # Tag suffix → REACT_APP_AGENT_NAME mapping (v*-modius → modius;
-      # everything else falling under this workflow's tag pattern is v*-optimus).
-      agent-env: ${{ endsWith(github.ref_name, '-modius') && 'modius' || 'optimus' }}
+      # v*-basius → basius; everything else falling under this workflow's tag
+      # pattern is v*-optimus → optimus).
+      agent-env: ${{ endsWith(github.ref_name, '-modius') && 'modius' || endsWith(github.ref_name, '-basius') && 'basius' || 'optimus' }}

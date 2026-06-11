@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 export type AgentType =
   | 'modius'
   | 'optimus'
+  | 'basius'
   | 'omenstrat_trader'
   | 'agentsFun'
   | 'polystrat_trader';

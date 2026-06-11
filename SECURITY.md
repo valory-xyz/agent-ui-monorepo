@@ -11,7 +11,7 @@ This repository ships three independently-versioned applications. Only the lates
 | App            | Release tag pattern                          | Supported version       |
 | -------------- | -------------------------------------------- | ----------------------- |
 | `agentsfun-ui` | `v*-agentsfun`                               | Latest released version |
-| `babydegen-ui` | `v*-modius`, `v*-optimus`                    | Latest released version |
+| `babydegen-ui` | `v*-modius`, `v*-optimus`, `v*-basius`        | Latest released version |
 | `predict-ui`   | `v*-omenstrat-trader`, `v*-polystrat-trader` | Latest released version |
 
 ## Reporting a Vulnerability

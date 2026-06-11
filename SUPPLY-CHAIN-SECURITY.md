@@ -115,7 +115,7 @@ Build-time env vars passed via Vite `define`:
 
 | Name | Source | Sensitivity |
 | --- | --- | --- |
-| `REACT_APP_AGENT_NAME` | Tag suffix (`v*-modius`, `v*-optimus`, `v*-omenstrat-trader`, `v*-polystrat-trader`, `v*-agentsfun`) → mapped in release workflow | Public — inlined into the bundle |
+| `REACT_APP_AGENT_NAME` | Tag suffix (`v*-modius`, `v*-optimus`, `v*-basius`, `v*-omenstrat-trader`, `v*-polystrat-trader`, `v*-agentsfun`) → mapped in release workflow | Public — inlined into the bundle |
 | `IS_MOCK_ENABLED` | `.env` (developer-local) | Public — inlined into the bundle |
 
 Neither is a secret. Listed for completeness so an auditor can confirm nothing sensitive leaked into `define`.

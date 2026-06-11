@@ -12,9 +12,17 @@ const optimusTheme: ThemeConfig['token'] = {
   colorPrimary: '#FF0421',
 };
 
+const basiusTheme: ThemeConfig['token'] = {
+  colorPrimary: '#0052FF',
+};
+
 export const mainTheme: ThemeConfig = {
   token: {
-    ...(agentType === 'modius' ? modiusTheme : optimusTheme),
+    ...(() => {
+      if (agentType === 'modius') return modiusTheme;
+      if (agentType === 'basius') return basiusTheme;
+      return optimusTheme;
+    })(),
     colorWarning: '#FF9C27',
     colorTextBase: '#0F172A',
     colorText: '#0F172A',
