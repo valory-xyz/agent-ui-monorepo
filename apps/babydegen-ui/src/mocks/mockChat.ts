@@ -1,4 +1,5 @@
 import { ChatResponse } from '../types';
+import { agentType } from '../utils/agentMap';
 
 const reasoningMock = `
 <div class="container">
@@ -13,8 +14,11 @@ const reasoningMock = `
 </div>
 `;
 
+// Basius (Base) runs on Aerodrome; Modius/Optimus on Velodrome. Mock-only.
+const mockChatProtocol = agentType === 'basius' ? 'aerodrome' : 'velodrome';
+
 export const mockChat: ChatResponse = {
-  selected_protocols: ['balancerPool', 'sturdy', 'velodrome'],
+  selected_protocols: ['balancerPool', 'sturdy', mockChatProtocol],
   trading_type: 'risky',
   previous_trading_type: 'balanced',
   reasoning: reasoningMock,
