@@ -8,7 +8,7 @@ import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { SelectedProtocol } from '../../types';
 import { Pill } from '../../ui/Pill';
-import { agentName } from '../../utils/agentMap';
+import { agentName, normalizeProtocol } from '../../utils/agentMap';
 
 const { Title, Text } = Typography;
 
@@ -40,14 +40,17 @@ const StrategyContent = () => {
   const operatingProtocols = useMemo(() => {
     if (!data?.selected_protocols) return [];
 
-    return data.selected_protocols.map((protocol: SelectedProtocol) => (
-      <Avatar
-        key={protocol}
-        size={36}
-        src={PROTOCOLS_MAP[protocol].logo}
-        style={{ border: `1px solid ${COLOR.lightGrey}`, padding: 6 }}
-      />
-    ));
+    return data.selected_protocols.map((protocol: SelectedProtocol) => {
+      const displayProtocol = normalizeProtocol(protocol);
+      return (
+        <Avatar
+          key={displayProtocol}
+          size={36}
+          src={PROTOCOLS_MAP[displayProtocol].logo}
+          style={{ border: `1px solid ${COLOR.lightGrey}`, padding: 6 }}
+        />
+      );
+    });
   }, [data?.selected_protocols]);
 
   return (
