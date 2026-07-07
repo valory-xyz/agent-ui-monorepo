@@ -7,6 +7,7 @@ import { COLOR } from '../../constants/colors';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { SelectedProtocol, TradingType } from '../../types';
 import { Pill } from '../../ui/Pill';
+import { normalizeProtocol } from '../../utils/agentMap';
 
 const { Text } = Typography;
 
@@ -73,15 +74,18 @@ export const OperatingProtocols = ({ protocols }: OperatingProtocolsProps) => (
   <SystemMessage label="Operating protocols updated:" type="protocols">
     {protocols.length === 0
       ? NA
-      : protocols.map((protocol) => (
-          <Pill size="large" key={protocol} style={{ marginLeft: 0, paddingRight: 16 }}>
-            <img
-              src={PROTOCOLS_MAP[protocol].logo}
-              alt={protocol}
-              style={{ width: 18, height: 18 }}
-            />
-            {PROTOCOLS_MAP[protocol].name}
-          </Pill>
-        ))}
+      : protocols.map((protocol) => {
+          const displayProtocol = normalizeProtocol(protocol);
+          return (
+            <Pill size="large" key={displayProtocol} style={{ marginLeft: 0, paddingRight: 16 }}>
+              <img
+                src={PROTOCOLS_MAP[displayProtocol].logo}
+                alt={displayProtocol}
+                style={{ width: 18, height: 18 }}
+              />
+              {PROTOCOLS_MAP[displayProtocol].name}
+            </Pill>
+          );
+        })}
   </SystemMessage>
 );
