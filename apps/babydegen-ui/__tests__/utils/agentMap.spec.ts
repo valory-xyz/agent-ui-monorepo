@@ -51,4 +51,67 @@ describe('agentMap (babydegen-ui)', () => {
 
     expect(() => require('../../src/utils/agentMap')).not.toThrow();
   });
+
+  describe('normalizeProtocol', () => {
+    it('maps velodrome to aerodrome for basius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'basius';
+
+      const { normalizeProtocol } = require('../../src/utils/agentMap');
+      expect(normalizeProtocol('velodrome')).toBe('aerodrome');
+    });
+
+    it('leaves other protocols untouched for basius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'basius';
+
+      const { normalizeProtocol } = require('../../src/utils/agentMap');
+      expect(normalizeProtocol('balancerPool')).toBe('balancerPool');
+      expect(normalizeProtocol('uniswapV3')).toBe('uniswapV3');
+      expect(normalizeProtocol('aerodrome')).toBe('aerodrome');
+    });
+
+    it('leaves velodrome untouched for modius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'modius';
+
+      const { normalizeProtocol } = require('../../src/utils/agentMap');
+      expect(normalizeProtocol('velodrome')).toBe('velodrome');
+    });
+
+    it('leaves velodrome untouched for optimus', () => {
+      process.env.REACT_APP_AGENT_NAME = 'optimus';
+
+      const { normalizeProtocol } = require('../../src/utils/agentMap');
+      expect(normalizeProtocol('velodrome')).toBe('velodrome');
+    });
+  });
+
+  describe('normalizeDetails', () => {
+    it('relabels velodrome case-insensitively for basius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'basius';
+
+      const { normalizeDetails } = require('../../src/utils/agentMap');
+      expect(normalizeDetails('Velodrome pool')).toBe('Aerodrome pool');
+      expect(normalizeDetails('velodrome CL pool')).toBe('Aerodrome CL pool');
+    });
+
+    it('leaves details without velodrome untouched for basius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'basius';
+
+      const { normalizeDetails } = require('../../src/utils/agentMap');
+      expect(normalizeDetails('Balancer pool')).toBe('Balancer pool');
+    });
+
+    it('leaves details untouched for modius', () => {
+      process.env.REACT_APP_AGENT_NAME = 'modius';
+
+      const { normalizeDetails } = require('../../src/utils/agentMap');
+      expect(normalizeDetails('Velodrome pool')).toBe('Velodrome pool');
+    });
+
+    it('leaves details untouched for optimus', () => {
+      process.env.REACT_APP_AGENT_NAME = 'optimus';
+
+      const { normalizeDetails } = require('../../src/utils/agentMap');
+      expect(normalizeDetails('Velodrome pool')).toBe('Velodrome pool');
+    });
+  });
 });

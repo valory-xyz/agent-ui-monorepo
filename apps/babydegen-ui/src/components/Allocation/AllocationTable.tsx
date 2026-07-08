@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { PROTOCOLS_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
 import { SelectedProtocol } from '../../types';
+import { normalizeDetails, normalizeProtocol } from '../../utils/agentMap';
 import { piePalette } from '../../utils/chartjs/palette';
 import { AssetBadges } from './AllocationAssets';
 
@@ -66,9 +67,9 @@ export const AllocationTable = () => {
       data?.allocations?.map(({ type, assets, details, apr }) => ({
         key: `${type}-${assets.join('-')}-${details}`,
         pool: assets,
-        details: `${details}`,
+        details: normalizeDetails(`${details}`),
         apr: `${apr}`,
-        type,
+        type: normalizeProtocol(type),
       })),
     [data?.allocations],
   );
