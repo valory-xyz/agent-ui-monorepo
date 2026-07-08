@@ -113,7 +113,7 @@
     "@babel/plugin-transform-modules-systemjs": "7.29.7",
     "rollup": "4.60.4",
     "qs": "6.15.2",
-    "ws": "8.20.1",
+    "ws": "8.21.0",
     "koa": "2.16.4",
     "**/nx/minimatch": "9.0.9",
     "**/@nx/devkit/minimatch": "9.0.9",
