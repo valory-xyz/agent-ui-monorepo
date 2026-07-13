@@ -1,6 +1,6 @@
 # CLAUDE.md — agent-ui-monorepo
 
-NX monorepo by Valory AG. Contains three React apps and six shared libraries for agent-based UIs.
+NX monorepo by Valory AG. Contains four React apps and six shared libraries for agent-based UIs.
 
 ---
 
@@ -10,6 +10,7 @@ NX monorepo by Valory AG. Contains three React apps and six shared libraries for
 apps/
   agentsfun-ui/   # Agents.fun social/memecoin UI            (dev 4300, preview 4400)
   babydegen-ui/  # Portfolio + withdrawal UI for Modius/Optimus/Basius (dev 4300, preview 4400)
+  connect-ui/    # Pearl Connect (BYOA) agent UI — Profile sections built, endpoints TBD (dev 4500, preview 4600)
   predict-ui/    # Prediction-market UI for Omenstrat/Polystrat (dev 4200, preview 4300)
 
 libs/

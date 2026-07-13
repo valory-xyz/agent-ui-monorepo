@@ -1,0 +1,7 @@
+{
+  "name": "connect-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/connect-ui/src",
+  "projectType": "application",
+  "tags": ["scope:connect-ui"]
+}
