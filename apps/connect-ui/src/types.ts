@@ -26,13 +26,16 @@ export type ConnectSettings = {
   harness: Harness;
 };
 
-/** Merge-patch body: omitted fields keep their current values. */
+/**
+ * Merge-patch body: omitted fields keep their current values. The whitelist
+ * is deliberately absent — the server rejects any whitelist patch with
+ * 422 WHITELIST_FROZEN (read-only via the API for now).
+ */
 export type SettingsPatch = {
   /** Required iff `protected` is present. */
   password?: string;
   protected?: {
     mode?: TransactionMode;
-    whitelist?: Whitelist;
   };
   harness?: Harness;
 };

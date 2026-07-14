@@ -6,7 +6,7 @@ describe('WhitelistedAddresses', () => {
   it('renders well-known addresses with their label and description', () => {
     render(
       <WhitelistedAddresses
-        whitelist={{ gnosis: ['0x4554fe75c1f5576c1d7f765b2a036c199adae329'] }}
+        whitelist={{ gnosis: ['0x735faab1c4ec41128c367afb5c3bac73509f70bb'] }}
       />,
     );
 

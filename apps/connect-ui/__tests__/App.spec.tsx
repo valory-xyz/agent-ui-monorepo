@@ -7,7 +7,7 @@ import { ConnectSettings } from '../src/types';
 const restrictedSettings: ConnectSettings = {
   protected: {
     mode: 'restricted',
-    whitelist: { gnosis: ['0x4554fe75c1f5576c1d7f765b2a036c199adae329'] },
+    whitelist: { gnosis: ['0x735faab1c4ec41128c367afb5c3bac73509f70bb'] },
   },
   harness: 'claude_code_desktop',
 };
