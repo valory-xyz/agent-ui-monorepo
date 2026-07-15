@@ -58,7 +58,7 @@ describe('App', () => {
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
     expect(screen.getByText('Transaction mode')).toBeInTheDocument();
     expect(screen.getByText('Whitelisted addresses')).toBeInTheDocument();
-    expect(screen.getByText('Olas Marketplace')).toBeInTheDocument();
+    expect(screen.getByText('0x735f...70bb')).toBeInTheDocument();
     expect(screen.queryByText('Unrestricted mode is on')).not.toBeInTheDocument();
   });
 

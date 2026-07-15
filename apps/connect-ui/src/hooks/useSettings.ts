@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query';
 import { getMockSettings } from '../mocks/mockSettings';
 import { ConnectSettings } from '../types';
 
-// TBD: endpoint path to be confirmed with the pearl-connect backend.
 export const useSettings = () => {
   return useQuery<ConnectSettings>({
     queryKey: ['settings'],

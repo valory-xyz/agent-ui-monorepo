@@ -55,7 +55,7 @@ const RadioDot = styled.span<{ $selected: boolean }>`
   margin-top: 2px;
   border-radius: 50%;
   background-color: white;
-  border: ${({ $selected }) => ($selected ? '5px solid #7C3AED' : '1px solid #D9D9D9')};
+  border: ${({ $selected }) => ($selected ? '5px solid #7E22CE' : '1px solid #D9D9D9')};
 `;
 
 type TransactionModeProps = {
