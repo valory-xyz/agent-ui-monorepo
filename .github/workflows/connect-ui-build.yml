@@ -1,0 +1,19 @@
+name: Build and Release Connect UI
+
+on:
+  push:
+    tags:
+      - 'v*-connect'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/_build-app.yml
+    permissions:
+      contents: write
+    with:
+      app-name: connect-ui
+      # connect-ui does not branch on agent type — no REACT_APP_AGENT_NAME.

@@ -1,6 +1,6 @@
 # CLAUDE.md — agent-ui-monorepo
 
-NX monorepo by Valory AG. Contains three React apps and six shared libraries for agent-based UIs.
+NX monorepo by Valory AG. Contains four React apps and six shared libraries for agent-based UIs.
 
 ---
 
@@ -10,6 +10,7 @@ NX monorepo by Valory AG. Contains three React apps and six shared libraries for
 apps/
   agentsfun-ui/   # Agents.fun social/memecoin UI            (dev 4300, preview 4400)
   babydegen-ui/  # Portfolio + withdrawal UI for Modius/Optimus/Basius (dev 4300, preview 4400)
+  connect-ui/    # Pearl Connect (BYOA) agent UI — Profile sections built, endpoints TBD (dev 4500, preview 4600)
   predict-ui/    # Prediction-market UI for Omenstrat/Polystrat (dev 4200, preview 4300)
 
 libs/
@@ -291,6 +292,7 @@ Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node
 | `check-pull-request.yml` | PRs to any branch                                  | `nx run-many --target=lint` + `nx run-many --target=test --passWithNoTests`. **No build, no typecheck.** |
 | `agentsfun-ui-build.yml` | Tag `v*-agentsfun`                                 | Builds and releases `agentsfun-ui-build.zip`                   |
 | `babydegen-ui-build.yml` | Tag `v*-modius`, `v*-optimus`, **or** `v*-basius`  | Sets `REACT_APP_AGENT_NAME` from the tag suffix, builds, and releases `babydegen-ui-build.zip` |
+| `connect-ui-build.yml`   | Tag `v*-connect`                                   | Builds and releases `connect-ui-build.zip` (no agent env var)  |
 | `predict-ui-build.yml`   | Tag `v*-omenstrat-trader` **or** `v*-polystrat-trader` | Sets `REACT_APP_AGENT_NAME` (`omenstrat_trader`/`polystrat_trader`), builds, and releases `predict-ui-build.zip` |
 | `gitleaks.yml`           | PRs to any branch                                  | Downloads gitleaks `v8.30.1` (SHA256-verified) and scans full history against `.gitleaks.toml` |
 
