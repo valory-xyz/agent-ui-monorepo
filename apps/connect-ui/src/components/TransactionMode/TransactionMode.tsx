@@ -1,3 +1,4 @@
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Flex, Typography } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -33,6 +34,23 @@ const MODAL_COPY: Record<Mode, { title: string; body: string; confirm: string }>
     confirm: 'Switch to Restricted',
   },
 };
+
+// Mirrors the Pearl app's blue info alert (.custom-alert--info).
+const UnrestrictedOnAlert = styled(Alert)`
+  padding: 12px;
+  align-items: flex-start;
+  background-color: #ebedff;
+  border-color: #dbe0ff;
+
+  .ant-alert-icon {
+    color: #4d63ff;
+  }
+
+  .ant-alert-message,
+  .ant-alert-description {
+    color: #0016b2;
+  }
+`;
 
 const ModeCard = styled.button<{ $selected: boolean }>`
   flex: 1;
@@ -98,9 +116,10 @@ export const TransactionMode = ({ settings }: TransactionModeProps) => {
           })}
         </Flex>
         {settings.protected.mode === 'unrestricted' && (
-          <Alert
+          <UnrestrictedOnAlert
             type="info"
             showIcon
+            icon={<InfoCircleOutlined />}
             message="Unrestricted mode is on"
             description="Your agent can send funds to any address. Consider only funding it with what it needs."
           />
