@@ -52,7 +52,7 @@ export const PasswordModal = ({
       <Flex vertical gap={12}>
         <Text>{body}</Text>
         <label htmlFor="connect-password">
-          Enter password <Text type="danger">*</Text>
+          Enter your password <Text type="danger">*</Text>
         </label>
         <Input.Password
           id="connect-password"

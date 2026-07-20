@@ -17,7 +17,7 @@ const MODES: { value: Mode; title: string; description: string }[] = [
   {
     value: 'unrestricted',
     title: 'Unrestricted',
-    description: 'Agent can send funds to any recipient address.',
+    description: 'Agent can interact with any recipient address.',
   },
 ];
 
@@ -102,7 +102,7 @@ export const TransactionMode = ({ settings }: TransactionModeProps) => {
             type="info"
             showIcon
             message="Unrestricted mode is on"
-            description="Your agent can send funds to any address. We recommend funding it with only what it needs."
+            description="Your agent can send funds to any address. Consider only funding it with what it needs."
           />
         )}
       </Flex>

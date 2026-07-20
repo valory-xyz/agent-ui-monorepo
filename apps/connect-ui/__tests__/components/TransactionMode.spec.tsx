@@ -100,7 +100,7 @@ describe('TransactionMode', () => {
     fireEvent.click(screen.getByText('Unrestricted'));
     await screen.findByText('Switch to Unrestricted mode?');
 
-    fireEvent.change(screen.getByLabelText(/Enter password/), {
+    fireEvent.change(screen.getByLabelText(/Enter your password/), {
       target: { value: 'hunter2' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Switch to Unrestricted' }));
@@ -131,7 +131,7 @@ describe('TransactionMode', () => {
     fireEvent.click(screen.getByText('Unrestricted'));
     await screen.findByText('Switch to Unrestricted mode?');
 
-    fireEvent.change(screen.getByLabelText(/Enter password/), {
+    fireEvent.change(screen.getByLabelText(/Enter your password/), {
       target: { value: 'wrong' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Switch to Unrestricted' }));
