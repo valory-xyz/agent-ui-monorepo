@@ -13,7 +13,7 @@ const MODES: { value: Mode; title: string; description: string }[] = [
   {
     value: 'restricted',
     title: 'Restricted',
-    description: 'Agent can only send funds to whitelisted addresses.',
+    description: 'Agent can only interact with whitelisted addresses.',
   },
   {
     value: 'unrestricted',
@@ -25,7 +25,7 @@ const MODES: { value: Mode; title: string; description: string }[] = [
 const MODAL_COPY: Record<Mode, { title: string; body: string; confirm: string }> = {
   unrestricted: {
     title: 'Switch to Unrestricted mode?',
-    body: 'Your agent will be able to send funds to any address. We recommend funding it with only what it needs.',
+    body: 'Your agent will be able to send funds to any address. Consider only funding it with what it needs.',
     confirm: 'Switch to Unrestricted',
   },
   restricted: {
