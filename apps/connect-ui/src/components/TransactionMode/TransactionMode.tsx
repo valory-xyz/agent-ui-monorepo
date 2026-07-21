@@ -68,8 +68,9 @@ const ModeCard = styled.button<{ $selected: boolean }>`
 
 const RadioDot = styled.span<{ $selected: boolean }>`
   flex: none;
-  width: 16px;
-  height: 16px;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
   margin-top: 2px;
   border-radius: 50%;
   background-color: white;

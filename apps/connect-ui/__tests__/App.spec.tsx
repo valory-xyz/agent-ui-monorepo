@@ -58,7 +58,8 @@ describe('App', () => {
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
     expect(screen.getByText('Transaction mode')).toBeInTheDocument();
     expect(screen.getByText('Whitelisted addresses')).toBeInTheDocument();
-    expect(screen.getByText('0x735f...70bb')).toBeInTheDocument();
+    // Whitelist entries are deliberately not listed.
+    expect(screen.queryByText('0x735f...70bb')).not.toBeInTheDocument();
     expect(screen.queryByText('Unrestricted mode is on')).not.toBeInTheDocument();
   });
 
