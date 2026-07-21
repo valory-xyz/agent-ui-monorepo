@@ -15,9 +15,7 @@ const ConfirmButton = styled(Button)`
     opacity: 0.4;
     color: #ffffff;
     border-color: transparent;
-    background:
-      linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%),
-      #7e22ce;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%), #7e22ce;
     background-blend-mode: overlay, normal;
     box-shadow:
       0 -1px 0 0 rgba(0, 0, 0, 0.05) inset,
