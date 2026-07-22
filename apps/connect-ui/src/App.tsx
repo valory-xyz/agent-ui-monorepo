@@ -7,13 +7,15 @@ import { CodingTool } from './components/CodingTool/CodingTool';
 import { GetStarted } from './components/GetStarted/GetStarted';
 import { TransactionMode } from './components/TransactionMode/TransactionMode';
 import { WhitelistedAddresses } from './components/WhitelistedAddresses/WhitelistedAddresses';
+import { COLOR } from './constants/theme';
 import { useSettings } from './hooks/useSettings';
+import { GlobalStyles as ConnectGlobalStyles } from './ui/GlobalStyles';
 
 const Panel = styled.div`
   flex: 1;
   background-color: white;
-  border-left: 1px solid #e4e4e4;
-  border-right: 1px solid #e4e4e4;
+  border-left: 1px solid ${COLOR.BORDER};
+  border-right: 1px solid ${COLOR.BORDER};
 `;
 
 const Profile = () => {
@@ -54,6 +56,7 @@ const App = () => {
           </Panel>
         </Flex>
         <GlobalStyles />
+        <ConnectGlobalStyles />
       </AntdApp>
     </ErrorBoundary>
   );
