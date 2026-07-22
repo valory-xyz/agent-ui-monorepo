@@ -22,7 +22,12 @@ export const GetStarted = () => {
       description="Work with your Connect agent from your coding tool."
     >
       <Flex vertical align="flex-start" gap={12}>
-        <Button icon={<GradientDot />} loading={isPending} onClick={() => mutate()}>
+        <Button
+          icon={<GradientDot />}
+          loading={isPending}
+          onClick={() => mutate()}
+          style={{ fontSize: 14, width: 204 }}
+        >
           New Connect Session
         </Button>
         {error && <Alert type="error" showIcon closable onClose={reset} message={error.message} />}

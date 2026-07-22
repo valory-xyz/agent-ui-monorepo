@@ -1,13 +1,12 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Alert, Flex, Typography } from 'antd';
+import { Alert, Flex } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { COLOR } from '../../constants/theme';
 import { ConnectSettings, TransactionMode as Mode } from '../../types';
 import { Section } from '../../ui/Section';
 import { PasswordModal } from '../PasswordModal/PasswordModal';
-
-const { Text } = Typography;
 
 const MODES: { value: Mode; title: string; description: string }[] = [
   {
@@ -39,16 +38,27 @@ const MODAL_COPY: Record<Mode, { title: string; body: string; confirm: string }>
 const UnrestrictedOnAlert = styled(Alert)`
   padding: 12px;
   align-items: flex-start;
-  background-color: #ebedff;
-  border-color: #dbe0ff;
+  background-color: ${COLOR.INFO_BG};
+  border: 1px solid ${COLOR.INFO_BORDER};
 
   .ant-alert-icon {
-    color: #4d63ff;
+    font-size: 20px;
+    color: ${COLOR.INFO_ICON};
   }
 
-  .ant-alert-message,
+  .ant-alert-message {
+    margin-bottom: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    color: ${COLOR.INFO_TEXT};
+  }
+
   .ant-alert-description {
-    color: #0016b2;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: ${COLOR.INFO_TEXT};
   }
 `;
 
@@ -62,8 +72,8 @@ const ModeCard = styled.button<{ $selected: boolean }>`
   border-radius: 10px;
   cursor: pointer;
   font: inherit;
-  border: 1px solid ${({ $selected }) => ($selected ? '#D3ADF7' : '#E4E4E4')};
-  background-color: ${({ $selected }) => ($selected ? '#F9F0FF' : 'transparent')};
+  border: 1px solid ${({ $selected }) => ($selected ? COLOR.MODE_SELECTED_BORDER : COLOR.BORDER)};
+  background-color: ${({ $selected }) => ($selected ? COLOR.MODE_SELECTED_BG : 'transparent')};
 `;
 
 const RadioDot = styled.span<{ $selected: boolean }>`
@@ -74,7 +84,24 @@ const RadioDot = styled.span<{ $selected: boolean }>`
   margin-top: 2px;
   border-radius: 50%;
   background-color: white;
-  border: ${({ $selected }) => ($selected ? '5px solid #7E22CE' : '1px solid #D9D9D9')};
+  border: ${({ $selected }) =>
+    $selected ? `5px solid ${COLOR.PRIMARY}` : `1px solid ${COLOR.RADIO_BORDER}`};
+`;
+
+// Card title — 14px / 500 / 20px (no <strong>, per design).
+const ModeTitle = styled.span`
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: ${COLOR.TEXT_PRIMARY};
+`;
+
+// Card hint — 14px / 400 / 20px, rgba(97, 112, 132, 1).
+const ModeDescription = styled.span`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: ${COLOR.TEXT_TERTIARY};
 `;
 
 type TransactionModeProps = {
@@ -109,8 +136,8 @@ export const TransactionMode = ({ settings }: TransactionModeProps) => {
               >
                 <RadioDot $selected={isSelected} />
                 <Flex vertical gap={4}>
-                  <Text strong>{mode.title}</Text>
-                  <Text type="secondary">{mode.description}</Text>
+                  <ModeTitle>{mode.title}</ModeTitle>
+                  <ModeDescription>{mode.description}</ModeDescription>
                 </Flex>
               </ModeCard>
             );
