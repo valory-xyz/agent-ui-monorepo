@@ -10,13 +10,16 @@ const StyledSection = styled.section`
 
 const Description = styled(Text)`
   display: block;
-  margin-bottom: 16px;
+
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
 type SectionProps = {
   title: string;
   description: string;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export const Section = ({ title, description, children }: SectionProps) => (

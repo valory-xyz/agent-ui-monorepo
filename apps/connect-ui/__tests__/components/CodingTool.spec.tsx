@@ -57,6 +57,6 @@ describe('CodingTool', () => {
     expect(url).toContain('/settings');
     expect(init.method).toBe('PATCH');
     expect(JSON.parse(init.body)).toEqual({ harness: 'claude_code_cli' });
-    expect(screen.queryByText(/Enter password/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Enter your password/)).not.toBeInTheDocument();
   });
 });

@@ -37,7 +37,7 @@ const Profile = () => {
       {data.protected.mode === 'restricted' && (
         <>
           <Divider style={{ margin: 0 }} />
-          <WhitelistedAddresses whitelist={data.protected.whitelist} />
+          <WhitelistedAddresses />
         </>
       )}
     </>

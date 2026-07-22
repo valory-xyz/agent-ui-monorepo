@@ -1,3 +1,4 @@
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { Alert, Flex, Typography } from 'antd';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -12,19 +13,19 @@ const MODES: { value: Mode; title: string; description: string }[] = [
   {
     value: 'restricted',
     title: 'Restricted',
-    description: 'Agent can only send funds to whitelisted addresses.',
+    description: 'Agent can only interact with whitelisted addresses.',
   },
   {
     value: 'unrestricted',
     title: 'Unrestricted',
-    description: 'Agent can send funds to any recipient address.',
+    description: 'Agent can interact with any recipient address.',
   },
 ];
 
 const MODAL_COPY: Record<Mode, { title: string; body: string; confirm: string }> = {
   unrestricted: {
     title: 'Switch to Unrestricted mode?',
-    body: 'Your agent will be able to send funds to any address. We recommend funding it with only what it needs.',
+    body: 'Your agent will be able to send funds to any address. Consider only funding it with what it needs.',
     confirm: 'Switch to Unrestricted',
   },
   restricted: {
@@ -33,6 +34,23 @@ const MODAL_COPY: Record<Mode, { title: string; body: string; confirm: string }>
     confirm: 'Switch to Restricted',
   },
 };
+
+// Mirrors the Pearl app's blue info alert (.custom-alert--info).
+const UnrestrictedOnAlert = styled(Alert)`
+  padding: 12px;
+  align-items: flex-start;
+  background-color: #ebedff;
+  border-color: #dbe0ff;
+
+  .ant-alert-icon {
+    color: #4d63ff;
+  }
+
+  .ant-alert-message,
+  .ant-alert-description {
+    color: #0016b2;
+  }
+`;
 
 const ModeCard = styled.button<{ $selected: boolean }>`
   flex: 1;
@@ -50,8 +68,9 @@ const ModeCard = styled.button<{ $selected: boolean }>`
 
 const RadioDot = styled.span<{ $selected: boolean }>`
   flex: none;
-  width: 16px;
-  height: 16px;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
   margin-top: 2px;
   border-radius: 50%;
   background-color: white;
@@ -98,11 +117,12 @@ export const TransactionMode = ({ settings }: TransactionModeProps) => {
           })}
         </Flex>
         {settings.protected.mode === 'unrestricted' && (
-          <Alert
+          <UnrestrictedOnAlert
             type="info"
             showIcon
+            icon={<InfoCircleOutlined />}
             message="Unrestricted mode is on"
-            description="Your agent can send funds to any address. We recommend funding it with only what it needs."
+            description="Your agent can send funds to any address. Consider only funding it with what it needs."
           />
         )}
       </Flex>
