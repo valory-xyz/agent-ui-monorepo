@@ -5,8 +5,6 @@ import styled from 'styled-components';
 
 import { CodingTool } from './components/CodingTool/CodingTool';
 import { GetStarted } from './components/GetStarted/GetStarted';
-import { TransactionMode } from './components/TransactionMode/TransactionMode';
-import { WhitelistedAddresses } from './components/WhitelistedAddresses/WhitelistedAddresses';
 import { COLOR } from './constants/theme';
 import { useSettings } from './hooks/useSettings';
 import { GlobalStyles as ConnectGlobalStyles } from './ui/GlobalStyles';
@@ -34,14 +32,6 @@ const Profile = () => {
       <GetStarted />
       <Divider style={{ margin: 0 }} />
       <CodingTool settings={data} />
-      <Divider style={{ margin: 0 }} />
-      <TransactionMode settings={data} />
-      {data.protected.mode === 'restricted' && (
-        <>
-          <Divider style={{ margin: 0 }} />
-          <WhitelistedAddresses />
-        </>
-      )}
     </>
   );
 };

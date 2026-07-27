@@ -4,17 +4,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import App from '../src/App';
 import { ConnectSettings } from '../src/types';
 
-const restrictedSettings: ConnectSettings = {
+const settings: ConnectSettings = {
   protected: {
     mode: 'restricted',
     whitelist: { gnosis: ['0x735faab1c4ec41128c367afb5c3bac73509f70bb'] },
   },
   harness: 'claude_code_desktop',
-};
-
-const unrestrictedSettings: ConnectSettings = {
-  ...restrictedSettings,
-  protected: { ...restrictedSettings.protected, mode: 'unrestricted' },
 };
 
 const renderApp = () => {
@@ -46,32 +41,19 @@ describe('App', () => {
     expect(container.querySelector('.ant-spin')).toBeInTheDocument();
   });
 
-  it('renders all sections including the whitelist in restricted mode', async () => {
+  it('renders all sections once settings load', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(restrictedSettings),
+      json: () => Promise.resolve(settings),
     });
 
     renderApp();
 
     await waitFor(() => expect(screen.getByText('Get started with Connect')).toBeInTheDocument());
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
-    expect(screen.getByText('Transaction mode')).toBeInTheDocument();
-    expect(screen.getByText('Whitelisted addresses')).toBeInTheDocument();
-    // Whitelist entries are deliberately not listed.
-    expect(screen.queryByText('0x735f...70bb')).not.toBeInTheDocument();
-    expect(screen.queryByText('Unrestricted mode is on')).not.toBeInTheDocument();
-  });
-
-  it('hides the whitelist and shows the banner in unrestricted mode', async () => {
-    (global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(unrestrictedSettings),
-    });
-
-    renderApp();
-
-    await waitFor(() => expect(screen.getByText('Unrestricted mode is on')).toBeInTheDocument());
+    // The Restricted/Unrestricted mode and Whitelisted addresses sections were
+    // removed from the agent UI.
+    expect(screen.queryByText('Transaction mode')).not.toBeInTheDocument();
     expect(screen.queryByText('Whitelisted addresses')).not.toBeInTheDocument();
   });
 });
