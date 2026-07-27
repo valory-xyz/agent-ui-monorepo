@@ -51,10 +51,9 @@ describe('App', () => {
 
     await waitFor(() => expect(screen.getByText('Get started with Connect')).toBeInTheDocument());
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
-    expect(screen.getByText('Whitelisted addresses')).toBeInTheDocument();
-    // Whitelist entries are deliberately not listed.
-    expect(screen.queryByText('0x735f...70bb')).not.toBeInTheDocument();
-    // The Restricted/Unrestricted mode section was removed from the agent UI.
+    // The Restricted/Unrestricted mode and Whitelisted addresses sections were
+    // removed from the agent UI.
     expect(screen.queryByText('Transaction mode')).not.toBeInTheDocument();
+    expect(screen.queryByText('Whitelisted addresses')).not.toBeInTheDocument();
   });
 });
