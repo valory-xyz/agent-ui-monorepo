@@ -31,20 +31,6 @@ export const COLOR = {
   SELECT_BG: '#F2F4F9',
   SELECT_BG_HOVER: '#EDF2F7',
   SELECT_ARROW: '#4D596A',
-
-  // Transaction-mode radio cards
-  MODE_SELECTED_BORDER: '#ECDCF9',
-  MODE_SELECTED_BG: '#F5EDFC',
-  RADIO_BORDER: '#D9D9D9',
-
-  // Info alert ("Unrestricted mode is on")
-  INFO_BG: '#EBEDFF',
-  INFO_BORDER: '#DBE0FF',
-  INFO_ICON: '#4D63FF',
-  INFO_TEXT: '#0016B2',
-
-  // Modal backdrop
-  MASK: 'rgba(15, 22, 36, 0.2)',
 } as const;
 
 export const mainTheme: ThemeConfig = {
