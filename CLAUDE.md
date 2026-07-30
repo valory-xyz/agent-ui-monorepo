@@ -298,6 +298,19 @@ Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node
 
 Releases are created with `softprops/action-gh-release@v1` + `generate_release_notes: true`. The same tag may be matched by `babydegen` and `predict` workflows — **the agent identity comes from the tag suffix, not from a separate `babydegen`/`predict` namespace**.
 
+### Shipping a release downstream
+
+A release is only half the job — each app is **vendored as a pre-built static bundle inside the Python agent repo that serves it**, so every release needs a follow-up PR there. Run `/ship-ui-bundle <tag>` ([`.claude/skills/ship-ui-bundle/`](.claude/skills/ship-ui-bundle/SKILL.md)) — it downloads the release asset, swaps the vendored directory, re-locks open-autonomy hashes where needed, and opens the PR.
+
+| Tag | Target repo | Vendored bundle dir |
+| --- | --- | --- |
+| `v*-agentsfun` | `valory-xyz/meme-ooorr` (**not** trader) | `packages/valory/skills/memeooorr_abci/agentsfun-ui-build` |
+| `v*-modius` / `v*-optimus` / `v*-basius` | `valory-xyz/optimus` | `packages/valory/skills/optimus_abci/{modius,optimus,basius}-ui-build` |
+| `v*-connect` | `valory-xyz/connect` | `connect/assets/ui` |
+| `v*-omenstrat-trader` / `v*-polystrat-trader` | `valory-xyz/trader` | `packages/valory/skills/trader_abci/ui-build/{omenstrat,polystrat}` |
+
+Bundles under `packages/` are fingerprinted in `packages/packages.json`, so changing one requires `autonomy packages lock` in the target repo or CI's `check-hash` fails. Afterwards, Pearl's pin in `frontend/constants/serviceTemplates/agentUiReleases.ts` (`valory-xyz/olas-operate-app`) must be bumped to the new tag.
+
 ## Supply chain & security
 
 Policy lives in [`SUPPLY-CHAIN-SECURITY.md`](SUPPLY-CHAIN-SECURITY.md). Quick map of the moving parts so future sessions don't re-derive them:
