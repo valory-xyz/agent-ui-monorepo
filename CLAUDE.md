@@ -279,7 +279,7 @@ afterEach(() => jest.restoreAllMocks());
 - `REACT_APP_AGENT_NAME` ∈ {`omenstrat_trader`, `polystrat_trader`}; falls back to `omenstrat_trader` with a console warning if missing/invalid. Theme + background image + market label (`"Omen"` vs `"Polymarket"`) switch on the value.
 - `src/env.d.ts` augments `ImportMetaEnv`. `src/hooks/useTradeHistory.ts` adds an artificial 1s delay for pagination UX.
 - **Withdrawal state machine** in `useWithdrawLockedFunds.ts`: states `idle → armed → selling → complete/errored`. POST `/withdrawal` arms the flow; the GET query polls every 2s while `armed` or `selling`; on terminal state, the hook invalidates the performance query so `funds_locked_in_markets` refreshes.
-- External: `POLYMARKET_PROFILE_BASE_URL`, `OMEN_SUBGRAPH_URL`, `OLAS_AGENTS_SUBGRAPH_URL`, OLAS-on-xDAI price via CoinGecko.
+- External: `POLYMARKET_PROFILE_BASE_URL`, OLAS-on-xDAI price via CoinGecko.
 
 ---
 
