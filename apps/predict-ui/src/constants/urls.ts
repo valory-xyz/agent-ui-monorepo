@@ -1,9 +1,3 @@
-// subgraphs
-export const OLAS_AGENTS_SUBGRAPH_URL = 'https://predict-agents.subgraph.autonolas.tech';
-export const OLAS_MECH_SUBGRAPH_URL = 'https://api.subgraph.autonolas.tech/api/proxy/mech';
-export const OMEN_SUBGRAPH_URL = 'https://omen.subgraph.autonolas.tech';
-export const GNOSIS_STAKING_SUBGRAPH_URL = 'https://staking-gnosis.subgraph.autonolas.tech';
-
 // apps
 export const REGISTRY_AGENTS_URL = 'https://registry.olas.network/ethereum/agents';
 export const REGISTRY_SERVICES_URL = 'https://registry.olas.network/gnosis/services';
