@@ -140,6 +140,8 @@ On Windows, `git add` emits `LF will be replaced by CRLF` warnings for the bundl
 git -C "$CLONE" diff --cached --name-only | grep -q '^packages/' && NEEDS_LOCK=1 || NEEDS_LOCK=0
 ```
 
+**If `NEEDS_LOCK=0`, skip this entire section — go straight to §5.** Everything below is gated on it. Falling through anyway is not harmless: a target whose bundle sits outside `packages/` can still *have* a `packages/packages.json` with a `service/…` entry (connect does), so `AUTHOR` resolves, nothing errors, and the lock is a silent no-op — after you have already paid a ~2 min `uv sync`, a `packages sync`, and, on a machine with no `~/.autonomy`, the global `autonomy init` that this section otherwise takes care to avoid.
+
 Vendored bundles under `packages/` are part of an open-autonomy package, so their content hash is fingerprinted in `packages/packages.json` and propagated into the dependent `skill.yaml`, `aea-config.yaml` and `service.yaml` files. CI (`tomte tox -e check-hash` / `autonomy packages lock --check`) fails the PR without this step.
 
 **Every command below is required, in order — `sync` especially.** The committed `packages/` tree is a *sparse* registry: it holds only this repo's own packages, not the third-party ones (`valory/kv_store`, `abstract_round_abci`, `mech_interact_abci`, …) that they depend on. Hashing walks the full dependency graph, so `lock` fails outright until `sync` has fetched them:
@@ -149,19 +151,23 @@ Vendored bundles under `packages/` are part of an open-autonomy package, so thei
 ⚠️ `autonomy init --reset` overwrites the **machine-global** `~/.autonomy` config, so the block below runs it only when no config exists. If `~/.autonomy` is already present, leave it alone — say so and let the user decide; a customised registry setup is theirs to change, not this skill's.
 
 ```bash
-cd "$CLONE"
-uv sync --all-groups                    # ~2 min first run, cached after
+[ "$NEEDS_LOCK" = 1 ] || { echo "bundle is outside packages/ — no re-lock needed"; }
 
-AUTHOR=$(jq -r '.dev | keys[] | select(startswith("service/"))' packages/packages.json | head -1 | cut -d/ -f2)
-[ -n "$AUTHOR" ] || { echo "could not derive author from packages.json" >&2; exit 1; }
+if [ "$NEEDS_LOCK" = 1 ]; then
+  cd "$CLONE"
+  uv sync --all-groups                  # ~2 min first run, cached after
 
-if [ ! -d ~/.autonomy ]; then
-  uv run autonomy init --reset --author "$AUTHOR" --ipfs --remote
+  AUTHOR=$(jq -r '.dev | keys[] | select(startswith("service/"))' packages/packages.json | head -1 | cut -d/ -f2)
+  [ -n "$AUTHOR" ] || { echo "could not derive author from packages.json" >&2; exit 1; }
+
+  if [ ! -d ~/.autonomy ]; then
+    uv run autonomy init --reset --author "$AUTHOR" --ipfs --remote
+  fi
+
+  uv run autonomy packages sync         # fetches third-party packages
+  uv run autonomy packages lock
+  uv run autonomy packages lock --check # must print "Verification successful"
 fi
-
-uv run autonomy packages sync           # fetches third-party packages
-uv run autonomy packages lock
-uv run autonomy packages lock --check   # must print "Verification successful"
 ```
 
 `sync` writes only into gitignored/tracked-unchanged paths — it must not add untracked files to `git status`. If it does, stop: something is off with the registry config.
@@ -176,9 +182,11 @@ If unrelated packages move, the clone is stale — re-fetch `main` and redo. A g
 
 **Stage the lock output.** §3 staged only `<bundle-dir>`, but everything `lock` just rewrote — `packages/packages.json` and the cascading yaml — sits *outside* it. Skip this and §5 commits the bundle alone: `lock --check` still passes locally, the PR opens looking correct, and CI's `check-hash` fails on the very hashes §4 exists to refresh.
 
+`add -u` — **not** `add -A`. §3 already staged the new bundle files, and `lock` only ever *modifies* files that already exist, so `-u` is exactly sufficient. `-A` would additionally sweep in anything `sync` left untracked, which is precisely the case the invariant above tells you to stop on.
+
 ```bash
-git -C "$CLONE" add -A
-git -C "$CLONE" diff --name-only        # must be empty — nothing left unstaged
+git -C "$CLONE" add -u                  # tracked modifications only — the lock output
+git -C "$CLONE" status --porcelain      # staged entries only; any '??' means sync misbehaved — stop
 git -C "$CLONE" diff --cached --stat    # the full commit: bundle + packages.json + cascade
 ```
 
@@ -239,7 +247,7 @@ Tell the user:
 
 | Symptom | Cause |
 | --- | --- |
-| CI `check-hash` fails, though `lock --check` passed locally | The lock output was never staged — §3 stages only the bundle dir; §4's final `git add -A` is what picks up `packages.json` + the cascading yaml |
+| CI `check-hash` fails, though `lock --check` passed locally | The lock output was never staged — §3 stages only the bundle dir; §4's final `git add -u` is what picks up `packages.json` + the cascading yaml |
 | CI `check-hash` fails and `lock --check` also fails locally | §4 skipped, or run before the bundle was staged |
 | `lock` fails with `Connection configuration not found` | `autonomy packages sync` not run — the local registry is sparse (§4) |
 | Sibling agent's yaml changed and you didn't expect it | Correct: shared skill, hash cascades to every dependent agent + service |
