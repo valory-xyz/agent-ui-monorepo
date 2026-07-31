@@ -2,6 +2,7 @@
 name: ship-ui-bundle
 description: Open the downstream PR that ships a built agent-ui-monorepo bundle into the agent repo that serves it (meme-ooorr / optimus / connect / trader). Takes a monorepo release tag (e.g. `v0.1.2-connect`), downloads that release's `*-ui-build.zip`, replaces the vendored bundle directory in the target repo, re-locks open-autonomy package hashes when the bundle lives under `packages/`, and opens the `chore: update …` PR. Repo-specific to agent-ui-monorepo.
 argument-hint: "<release-tag> [--repo-path <existing-clone>] [--no-pr]  # e.g. v0.1.2-connect. --repo-path reuses a local clone of the target repo (skips clone + uv sync). --no-pr stops after the local commit."
+disable-model-invocation: true
 ---
 
 # Ship a UI bundle to its agent repo
@@ -47,10 +48,10 @@ gh auth status >/dev/null || { echo "run: gh auth login" >&2; exit 1; }
 
 Resolve the tag argument to a row in the target map. Derive:
 
-```
-TAG                 # e.g. v0.1.2-connect  (as given)
-SUFFIX=${TAG#v*.*.*-}   # connect | modius | optimus | basius | agentsfun | omenstrat-trader | polystrat-trader
-VERSION             # e.g. 0.1.2
+```bash
+TAG="v0.1.2-connect"            # as given
+SUFFIX=${TAG#v*.*.*-}           # connect | modius | optimus | basius | agentsfun | omenstrat-trader | polystrat-trader
+VERSION=${TAG#v}; VERSION=${VERSION%%-*}   # 0.1.2 — used in the §3 branch name
 ```
 
 If invoked without a tag, list the recent releases on each line and ask which to ship:
@@ -62,6 +63,20 @@ gh release list --repo valory-xyz/agent-ui-monorepo --limit 20
 If the suffix does not match a row, **stop**. Do not guess a target directory — a wrong guess writes an incompatible bundle into a live agent.
 
 ## 2 — Fetch the release asset
+
+Verify **provenance first** — the release must be CI's build of reviewed code on `main`, not a tag pushed on a stray commit or a hand-replaced asset. `_build-app.yml` triggers on *any* pushed tag and has no ancestor-of-`main` check, so an unreviewed commit yields a legitimate-looking release with a genuine CI-built asset. Nothing later in this procedure would notice.
+
+```bash
+REPO=valory-xyz/agent-ui-monorepo
+STATUS=$(gh api "repos/$REPO/compare/main...$TAG" -q .status)
+[ "$STATUS" = behind ] || [ "$STATUS" = identical ] \
+  || { echo "$TAG is not on main (status: $STATUS) — ship only merged, reviewed code" >&2; exit 1; }
+gh api "repos/$REPO/releases/tags/$TAG" \
+  -q '[.draft, .prerelease, (.assets[] | select(.name=="<ASSET>") | .uploader.login)] | @tsv'
+# expect: false  false  github-actions[bot] — anything else: stop and report to the user
+```
+
+Then download:
 
 ```bash
 WORK="${TMPDIR:-/tmp}/ship-ui-bundle/$TAG"
@@ -86,17 +101,26 @@ Reuse a persistent clone; `trader` and `optimus` are large and the `uv sync` in 
 ```bash
 CLONE="${REPO_PATH:-$HOME/.cache/agent-ui-bundle-prs/<repo-name>}"
 [ -d "$CLONE/.git" ] || gh repo clone <owner/repo> "$CLONE"
+
+# Refuse a dirty tree BEFORE any checkout/reset — never reset over someone's work.
+[ -z "$(git -C "$CLONE" status --porcelain)" ] \
+  || { echo "worktree dirty: $CLONE — commit/stash first, not resetting over it" >&2; exit 1; }
+
 git -C "$CLONE" fetch origin --prune
 git -C "$CLONE" checkout main && git -C "$CLONE" reset --hard origin/main
-git -C "$CLONE" checkout -b "chore/update-<variant>-ui-v$VERSION"
+# -B, not -b: the branch name is fully tag-derived, so a retry must reuse it
+git -C "$CLONE" checkout -B "chore/update-<variant>-ui-v$VERSION"
 ```
-
-If `--repo-path` was given and its worktree is dirty, **stop and report** — do not reset over someone's work.
 
 Swap the bundle. Deleting first is what makes stale hashed assets disappear; a plain copy leaves orphaned `index-*.js` files behind and the bundle grows every release.
 
+`$DEST` is built from a placeholder this skill substitutes at run time, and bundle directories move — so guard it before the recursive delete. Unguarded, an empty or wrong-but-existing substitution makes `DEST` equal `"$CLONE/"`, and `-mindepth 1 -maxdepth 1` then matches every top-level entry in the clone, `.git` included.
+
 ```bash
 DEST="$CLONE/<bundle-dir>"
+case "$DEST" in "$CLONE"|"$CLONE/") echo "refusing to wipe clone root: $DEST" >&2; exit 1;; esac
+[ -f "$DEST/index.html" ] || { echo "no index.html in $DEST — bundle dir moved? check the repo tree" >&2; exit 1; }
+
 # keep README.md — see the note above; the zip's copy overwrites it when present
 find "$DEST" -mindepth 1 -maxdepth 1 ! -name README.md -exec rm -rf {} +
 cp -r "$WORK/bundle/." "$DEST/"
@@ -104,7 +128,7 @@ git -C "$CLONE" add -A "<bundle-dir>"
 git -C "$CLONE" status --short
 ```
 
-Sanity-check the staged diff: it should be an `index.html` one-line `<script src>` change plus a deleted + added `assets/index-*.js` pair (GitHub renders these as a rename), and nothing outside the bundle dir. If `README.md` shows as deleted, the `find` filter did not apply — fix before continuing.
+Sanity-check the staged diff: an `index.html` one-line `<script src>` change, plus deleted + added hashed-asset pairs (`index-*.js`, `index-*.css`, and any other hashed asset that changed — GitHub renders these as renames), and nothing outside the bundle dir. If `README.md` shows as deleted, the `find` filter did not apply — fix before continuing.
 
 An **empty** staged diff means the repo already vendors this exact release — not a failure. Report it and stop rather than committing nothing.
 
@@ -118,21 +142,27 @@ git -C "$CLONE" diff --cached --name-only | grep -q '^packages/' && NEEDS_LOCK=1
 
 Vendored bundles under `packages/` are part of an open-autonomy package, so their content hash is fingerprinted in `packages/packages.json` and propagated into the dependent `skill.yaml`, `aea-config.yaml` and `service.yaml` files. CI (`tomte tox -e check-hash` / `autonomy packages lock --check`) fails the PR without this step.
 
-**All four commands are required, in order.** The committed `packages/` tree is a *sparse* registry — it holds only this repo's own packages, not the third-party ones (`valory/kv_store`, `abstract_round_abci`, `mech_interact_abci`, …) that its packages depend on. Hashing walks the full dependency graph, so `lock` fails outright until `sync` has fetched them:
+**Every command below is required, in order — `sync` especially.** The committed `packages/` tree is a *sparse* registry: it holds only this repo's own packages, not the third-party ones (`valory/kv_store`, `abstract_round_abci`, `mech_interact_abci`, …) that they depend on. Hashing walks the full dependency graph, so `lock` fails outright until `sync` has fetched them:
 
 > `Error: Connection configuration not found: …/packages/valory/connections/kv_store/connection.yaml`
+
+⚠️ `autonomy init --reset` overwrites the **machine-global** `~/.autonomy` config, so the block below runs it only when no config exists. If `~/.autonomy` is already present, leave it alone — say so and let the user decide; a customised registry setup is theirs to change, not this skill's.
 
 ```bash
 cd "$CLONE"
 uv sync --all-groups                    # ~2 min first run, cached after
-AUTHOR=$(grep 'service/' packages/packages.json | awk -F/ '{print $2}' | head -1)
-uv run autonomy init --reset --author "$AUTHOR" --ipfs --remote   # once per machine
+
+AUTHOR=$(jq -r '.dev | keys[] | select(startswith("service/"))' packages/packages.json | head -1 | cut -d/ -f2)
+[ -n "$AUTHOR" ] || { echo "could not derive author from packages.json" >&2; exit 1; }
+
+if [ ! -d ~/.autonomy ]; then
+  uv run autonomy init --reset --author "$AUTHOR" --ipfs --remote
+fi
+
 uv run autonomy packages sync           # fetches third-party packages
 uv run autonomy packages lock
 uv run autonomy packages lock --check   # must print "Verification successful"
 ```
-
-⚠️ `autonomy init --reset` overwrites the **global** `~/.autonomy` config. Check whether one exists (`ls ~/.autonomy`) and say so before running; if the user has a customised registry setup, let them run `init` themselves.
 
 `sync` writes only into gitignored/tracked-unchanged paths — it must not add untracked files to `git status`. If it does, stop: something is off with the registry config.
 
@@ -143,6 +173,14 @@ git -C "$CLONE" status --short          # expect bundle files + packages.json + 
 ```
 
 If unrelated packages move, the clone is stale — re-fetch `main` and redo. A good pre-flight sanity check is that `lock --check` passes on **untouched** `main`; if it doesn't, the local toolchain disagrees with what the maintainers committed and nothing downstream can be trusted.
+
+**Stage the lock output.** §3 staged only `<bundle-dir>`, but everything `lock` just rewrote — `packages/packages.json` and the cascading yaml — sits *outside* it. Skip this and §5 commits the bundle alone: `lock --check` still passes locally, the PR opens looking correct, and CI's `check-hash` fails on the very hashes §4 exists to refresh.
+
+```bash
+git -C "$CLONE" add -A
+git -C "$CLONE" diff --name-only        # must be empty — nothing left unstaged
+git -C "$CLONE" diff --cached --stat    # the full commit: bundle + packages.json + cascade
+```
 
 **If neither `uv` nor a working Python env is available:** do not fake the hashes and do not open the PR claiming it is ready. Commit the bundle, then stop and report that the re-lock is outstanding, quoting the two commands above.
 
@@ -158,15 +196,10 @@ Match the surrounding repo's commit style — these agent repos use plain `chore
 
 **Ask the user to confirm before pushing.** Show them the staged file list and the branch name first; pushing and opening a PR in another team's repo is outward-facing and should not happen implicitly. Skip §6 entirely under `--no-pr`.
 
+Write the body, then push and open:
+
 ```bash
-git -C "$CLONE" push -u origin "chore/update-<variant>-ui-v$VERSION"
-gh pr create --repo <owner/repo> --base main \
-  --title "chore: update <variant>-ui to $TAG" --body-file "$WORK/pr-body.md"
-```
-
-Body template:
-
-```markdown
+cat > "$WORK/pr-body.md" <<'EOF'
 ## Summary
 - Update the vendored <variant> UI bundle to [`<TAG>`](https://github.com/valory-xyz/agent-ui-monorepo/releases/tag/<TAG>): swap `assets/index-<old>.js` for `assets/index-<new>.js` and repoint the `<script src>` in `index.html`.
 - <list any added/removed static assets — new logos, images, fonts>
@@ -178,7 +211,14 @@ Built by agent-ui-monorepo CI — the bundle is the unmodified `<ASSET>` release
 - [ ] <if §4 ran> `autonomy packages lock --check` passes in CI
 - [ ] Common checks green
 - [ ] Manual: run the service locally and confirm the UI loads the new bundle
+EOF
+
+git -C "$CLONE" push -u origin "chore/update-<variant>-ui-v$VERSION"
+gh pr create --repo <owner/repo> --base main \
+  --title "chore: update <variant>-ui to $TAG" --body-file "$WORK/pr-body.md"
 ```
+
+Substitute the `<…>` placeholders before writing the file — the heredoc is quoted, so nothing expands on its own.
 
 Include a `Reference — <monorepo PR url>` line when the release exists to ship a specific monorepo PR (trader#853 does this).
 
@@ -199,7 +239,8 @@ Tell the user:
 
 | Symptom | Cause |
 | --- | --- |
-| CI `check-hash` fails | §4 skipped, or run before the bundle was staged |
+| CI `check-hash` fails, though `lock --check` passed locally | The lock output was never staged — §3 stages only the bundle dir; §4's final `git add -A` is what picks up `packages.json` + the cascading yaml |
+| CI `check-hash` fails and `lock --check` also fails locally | §4 skipped, or run before the bundle was staged |
 | `lock` fails with `Connection configuration not found` | `autonomy packages sync` not run — the local registry is sparse (§4) |
 | Sibling agent's yaml changed and you didn't expect it | Correct: shared skill, hash cascades to every dependent agent + service |
 | UI loads blank, 404 on `/assets/index-*.js` | `index.html` and the js file came from different builds — re-extract and redo §3 |
