@@ -139,9 +139,6 @@ const AgentLayout = ({
   </Flex>
 );
 
-// Polystrat metrics are sourced from a subgraph that is not yet indexed with
-// the new Safe structure. Until then, hide the metric sections and point users
-// to Polymarket. Flip the flag to restore the full UI.
 const isPolystratMetricsUnavailable = isPolystratAgent && !ARE_POLYSTRAT_METRICS_AVAILABLE;
 
 export const Agent = () => {

@@ -13,6 +13,10 @@ jest.mock('../../src/utils/agentMap', () => ({
   isPolystratAgent: true,
 }));
 
+jest.mock('../../src/constants/featureFlags', () => ({
+  ARE_POLYSTRAT_METRICS_AVAILABLE: false,
+}));
+
 jest.mock('../../src/hooks/useAgentDetails');
 jest.mock('../../src/hooks/useFeatures');
 jest.mock('../../src/components/Chat/Chat', () => ({
@@ -57,7 +61,7 @@ const mockUseAgentDetails = (overrides: Record<string, unknown> = {}) =>
     ...overrides,
   });
 
-// Metrics are unavailable by default (ARE_POLYSTRAT_METRICS_AVAILABLE=false).
+// Metrics-unavailable state (ARE_POLYSTRAT_METRICS_AVAILABLE mocked to false).
 describe('Agent – polystrat agent, metrics unavailable', () => {
   beforeEach(() => {
     jest.clearAllMocks();
