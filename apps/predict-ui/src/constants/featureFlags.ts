@@ -1,9 +1,11 @@
 /**
  * Polystrat metrics availability toggle.
  *
- * While this is `false`, the Polystrat agent hides Performance, Profit Over
- * Time and Trade History and shows a "metrics unavailable" state that points
- * users to Polymarket instead. Set to `false` if the subgraph data becomes
- * unreliable again — no other change is required.
+ * While `true`, the Polystrat agent renders the full metrics UI (Performance,
+ * Profit Over Time, Trade History). Set to `false` if the subgraph data
+ * becomes unreliable again: the metric sections are then hidden behind a
+ * "metrics unavailable" state that points users to Polymarket instead, and
+ * the page stops depending on `/agent/performance`. No other change is
+ * required in either direction.
  */
 export const ARE_POLYSTRAT_METRICS_AVAILABLE = true;
