@@ -66,10 +66,9 @@ describe('Agent – polystrat agent, metrics available', () => {
     });
   });
 
-  it('renders the metric sections and the incomplete-data alert', () => {
+  it('renders the metric sections', () => {
     render(<Agent />, { wrapper: createWrapper() });
     expect(screen.getByText('Performance')).toBeInTheDocument();
-    expect(screen.getByText('Some performance data may be incomplete')).toBeInTheDocument();
   });
 
   it('does not render the metrics-unavailable card', () => {

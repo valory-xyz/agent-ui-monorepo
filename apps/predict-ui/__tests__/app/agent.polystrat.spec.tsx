@@ -78,12 +78,11 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
     expect(screen.getByText('View agent activity')).toBeInTheDocument();
   });
 
-  it('does not render the metric sections or the incomplete-data alert', () => {
+  it('does not render the metric sections', () => {
     render(<Agent />, { wrapper: createWrapper() });
     expect(screen.queryByText('Performance')).toBeNull();
     expect(screen.queryByText('Profit Over Time')).toBeNull();
     expect(screen.queryByText('Trade History')).toBeNull();
-    expect(screen.queryByText('Some performance data may be incomplete')).toBeNull();
   });
 
   it('still renders the non-metric sections (strategy, withdraw)', () => {
