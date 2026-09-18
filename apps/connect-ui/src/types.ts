@@ -3,14 +3,18 @@
  * - GET /settings returns the canonical nested shape.
  * - PATCH /settings is a JSON merge-patch; the keystore password gates the
  *   `protected` object (mode/whitelist), while `harness` needs no password.
- * - POST /session opens a Claude Code session on demand; a deep link that
+ * - POST /session opens an agent session on demand; a deep link that
  *   won't open is a 200 with {launched: false, error} for the UI to show.
  */
 
 export type TransactionMode = 'restricted' | 'unrestricted';
 
-/** Which Claude Code the server opens the workspace session in. */
-export type Harness = 'claude_code_cli' | 'claude_code_desktop';
+/**
+ * Which harness the server opens the workspace session in. The server keeps
+ * the canonical list and rejects anything else, so this union must match
+ * pearl-connect's `HARNESSES` (connect/settings.py).
+ */
+export type Harness = 'claude_code_cli' | 'claude_code_desktop' | 'codex_cli' | 'codex_desktop';
 
 /** chain -> addresses the service safe may call in restricted mode */
 export type Whitelist = Record<string, string[]>;
