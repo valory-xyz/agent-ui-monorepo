@@ -6,9 +6,12 @@ import { useUpdateSettings } from '../../hooks/useUpdateSettings';
 import { ConnectSettings, Harness } from '../../types';
 import { Section } from '../../ui/Section';
 
+// Desktop before CLI within each tool, and the server's default first.
 const HARNESS_OPTIONS: { value: Harness; label: string }[] = [
   { value: 'claude_code_desktop', label: 'Claude Desktop' },
   { value: 'claude_code_cli', label: 'Claude Code CLI' },
+  { value: 'codex_desktop', label: 'Codex Desktop' },
+  { value: 'codex_cli', label: 'Codex CLI' },
 ];
 
 // Filled, rounded gray control per Figma — no border, subtle gray fill that
