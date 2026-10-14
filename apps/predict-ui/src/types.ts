@@ -134,6 +134,29 @@ export type AgentProfitTimeseriesResponse = {
   points: AgentProfitPoint[];
 };
 
+/** Leaderboard windows. Unlike `AgentWindow`, there is a `1y` and no `lifetime`. */
+export type LeaderboardWindow = '7d' | '30d' | '90d' | '1y';
+
+export type LeaderboardStatus = 'ranked' | 'not_ranked' | 'unavailable';
+
+export type NotRankedReason = 'not_ranked_yet' | 'not_enough_trades_in_window' | 'not_eligible';
+
+/** `GET /api/v1/agent/leaderboard?window=` (trader#1055). */
+export type AgentLeaderboardResponse = {
+  agent_id: string;
+  agent_type: 'omenstrat' | 'polystrat';
+  window: LeaderboardWindow;
+  status: LeaderboardStatus;
+  rank_by_roi: number | null;
+  rank_by_pnl: number | null;
+  total_ranked: number | null;
+  not_ranked_reason: NotRankedReason | null;
+  /** Ready-made deep link from olas-predict; rendered as is. */
+  leaderboard_url: string;
+  /** ISO 8601 timestamp, null when unavailable */
+  last_updated: string | null;
+};
+
 export type WithdrawalMode = 'idle' | 'armed' | 'selling' | 'complete' | 'errored';
 
 export type WithdrawalVenue = 'polymarket' | 'omen';

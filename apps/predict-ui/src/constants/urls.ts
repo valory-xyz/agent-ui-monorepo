@@ -2,6 +2,8 @@
 export const REGISTRY_AGENTS_URL = 'https://registry.olas.network/ethereum/agents';
 export const REGISTRY_SERVICES_URL = 'https://registry.olas.network/gnosis/services';
 export const PREDICT_APP_URL = 'https://predict.olas.network';
+/** Fallback for "See full leaderboard" only when the agent request itself fails. */
+export const LEADERBOARD_PAGE_URL = `${PREDICT_APP_URL}/leaderboard`;
 export const POLYMARKET_PROFILE_BASE_URL = 'https://polymarket.com/profile';
 
 // coingecko
