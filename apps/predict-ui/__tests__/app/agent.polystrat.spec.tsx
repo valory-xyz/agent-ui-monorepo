@@ -82,6 +82,7 @@ describe('Agent – polystrat agent, metrics unavailable', () => {
     render(<Agent />, { wrapper: createWrapper() });
     expect(screen.queryByText('Performance')).toBeNull();
     expect(screen.queryByText('Profit Over Time')).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Leaderboard' })).toBeNull();
     expect(screen.queryByText('Trade History')).toBeNull();
   });
 

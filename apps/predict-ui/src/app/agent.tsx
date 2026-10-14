@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { AgentDetails } from '../components/AgentDetails';
 import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
+import { Leaderboard } from '../components/Leaderboard';
 import { MetricsUnavailable } from '../components/MetricsUnavailable';
 import { AgentPerformance } from '../components/Performance';
 import { ProfitOverTime } from '../components/ProfitOverTime/ProfitOverTime';
@@ -168,6 +169,7 @@ export const Agent = () => {
       metricsAvailable
     >
       <AgentPerformance performance={performance} />
+      <Leaderboard />
       <ProfitOverTime />
       <TradeHistory />
     </AgentLayout>

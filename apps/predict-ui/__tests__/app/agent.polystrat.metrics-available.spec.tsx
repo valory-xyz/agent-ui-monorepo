@@ -69,6 +69,7 @@ describe('Agent – polystrat agent, metrics available', () => {
   it('renders the metric sections', () => {
     render(<Agent />, { wrapper: createWrapper() });
     expect(screen.getByText('Performance')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Leaderboard' })).toBeInTheDocument();
   });
 
   it('does not render the metrics-unavailable card', () => {
