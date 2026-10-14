@@ -89,6 +89,22 @@ describe('Agent', () => {
     expect(screen.getByText('Performance')).toBeInTheDocument();
   });
 
+  it('renders the Leaderboard card between Performance and Profit Over Time', () => {
+    (useAgentDetails as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isError: false,
+      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
+    });
+    render(<Agent />, { wrapper: createWrapper() });
+    const performance = screen.getByText('Performance');
+    const leaderboard = screen.getByRole('heading', { name: 'Leaderboard' });
+    const profitOverTime = screen.getByText('Profit Over Time');
+    expect(performance.compareDocumentPosition(leaderboard)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(leaderboard.compareDocumentPosition(profitOverTime)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+  });
+
   it('renders UnlockChat when isChatEnabled=false and features loaded', () => {
     (useAgentDetails as jest.Mock).mockReturnValue({
       isLoading: false,
@@ -123,7 +139,10 @@ describe('Agent', () => {
       isError: false,
       data: { agentDetails: mockAgentDetails, performance: mockPerformance },
     });
-    (useFeatures as jest.Mock).mockReturnValue({ isLoading: true, data: undefined });
+    (useFeatures as jest.Mock).mockReturnValue({
+      isLoading: true,
+      data: undefined,
+    });
     render(<Agent />, { wrapper: createWrapper() });
     // When features are loading, ChatContent returns null
     expect(screen.queryByText("Update agent's goal")).toBeNull();

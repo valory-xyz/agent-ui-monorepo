@@ -3,6 +3,7 @@ export const REACT_QUERY_KEYS = {
   TRADING_DETAILS: 'tradingDetails' as const,
   PERFORMANCE: 'agentPerformance' as const,
   PROFIT_OVER_TIME: 'profitOverTime' as const,
+  LEADERBOARD: 'agentLeaderboard' as const,
   PREDICTION_HISTORY: 'predictionHistory' as const,
   PREDICTION_DETAILS: 'predictionDetails' as const,
   WITHDRAW_INITIATE: 'withdrawInitiate' as const,
