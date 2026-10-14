@@ -7,6 +7,11 @@ import { REACT_QUERY_KEYS } from '../../src/constants/reactQueryKeys';
 import { useLeaderboard } from '../../src/hooks/useLeaderboard';
 import { LeaderboardWindow } from '../../src/types';
 
+jest.mock('@agent-ui-monorepo/util-functions', () => ({
+  ...jest.requireActual('@agent-ui-monorepo/util-functions'),
+  exponentialBackoffDelay: () => 0,
+}));
+
 const createWrapper = (queryClient: QueryClient) => {
   return ({ children }: { children: React.ReactNode }) =>
     createElement(QueryClientProvider, { client: queryClient }, children);
@@ -84,8 +89,8 @@ describe('useLeaderboard', () => {
       wrapper: createWrapper(newClient()),
     });
 
-    // The hook sets its own retry count, so only check that no data arrives.
-    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(result.current.error).toEqual(new Error('Failed to fetch leaderboard rank'));
     expect(result.current.data).toBeUndefined();
   });
 });
