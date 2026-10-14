@@ -23,9 +23,13 @@ const EMPTY_STATE_COPY = {
     title: 'Not ranked yet.',
     description: 'Keep your agent running. It gets ranked after enough trades.',
   },
-  not_enough_trades: {
+  not_enough_trades_in_window: {
     title: 'Not enough trades in this period.',
     description: "Try a different period to see your agent's rank.",
+  },
+  not_eligible: {
+    title: 'Not eligible for the leaderboard.',
+    description: "This agent doesn't meet the leaderboard requirements.",
   },
   unavailable: {
     title: 'Rank unavailable right now.',
@@ -40,14 +44,11 @@ export type LeaderboardState =
   | { kind: 'ranked'; rankByRoi: number; rankByPnl: number; total: number }
   | { kind: EmptyState };
 
-/** Maps the agent response (or a failed request) to what the card shows. */
 export const getLeaderboardState = (
   data: AgentLeaderboardResponse | undefined,
-  isLoading: boolean,
   isError: boolean,
 ): LeaderboardState => {
-  if (isLoading) return { kind: 'loading' };
-  if (isError || !data) return { kind: 'unavailable' };
+  if (!data) return { kind: isError ? 'unavailable' : 'loading' };
 
   if (data.status === 'ranked') {
     const { rank_by_roi, rank_by_pnl, total_ranked } = data;
@@ -63,17 +64,26 @@ export const getLeaderboardState = (
   }
 
   if (data.status === 'not_ranked') {
-    return data.not_ranked_reason === 'not_enough_trades_in_window'
-      ? { kind: 'not_enough_trades' }
-      : { kind: 'not_ranked_yet' };
+    const reason = data.not_ranked_reason;
+    switch (reason) {
+      case null:
+        return { kind: 'not_ranked_yet' };
+      case 'not_ranked_yet':
+      case 'not_enough_trades_in_window':
+      case 'not_eligible':
+        return { kind: reason };
+      default:
+        reason satisfies never;
+        return { kind: 'unavailable' };
+    }
   }
 
   return { kind: 'unavailable' };
 };
 
-/** The window control only helps where another window can give a different result. */
+/** Hidden only where the window can't change the result. */
 const showsWindowControl = (kind: LeaderboardState['kind']) =>
-  kind === 'loading' || kind === 'ranked' || kind === 'not_enough_trades';
+  kind !== 'not_ranked_yet' && kind !== 'not_eligible';
 
 const LeaderboardButton = styled(Button)<{ $centered: boolean }>`
   align-self: ${({ $centered }) => ($centered ? 'center' : 'flex-start')};
@@ -131,12 +141,11 @@ const RankSkeleton = () => (
 
 export const Leaderboard = () => {
   const [currentWindow, setCurrentWindow] = useState<LeaderboardWindow>('7d');
-  const { data, isLoading, isError } = useLeaderboard({
+  const { data, isError } = useLeaderboard({
     window: currentWindow,
   });
-  const state = getLeaderboardState(data, isLoading, isError);
+  const state = getLeaderboardState(data, isError);
 
-  // The agent always returns a URL; the constant only covers a failed request.
   const leaderboardUrl = data?.leaderboard_url ?? (isError ? LEADERBOARD_PAGE_URL : undefined);
   const showButton = (state.kind === 'ranked' || state.kind === 'unavailable') && !!leaderboardUrl;
 

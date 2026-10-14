@@ -51,39 +51,45 @@ const mockHook = (value: {
   });
 
 const getButton = () => screen.queryByRole('link', { name: /see full leaderboard/i });
+const getPeriod = (label: string) => screen.getByRole('radio', { name: label });
 
 describe('getLeaderboardState', () => {
-  it.each<[string, AgentLeaderboardResponse | undefined, boolean, boolean, object]>([
-    ['loading', undefined, true, false, { kind: 'loading' }],
-    [
-      'ranked',
-      ranked,
-      false,
-      false,
-      { kind: 'ranked', rankByRoi: 114, rankByPnl: 124, total: 242 },
-    ],
-    ['not_ranked_yet', notRanked('not_ranked_yet'), false, false, { kind: 'not_ranked_yet' }],
+  const rankedState = {
+    kind: 'ranked',
+    rankByRoi: 114,
+    rankByPnl: 124,
+    total: 242,
+  };
+
+  it.each<[string, AgentLeaderboardResponse | undefined, boolean, object]>([
+    ['no data yet', undefined, false, { kind: 'loading' }],
+    ['ranked', ranked, false, rankedState],
+    ['a failed refetch with cached data', ranked, true, rankedState],
+    ['not_ranked_yet', notRanked('not_ranked_yet'), false, { kind: 'not_ranked_yet' }],
     [
       'not_enough_trades_in_window',
       notRanked('not_enough_trades_in_window'),
       false,
-      false,
-      { kind: 'not_enough_trades' },
+      { kind: 'not_enough_trades_in_window' },
     ],
-    ['not_eligible', notRanked('not_eligible'), false, false, { kind: 'not_ranked_yet' }],
-    ['not_ranked without a reason', notRanked(null), false, false, { kind: 'not_ranked_yet' }],
-    ['unavailable', unavailable, false, false, { kind: 'unavailable' }],
-    ['a request error', undefined, false, true, { kind: 'unavailable' }],
-    ['no data', undefined, false, false, { kind: 'unavailable' }],
+    ['not_eligible', notRanked('not_eligible'), false, { kind: 'not_eligible' }],
+    ['not_ranked without a reason', notRanked(null), false, { kind: 'not_ranked_yet' }],
+    [
+      'an unknown reason',
+      notRanked('new_reason' as NotRankedReason),
+      false,
+      { kind: 'unavailable' },
+    ],
+    ['unavailable', unavailable, false, { kind: 'unavailable' }],
+    ['a request error', undefined, true, { kind: 'unavailable' }],
     [
       'ranked with a missing rank',
       { ...ranked, rank_by_pnl: null },
       false,
-      false,
       { kind: 'unavailable' },
     ],
-  ])('maps %s', (_, data, isLoading, isError, expected) => {
-    expect(getLeaderboardState(data, isLoading, isError)).toEqual(expected);
+  ])('maps %s', (_, data, isError, expected) => {
+    expect(getLeaderboardState(data, isError)).toEqual(expected);
   });
 });
 
@@ -99,11 +105,40 @@ describe('Leaderboard', () => {
       expect(screen.getByText(label)).toBeInTheDocument(),
     );
 
+    expect(getPeriod('7D')).toBeChecked();
+
     fireEvent.click(screen.getByText('1Y'));
     expect(useLeaderboard).toHaveBeenLastCalledWith({ window: '1y' });
+    expect(getPeriod('1Y')).toBeChecked();
+    expect(getPeriod('7D')).not.toBeChecked();
 
     fireEvent.click(screen.getByText('30D'));
     expect(useLeaderboard).toHaveBeenLastCalledWith({ window: '30d' });
+    expect(getPeriod('30D')).toBeChecked();
+  });
+
+  it('keeps the toggle on an unavailable period and hides it on switching to not eligible', () => {
+    const byWindow = {
+      '7d': ranked,
+      '1y': unavailable,
+      '30d': notRanked('not_eligible'),
+    };
+    (useLeaderboard as jest.Mock).mockImplementation(({ window }) => ({
+      data: byWindow[window as keyof typeof byWindow],
+      isLoading: false,
+      isError: false,
+    }));
+    render(<Leaderboard />);
+
+    fireEvent.click(screen.getByText('1Y'));
+    expect(screen.getByText('Rank unavailable right now.')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('7D'));
+    expect(screen.getByText('114')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('30D'));
+    expect(screen.getByText('Not eligible for the leaderboard.')).toBeInTheDocument();
+    expect(screen.queryByText('7D')).not.toBeInTheDocument();
   });
 
   it('shows skeletons and keeps the window control while loading', () => {
@@ -157,13 +192,25 @@ describe('Leaderboard', () => {
     expect(getButton()).not.toBeInTheDocument();
   });
 
+  it('shows "Not eligible" without the window control or button', () => {
+    mockHook({ data: notRanked('not_eligible') });
+    render(<Leaderboard />);
+
+    expect(screen.getByText('Not eligible for the leaderboard.')).toBeInTheDocument();
+    expect(
+      screen.getByText("This agent doesn't meet the leaderboard requirements."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('7D')).not.toBeInTheDocument();
+    expect(getButton()).not.toBeInTheDocument();
+  });
+
   it('shows "Rank unavailable right now" with the agent URL when unavailable', () => {
     mockHook({ data: unavailable });
     render(<Leaderboard />);
 
     expect(screen.getByText('Rank unavailable right now.')).toBeInTheDocument();
     expect(screen.getByText('Please check back later.')).toBeInTheDocument();
-    expect(screen.queryByText('7D')).not.toBeInTheDocument();
+    expect(screen.getByText('7D')).toBeInTheDocument();
     expect(getButton()).toHaveAttribute('href', LEADERBOARD_PAGE_URL);
   });
 
@@ -175,8 +222,17 @@ describe('Leaderboard', () => {
     expect(getButton()).toHaveAttribute('href', LEADERBOARD_PAGE_URL);
   });
 
+  it('keeps the cached rank when a background refetch fails', () => {
+    mockHook({ data: ranked, isError: true });
+    render(<Leaderboard />);
+
+    expect(screen.getByText('114')).toBeInTheDocument();
+    expect(screen.queryByText('Rank unavailable right now.')).not.toBeInTheDocument();
+    expect(getButton()).toHaveAttribute('href', DEEP_LINK);
+  });
+
   it('hides the button when there is no URL', () => {
-    mockHook({});
+    mockHook({ data: { ...ranked, rank_by_roi: null, leaderboard_url: '' } });
     render(<Leaderboard />);
 
     expect(screen.getByText('Rank unavailable right now.')).toBeInTheDocument();
