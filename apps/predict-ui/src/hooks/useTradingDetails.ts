@@ -1,4 +1,4 @@
-import { API_V1, FIVE_MINUTES } from '@agent-ui-monorepo/util-constants-and-types';
+import { API_V1, THIRTY_SECONDS } from '@agent-ui-monorepo/util-constants-and-types';
 import { delay, devMock, exponentialBackoffDelay } from '@agent-ui-monorepo/util-functions';
 import { useQuery } from '@tanstack/react-query';
 
@@ -18,7 +18,8 @@ export const useTradingDetails = () => {
 
       return response.json();
     },
-    refetchInterval: FIVE_MINUTES,
+    // The goal is changed from Pearl's Overview, so poll often enough to show the new strategy.
+    refetchInterval: THIRTY_SECONDS,
     retry: 5,
     retryDelay: exponentialBackoffDelay,
   });
