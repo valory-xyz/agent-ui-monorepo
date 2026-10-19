@@ -112,7 +112,7 @@ export const API_V1 = `${LOCAL}/api/v1`;
 | babydegen-ui  | `LOCAL/{portfolio, withdrawal/amount}`; `POST LOCAL/withdrawal/initiate`; `GET LOCAL/withdrawal/status/:id`                                                         |
 | predict-ui    | `API_V1/{agent/details, agent/performance, agent/profit-over-time?window=…, agent/prediction-history?page=…, agent/position-details/:id, agent/trading-details, withdrawal}` |
 
-`AgentType` (union: `predict | modius | optimus | basius | agentsFun | polystrat_trader | omenstrat_trader`) lives in `libs/util-constants-and-types/src/lib/constants/agents.ts`, but **`ui-chat` keeps its own copy** in `libs/ui-chat/src/lib/types.ts` — that local one is the live type (it types the `<Chat>` `agentType` prop and `LOGO_MAP`). Add a new agent to **both**, plus a `LOGO_MAP` entry.
+`AgentType` (union: `predict | modius | optimus | basius | agentsFun | polystrat_trader | omenstrat_trader`) lives in `libs/util-constants-and-types/src/lib/constants/agents.ts`; predict-ui's `utils/agentMap.ts` imports it from there. **`ui-chat` keeps its own copy** in `libs/ui-chat/src/lib/types.ts` (it types the `<Chat>` `agentType` prop and `LOGO_MAP`, used by agentsfun-ui). Add a new agent to **both**, plus a `LOGO_MAP` entry if it uses the chat.
 
 ---
 
