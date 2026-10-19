@@ -109,8 +109,8 @@ export const API_V1 = `${LOCAL}/api/v1`;
 | App           | Endpoints used                                                                                                                                                                |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | agentsfun-ui  | `LOCAL/{agent-info, features, x-activity, memecoin-activity, performance-summary, media}`                                                                                     |
-| babydegen-ui  | `LOCAL/{features, portfolio, withdrawal/amount}`; `POST LOCAL/withdrawal/initiate`; `GET LOCAL/withdrawal/status/:id`                                                         |
-| predict-ui    | `LOCAL/features`; `API_V1/{agent/details, agent/performance, agent/profit-over-time?window=…, agent/prediction-history?page=…, agent/position-details/:id, agent/trading-details, withdrawal}` |
+| babydegen-ui  | `LOCAL/{portfolio, withdrawal/amount}`; `POST LOCAL/withdrawal/initiate`; `GET LOCAL/withdrawal/status/:id`                                                         |
+| predict-ui    | `API_V1/{agent/details, agent/performance, agent/profit-over-time?window=…, agent/prediction-history?page=…, agent/position-details/:id, agent/trading-details, withdrawal}` |
 
 `AgentType` (union: `predict | modius | optimus | basius | agentsFun | polystrat_trader | omenstrat_trader`) lives in `libs/util-constants-and-types/src/lib/constants/agents.ts`, but **`ui-chat` keeps its own copy** in `libs/ui-chat/src/lib/types.ts` — that local one is the live type (it types the `<Chat>` `agentType` prop and `LOGO_MAP`). Add a new agent to **both**, plus a `LOGO_MAP` entry.
 
@@ -154,7 +154,7 @@ const queryFn = async () => {
 };
 ```
 
-`devMock.ts` is `istanbul ignore file` — Jest setup forces `IS_MOCK_ENABLED=false` so the mock branch never executes in tests. To exercise mock-mode code paths in tests, use `.mock.spec.ts` files (the established convention: `useFeatures.mock.spec.ts`, `usePortfolio.mock.spec.ts`, etc.) that set `IS_MOCK_ENABLED=true` before `require()`-ing the hook.
+`devMock.ts` is `istanbul ignore file` — Jest setup forces `IS_MOCK_ENABLED=false` so the mock branch never executes in tests. To exercise mock-mode code paths in tests, use `.mock.spec.ts` files (the established convention: `usePortfolio.mock.spec.ts`, `useTradeHistory.mock.spec.ts`, etc.) that set `IS_MOCK_ENABLED=true` before `require()`-ing the hook.
 
 ### React Query retry — single shared helper
 
@@ -173,8 +173,8 @@ Test infrastructure is already configured per project. **All 9 projects (3 apps 
 **Apps** — mirror `src/` under `__tests__/`:
 
 ```
-apps/predict-ui/src/hooks/useFeatures.ts
-apps/predict-ui/__tests__/hooks/useFeatures.spec.ts   ✓
+apps/predict-ui/src/hooks/useTradeHistory.ts
+apps/predict-ui/__tests__/hooks/useTradeHistory.spec.ts   ✓
 ```
 
 Import paths from `__tests__/[subpath]/file.spec.ts` back into `src/`:
@@ -269,13 +269,13 @@ afterEach(() => jest.restoreAllMocks());
 - IPFS media is served from `gateway.autonolas.tech/ipfs/`; external links go to X (`X_URL`, `X_POST_URL`) and Agents.fun (`AGENTS_FUN_URL`).
 
 ### `babydegen-ui`
-- Sections: Portfolio (with breakdown modal) → Allocation (Chart.js donut + Ant Table) → StrategyAndChat (gated) → WithdrawAgentsFunds.
+- Sections: Portfolio (with breakdown modal) → Allocation (Chart.js donut + Ant Table) → Strategy → WithdrawAgentsFunds. The agent's goal chat moved to Pearl's Overview and is not part of this UI.
 - `src/utils/agentMap.ts` keys off `REACT_APP_AGENT_NAME`: `modius` → "Modius" on **Mode**; `basius` → "Basius" on **Base**; anything else → "Optimus" on **Optimism**. Each agent has its own primary colour/theme (`src/constants/{colors,theme}.ts`), network logo (`mode-network.png`/`optimism-network.png`/`base-network.png`), and pie-chart palette (`src/utils/chartjs/palette.ts`). Pool protocols (`SelectedProtocol`/`PROTOCOLS_MAP` in `src/constants/textMaps.ts`) include `aerodrome` (Base DEX) alongside balancerPool/sturdy/velodrome/uniswapV3.
 - **AllocationPie uses a custom Chart.js plugin** (`src/utils/chartjs/donut-center-plugin.ts`) that loads the chain logo image and calls `chart.update()` once it resolves. This file is excluded from coverage (requires `jest-canvas-mock` or E2E).
 - **Withdrawal state machine** in `useWithdrawFunds.ts`: POST `/withdrawal/initiate` captures `withdrawId` → query `/withdrawal/status/:id` is gated by `enabled: !!withdrawId` and polls every 2s until `status === 'completed'`. Address validated client-side with `viem`'s `isAddress`.
 
 ### `predict-ui`
-- Layout (no router): AgentDetails → Performance → ProfitOverTime (Recharts) → TradeHistory (paginated with PositionDetailsModal) → Strategy → ChatContent (gated) → WithdrawLockedFunds.
+- Layout (no router): AgentDetails → Performance → ProfitOverTime (Recharts) → TradeHistory (paginated with PositionDetailsModal) → Strategy → WithdrawLockedFunds. The agent's goal chat moved to Pearl's Overview and is not part of this UI.
 - `REACT_APP_AGENT_NAME` ∈ {`omenstrat_trader`, `polystrat_trader`}; falls back to `omenstrat_trader` with a console warning if missing/invalid. Theme + background image + market label (`"Omen"` vs `"Polymarket"`) switch on the value.
 - `src/env.d.ts` augments `ImportMetaEnv`. `src/hooks/useTradeHistory.ts` adds an artificial 1s delay for pagination UX.
 - **Withdrawal state machine** in `useWithdrawLockedFunds.ts`: states `idle → armed → selling → complete/errored`. POST `/withdrawal` arms the flow; the GET query polls every 2s while `armed` or `selling`; on terminal state, the hook invalidates the performance query so `funds_locked_in_markets` refreshes.
