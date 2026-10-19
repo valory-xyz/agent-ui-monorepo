@@ -1,16 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { Agent } from '../../src/app/agent';
 import { useAgentDetails } from '../../src/hooks/useAgentDetails';
-import { useFeatures } from '../../src/hooks/useFeatures';
 
 jest.mock('../../src/hooks/useAgentDetails');
-jest.mock('../../src/hooks/useFeatures');
-jest.mock('../../src/components/Chat/Chat', () => ({
-  Chat: () => <div data-testid="chat-mock">Chat</div>,
-}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -43,10 +38,6 @@ const mockPerformance = {
 describe('Agent', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useFeatures as jest.Mock).mockReturnValue({
-      isLoading: false,
-      data: { isChatEnabled: false },
-    });
   });
 
   it('renders loading skeletons when isLoading=true', () => {
@@ -105,46 +96,22 @@ describe('Agent', () => {
     );
   });
 
-  it('renders UnlockChat when isChatEnabled=false and features loaded', () => {
+  it("does not render the chat (Update agent's goal) section or fetch its features", async () => {
+    const fetchMock = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ isChatEnabled: false }),
+    });
+    global.fetch = fetchMock;
     (useAgentDetails as jest.Mock).mockReturnValue({
       isLoading: false,
       isError: false,
       data: { agentDetails: mockAgentDetails, performance: mockPerformance },
     });
-    (useFeatures as jest.Mock).mockReturnValue({
-      isLoading: false,
-      data: { isChatEnabled: false },
-    });
     render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByText("Update agent's goal")).toBeInTheDocument();
-  });
-
-  it('renders Chat when isChatEnabled=true', () => {
-    (useAgentDetails as jest.Mock).mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
-    });
-    (useFeatures as jest.Mock).mockReturnValue({
-      isLoading: false,
-      data: { isChatEnabled: true },
-    });
-    render(<Agent />, { wrapper: createWrapper() });
-    expect(screen.getByTestId('chat-mock')).toBeInTheDocument();
-  });
-
-  it('shows nothing for ChatContent when features are loading', () => {
-    (useAgentDetails as jest.Mock).mockReturnValue({
-      isLoading: false,
-      isError: false,
-      data: { agentDetails: mockAgentDetails, performance: mockPerformance },
-    });
-    (useFeatures as jest.Mock).mockReturnValue({
-      isLoading: true,
-      data: undefined,
-    });
-    render(<Agent />, { wrapper: createWrapper() });
-    // When features are loading, ChatContent returns null
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(fetchMock.mock.calls.map(([url]) => url)).not.toContainEqual(
+      expect.stringContaining('/features'),
+    );
     expect(screen.queryByText("Update agent's goal")).toBeNull();
   });
 });

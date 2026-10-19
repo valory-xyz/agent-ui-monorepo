@@ -1,4 +1,3 @@
-import { Card as AntdCard } from 'antd';
 import styled, { css } from 'styled-components';
 
 import { COLOR } from '../../constants/theme';
@@ -32,34 +31,6 @@ export const Card = styled.div<{ $padding?: string; $gap?: string }>`
   border: 1px solid ${COLOR.WHITE_TRANSPARENT_10};
   &::before {
     ${cardBeforeStyles}
-  }
-
-  & > * {
-    position: relative;
-    z-index: 2;
-  }
-`;
-
-/**
- * A variant of Card with slightly different styles (used for predict ui Chat)
- */
-export const CardV2 = styled(AntdCard)`
-  position: relative;
-  backdrop-filter: blur(10px);
-  border: 1px solid ${COLOR.WHITE_TRANSPARENT_10};
-  background: transparent;
-
-  .agent-chat-input {
-    background: ${COLOR.WHITE_TRANSPARENT_10};
-    backdrop-filter: blur(4px);
-    textarea {
-      background: transparent;
-    }
-  }
-
-  &::before {
-    ${cardBeforeStyles}
-    border-radius: 16px;
   }
 
   & > * {
