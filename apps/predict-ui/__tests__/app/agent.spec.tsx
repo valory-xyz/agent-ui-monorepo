@@ -4,13 +4,20 @@ import { createElement } from 'react';
 
 import { Agent } from '../../src/app/agent';
 import { useAgentDetails } from '../../src/hooks/useAgentDetails';
+import { getMockLeaderboard } from '../../src/mocks/mockLeaderboard';
+import { getMockProfitOverTime } from '../../src/mocks/mockProfitOverTime';
+import { mockTradeHistory } from '../../src/mocks/mockTradeHistory';
+import { mockTradingDetails } from '../../src/mocks/mockTradingDetails';
+import { mockWithdrawalStatus } from '../../src/mocks/mockWithdrawal';
 
 jest.mock('../../src/hooks/useAgentDetails');
 
-const createWrapper = () => {
-  const queryClient = new QueryClient({
+const createQueryClient = () =>
+  new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
+
+const createWrapper = (queryClient = createQueryClient()) => {
   return ({ children }: { children: React.ReactNode }) =>
     createElement(QueryClientProvider, { client: queryClient }, children);
 };
@@ -36,8 +43,14 @@ const mockPerformance = {
 };
 
 describe('Agent', () => {
+  const originalFetch = global.fetch;
+
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
   });
 
   it('renders loading skeletons when isLoading=true', () => {
@@ -97,9 +110,19 @@ describe('Agent', () => {
   });
 
   it("does not render the chat (Update agent's goal) section or fetch its features", async () => {
-    const fetchMock = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ isChatEnabled: false }),
+    const responses: Record<string, unknown> = {
+      '/agent/leaderboard': getMockLeaderboard('30d'),
+      '/agent/profit-over-time': getMockProfitOverTime('lifetime'),
+      '/agent/prediction-history': mockTradeHistory,
+      '/agent/trading-details': mockTradingDetails,
+      '/withdrawal': mockWithdrawalStatus,
+    };
+    const fetchMock = jest.fn((url: string) => {
+      const path = Object.keys(responses).find((key) => url.includes(key));
+      return Promise.resolve({
+        ok: path !== undefined,
+        json: () => Promise.resolve(path ? responses[path] : {}),
+      });
     });
     global.fetch = fetchMock;
     (useAgentDetails as jest.Mock).mockReturnValue({
@@ -107,8 +130,10 @@ describe('Agent', () => {
       isError: false,
       data: { agentDetails: mockAgentDetails, performance: mockPerformance },
     });
-    render(<Agent />, { wrapper: createWrapper() });
+    const queryClient = createQueryClient();
+    render(<Agent />, { wrapper: createWrapper(queryClient) });
     await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    await waitFor(() => expect(queryClient.isFetching()).toBe(0));
     expect(fetchMock.mock.calls.map(([url]) => url)).not.toContainEqual(
       expect.stringContaining('/features'),
     );
