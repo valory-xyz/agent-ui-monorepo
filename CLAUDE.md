@@ -93,7 +93,7 @@ yarn nx lint predict-ui   # single project
 | Unit testing    | Jest 29 + React Testing Library 16                                    |
 | Node utilities  | ts-jest (node env); React components: babel-jest with @nx/react/babel |
 | Package manager | Yarn (frozen lockfile in CI)                                          |
-| Node version    | 24 (`.nvmrc` pins `v24.15.0`; CI uses `24.x`)                         |
+| Node version    | 24 (`.nvmrc` pins `v24.22.1`; CI uses `24.x`)                         |
 
 ---
 
@@ -285,7 +285,7 @@ afterEach(() => jest.restoreAllMocks());
 
 ## CI/CD
 
-Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node from `.nvmrc` (currently `v24.15.0`) and activates Corepack-pinned `yarn@1.22.22` before installing. The `packageManager` pin in `package.json` is silently ignored without that activation.
+Workflows in `.github/workflows/` — every workflow that runs `yarn` reads Node from `.nvmrc` (currently `v24.22.1`) and activates Corepack-pinned `yarn@1.22.22` before installing. The `packageManager` pin in `package.json` is silently ignored without that activation.
 
 | Workflow                 | Trigger                                            | What it does                                                   |
 | ------------------------ | -------------------------------------------------- | -------------------------------------------------------------- |
