@@ -15,48 +15,25 @@ jest.mock('../src/components/Strategy/Strategy', () => ({
   Strategy: () => <div>Strategy</div>,
 }));
 
-jest.mock('../src/components/Chat/Chat', () => ({
-  Chat: () => <div>Chat</div>,
-}));
-
 jest.mock('../src/components/WithdrawAgentsFunds/WithdrawAgentsFunds', () => ({
   WithdrawAgentsFunds: () => <div>WithdrawAgentsFunds</div>,
 }));
 
-jest.mock('../src/hooks/useFeatures');
 jest.mock('@agent-ui-monorepo/ui-theme', () => ({
   GlobalStyles: () => null,
 }));
-jest.mock('@agent-ui-monorepo/ui-chat', () => ({
-  UnlockChat: () => <div>UnlockChat</div>,
-}));
-
-const { useFeatures } = jest.requireMock('../src/hooks/useFeatures') as {
-  useFeatures: jest.Mock;
-};
 
 describe('App (babydegen-ui)', () => {
-  beforeEach(() => {
-    useFeatures.mockReturnValue({ isLoading: false, data: { isChatEnabled: true } });
-  });
-
-  it('renders Chat and Strategy when isChatEnabled=true', () => {
+  it('renders every section, with Strategy shown without a chat gate', () => {
     render(<App />);
-    expect(screen.getByText('Chat')).toBeInTheDocument();
+    expect(screen.getByText('Portfolio')).toBeInTheDocument();
+    expect(screen.getByText('Allocation')).toBeInTheDocument();
     expect(screen.getByText('Strategy')).toBeInTheDocument();
+    expect(screen.getByText('WithdrawAgentsFunds')).toBeInTheDocument();
   });
 
-  it('renders UnlockChat when isChatEnabled=false', () => {
-    useFeatures.mockReturnValue({ isLoading: false, data: { isChatEnabled: false } });
+  it("does not render the chat (Update agent's goal) section", () => {
     render(<App />);
-    expect(screen.getByText('UnlockChat')).toBeInTheDocument();
-    expect(screen.queryByText('Chat')).toBeNull();
-  });
-
-  it('renders nothing for StrategyAndChat when isLoading=true', () => {
-    useFeatures.mockReturnValue({ isLoading: true, data: undefined });
-    render(<App />);
-    expect(screen.queryByText('Chat')).toBeNull();
-    expect(screen.queryByText('UnlockChat')).toBeNull();
+    expect(screen.queryByText("Update agent's goal")).toBeNull();
   });
 });

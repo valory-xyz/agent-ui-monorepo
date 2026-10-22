@@ -1,4 +1,4 @@
-import { AgentType } from '@agent-ui-monorepo/ui-chat';
+import { AgentType } from '@agent-ui-monorepo/util-constants-and-types';
 
 /**
  * Supported agents map

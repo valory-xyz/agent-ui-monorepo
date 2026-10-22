@@ -1,19 +1,6 @@
 import { CurrencyCode } from './constants/currency';
 
-export type Features = {
-  isChatEnabled: boolean;
-};
-
 export type TradingType = 'risky' | 'balanced';
-
-/**
- * Chat response from the agent.
- */
-export type ChatResponse = {
-  reasoning: string;
-  trading_type: TradingType;
-  previous_trading_type?: TradingType;
-};
 
 export type AgentDetailsResponse = {
   id: string;

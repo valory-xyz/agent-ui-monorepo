@@ -1,11 +1,9 @@
-import { UnlockChat } from '@agent-ui-monorepo/ui-chat';
 import { Col, Flex, Row, Skeleton } from 'antd';
 import { Frown, Unplug } from 'lucide-react';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import { AgentDetails } from '../components/AgentDetails';
-import { Chat } from '../components/Chat/Chat';
 import { ErrorState } from '../components/ErrorState';
 import { Leaderboard } from '../components/Leaderboard';
 import { MetricsUnavailable } from '../components/MetricsUnavailable';
@@ -16,9 +14,7 @@ import { TradeHistory } from '../components/TradeHistory/TradeHistory';
 import { Card } from '../components/ui/Card';
 import { WithdrawLockedFunds } from '../components/WithdrawLockedFunds';
 import { ARE_POLYSTRAT_METRICS_AVAILABLE } from '../constants/featureFlags';
-import { COLOR } from '../constants/theme';
 import { useAgentDetails } from '../hooks/useAgentDetails';
-import { useFeatures } from '../hooks/useFeatures';
 import { AgentDetailsResponse } from '../types';
 import { isPolystratAgent } from '../utils/agentMap';
 
@@ -83,22 +79,6 @@ const AgentNotFound = () => (
   </Flex>
 );
 
-const ChatContent = () => {
-  const { isLoading, data } = useFeatures();
-
-  if (isLoading) return null;
-
-  if (!data?.isChatEnabled) {
-    return (
-      <Card>
-        <UnlockChat iconColor={COLOR.WHITE_TRANSPARENT_50} />
-      </Card>
-    );
-  }
-
-  return <Chat />;
-};
-
 type AgentLayoutProps = {
   agentDetails: AgentDetailsResponse;
   /** Section rendered between the agent details and the strategy card. */
@@ -121,7 +101,6 @@ const AgentLayout = ({
       />
       {children}
       <Strategy />
-      <ChatContent />
       <WithdrawLockedFunds
         lockedAmount={lockedAmount}
         marketName={isPolystratAgent ? 'Polymarket' : 'Omen'}

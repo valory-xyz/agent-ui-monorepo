@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { useTradingDetails } from '../../src/hooks/useTradingDetails';
@@ -24,6 +24,7 @@ describe('useTradingDetails', () => {
   });
 
   afterEach(() => {
+    jest.useRealTimers();
     const g = global as unknown as Record<string, unknown>;
     delete g['fetch'];
   });
@@ -50,6 +51,21 @@ describe('useTradingDetails', () => {
     const { result } = renderHook(() => useTradingDetails(), { wrapper: createWrapper() });
 
     await waitFor(() => expect(result.current.data).toEqual(mockData));
+  });
+
+  it('refetches every 30 seconds so a goal changed from Pearl shows up', async () => {
+    jest.useFakeTimers();
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve(mockData),
+    });
+
+    const { result } = renderHook(() => useTradingDetails(), { wrapper: createWrapper() });
+    await waitFor(() => expect(result.current.data).toEqual(mockData));
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+
+    await act(() => jest.advanceTimersByTimeAsync(30_000));
+    expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 
   it('queryFn throws when fetch returns ok=false', async () => {

@@ -6,7 +6,6 @@ import { createElement } from 'react';
 
 import { Agent } from '../../src/app/agent';
 import { useAgentDetails } from '../../src/hooks/useAgentDetails';
-import { useFeatures } from '../../src/hooks/useFeatures';
 
 jest.mock('../../src/utils/agentMap', () => ({
   agentType: 'polystrat_trader',
@@ -19,10 +18,6 @@ jest.mock('../../src/constants/featureFlags', () => ({
 }));
 
 jest.mock('../../src/hooks/useAgentDetails');
-jest.mock('../../src/hooks/useFeatures');
-jest.mock('../../src/components/Chat/Chat', () => ({
-  Chat: () => <div data-testid="chat-mock">Chat</div>,
-}));
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -55,10 +50,6 @@ const mockPerformance = {
 describe('Agent – polystrat agent, metrics available', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (useFeatures as jest.Mock).mockReturnValue({
-      isLoading: false,
-      data: { isChatEnabled: false },
-    });
     (useAgentDetails as jest.Mock).mockReturnValue({
       isLoading: false,
       isError: false,

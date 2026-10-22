@@ -38,20 +38,6 @@ export type PortfolioResponse = {
   selected_protocols: SelectedProtocol[];
 };
 
-/**
- * Chat response from the agent.
- */
-export type ChatResponse = {
-  reasoning: string;
-  trading_type: TradingType;
-  previous_trading_type?: TradingType;
-  selected_protocols: SelectedProtocol[];
-};
-
-export type Features = {
-  isChatEnabled: boolean;
-};
-
 export type WithdrawalFunds = {
   /** e.g., 1,500 USDC in smallest unit (e.g., 1,500,000,000) */
   amount: number;

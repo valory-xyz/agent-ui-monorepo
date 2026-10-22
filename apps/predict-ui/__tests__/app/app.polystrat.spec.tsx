@@ -16,9 +16,6 @@ jest.mock('../../src/hooks/useAgentDetails', () => ({
     data: { agentDetails: undefined, performance: undefined },
   }),
 }));
-jest.mock('../../src/hooks/useFeatures', () => ({
-  useFeatures: jest.fn().mockReturnValue({ isLoading: true, data: undefined }),
-}));
 
 describe('App – polystrat agent (isOmenstratAgent=false)', () => {
   it('renders without crashing (no background image, tooltip border set)', () => {
