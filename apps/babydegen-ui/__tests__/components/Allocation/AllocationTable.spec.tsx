@@ -65,4 +65,23 @@ describe('AllocationTable', () => {
     expect(container.querySelector('.ant-table')).toBeInTheDocument();
     expect(screen.queryByRole('row', { name: /detail/ })).toBeNull();
   });
+
+  it('keeps legacy velodrome branding and shows Aero only for aero rows', () => {
+    usePortfolio.mockReturnValue({
+      data: {
+        allocations: [
+          { type: 'velodrome', assets: ['USDC', 'VELO'], details: 'Velodrome CL Pool', apr: 3 },
+          { type: 'aero', assets: ['WETH', 'USDC'], details: 'Aero CL Pool', apr: 4 },
+        ],
+      },
+      isLoading: false,
+    });
+    const { container } = render(<AllocationTable />, { wrapper });
+    expect(screen.getByText('Velodrome CL Pool')).toBeInTheDocument();
+    expect(screen.getByText('Aero CL Pool')).toBeInTheDocument();
+    const protocolLogos = Array.from(
+      container.querySelectorAll('.ant-avatar img[src^="/logos/protocols/"]'),
+    ).map((img) => img.getAttribute('src'));
+    expect(protocolLogos).toEqual(['/logos/protocols/velodrome.png', '/logos/protocols/aero.png']);
+  });
 });

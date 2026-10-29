@@ -67,4 +67,20 @@ describe('Strategy', () => {
     const avatars = container.querySelectorAll('.ant-avatar');
     expect(avatars.length).toBeGreaterThan(0);
   });
+
+  it('renders a distinct logo for legacy velodrome/aerodrome and merged aero keys', () => {
+    usePortfolio.mockReturnValue({
+      data: { trading_type: 'balanced', selected_protocols: ['velodrome', 'aerodrome', 'aero'] },
+      isLoading: false,
+    });
+    const { container } = render(<Strategy />, { wrapper: createWrapper() });
+    const logos = Array.from(container.querySelectorAll('.ant-avatar img')).map((img) =>
+      img.getAttribute('src'),
+    );
+    expect(logos).toEqual([
+      '/logos/protocols/velodrome.png',
+      '/logos/protocols/aerodrome.png',
+      '/logos/protocols/aero.png',
+    ]);
+  });
 });
