@@ -7,7 +7,8 @@ export const mockAgentAsset = (() => {
   return 'OP';
 })();
 
-// Basius (Base) runs on Aerodrome; Modius/Optimus on Velodrome. Mock-only.
+// Legacy pool opened before the Velodrome/Aerodrome merger: `aerodrome` on
+// Base, `velodrome` elsewhere. Mock-only.
 const isBasius = agentType === 'basius';
 const mockPoolProtocol = isBasius ? 'aerodrome' : 'velodrome';
 const mockPoolChain = isBasius ? 'base' : 'optimism';
@@ -50,6 +51,16 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 100.0,
       address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
     },
+    {
+      chain: mockPoolChain,
+      type: 'aero',
+      id: '0x2c3a4E7b1D9f0a6C8e5B7d2F4a1c9E0b3D6f8A15',
+      assets: ['WETH', 'USDC'],
+      apr: 14.72,
+      details: 'Aero CL Pool',
+      ratio: 100.0,
+      address: '0x553Ce54DE9b219ecFfa9B65AEF49597c884AC64a',
+    },
   ],
   portfolio_breakdown: [
     {
@@ -77,6 +88,6 @@ export const mockPortfolio: PortfolioResponse = {
       ratio: 0.0,
     },
   ],
-  selected_protocols: ['balancerPool', 'sturdy', mockPoolProtocol],
+  selected_protocols: ['balancerPool', 'sturdy', mockPoolProtocol, 'aero'],
   trading_type: 'balanced',
 } as const;

@@ -27,8 +27,8 @@ export const agentChainName = ((): 'mode' | 'base' | 'optimism' => {
 })();
 
 /**
- * Aerodrome (Base) is a Velodrome fork sharing the same contract ABIs, so the
- * agent backend reports it as `velodrome`. Basius runs only on Base, so display
+ * Legacy Aerodrome (Base) positions share Velodrome's contract ABIs, so the
+ * agent backend reports them as `velodrome`. Basius runs only on Base, so display
  * that protocol as Aerodrome.
  */
 export const normalizeProtocol = (protocol: SelectedProtocol): SelectedProtocol =>

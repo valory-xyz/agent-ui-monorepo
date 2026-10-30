@@ -67,6 +67,7 @@ describe('agentMap (babydegen-ui)', () => {
       expect(normalizeProtocol('balancerPool')).toBe('balancerPool');
       expect(normalizeProtocol('uniswapV3')).toBe('uniswapV3');
       expect(normalizeProtocol('aerodrome')).toBe('aerodrome');
+      expect(normalizeProtocol('aero')).toBe('aero');
     });
 
     it('leaves velodrome untouched for modius', () => {
@@ -81,6 +82,13 @@ describe('agentMap (babydegen-ui)', () => {
 
       const { normalizeProtocol } = require('../../src/utils/agentMap');
       expect(normalizeProtocol('velodrome')).toBe('velodrome');
+    });
+
+    it.each(['basius', 'modius', 'optimus'])('leaves aero untouched for %s', (agent) => {
+      process.env.REACT_APP_AGENT_NAME = agent;
+
+      const { normalizeProtocol } = require('../../src/utils/agentMap');
+      expect(normalizeProtocol('aero')).toBe('aero');
     });
   });
 
@@ -100,6 +108,14 @@ describe('agentMap (babydegen-ui)', () => {
       expect(normalizeDetails('Balancer pool')).toBe('Balancer pool');
     });
 
+    it.each(['basius', 'modius', 'optimus'])('leaves Aero details untouched for %s', (agent) => {
+      process.env.REACT_APP_AGENT_NAME = agent;
+
+      const { normalizeDetails } = require('../../src/utils/agentMap');
+      expect(normalizeDetails('Aero CL Pool')).toBe('Aero CL Pool');
+      expect(normalizeDetails('Aero Pool')).toBe('Aero Pool');
+    });
+
     it('leaves details untouched for modius', () => {
       process.env.REACT_APP_AGENT_NAME = 'modius';
 
@@ -111,7 +127,7 @@ describe('agentMap (babydegen-ui)', () => {
       process.env.REACT_APP_AGENT_NAME = 'optimus';
 
       const { normalizeDetails } = require('../../src/utils/agentMap');
-      expect(normalizeDetails('Velodrome pool')).toBe('Velodrome pool');
+      expect(normalizeDetails('Velodrome CL Pool')).toBe('Velodrome CL Pool');
     });
   });
 });

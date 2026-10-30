@@ -5,14 +5,6 @@ export const TRADING_TYPE_MAP = {
   balanced: 'Balanced',
 } as const;
 
-export const PROTOCOL_IMAGE_MAP: Record<SelectedProtocol, string> = {
-  balancerPool: '/logos/protocols/balancer.png',
-  sturdy: '/logos/protocols/sturdy.png',
-  velodrome: '/logos/protocols/velodrome.png',
-  uniswapV3: '/logos/protocols/uniswapV3.png',
-  aerodrome: '/logos/protocols/aerodrome.png',
-} as const;
-
 export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<'name' | 'logo', string>> = {
   balancerPool: {
     name: 'Balancer',
@@ -33,5 +25,9 @@ export const PROTOCOLS_MAP: Record<SelectedProtocol, Record<'name' | 'logo', str
   aerodrome: {
     name: 'Aerodrome',
     logo: '/logos/protocols/aerodrome.png',
+  },
+  aero: {
+    name: 'Aero',
+    logo: '/logos/protocols/aero.png',
   },
 } as const;
