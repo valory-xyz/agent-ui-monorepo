@@ -6,7 +6,6 @@ import { useMemo } from 'react';
 import { COLOR } from '../../constants/colors';
 import { PROTOCOLS_MAP, TRADING_TYPE_MAP } from '../../constants/textMaps';
 import { usePortfolio } from '../../hooks/usePortfolio';
-import { SelectedProtocol } from '../../types';
 import { Pill } from '../../ui/Pill';
 import { agentName, normalizeProtocol } from '../../utils/agentMap';
 
@@ -40,17 +39,15 @@ const StrategyContent = () => {
   const operatingProtocols = useMemo(() => {
     if (!data?.selected_protocols) return [];
 
-    return data.selected_protocols.map((protocol: SelectedProtocol) => {
-      const displayProtocol = normalizeProtocol(protocol);
-      return (
-        <Avatar
-          key={displayProtocol}
-          size={36}
-          src={PROTOCOLS_MAP[displayProtocol].logo}
-          style={{ border: `1px solid ${COLOR.lightGrey}`, padding: 6 }}
-        />
-      );
-    });
+    const displayProtocols = Array.from(new Set(data.selected_protocols.map(normalizeProtocol)));
+    return displayProtocols.map((protocol) => (
+      <Avatar
+        key={protocol}
+        size={36}
+        src={PROTOCOLS_MAP[protocol].logo}
+        style={{ border: `1px solid ${COLOR.lightGrey}`, padding: 6 }}
+      />
+    ));
   }, [data?.selected_protocols]);
 
   return (

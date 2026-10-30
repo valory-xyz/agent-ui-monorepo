@@ -29,8 +29,7 @@ export const agentChainName = ((): 'mode' | 'base' | 'optimism' => {
 /**
  * Legacy Aerodrome (Base) positions share Velodrome's contract ABIs, so the
  * agent backend reports them as `velodrome`. Basius runs only on Base, so display
- * that protocol as Aerodrome. Positions in the merged protocol arrive as `aero`
- * and pass through unchanged.
+ * that protocol as Aerodrome.
  */
 export const normalizeProtocol = (protocol: SelectedProtocol): SelectedProtocol =>
   agentType === 'basius' && protocol === 'velodrome' ? 'aerodrome' : protocol;
@@ -38,7 +37,6 @@ export const normalizeProtocol = (protocol: SelectedProtocol): SelectedProtocol 
 /**
  * Backend-provided free-text detail strings (e.g. "Velodrome pool") reference
  * the reported protocol name. Relabel for Basius to match {@link normalizeProtocol}.
- * "Aero ..." strings are left untouched.
  */
 export const normalizeDetails = (details: string): string =>
   agentType === 'basius' ? details.replace(/velodrome/gi, 'Aerodrome') : details;
