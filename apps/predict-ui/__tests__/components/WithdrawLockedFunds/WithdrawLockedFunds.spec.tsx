@@ -47,6 +47,24 @@ describe('WithdrawLockedFunds', () => {
       expect(screen.getByText(/Closes all open positions on Polymarket/)).toBeInTheDocument();
     });
 
+    it.each<[string, Partial<WithdrawalStatus>]>([
+      ['idle', { mode: 'idle' }],
+      ['armed', { mode: 'armed' }],
+      ['selling', { mode: 'selling' }],
+      ['complete', { mode: 'complete' }],
+      ['partial', { mode: 'errored', fills: [fakeFill] }],
+      ['errored', { mode: 'errored', fills: [] }],
+    ])('shows the Danger zone pill in the %s state', (_, status) => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus(status),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      expect(screen.getByText('Danger zone')).toBeInTheDocument();
+    });
+
     it('uses the custom market name for cross-agent reuse', () => {
       mockedHook.mockReturnValue({
         isLoading: false,
@@ -70,7 +88,7 @@ describe('WithdrawLockedFunds', () => {
       renderCard();
       expect(screen.getByText('Open positions value')).toBeInTheDocument();
       expect(screen.getByText('~$120.32')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeEnabled();
+      expect(screen.getByRole('button', { name: /sell positions and withdraw/i })).toBeEnabled();
     });
 
     it('disables the initiate button when there are no locked funds', () => {
@@ -81,7 +99,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard({ lockedAmount: 0 });
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /sell positions and withdraw/i })).toBeDisabled();
     });
 
     it('falls through to the initiate body when no status data has loaded yet', () => {
@@ -92,7 +110,9 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      ).toBeInTheDocument();
     });
 
     it('calls initiateWithdraw when the button is clicked', () => {
@@ -104,7 +124,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw,
       });
       renderCard();
-      fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sell positions and withdraw/i }));
       expect(initiateWithdraw).toHaveBeenCalledTimes(1);
     });
 
@@ -117,7 +137,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw,
       });
       renderCard();
-      fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sell positions and withdraw/i }));
       await waitFor(() => expect(initiateWithdraw).toHaveBeenCalled());
     });
   });
@@ -137,7 +157,7 @@ describe('WithdrawLockedFunds', () => {
         ),
       ).toBeInTheDocument();
       expect(container.querySelector('.ant-spin')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /initiate withdrawal/i })).toBeNull();
+      expect(screen.queryByRole('button', { name: /sell positions and withdraw/i })).toBeNull();
     });
 
     it('shows the selling-state message when the sweep is in progress', () => {
@@ -184,7 +204,9 @@ describe('WithdrawLockedFunds', () => {
       if (!closeButton) throw new Error('Expected alert close button to be present');
       fireEvent.click(closeButton);
       expect(screen.queryByText('Withdrawal complete!')).toBeNull();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -198,7 +220,9 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       expect(screen.getByText('Withdrawal failed')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      ).toBeInTheDocument();
     });
 
     it('shows the failure alert when isError is true even without status data', () => {
@@ -221,7 +245,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw,
       });
       renderCard();
-      fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sell positions and withdraw/i }));
       expect(initiateWithdraw).toHaveBeenCalledTimes(1);
     });
 
@@ -238,7 +262,9 @@ describe('WithdrawLockedFunds', () => {
       fireEvent.click(closeButton);
 
       expect(screen.queryByText('Withdrawal failed')).toBeNull();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      ).toBeInTheDocument();
       expect(container.querySelector('.ant-spin')).toBeNull();
     });
 
@@ -250,7 +276,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard({ lockedAmount: 0 });
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /sell positions and withdraw/i })).toBeDisabled();
     });
   });
 
@@ -276,7 +302,9 @@ describe('WithdrawLockedFunds', () => {
         ),
       ).toBeInTheDocument();
       expect(screen.queryByText('Withdrawal failed')).toBeNull();
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      ).toBeInTheDocument();
     });
 
     it('keeps showing the full-failure alert when mode=errored has no fills', () => {
@@ -315,7 +343,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw,
       });
       renderCard();
-      fireEvent.click(screen.getByRole('button', { name: /initiate withdrawal/i }));
+      fireEvent.click(screen.getByRole('button', { name: /sell positions and withdraw/i }));
       expect(initiateWithdraw).toHaveBeenCalledTimes(1);
     });
 
@@ -327,7 +355,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard({ lockedAmount: 0 });
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /sell positions and withdraw/i })).toBeDisabled();
     });
   });
 
@@ -353,7 +381,7 @@ describe('WithdrawLockedFunds', () => {
         initiateWithdraw: jest.fn(),
       });
       renderCard({ metricsAvailable: false, lockedAmount: 0 });
-      expect(screen.getByRole('button', { name: /initiate withdrawal/i })).toBeEnabled();
+      expect(screen.getByRole('button', { name: /sell positions and withdraw/i })).toBeEnabled();
     });
 
     it('hides the open-positions value while selling', () => {
@@ -405,7 +433,7 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       const button = screen.getByRole('button', {
-        name: /initiate withdrawal/i,
+        name: /sell positions and withdraw/i,
       });
       expect(button).toHaveClass('ant-btn-loading');
     });

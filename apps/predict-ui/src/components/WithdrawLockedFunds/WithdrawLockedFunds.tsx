@@ -23,21 +23,39 @@ const getDescription = (marketName: string, metricsAvailable: boolean) =>
 const isInitiateDisabled = (amount: number, metricsAvailable: boolean) =>
   metricsAvailable && amount <= 0;
 
+const INITIATE_LABEL = 'Sell positions and withdraw';
+
 const InitiateButton = styled(Button)`
   align-self: flex-start;
   height: auto;
   padding: 8px 16px;
   border-radius: 10px;
-  background: ${COLOR.WHITE_TRANSPARENT_10};
+  font-size: 14px;
+  background: ${COLOR.DANGER_BUTTON};
   border-color: transparent;
   color: ${COLOR.TEXT_PRIMARY};
 
   &:hover,
   &:focus {
-    background: ${COLOR.WHITE_TRANSPARENT_20} !important;
+    background: ${COLOR.DANGER_BUTTON} !important;
     border-color: transparent !important;
     color: ${COLOR.TEXT_PRIMARY} !important;
+    opacity: 0.85;
   }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+`;
+
+const DangerZonePill = styled(Text)`
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${COLOR.DANGER_PILL_TEXT};
+  background: ${COLOR.DANGER_PILL_BACKGROUND};
 `;
 
 const SuccessAlert = styled(AntdAlert)`
@@ -81,6 +99,7 @@ const Header = ({
   metricsAvailable: boolean;
 }) => (
   <Flex vertical gap={6}>
+    <DangerZonePill>Danger zone</DangerZonePill>
     <Title level={4} className="m-0 font-normal">
       Withdraw funds locked in markets
     </Title>
@@ -117,7 +136,7 @@ const InitiateBody = ({ amount, isLoading, metricsAvailable, onInitiate }: Initi
       loading={isLoading}
       disabled={isInitiateDisabled(amount, metricsAvailable)}
     >
-      Initiate withdrawal
+      {INITIATE_LABEL}
     </InitiateButton>
   </>
 );
@@ -195,7 +214,7 @@ const PartialBody = ({
       loading={isLoading}
       disabled={isInitiateDisabled(amount, metricsAvailable)}
     >
-      Initiate withdrawal
+      {INITIATE_LABEL}
     </InitiateButton>
   </>
 );
@@ -224,7 +243,7 @@ const ErrorBody = ({ amount, isLoading, metricsAvailable, onRetry, onDismiss }: 
       loading={isLoading}
       disabled={isInitiateDisabled(amount, metricsAvailable)}
     >
-      Initiate withdrawal
+      {INITIATE_LABEL}
     </InitiateButton>
   </>
 );
