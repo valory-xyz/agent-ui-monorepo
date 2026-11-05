@@ -26,14 +26,18 @@ const buildStatus = (overrides: Partial<WithdrawalStatus> = {}): WithdrawalStatu
   ...overrides,
 });
 
+const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 // Computed styles depend on whether antd's or styled-components' sheet is
 // inserted first, so read the rules styled-components emitted for the element.
-const styledRulesFor = (element: HTMLElement) => {
+// `selectorSuffix` picks a nested rule, e.g. ':not(:disabled):hover'.
+const styledRulesFor = (element: HTMLElement, selectorSuffix = '') => {
   const css = Array.from(document.querySelectorAll('style[data-styled]'))
     .map((tag) => tag.textContent ?? '')
     .join('');
+  const suffix = escapeRegExp(selectorSuffix);
   return Array.from(element.classList)
-    .flatMap((cls) => css.match(new RegExp(`\\.${cls}\\{[^}]*\\}`, 'g')) ?? [])
+    .flatMap((cls) => css.match(new RegExp(`\\.${cls}${suffix}(?:,[^{]*)?\\{[^}]*\\}`, 'g')) ?? [])
     .join('');
 };
 
@@ -91,6 +95,21 @@ describe('WithdrawLockedFunds', () => {
         screen.getByRole('button', { name: /sell positions and withdraw/i }),
       );
       expect(buttonRules).toContain('background:#E50058;');
+    });
+
+    it('applies the withdraw button hover and focus styles only while it is enabled', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus(),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      const button = screen.getByRole('button', { name: /sell positions and withdraw/i });
+      expect(styledRulesFor(button, ':not(:disabled):hover')).toContain('opacity:0.85;');
+      expect(styledRulesFor(button, ':not(:disabled):focus')).toContain('opacity:0.85;');
+      expect(styledRulesFor(button, ':hover')).toBe('');
+      expect(styledRulesFor(button, ':focus')).toBe('');
     });
 
     it('uses the custom market name for cross-agent reuse', () => {
