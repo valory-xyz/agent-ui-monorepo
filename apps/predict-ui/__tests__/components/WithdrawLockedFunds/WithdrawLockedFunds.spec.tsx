@@ -106,8 +106,12 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       const button = screen.getByRole('button', { name: /sell positions and withdraw/i });
-      expect(styledRulesFor(button, ':not(:disabled):hover')).toContain('opacity:0.85;');
-      expect(styledRulesFor(button, ':not(:disabled):focus')).toContain('opacity:0.85;');
+      const hoverRules = styledRulesFor(button, ':not(:disabled):hover');
+      const focusRules = styledRulesFor(button, ':not(:disabled):focus');
+      expect(hoverRules).toContain('background:#E50058 !important;');
+      expect(hoverRules).toContain('opacity:0.85;');
+      expect(focusRules).toContain('background:#E50058 !important;');
+      expect(focusRules).toContain('opacity:0.85;');
       expect(styledRulesFor(button, ':hover')).toBe('');
       expect(styledRulesFor(button, ':focus')).toBe('');
     });
