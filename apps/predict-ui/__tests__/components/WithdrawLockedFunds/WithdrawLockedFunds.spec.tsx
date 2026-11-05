@@ -26,6 +26,17 @@ const buildStatus = (overrides: Partial<WithdrawalStatus> = {}): WithdrawalStatu
   ...overrides,
 });
 
+// Computed styles depend on whether antd's or styled-components' sheet is
+// inserted first, so read the rules styled-components emitted for the element.
+const styledRulesFor = (element: HTMLElement) => {
+  const css = Array.from(document.querySelectorAll('style[data-styled]'))
+    .map((tag) => tag.textContent ?? '')
+    .join('');
+  return Array.from(element.classList)
+    .flatMap((cls) => css.match(new RegExp(`\\.${cls}\\{[^}]*\\}`, 'g')) ?? [])
+    .join('');
+};
+
 const renderCard = (props?: Partial<React.ComponentProps<typeof WithdrawLockedFunds>>) =>
   render(<WithdrawLockedFunds lockedAmount={120.32} marketName="Polymarket" {...(props ?? {})} />);
 
@@ -63,6 +74,23 @@ describe('WithdrawLockedFunds', () => {
       });
       renderCard();
       expect(screen.getByText('Danger zone')).toBeInTheDocument();
+    });
+
+    it('styles the pill and the withdraw button in the agent danger colours', () => {
+      mockedHook.mockReturnValue({
+        isLoading: false,
+        isError: false,
+        data: buildStatus(),
+        initiateWithdraw: jest.fn(),
+      });
+      renderCard();
+      const pillRules = styledRulesFor(screen.getByText('Danger zone'));
+      expect(pillRules).toContain('color:#FF4D91;');
+      expect(pillRules).toContain('background:rgba(255,77,145,0.1);');
+      const buttonRules = styledRulesFor(
+        screen.getByRole('button', { name: /sell positions and withdraw/i }),
+      );
+      expect(buttonRules).toContain('background:#E50058;');
     });
 
     it('uses the custom market name for cross-agent reuse', () => {

@@ -35,8 +35,8 @@ const InitiateButton = styled(Button)`
   border-color: transparent;
   color: ${COLOR.TEXT_PRIMARY};
 
-  &:hover,
-  &:focus {
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
     background: ${COLOR.DANGER_BUTTON} !important;
     border-color: transparent !important;
     color: ${COLOR.TEXT_PRIMARY} !important;
