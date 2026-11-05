@@ -31,8 +31,8 @@ const armWithdrawal = async (): Promise<WithdrawalStatus> => {
 
 export const useWithdrawLockedFunds = () => {
   const queryClient = useQueryClient();
-  // Status polling is opt-in — only enabled after the user explicitly clicks
-  // "Initiate withdrawal". Until then, the page does not hit the withdrawal API.
+  // Status polling is opt-in — only enabled once the user starts a withdrawal.
+  // Until then, the page does not hit the withdrawal API.
   const [hasArmed, setHasArmed] = useState(false);
 
   const { data } = useQuery<WithdrawalStatus>({
