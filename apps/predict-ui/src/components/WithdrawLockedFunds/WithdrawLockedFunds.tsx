@@ -42,10 +42,6 @@ const InitiateButton = styled(Button)`
     color: ${COLOR.TEXT_PRIMARY} !important;
     opacity: 0.85;
   }
-
-  &:disabled {
-    opacity: 0.5;
-  }
 `;
 
 const DangerZonePill = styled(Text)`
