@@ -8,6 +8,9 @@ const traderColors = {
   MODAL_BACKGROUND: '#2B194A',
   CARD_BACKGROUND: '#2B194A',
   TOOLTIP_BORDER: 'rgba(0, 0, 0, 0.90)',
+  DANGER_PILL_TEXT: '#FF4D91',
+  DANGER_PILL_BACKGROUND: 'rgba(255, 77, 145, 0.1)',
+  DANGER_BUTTON: '#E50058',
 };
 
 const polystratColors = {
@@ -16,6 +19,9 @@ const polystratColors = {
   MODAL_BACKGROUND: '#2A4053',
   CARD_BACKGROUND: '#2A4053',
   TOOLTIP_BORDER: '#3D5266',
+  DANGER_PILL_TEXT: '#FF3355',
+  DANGER_PILL_BACKGROUND: 'rgba(255, 51, 85, 0.2)',
+  DANGER_BUTTON: '#FF3355',
 };
 
 const agentColors = isOmenstratAgent ? traderColors : polystratColors;
@@ -28,6 +34,9 @@ export const COLOR = {
   MODAL_BACKGROUND: agentColors.MODAL_BACKGROUND,
   CARD_BACKGROUND: agentColors.CARD_BACKGROUND,
   TOOLTIP_BORDER: agentColors.TOOLTIP_BORDER,
+  DANGER_PILL_TEXT: agentColors.DANGER_PILL_TEXT,
+  DANGER_PILL_BACKGROUND: agentColors.DANGER_PILL_BACKGROUND,
+  DANGER_BUTTON: agentColors.DANGER_BUTTON,
   BORDER_NEUTRAL_SECONDARY: 'rgba(61, 82, 102, 0.50)',
 
   BLACK_TRANSPARENT_3: 'rgba(0, 0, 0, 0.03)',
