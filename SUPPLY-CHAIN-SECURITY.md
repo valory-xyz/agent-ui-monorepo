@@ -296,7 +296,7 @@ This file lands as part of Phase 2 of the supply-chain hardening plan. Items her
 - [ ] **Disable Dependabot security updates** + close stale `dependabot/npm_and_yarn/*` PRs. Manual GitHub-side action; tracked under the supply-chain plan's Phase 1.7.
 - [ ] **Re-enable branch protection on `main`** once `Supply chain checks passed` has run green for a week. Required checks: `Supply chain checks passed` + `All checks passed` + `Run Gitleaks`. **Require review from Code Owners** — without this, [`.github/CODEOWNERS`](./.github/CODEOWNERS) is decorative. Tracked under the supply-chain plan's Phase 3.6.
 - [ ] **Weekly cron audit** with Slack/Issue failure notification. Tracked under the supply-chain plan's Phase 3.4.
-- [ ] **Snyk parity** with other Valory repos. Tracked under the supply-chain plan's Phase 3.5.
+- [x] **Code scanning** via GitHub CodeQL (default setup).
 - [ ] **Strip tildes (`~`)** on the remaining `@swc-node/register`, `@swc/cli`, `@swc/core`, `@swc/helpers`, `jsdom`, `typescript` entries. Plan 1.2 was scoped to carets only; tildes carry the same patch-bump-on-clean-install risk.
 - [ ] Migrate `styled-components` 5.3.6 → 6.x to clear the allowlisted `babel-plugin-styled-components` transitives (`lodash`, `picomatch`). Major-version migration; non-trivial.
 - [ ] Bump `react-router-dom` 6.29.0 → 6.30.2+ to clear the allowlisted `@remix-run/router` advisory. Patch bump within v6, low risk.

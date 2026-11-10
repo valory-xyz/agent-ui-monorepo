@@ -1165,7 +1165,7 @@ Note: per the `SUPPLY-CHAIN-SECURITY.md` policy, **"Dependabot security updates"
 
 | Decision | Choice | Why |
 | --- | --- | --- |
-| Sources | Dependabot only | Snyk workflow exists (`.github/workflows/snyk-security.yml`) but is dormant until `SNYK_TOKEN` is configured. Gitleaks runs separately for secret-scanning. |
+| Sources | Dependabot only | Code scanning runs via CodeQL (default setup). Gitleaks runs separately for secret-scanning. |
 | Archetype | Fixed at `nx-monorepo-of-static-react-spas` | One deployment model (static ZIP attached to GitHub Release per app). One toolchain (Nx 21 + Vite 6 + React 19 + Ant Design 5 + styled-components 5 + TanStack Query 5). No per-app variation in the dependency graph — all three apps share the same root `package.json`. |
 | PROD path definition | `apps/{agentsfun-ui,babydegen-ui,predict-ui}/src/**` + `libs/*/src/lib/**`; exclusion of tests by pattern (co-located in libs) and by directory (`apps/*/__tests__/`) | Mirrors what Vite actually pulls into the build. Pattern exclusion handles libs' co-located unit specs; directory exclusion handles the apps' dedicated `__tests__/` trees. |
 | Allowlist matching | Single `.supply-chain/audit-allowlist.json`, keyed by **GHSA** (not numeric `id`) | Dependabot's payload exposes `ghsa_id` directly; the numeric `id` is yarn's, only available via `yarn audit --json`. The allowlist already carries both fields per its `_fields` schema. |
@@ -1176,7 +1176,7 @@ Note: per the `SUPPLY-CHAIN-SECURITY.md` policy, **"Dependabot security updates"
 | Multi-line import regex | `grep -Pzo` with `-z` (null-terminated) to span newlines | This repo's TS/JS uses multi-line named imports heavily (ESLint's `simple-import-sort` produces them). A line-by-line regex misses them and produces false `not_used` dismissals. |
 | Always-PROD sanity probe | Direct `dependencies` entry with `PROD_HITS=0` forces PROD | Catches regex-evolution bugs without requiring perfect import-shape coverage. |
 | Build scripts / Nx targets | DEV | `scripts/audit.mjs`, `scripts/audit-install-hooks.mjs`, `scripts/bundle-size.mjs`, `scripts/branch-protection-apply.sh` are supply-chain tooling. `vite.config.ts` / `jest.config.ts` / `eslint.config.mjs` evaluate at build time only. None ship in any per-app ZIP. |
-| Snyk / Gitleaks | Out of scope for this skill | They report to GitHub Code Scanning (Snyk, when active) and stand-alone runs (Gitleaks), not to Dependabot alerts. Each has its own dashboard. |
+| Gitleaks | Out of scope for this skill | Stand-alone runs, not Dependabot alerts. |
 
 ### What this skill encodes from the repo's existing precedent
 
