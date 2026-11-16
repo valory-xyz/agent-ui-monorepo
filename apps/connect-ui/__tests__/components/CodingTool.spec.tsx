@@ -1,11 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { CodingTool } from '../../src/components/CodingTool/CodingTool';
 import { ConnectSettings, HarnessOption } from '../../src/types';
@@ -66,9 +60,7 @@ describe('CodingTool', () => {
     renderComponent();
 
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
-    expect(
-      screen.getByText('Choose where you run your Connect agent.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Choose where you run your Connect agent.')).toBeInTheDocument();
     expect(screen.getByText('Claude Desktop')).toBeInTheDocument();
   });
 
@@ -158,16 +150,12 @@ describe('CodingTool', () => {
     openDropdown(container);
     fireEvent.click(await screen.findByText('OCB CLI'));
 
-    const alert = await screen.findByText(
-      'harness ocb_cli is unavailable: model_unavailable',
+    const alert = await screen.findByText('harness ocb_cli is unavailable: model_unavailable');
+    expect(container.querySelector('.ant-select-selection-item')).toHaveTextContent(
+      'Claude Desktop',
     );
-    expect(
-      container.querySelector('.ant-select-selection-item'),
-    ).toHaveTextContent('Claude Desktop');
 
-    const close = alert
-      .closest('.ant-alert')
-      ?.querySelector('.ant-alert-close-icon');
+    const close = alert.closest('.ant-alert')?.querySelector('.ant-alert-close-icon');
     if (!close) throw new Error('Expected a closable alert');
     fireEvent.click(close);
     await waitFor(() =>

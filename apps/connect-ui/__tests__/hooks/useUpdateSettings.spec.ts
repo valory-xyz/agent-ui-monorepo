@@ -33,8 +33,7 @@ describe('useUpdateSettings', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       status: 200,
-      json: () =>
-        Promise.resolve({ protected: { mode: 'unrestricted', whitelist: {} } }),
+      json: () => Promise.resolve({ protected: { mode: 'unrestricted', whitelist: {} } }),
     });
 
     const { queryClient, wrapper } = createClientAndWrapper();
@@ -70,9 +69,7 @@ describe('useUpdateSettings', () => {
     result.current.mutate(modePatch);
 
     await waitFor(() =>
-      expect(result.current.error?.message).toBe(
-        'Incorrect password. Please try again.',
-      ),
+      expect(result.current.error?.message).toBe('Incorrect password. Please try again.'),
     );
   });
 
@@ -129,9 +126,7 @@ describe('useUpdateSettings', () => {
 
     result.current.mutate({ harness: 'claude_code_cli' });
 
-    await waitFor(() =>
-      expect(result.current.error?.message).toBe('Failed to update settings.'),
-    );
+    await waitFor(() => expect(result.current.error?.message).toBe('Failed to update settings.'));
   });
 
   it('surfaces a generic error on other failures', async () => {
@@ -146,8 +141,6 @@ describe('useUpdateSettings', () => {
 
     result.current.mutate({ harness: 'claude_code_cli' });
 
-    await waitFor(() =>
-      expect(result.current.error?.message).toBe('Failed to update settings.'),
-    );
+    await waitFor(() => expect(result.current.error?.message).toBe('Failed to update settings.'));
   });
 });

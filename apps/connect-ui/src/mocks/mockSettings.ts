@@ -8,10 +8,7 @@ import {
 
 // The three states "OCB CLI" can be in; swap one into the mock state below to
 // see it. It ships as model_unavailable until its chat mechs are confirmed.
-export const MOCK_OCB_OPTIONS: Record<
-  'available' | HarnessUnavailableReason,
-  HarnessOption
-> = {
+export const MOCK_OCB_OPTIONS: Record<'available' | HarnessUnavailableReason, HarnessOption> = {
   available: { id: 'ocb_cli', available: true },
   windows_unsupported: {
     id: 'ocb_cli',
@@ -57,12 +54,9 @@ export const getMockSettings = (): ConnectSettings => ({
 });
 
 // Stateful so changes survive the query invalidation refetch in mock mode.
-export const applyMockSettingsPatch = (
-  patch: SettingsPatch,
-): ConnectSettings => {
+export const applyMockSettingsPatch = (patch: SettingsPatch): ConnectSettings => {
   if (patch.harness) mockSettingsState.harness = patch.harness;
-  if (patch.protected?.mode)
-    mockSettingsState.protected.mode = patch.protected.mode;
+  if (patch.protected?.mode) mockSettingsState.protected.mode = patch.protected.mode;
   return getMockSettings();
 };
 

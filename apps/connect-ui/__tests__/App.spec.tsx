@@ -60,9 +60,7 @@ describe('App', () => {
 
     renderApp();
 
-    await waitFor(() =>
-      expect(screen.getByText('Get started with Connect')).toBeInTheDocument(),
-    );
+    await waitFor(() => expect(screen.getByText('Get started with Connect')).toBeInTheDocument());
     expect(screen.getByText('Coding tool')).toBeInTheDocument();
     // The Restricted/Unrestricted mode and Whitelisted addresses sections were
     // removed from the agent UI.

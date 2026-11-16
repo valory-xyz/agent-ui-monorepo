@@ -3,12 +3,7 @@ import styled from 'styled-components';
 
 import { COLOR } from '../../constants/theme';
 import { useUpdateSettings } from '../../hooks/useUpdateSettings';
-import {
-  ConnectSettings,
-  Harness,
-  HarnessOption,
-  HarnessUnavailableReason,
-} from '../../types';
+import { ConnectSettings, Harness, HarnessOption, HarnessUnavailableReason } from '../../types';
 import { Section } from '../../ui/Section';
 
 // The server owns which harnesses exist and their order (GET /settings
@@ -79,16 +74,11 @@ export const CodingTool = ({ settings }: CodingToolProps) => {
   // for it (only the `protected` object is password-gated).
   const { mutate, isPending, error, reset } = useUpdateSettings();
   const options = settings.harnesses
-    .filter(({ id }) =>
-      Object.prototype.hasOwnProperty.call(HARNESS_LABELS, id),
-    )
+    .filter(({ id }) => Object.prototype.hasOwnProperty.call(HARNESS_LABELS, id))
     .map(toOption);
 
   return (
-    <Section
-      title="Coding tool"
-      description="Choose where you run your Connect agent."
-    >
+    <Section title="Coding tool" description="Choose where you run your Connect agent.">
       <Flex vertical align="flex-start" gap={12}>
         <StyledSelect
           variant="filled"
@@ -99,15 +89,7 @@ export const CodingTool = ({ settings }: CodingToolProps) => {
           popupMatchSelectWidth={false}
           popupClassName="connect-harness-popup"
         />
-        {error && (
-          <Alert
-            type="error"
-            showIcon
-            closable
-            onClose={reset}
-            message={error.message}
-          />
-        )}
+        {error && <Alert type="error" showIcon closable onClose={reset} message={error.message} />}
       </Flex>
     </Section>
   );

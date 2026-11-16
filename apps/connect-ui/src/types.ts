@@ -22,9 +22,7 @@ export type Harness =
   | 'ocb_cli';
 
 /** Why the server will not open a harness on this instance. */
-export type HarnessUnavailableReason =
-  | 'windows_unsupported'
-  | 'model_unavailable';
+export type HarnessUnavailableReason = 'windows_unsupported' | 'model_unavailable';
 
 /** One entry of GET /settings `harnesses`, the server's display order. */
 export type HarnessOption = {
