@@ -20,9 +20,15 @@ export const useUpdateSettings = () => {
         body: JSON.stringify(patch),
       });
 
-      if (response.status === 401) throw new Error('Incorrect password. Please try again.');
+      if (response.status === 401)
+        throw new Error('Incorrect password. Please try again.');
       if (response.status === 429)
         throw new Error('Too many failed attempts. Please try again later.');
+      if (response.status === 400) {
+        // the server names why it refused, e.g. a coding tool unavailable here
+        const body = await response.json().catch(() => null);
+        throw new Error(body?.detail ?? 'Failed to update settings.');
+      }
       if (!response.ok) throw new Error('Failed to update settings.');
 
       return response.json();

@@ -33,7 +33,8 @@ describe('useUpdateSettings', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       status: 200,
-      json: () => Promise.resolve({ protected: { mode: 'unrestricted', whitelist: {} } }),
+      json: () =>
+        Promise.resolve({ protected: { mode: 'unrestricted', whitelist: {} } }),
     });
 
     const { queryClient, wrapper } = createClientAndWrapper();
@@ -47,7 +48,10 @@ describe('useUpdateSettings', () => {
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('/settings'),
-      expect.objectContaining({ method: 'PATCH', body: JSON.stringify(modePatch) }),
+      expect.objectContaining({
+        method: 'PATCH',
+        body: JSON.stringify(modePatch),
+      }),
     );
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['settings'] });
     expect(result.current.data?.protected.mode).toBe('unrestricted');
@@ -66,7 +70,9 @@ describe('useUpdateSettings', () => {
     result.current.mutate(modePatch);
 
     await waitFor(() =>
-      expect(result.current.error?.message).toBe('Incorrect password. Please try again.'),
+      expect(result.current.error?.message).toBe(
+        'Incorrect password. Please try again.',
+      ),
     );
   });
 
@@ -89,10 +95,49 @@ describe('useUpdateSettings', () => {
     );
   });
 
-  it('surfaces a generic error on other failures', async () => {
+  it('surfaces the reason the server gives for refusing a change', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
       status: 400,
+      json: () =>
+        Promise.resolve({
+          detail: 'harness ocb_cli is unavailable: model_unavailable',
+        }),
+    });
+
+    const { wrapper } = createClientAndWrapper();
+    const { result } = renderHook(() => useUpdateSettings(), { wrapper });
+
+    result.current.mutate({ harness: 'ocb_cli' });
+
+    await waitFor(() =>
+      expect(result.current.error?.message).toBe(
+        'harness ocb_cli is unavailable: model_unavailable',
+      ),
+    );
+  });
+
+  it('falls back to a generic error when a 400 carries no JSON', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: () => Promise.reject(new SyntaxError('not JSON')),
+    });
+
+    const { wrapper } = createClientAndWrapper();
+    const { result } = renderHook(() => useUpdateSettings(), { wrapper });
+
+    result.current.mutate({ harness: 'claude_code_cli' });
+
+    await waitFor(() =>
+      expect(result.current.error?.message).toBe('Failed to update settings.'),
+    );
+  });
+
+  it('surfaces a generic error on other failures', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
       json: () => Promise.resolve({}),
     });
 
@@ -101,6 +146,8 @@ describe('useUpdateSettings', () => {
 
     result.current.mutate({ harness: 'claude_code_cli' });
 
-    await waitFor(() => expect(result.current.error?.message).toBe('Failed to update settings.'));
+    await waitFor(() =>
+      expect(result.current.error?.message).toBe('Failed to update settings.'),
+    );
   });
 });

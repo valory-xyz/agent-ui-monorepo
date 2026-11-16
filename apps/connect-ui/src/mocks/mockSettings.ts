@@ -1,4 +1,29 @@
-import { ConnectSettings, SessionResponse, SettingsPatch } from '../types';
+import {
+  ConnectSettings,
+  HarnessOption,
+  HarnessUnavailableReason,
+  SessionResponse,
+  SettingsPatch,
+} from '../types';
+
+// The three states "OCB CLI" can be in; swap one into the mock state below to
+// see it. It ships as model_unavailable until its chat mechs are confirmed.
+export const MOCK_OCB_OPTIONS: Record<
+  'available' | HarnessUnavailableReason,
+  HarnessOption
+> = {
+  available: { id: 'ocb_cli', available: true },
+  windows_unsupported: {
+    id: 'ocb_cli',
+    available: false,
+    unavailable_reason: 'windows_unsupported',
+  },
+  model_unavailable: {
+    id: 'ocb_cli',
+    available: false,
+    unavailable_reason: 'model_unavailable',
+  },
+};
 
 // Mirrors pearl-connect's default_whitelist(): the Mech Marketplace on each
 // supported chain, from mech_client/configs/mechs.json.
@@ -13,6 +38,13 @@ const mockSettingsState: ConnectSettings = {
     },
   },
   harness: 'claude_code_desktop',
+  harnesses: [
+    { id: 'claude_code_desktop', available: true },
+    { id: 'claude_code_cli', available: true },
+    { id: 'codex_desktop', available: true },
+    { id: 'codex_cli', available: true },
+    MOCK_OCB_OPTIONS.model_unavailable,
+  ],
 };
 
 export const getMockSettings = (): ConnectSettings => ({
@@ -21,12 +53,16 @@ export const getMockSettings = (): ConnectSettings => ({
     whitelist: { ...mockSettingsState.protected.whitelist },
   },
   harness: mockSettingsState.harness,
+  harnesses: mockSettingsState.harnesses.map((option) => ({ ...option })),
 });
 
 // Stateful so changes survive the query invalidation refetch in mock mode.
-export const applyMockSettingsPatch = (patch: SettingsPatch): ConnectSettings => {
+export const applyMockSettingsPatch = (
+  patch: SettingsPatch,
+): ConnectSettings => {
   if (patch.harness) mockSettingsState.harness = patch.harness;
-  if (patch.protected?.mode) mockSettingsState.protected.mode = patch.protected.mode;
+  if (patch.protected?.mode)
+    mockSettingsState.protected.mode = patch.protected.mode;
   return getMockSettings();
 };
 
