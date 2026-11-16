@@ -1,5 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 
 import { CodingTool } from '../../src/components/CodingTool/CodingTool';
 import { ConnectSettings, HarnessOption } from '../../src/types';
@@ -117,6 +123,7 @@ describe('CodingTool', () => {
       expect(option).toHaveTextContent('OCB CLI');
 
       fireEvent.click(reason);
+      await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
       expect(global.fetch).not.toHaveBeenCalled();
     },
   );

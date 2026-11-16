@@ -79,7 +79,9 @@ export const CodingTool = ({ settings }: CodingToolProps) => {
   // for it (only the `protected` object is password-gated).
   const { mutate, isPending, error, reset } = useUpdateSettings();
   const options = settings.harnesses
-    .filter(({ id }) => id in HARNESS_LABELS)
+    .filter(({ id }) =>
+      Object.prototype.hasOwnProperty.call(HARNESS_LABELS, id),
+    )
     .map(toOption);
 
   return (

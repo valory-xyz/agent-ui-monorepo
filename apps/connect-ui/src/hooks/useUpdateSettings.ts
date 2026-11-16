@@ -5,6 +5,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { applyMockSettingsPatch } from '../mocks/mockSettings';
 import { ConnectSettings, SettingsPatch } from '../types';
 
+const UPDATE_FAILED = 'Failed to update settings.';
+
 export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
 
@@ -27,9 +29,9 @@ export const useUpdateSettings = () => {
       if (response.status === 400) {
         // the server names why it refused, e.g. a coding tool unavailable here
         const body = await response.json().catch(() => null);
-        throw new Error(body?.detail ?? 'Failed to update settings.');
+        throw new Error(body?.detail ?? UPDATE_FAILED);
       }
-      if (!response.ok) throw new Error('Failed to update settings.');
+      if (!response.ok) throw new Error(UPDATE_FAILED);
 
       return response.json();
     },
