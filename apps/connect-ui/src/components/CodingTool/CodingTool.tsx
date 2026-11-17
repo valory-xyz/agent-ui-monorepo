@@ -21,6 +21,15 @@ const UNAVAILABLE_TEXT: Record<HarnessUnavailableReason, string> = {
   model_unavailable: 'Not available on this chain yet',
 };
 
+// What a Connect build without `harnesses` offers: the four tools it knows,
+// all available, in the order this dropdown listed them before.
+const LEGACY_HARNESSES: HarnessOption[] = [
+  { id: 'claude_code_desktop', available: true },
+  { id: 'claude_code_cli', available: true },
+  { id: 'codex_desktop', available: true },
+  { id: 'codex_cli', available: true },
+];
+
 const toOption = ({ id, available, unavailable_reason }: HarnessOption) => {
   const label = HARNESS_LABELS[id];
   const reason = unavailable_reason && UNAVAILABLE_TEXT[unavailable_reason];
@@ -73,7 +82,7 @@ export const CodingTool = ({ settings }: CodingToolProps) => {
   // The harness is a plain preference — PATCH /settings needs no password
   // for it (only the `protected` object is password-gated).
   const { mutate, isPending, error, reset } = useUpdateSettings();
-  const options = settings.harnesses
+  const options = (settings.harnesses ?? LEGACY_HARNESSES)
     .filter(({ id }) => Object.prototype.hasOwnProperty.call(HARNESS_LABELS, id))
     .map(toOption);
 

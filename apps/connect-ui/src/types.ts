@@ -44,7 +44,8 @@ export type ProtectedSettings = {
 export type ConnectSettings = {
   protected: ProtectedSettings;
   harness: Harness;
-  harnesses: HarnessOption[];
+  /** Absent from Connect builds that predate harness availability. */
+  harnesses?: HarnessOption[];
 };
 
 /**

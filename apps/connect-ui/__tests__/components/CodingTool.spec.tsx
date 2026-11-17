@@ -83,6 +83,22 @@ describe('CodingTool', () => {
     ]);
   });
 
+  it('offers the four known tools on a Connect build without harnesses', async () => {
+    // Connect before harness availability answers GET /settings without the list
+    const { harnesses: _omitted, ...legacy } = settings;
+    const { container } = renderComponent(legacy);
+    openDropdown(container);
+
+    await waitFor(() => expect(optionLabels()).toHaveLength(4));
+    expect(optionLabels()).toEqual([
+      'Claude Desktop',
+      'Claude Code CLI',
+      'Codex Desktop',
+      'Codex CLI',
+    ]);
+    expect(document.querySelector('.ant-select-item-option-disabled')).toBeNull();
+  });
+
   it('skips a harness this build has no name for', async () => {
     const unknown = {
       id: 'cursor_cli',

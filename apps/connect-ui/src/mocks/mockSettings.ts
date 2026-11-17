@@ -24,7 +24,7 @@ export const MOCK_OCB_OPTIONS: Record<'available' | HarnessUnavailableReason, Ha
 
 // Mirrors pearl-connect's default_whitelist(): the Mech Marketplace on each
 // supported chain, from mech_client/configs/mechs.json.
-const mockSettingsState: ConnectSettings = {
+const mockSettingsState: Required<ConnectSettings> = {
   protected: {
     mode: 'restricted',
     whitelist: {
