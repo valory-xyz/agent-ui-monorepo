@@ -14,7 +14,23 @@ export type TransactionMode = 'restricted' | 'unrestricted';
  * the canonical list and rejects anything else, so this union must match
  * pearl-connect's `HARNESSES` (connect/settings.py).
  */
-export type Harness = 'claude_code_cli' | 'claude_code_desktop' | 'codex_cli' | 'codex_desktop';
+export type Harness =
+  | 'claude_code_cli'
+  | 'claude_code_desktop'
+  | 'codex_cli'
+  | 'codex_desktop'
+  | 'ocb_cli';
+
+/** Why the server will not open a harness on this instance. */
+export type HarnessUnavailableReason = 'windows_unsupported' | 'model_unavailable';
+
+/**
+ * One entry of GET /settings `harnesses`, the server's display order. A
+ * reason comes with, and only with, an unavailable harness.
+ */
+export type HarnessOption =
+  | { id: Harness; available: true }
+  | { id: Harness; available: false; unavailable_reason: HarnessUnavailableReason };
 
 /** chain -> addresses the service safe may call in restricted mode */
 export type Whitelist = Record<string, string[]>;
@@ -28,6 +44,8 @@ export type ProtectedSettings = {
 export type ConnectSettings = {
   protected: ProtectedSettings;
   harness: Harness;
+  /** Absent from Connect builds that predate harness availability. */
+  harnesses?: HarnessOption[];
 };
 
 /**

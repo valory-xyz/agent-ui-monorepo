@@ -47,7 +47,10 @@ describe('useUpdateSettings', () => {
 
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('/settings'),
-      expect.objectContaining({ method: 'PATCH', body: JSON.stringify(modePatch) }),
+      expect.objectContaining({
+        method: 'PATCH',
+        body: JSON.stringify(modePatch),
+      }),
     );
     expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['settings'] });
     expect(result.current.data?.protected.mode).toBe('unrestricted');
@@ -89,10 +92,53 @@ describe('useUpdateSettings', () => {
     );
   });
 
-  it('surfaces a generic error on other failures', async () => {
+  it('surfaces the reason the server gives for refusing a change', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
       status: 400,
+      json: () =>
+        Promise.resolve({
+          detail: 'harness ocb_cli is unavailable: model_unavailable',
+        }),
+    });
+
+    const { queryClient, wrapper } = createClientAndWrapper();
+    const current = { harness: 'claude_code_desktop' };
+    queryClient.setQueryData(['settings'], current);
+    const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
+    const { result } = renderHook(() => useUpdateSettings(), { wrapper });
+
+    result.current.mutate({ harness: 'ocb_cli' });
+
+    await waitFor(() =>
+      expect(result.current.error?.message).toBe(
+        'harness ocb_cli is unavailable: model_unavailable',
+      ),
+    );
+    // the previous selection stays: nothing refetches or rewrites the settings
+    expect(queryClient.getQueryData(['settings'])).toBe(current);
+    expect(invalidateSpy).not.toHaveBeenCalled();
+  });
+
+  it('falls back to a generic error when a 400 carries no JSON', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 400,
+      json: () => Promise.reject(new SyntaxError('not JSON')),
+    });
+
+    const { wrapper } = createClientAndWrapper();
+    const { result } = renderHook(() => useUpdateSettings(), { wrapper });
+
+    result.current.mutate({ harness: 'claude_code_cli' });
+
+    await waitFor(() => expect(result.current.error?.message).toBe('Failed to update settings.'));
+  });
+
+  it('surfaces a generic error on other failures', async () => {
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
       json: () => Promise.resolve({}),
     });
 

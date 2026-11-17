@@ -5,6 +5,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { applyMockSettingsPatch } from '../mocks/mockSettings';
 import { ConnectSettings, SettingsPatch } from '../types';
 
+const UPDATE_FAILED = 'Failed to update settings.';
+
 export const useUpdateSettings = () => {
   const queryClient = useQueryClient();
 
@@ -23,7 +25,12 @@ export const useUpdateSettings = () => {
       if (response.status === 401) throw new Error('Incorrect password. Please try again.');
       if (response.status === 429)
         throw new Error('Too many failed attempts. Please try again later.');
-      if (!response.ok) throw new Error('Failed to update settings.');
+      if (response.status === 400) {
+        // the server names why it refused, e.g. a coding tool unavailable here
+        const body = await response.json().catch(() => null);
+        throw new Error(typeof body?.detail === 'string' ? body.detail : UPDATE_FAILED);
+      }
+      if (!response.ok) throw new Error(UPDATE_FAILED);
 
       return response.json();
     },

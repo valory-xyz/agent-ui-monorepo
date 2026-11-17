@@ -10,6 +10,17 @@ const settings: ConnectSettings = {
     whitelist: { gnosis: ['0x735faab1c4ec41128c367afb5c3bac73509f70bb'] },
   },
   harness: 'claude_code_desktop',
+  harnesses: [
+    { id: 'claude_code_desktop', available: true },
+    { id: 'claude_code_cli', available: true },
+    { id: 'codex_desktop', available: true },
+    { id: 'codex_cli', available: true },
+    {
+      id: 'ocb_cli',
+      available: false,
+      unavailable_reason: 'model_unavailable',
+    },
+  ],
 };
 
 const renderApp = () => {
