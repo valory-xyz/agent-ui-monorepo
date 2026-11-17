@@ -102,7 +102,10 @@ describe('useUpdateSettings', () => {
         }),
     });
 
-    const { wrapper } = createClientAndWrapper();
+    const { queryClient, wrapper } = createClientAndWrapper();
+    const current = { harness: 'claude_code_desktop' };
+    queryClient.setQueryData(['settings'], current);
+    const invalidateSpy = jest.spyOn(queryClient, 'invalidateQueries');
     const { result } = renderHook(() => useUpdateSettings(), { wrapper });
 
     result.current.mutate({ harness: 'ocb_cli' });
@@ -112,6 +115,9 @@ describe('useUpdateSettings', () => {
         'harness ocb_cli is unavailable: model_unavailable',
       ),
     );
+    // the previous selection stays: nothing refetches or rewrites the settings
+    expect(queryClient.getQueryData(['settings'])).toBe(current);
+    expect(invalidateSpy).not.toHaveBeenCalled();
   });
 
   it('falls back to a generic error when a 400 carries no JSON', async () => {

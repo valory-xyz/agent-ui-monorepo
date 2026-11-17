@@ -65,8 +65,6 @@ describe('CodingTool', () => {
   });
 
   it('offers the harnesses the server lists, in its order', async () => {
-    // the server owns the list; an option missing here is a tool the operator
-    // simply cannot reach
     const { container } = renderComponent({
       ...settings,
       harnesses: [...harnesses].reverse(),
@@ -136,6 +134,26 @@ describe('CodingTool', () => {
     },
   );
 
+  it.each([
+    ['no reason', { id: 'ocb_cli', available: false }],
+    [
+      'a reason this build does not know',
+      { id: 'ocb_cli', available: false, unavailable_reason: 'kernel_too_old' },
+    ],
+  ])('still explains a disabled option with %s', async (_case, option) => {
+    const { container } = renderComponent(withOcb(option as unknown as HarnessOption));
+    openDropdown(container);
+
+    const reason = await screen.findByText('Not available here yet');
+    const item = reason.closest('.ant-select-item-option');
+    expect(item).toHaveClass('ant-select-item-option-disabled');
+    expect(item).toHaveTextContent('OCB CLI');
+
+    fireEvent.click(reason);
+    await act(() => new Promise((resolve) => setTimeout(resolve, 50)));
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
   it('selects OCB CLI like any other tool when it is available', async () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -166,10 +184,8 @@ describe('CodingTool', () => {
     openDropdown(container);
     fireEvent.click(await screen.findByText('OCB CLI'));
 
+    // the selection staying put is the hook's job (useUpdateSettings.spec)
     const alert = await screen.findByText('harness ocb_cli is unavailable: model_unavailable');
-    expect(container.querySelector('.ant-select-selection-item')).toHaveTextContent(
-      'Claude Desktop',
-    );
 
     const close = alert.closest('.ant-alert')?.querySelector('.ant-alert-close-icon');
     if (!close) throw new Error('Expected a closable alert');

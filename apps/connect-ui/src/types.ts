@@ -24,13 +24,13 @@ export type Harness =
 /** Why the server will not open a harness on this instance. */
 export type HarnessUnavailableReason = 'windows_unsupported' | 'model_unavailable';
 
-/** One entry of GET /settings `harnesses`, the server's display order. */
-export type HarnessOption = {
-  id: Harness;
-  available: boolean;
-  /** Present iff `available` is false. */
-  unavailable_reason?: HarnessUnavailableReason;
-};
+/**
+ * One entry of GET /settings `harnesses`, the server's display order. A
+ * reason comes with, and only with, an unavailable harness.
+ */
+export type HarnessOption =
+  | { id: Harness; available: true }
+  | { id: Harness; available: false; unavailable_reason: HarnessUnavailableReason };
 
 /** chain -> addresses the service safe may call in restricted mode */
 export type Whitelist = Record<string, string[]>;
