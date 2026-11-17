@@ -28,7 +28,7 @@ export const useUpdateSettings = () => {
       if (response.status === 400) {
         // the server names why it refused, e.g. a coding tool unavailable here
         const body = await response.json().catch(() => null);
-        throw new Error(body?.detail ?? UPDATE_FAILED);
+        throw new Error(typeof body?.detail === 'string' ? body.detail : UPDATE_FAILED);
       }
       if (!response.ok) throw new Error(UPDATE_FAILED);
 
